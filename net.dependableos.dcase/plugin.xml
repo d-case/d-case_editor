@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<!--
+ Copyright (C) Yutaka Matsuno 2010-2012 All rights reserved.
+-->
+
+<plugin>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <package
+            uri="http://www.dependable-os.net/2010/03/dcase/"
+            class="net.dependableos.dcase.DcasePackage"
+            genModel="model/dcase.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.extension_parser">
+      <parser
+            type="dcase_model"
+            class="net.dependableos.dcase.util.DcaseResourceFactoryImpl"/>
+   </extension>
+
+</plugin>

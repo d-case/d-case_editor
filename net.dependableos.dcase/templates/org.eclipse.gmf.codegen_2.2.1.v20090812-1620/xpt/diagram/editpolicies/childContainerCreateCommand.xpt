@@ -1,0 +1,32 @@
+﻿/*
+ * Copyright (c) 2007, 2009 Borland Software Corporation
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Alexander Shatalin (Borland) - initial API and implementation
+ */
+ 
+«IMPORT 'http://www.eclipse.org/gmf/2009/GenModel'»
+
+«DEFINE childContainerCreateCommand FOR Sequence(gmfgen::GenNode)-»
+«IF not self->isEmpty()-»
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	protected org.eclipse.gef.commands.Command getCreateCommand(org.eclipse.gmf.runtime.emf.type.core.requests.CreateElementRequest req) {
+«FOREACH self AS n-»
+		«EXPAND childNodeCreateCommand(n) FOR n.modelFacet-»
+«ENDFOREACH-»
+		return super.getCreateCommand(req);
+	}
+«ENDIF-»
+«ENDDEFINE»
+
+«DEFINE childNodeCreateCommand(node : gmfgen::GenNode) FOR gmfgen::TypeModelFacet-»
+if («EXPAND xpt::providers::ElementTypes::accessElementType FOR node» == req.getElementType()) {
+	return getGEFWrapper(new «node.getCreateCommandQualifiedClassName()»(req));
+}
+«ENDDEFINE»

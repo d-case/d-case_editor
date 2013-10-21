@@ -1,0 +1,173 @@
+﻿/*
+ * Copyright (c) 2007, 2009 Borland Software Corporation
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Alexander Shatalin (Borland) - initial API and implementation
+ */
+
+«IMPORT 'http://www.eclipse.org/gmf/2009/GenModel'»
+
+«EXTENSION xpt::diagram::updater::Utils»
+
+«DEFINE DiagramContentInitializer FOR gmfgen::GenDiagram-»
+	«EXPAND xpt::Common::copyright FOR getDiagram().editorGen-»
+package «editorGen.editor.packageName»;
+
+	«EXPAND xpt::Common::generatedClassComment»
+public class «diagramContentInitializerClassName» {
+
+	«EXPAND attributes-»
+
+	«EXPAND initDiagramContent-»
+	
+	«EXPAND createChildren FOREACH getAllContainers()->select(container | not container.sansDomain)-»
+	
+	«EXPAND createNode-»
+	
+	«EXPAND createLinks-»
+	«IF not (getAllContainers())[gmfgen::GenCompartment]->isEmpty()-»
+	
+		«EXPAND getCompartment-»
+	«ENDIF-»
+
+	«EXPAND additions-»
+}
+«ENDDEFINE»
+
+«DEFINE attributes FOR gmfgen::GenDiagram-»
+	«EXPAND xpt::Common::generatedMemberComment»
+private java.util.Map myDomain2NotationMap = new java.util.HashMap();
+
+	«EXPAND xpt::Common::generatedMemberComment»
+private java.util.Collection myLinkDescriptors = new java.util.LinkedList();
+«ENDDEFINE»
+
+«DEFINE initDiagramContent FOR gmfgen::GenDiagram-»
+	«EXPAND xpt::Common::generatedMemberComment»
+public void initDiagramContent(org.eclipse.gmf.runtime.notation.Diagram diagram) {
+	if (!«EXPAND xpt::editor::VisualIDRegistry::modelID».equals(diagram.getType())) {
+		«editorGen.plugin.getActivatorQualifiedClassName()».getInstance().logError("Incorrect diagram passed as a parameter: " + diagram.getType());
+		return;
+	}
+	if («EXPAND MetaModel::NotInstance('diagram.getElement()') FOR domainDiagramElement») {
+		«editorGen.plugin.getActivatorQualifiedClassName()».getInstance().logError("Incorrect diagram element specified: " + diagram.getElement() + " instead of «domainDiagramElement.ecoreClass.name»");
+		return;
+	}
+	«EXPAND createChildrenMethodName»(diagram);
+	createLinks(diagram);
+}
+«ENDDEFINE»
+
+«DEFINE createChildrenMethodName FOR gmfgen::GenContainerBase»create«getUniqueIdentifier()»Children«ENDDEFINE»
+
+«DEFINE createChildren FOR gmfgen::GenContainerBase-»
+	«EXPAND xpt::Common::generatedMemberComment»
+private void «EXPAND createChildrenMethodName»(org.eclipse.gmf.runtime.notation.View view) {
+	«EXPAND collectContainedLinks-»
+	«IF hasSemanticChildren(self)-»
+	java.util.Collection childNodeDescriptors = «EXPAND xpt::diagram::updater::DiagramUpdater::getSemanticChildrenMethodCall»(view);
+	for (java.util.Iterator it = childNodeDescriptors.iterator(); it.hasNext();) {
+		createNode(view, («getDiagram().editorGen.diagramUpdater.getNodeDescriptorQualifiedClassName()») it.next());
+	}
+	«ENDIF-»
+	«EXPAND createCompartmentsChildren-»
+}
+«ENDDEFINE»
+
+«DEFINE collectContainedLinks FOR gmfgen::GenContainerBase»«ENDDEFINE»
+
+«DEFINE collectContainedLinks FOR gmfgen::GenNode-»
+	myDomain2NotationMap.put(view.getElement(), view);
+	myLinkDescriptors.addAll(«EXPAND xpt::diagram::updater::DiagramUpdater::getOutgoingLinksMethodCall»(view));
+«ENDDEFINE»
+
+«DEFINE createCompartmentsChildren FOR gmfgen::GenContainerBase»«ENDDEFINE»
+
+«DEFINE createCompartmentsChildren FOR gmfgen::GenNode-»
+	«EXPAND callCreateCompartmentChildren FOREACH compartments»
+«ENDDEFINE»
+
+«REM»
+	Will be called for each compartment of GenNode for GenNode.isSansDomain() == false. 
+	if !GenNode.isSansDomain() => !GenCompartment.isSansDomain() so should not check 
+	!this.isSansDomain() here.
+«ENDREM»
+«DEFINE callCreateCompartmentChildren FOR gmfgen::GenCompartment-»
+	«EXPAND createChildrenMethodName»(getCompartment(view, «EXPAND xpt::editor::VisualIDRegistry::visualID»));
+«ENDDEFINE»
+
+«DEFINE createNode FOR gmfgen::GenDiagram-»
+	«EXPAND xpt::Common::generatedMemberComment»
+private void createNode(org.eclipse.gmf.runtime.notation.View parentView, «editorGen.diagramUpdater.getNodeDescriptorQualifiedClassName()» nodeDescriptor) {
+	final String nodeType = «EXPAND xpt::editor::VisualIDRegistry::typeMethodCall('nodeDescriptor.getVisualID()')»;
+	org.eclipse.gmf.runtime.notation.Node node = org.eclipse.gmf.runtime.diagram.core.services.ViewService.createNode(parentView, nodeDescriptor.getModelElement(), nodeType, «EXPAND xpt::plugin::Activator::preferenceHintAccess FOR editorGen»);
+	switch (nodeDescriptor.getVisualID()) {
+	«EXPAND createNodeCase FOREACH getAllNodes()->select(node | not node.sansDomain)-»
+	}
+}
+«ENDDEFINE»
+
+«DEFINE createNodeCase FOR gmfgen::GenContainerBase-»
+«EXPAND xpt::Common::caseVisualID»
+	«EXPAND createChildrenMethodName»(node);
+	return;
+«ENDDEFINE»
+
+«REM»Adopt this code to work with links to links«ENDREM»
+«DEFINE createLinks FOR gmfgen::GenDiagram-»
+	«EXPAND xpt::Common::generatedMemberComment»
+private void createLinks(org.eclipse.gmf.runtime.notation.Diagram diagram) {
+	for (boolean continueLinkCreation = true; continueLinkCreation;) {
+		continueLinkCreation = false;
+		java.util.Collection additionalDescriptors = new java.util.LinkedList();
+		for (java.util.Iterator it = myLinkDescriptors.iterator(); it.hasNext();) {
+			«editorGen.diagramUpdater.getLinkDescriptorQualifiedClassName()» nextLinkDescriptor = («editorGen.diagramUpdater.getLinkDescriptorQualifiedClassName()») it.next();
+			if (!myDomain2NotationMap.containsKey(nextLinkDescriptor.getSource()) || !myDomain2NotationMap.containsKey(nextLinkDescriptor.getDestination())) {
+				continue;
+			}
+			final String linkType = «EXPAND xpt::editor::VisualIDRegistry::typeMethodCall('nextLinkDescriptor.getVisualID()')»;
+			org.eclipse.gmf.runtime.notation.Edge edge = org.eclipse.gmf.runtime.diagram.core.services.ViewService.getInstance().createEdge(nextLinkDescriptor.getSemanticAdapter(), diagram, linkType, org.eclipse.gmf.runtime.diagram.core.util.ViewUtil.APPEND, true, «EXPAND xpt::plugin::Activator::preferenceHintAccess FOR editorGen»);
+			if (edge != null) {
+				edge.setSource((org.eclipse.gmf.runtime.notation.View) myDomain2NotationMap.get(nextLinkDescriptor.getSource()));
+				edge.setTarget((org.eclipse.gmf.runtime.notation.View) myDomain2NotationMap.get(nextLinkDescriptor.getDestination()));
+				it.remove();
+				if (nextLinkDescriptor.getModelElement() != null) {
+					myDomain2NotationMap.put(nextLinkDescriptor.getModelElement(), edge);
+				}
+				continueLinkCreation = true;
+				switch (nextLinkDescriptor.getVisualID()) {
+	«EXPAND createLinksCase FOREACH links->select(link | null <> link.getMetaClass())-»
+				}
+			}
+		}
+		myLinkDescriptors.addAll(additionalDescriptors);
+	}
+}
+«ENDDEFINE»
+
+«DEFINE createLinksCase FOR gmfgen::GenLink-»
+«EXPAND xpt::Common::caseVisualID»
+	additionalDescriptors.addAll(«EXPAND xpt::diagram::updater::DiagramUpdater::getOutgoingLinksMethodCall»(edge));
+	break;
+«ENDDEFINE»
+
+«DEFINE getCompartment FOR gmfgen::GenDiagram-»
+	«EXPAND xpt::Common::generatedMemberComment»
+private org.eclipse.gmf.runtime.notation.Node getCompartment(org.eclipse.gmf.runtime.notation.View node, int visualID) {
+	String type = «EXPAND xpt::editor::VisualIDRegistry::typeMethodCall('visualID')»;
+	for (java.util.Iterator it = node.getChildren().iterator(); it.hasNext();) {
+		org.eclipse.gmf.runtime.notation.View nextView = (org.eclipse.gmf.runtime.notation.View) it.next();
+		if (nextView instanceof org.eclipse.gmf.runtime.notation.Node && type.equals(nextView.getType())) {
+			return (org.eclipse.gmf.runtime.notation.Node) nextView;
+		}
+	}
+	return null;
+}
+«ENDDEFINE»
+
+«DEFINE additions FOR gmfgen::GenDiagram»«ENDDEFINE»

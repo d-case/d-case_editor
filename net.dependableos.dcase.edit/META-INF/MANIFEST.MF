@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: %pluginName
+Bundle-SymbolicName: net.dependableos.dcase.edit;singleton:=true
+Bundle-Version: 0.8.15.axe_qualifier
+Bundle-ClassPath: .
+Bundle-Activator: net.dependableos.dcase.provider.DcaseEditPlugin$Implementation
+Bundle-Vendor: %providerName
+Bundle-Localization: plugin
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Export-Package: net.dependableos.dcase.provider
+Require-Bundle: org.eclipse.core.runtime,
+ net.dependableos.dcase;visibility:=reexport,
+ org.eclipse.emf.edit;visibility:=reexport
+Bundle-ActivationPolicy: lazy

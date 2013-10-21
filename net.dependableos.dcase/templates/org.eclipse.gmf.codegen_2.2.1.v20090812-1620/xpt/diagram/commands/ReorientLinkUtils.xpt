@@ -1,0 +1,300 @@
+﻿/*
+ * Copyright (c) 2007, 2009 Borland Software Corporation
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Dmitry Stadnik (Borland) - initial API and implementation
+ */
+
+«IMPORT 'http://www.eclipse.org/gmf/2009/GenModel'»
+«IMPORT 'http://www.eclipse.org/emf/2002/GenModel'»
+
+«EXTENSION xpt::diagram::Utils»
+
+«REM»
+	Expands to all accessor methods for link and it's ends.
+«ENDREM»
+«DEFINE accessors FOR gmfgen::GenLink-»
+	«EXPAND linkAccessor FOR modelFacet-»
+	«EXPAND oldSourceAccessor FOR modelFacet-»
+	«EXPAND newSourceAccessor FOR modelFacet-»
+	«EXPAND oldTargetAccessor FOR modelFacet-»
+	«EXPAND newTargetAccessor FOR modelFacet-»
+«ENDDEFINE»
+
+«DEFINE linkAccessor FOR gmfgen::LinkModelFacet-»
+«ENDDEFINE»
+
+«DEFINE linkAccessor FOR gmfgen::TypeLinkModelFacet-»
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	protected «EXPAND MetaModel::QualifiedClassName FOR metaClass» getLink() {
+		return «EXPAND MetaModel::CastEObject('getElementToEdit()') FOR metaClass»;
+	}
+«ENDDEFINE»
+
+«DEFINE oldSourceAccessor FOR gmfgen::LinkModelFacet-»
+«ENDDEFINE»
+
+«DEFINE oldSourceAccessor FOR gmfgen::TypeLinkModelFacet-»
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	protected «EXPAND MetaModel::QualifiedClassName FOR getSourceType()» getOldSource() {
+		return «EXPAND MetaModel::CastEObject('oldEnd') FOR getSourceType()»;
+	}
+«ENDDEFINE»
+
+«DEFINE oldSourceAccessor FOR gmfgen::FeatureLinkModelFacet-»
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	protected «EXPAND MetaModel::QualifiedClassName FOR getSourceType()» getOldSource() {
+		return «EXPAND MetaModel::CastEObject('referenceOwner') FOR getSourceType()»;
+	}
+«ENDDEFINE»
+
+«DEFINE newSourceAccessor FOR gmfgen::LinkModelFacet-»
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	protected «EXPAND MetaModel::QualifiedClassName FOR getSourceType()» getNewSource() {
+		return «EXPAND MetaModel::CastEObject('newEnd') FOR getSourceType()»;
+	}
+«ENDDEFINE»
+
+«DEFINE oldTargetAccessor FOR gmfgen::LinkModelFacet-»
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	protected «EXPAND MetaModel::QualifiedClassName FOR getTargetType()» getOldTarget() {
+		return «EXPAND MetaModel::CastEObject('oldEnd') FOR getTargetType()»;
+	}
+«ENDDEFINE»
+
+«DEFINE newTargetAccessor FOR gmfgen::LinkModelFacet-»
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	protected «EXPAND MetaModel::QualifiedClassName FOR getTargetType()» getNewTarget() {
+		return «EXPAND MetaModel::CastEObject('newEnd') FOR getTargetType()»;
+	}
+«ENDDEFINE»
+
+«REM»
+	Generates canExecute() method for the command that reorients link.
+	Implementation should perform all static checks that command can be executed.
+«ENDREM»
+«DEFINE canReorient(link : gmfgen::GenLink) FOR gmfgen::LinkModelFacet-»
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	public boolean canExecute() {
+		«EXPAND checkLinkValidity-»
+		if (reorientDirection == org.eclipse.gmf.runtime.emf.type.core.requests.ReorientRelationshipRequest.REORIENT_SOURCE) {
+			return canReorientSource();
+		}
+		if (reorientDirection == org.eclipse.gmf.runtime.emf.type.core.requests.ReorientRelationshipRequest.REORIENT_TARGET) {
+			return canReorientTarget();
+		}
+		return false;
+	}
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	protected boolean canReorientSource() {
+		«EXPAND checkSourceRequestValidity(link)-»
+	}
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	protected boolean canReorientTarget() {
+		«EXPAND checkTargetRequestValidity(link)-»
+	}
+«ENDDEFINE»
+
+«DEFINE checkLinkValidity FOR gmfgen::LinkModelFacet-»
+«ENDDEFINE»
+
+«DEFINE checkLinkValidity FOR gmfgen::TypeLinkModelFacet-»
+	if («EXPAND MetaModel::NotInstance('getElementToEdit()') FOR metaClass») {
+		return false;
+	}
+«ENDDEFINE»
+
+«DEFINE checkLinkValidity FOR gmfgen::FeatureLinkModelFacet-»
+	if («EXPAND MetaModel::NotInstance('referenceOwner') FOR getSourceType()») {
+		return false;
+	}
+«ENDDEFINE»
+
+«DEFINE checkSourceRequestValidity(link : gmfgen::GenLink) FOR gmfgen::LinkModelFacet-»
+«ENDDEFINE»
+
+«DEFINE checkSourceRequestValidity(link : gmfgen::GenLink) FOR gmfgen::TypeLinkModelFacet-»
+	if (!(«EXPAND MetaModel::IsInstance('oldEnd') FOR getSourceType()» && «EXPAND MetaModel::IsInstance('newEnd') FOR getSourceType()»)) {
+		return false;
+	}
+	«EXPAND extractFeatureWithCheck('getLink()', metaClass, 'target', getTargetType()) FOR targetMetaFeature-»
+	«EXPAND checkLinkConstraint(link, 'getNewSource()', 'target')-»
+«ENDDEFINE»
+
+«REM»
+	When feature source is being reoriented oldEnd is the link target.
+«ENDREM»
+«DEFINE checkSourceRequestValidity(link : gmfgen::GenLink) FOR gmfgen::FeatureLinkModelFacet-»
+	if (!(«EXPAND MetaModel::IsInstance('oldEnd') FOR getTargetType()» && «EXPAND MetaModel::IsInstance('newEnd') FOR getSourceType()»)) {
+		return false;
+	}
+	return «EXPAND checkLinkConstraintInvocation FOR link»(getNewSource(), getOldTarget());
+«ENDDEFINE»
+
+«DEFINE checkTargetRequestValidity(link : gmfgen::GenLink) FOR gmfgen::LinkModelFacet-»
+«ENDDEFINE»
+
+«DEFINE checkTargetRequestValidity(link : gmfgen::GenLink) FOR gmfgen::TypeLinkModelFacet-»
+	if (!(«EXPAND MetaModel::IsInstance('oldEnd') FOR getTargetType()» && «EXPAND MetaModel::IsInstance('newEnd') FOR getTargetType()»)) {
+		return false;
+	}
+	«IF sourceMetaFeature <> null-»
+		«EXPAND extractFeatureWithCheck('getLink()', metaClass, 'source', getSourceType()) FOR sourceMetaFeature-»
+	«ELSE-»
+		if (!(«EXPAND MetaModel::IsContainerInstance('getLink()', metaClass) FOR getSourceType()»)) {
+			return false;
+		}
+		«EXPAND MetaModel::DeclareAndAssignContainer('source', 'getLink()', metaClass) FOR getSourceType()»
+	«ENDIF-»
+	«EXPAND checkLinkConstraint(link, 'source', 'getNewTarget()')-»
+«ENDDEFINE»
+
+«DEFINE checkTargetRequestValidity(link : gmfgen::GenLink) FOR gmfgen::FeatureLinkModelFacet-»
+	if (!(«EXPAND MetaModel::IsInstance('oldEnd') FOR getTargetType()» && «EXPAND MetaModel::IsInstance('newEnd') FOR getTargetType()»)) {
+		return false;
+	}
+	return «EXPAND checkLinkConstraintInvocation FOR link»(getOldSource(), getNewTarget());
+«ENDDEFINE»
+
+«DEFINE extractFeatureWithCheck(containerVar : String, containerMetaClass : genmodel::GenClass, _var : String, varMetaClass : genmodel::GenClass) FOR genmodel::GenFeature-»
+	«IF ecoreFeature.many-»
+		if («EXPAND MetaModel::getFeatureValue(containerVar, containerMetaClass)».size() != 1) {
+			return false;
+		}
+		«EXPAND MetaModel::DeclareAndAssign2(_var, containerVar, containerMetaClass, self, 'get(0)', true) FOR varMetaClass»
+	«ELSE-»
+		«EXPAND MetaModel::DeclareAndAssign(_var, containerVar, containerMetaClass, self) FOR varMetaClass»
+	«ENDIF-»
+«ENDDEFINE»
+
+«DEFINE checkLinkConstraint(link : gmfgen::GenLink, sourceVar : String, targetVar : String) FOR gmfgen::TypeLinkModelFacet-»
+	«IF hasContainerOtherThanSource(self)-»
+		if (!(«EXPAND MetaModel::IsContainerInstance('getLink()', metaClass) FOR containmentMetaFeature.genClass»)) {
+			return false;
+		}
+		«EXPAND MetaModel::DeclareAndAssignContainer('container', 'getLink()', metaClass) FOR containmentMetaFeature.genClass»
+		return «EXPAND checkLinkConstraintInvocation FOR link»(container, «sourceVar», «targetVar»);
+	«ELSE-»
+		return «EXPAND checkLinkConstraintInvocation FOR link»(«sourceVar», «targetVar»);
+	«ENDIF-»
+«ENDDEFINE»
+
+«DEFINE checkLinkConstraintInvocation FOR gmfgen::GenLink-»
+	«diagram.getBaseItemSemanticEditPolicyQualifiedClassName()».«diagram.getLinkCreationConstraintsClassName()».canExist«getUniqueIdentifier()»
+«ENDDEFINE»
+
+«REM»
+	Generates doExecuteWithResult() method for the command that reorients link.
+	Implementation should throw ExecutionException if it can't execute the command.
+«ENDREM»
+«DEFINE reorient FOR gmfgen::LinkModelFacet-»
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	protected org.eclipse.gmf.runtime.common.core.command.CommandResult doExecuteWithResult(
+			org.eclipse.core.runtime.IProgressMonitor monitor, org.eclipse.core.runtime.IAdaptable info)
+			throws org.eclipse.core.commands.ExecutionException {
+		if (!canExecute()) {
+			throw new org.eclipse.core.commands.ExecutionException("Invalid arguments in reorient link command"); «EXPAND xpt::Common::nonNLS»
+		}
+		if (reorientDirection == org.eclipse.gmf.runtime.emf.type.core.requests.ReorientRelationshipRequest.REORIENT_SOURCE) {
+			return reorientSource();
+		}
+		if (reorientDirection == org.eclipse.gmf.runtime.emf.type.core.requests.ReorientRelationshipRequest.REORIENT_TARGET) {
+			return reorientTarget();
+		}
+		throw new IllegalStateException();
+	}
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	protected org.eclipse.gmf.runtime.common.core.command.CommandResult reorientSource() throws org.eclipse.core.commands.ExecutionException {
+		«EXPAND reorientSource-»
+	}
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	protected org.eclipse.gmf.runtime.common.core.command.CommandResult reorientTarget() throws org.eclipse.core.commands.ExecutionException {
+		«EXPAND reorientTarget-»
+	}
+«ENDDEFINE»
+
+«DEFINE reorientSource FOR gmfgen::LinkModelFacet-»
+«ENDDEFINE»
+
+«REM»
+	Shouldn't we change link container here?
+	[artem] especially when there's explicit childMetaFeature and 
+	we changed source to another, but didn't change the container. Perhaps,
+	makes sense to deduceContainer() using new source?
+«ENDREM»
+«DEFINE reorientSource FOR gmfgen::TypeLinkModelFacet-»
+«IF (if sourceMetaFeature = null then containmentMetaFeature.ecoreFeature.changeable else sourceMetaFeature.ecoreFeature.changeable endif)-»
+«IF sourceMetaFeature <> null-»
+	«EXPAND changeTarget('getLink()', metaClass, 'getOldSource()', 'getNewSource()') FOR sourceMetaFeature-»
+«ELSE-»
+	«EXPAND changeSource('getLink()', 'getOldSource()', 'getNewSource()', getSourceType()) FOR (if hasExplicitChildFeature(self) then childMetaFeature else containmentMetaFeature endif)-»
+«ENDIF-»
+	return org.eclipse.gmf.runtime.common.core.command.CommandResult.newOKCommandResult(getLink());
+«ELSE-»
+	throw new UnsupportedOperationException();
+«ENDIF-»
+«ENDDEFINE»
+
+«REM»
+	When feature source is being reoriented oldEnd is the link target.
+«ENDREM»
+«DEFINE reorientSource FOR gmfgen::FeatureLinkModelFacet-»
+«IF metaFeature.ecoreFeature.changeable-»
+	«EXPAND changeSource('getOldTarget()', 'getOldSource()', 'getNewSource()', getSourceType()) FOR metaFeature-»
+	return org.eclipse.gmf.runtime.common.core.command.CommandResult.newOKCommandResult(referenceOwner);
+«ELSE-»
+	throw new UnsupportedOperationException();
+«ENDIF-»
+«ENDDEFINE»
+
+«DEFINE reorientTarget FOR gmfgen::LinkModelFacet-»
+«ENDDEFINE»
+
+«DEFINE reorientTarget FOR gmfgen::TypeLinkModelFacet-»
+«IF targetMetaFeature.ecoreFeature.changeable-»
+	«EXPAND changeTarget('getLink()', metaClass, 'getOldTarget()', 'getNewTarget()') FOR targetMetaFeature-»
+	return org.eclipse.gmf.runtime.common.core.command.CommandResult.newOKCommandResult(getLink());
+«ELSE-»
+	throw new UnsupportedOperationException();
+«ENDIF-»
+«ENDDEFINE»
+
+«DEFINE reorientTarget FOR gmfgen::FeatureLinkModelFacet-»
+«IF metaFeature.ecoreFeature.changeable-»
+	«EXPAND changeTarget('getOldSource()', getSourceType(), 'getOldTarget()', 'getNewTarget()') FOR metaFeature-»
+	return org.eclipse.gmf.runtime.common.core.command.CommandResult.newOKCommandResult(referenceOwner);
+«ELSE-»
+	throw new UnsupportedOperationException();
+«ENDIF-»
+«ENDDEFINE»
+
+«REM»
+	Replace old target with the new one in the source.
+«ENDREM»
+«DEFINE changeTarget(sourceVar : String, sourceVarGenClass : genmodel::GenClass, oldTargetVar : String, newTargetVar : String) FOR genmodel::GenFeature-»
+«EXPAND MetaModel::replaceFeatureValue(sourceVar, sourceVarGenClass, oldTargetVar, newTargetVar)»
+«ENDDEFINE»
+
+«REM»
+	Move target from old source to the new one.
+«ENDREM»
+«DEFINE changeSource(targetVar : String, oldSourceVar : String, newSourceVar : String, sourceVarGenClass : genmodel::GenClass) FOR genmodel::GenFeature-»
+«EXPAND MetaModel::moveFeatureValue(oldSourceVar, newSourceVar, sourceVarGenClass, targetVar)»
+«ENDDEFINE»

@@ -1,0 +1,51 @@
+﻿/*
+ * Copyright (c) 2007, 2009 Borland Software Corporation
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Dmitry Stadnik (Borland) - initial API and implementation
+ */
+
+«IMPORT 'http://www.eclipse.org/gmf/2009/GenModel'»
+
+«DEFINE properties FOR gmfgen::GenPlugin-»
+pluginName=«name»
+providerName=«provider»
+
+editorName=«editorGen.modelID» Diagram Editing
+context.description=«editorGen.modelID» Diagram Editing
+context.name=In «editorGen.modelID» Diagram Editor
+newWizardName=«editorGen.modelID» Diagram
+newWizardDesc=Creates «editorGen.modelID» diagram.
+
+«IF editorGen.diagram.generateInitDiagramAction()-»
+initDiagramActionLabel=Initialize «editorGen.diagramFileExtension» diagram file
+«ENDIF-»
+
+«IF null <> editorGen.application-»
+perspectiveName=«editorGen.modelID» Perspective
+applicationActionSetLabel=<«editorGen.modelID» Actions
+newDiagramActionLabel=«editorGen.modelID» Diagram
+aboutActionLabel=«editorGen.modelID» Diagram About...
+openURIActionLabel=Open URI...
+openURIActionDescription=Open file by URI
+openActionLabel=Open...
+openActionDescription=Open file
+«ENDIF-»
+
+navigatorContentName=*.«editorGen.diagramFileExtension» diagram contents
+«IF null <> editorGen.navigator and editorGen.navigator.generateDomainModelNavigator-»
+domainNavigatorContentName=*.«editorGen.domainFileExtension» model contents
+«ENDIF-»
+update.diagram.name=Update «editorGen.modelID» diagram
+update.diagram.description=Perform «editorGen.modelID» diagram update
+
+«EXPAND xpt::propsheet::extensions::i18n FOR editorGen.propertySheet-»
+«EXPAND xpt::diagram::preferences::extensions::i18n FOR editorGen.diagram-»
+«EXPAND xpt::providers::extensions::i18n FOR editorGen.diagram-»
+«EXPAND impl::actions::extensions::i18n FOR editorGen-»
+«ENDDEFINE»

@@ -1,0 +1,132 @@
+﻿/*
+ * Copyright (c) 2007, 2009 Borland Software Corporation
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Alexander Shatalin (Borland) - initial API and implementation
+ */
+
+«IMPORT 'http://www.eclipse.org/gmf/2009/GenModel'»
+«EXTENSION xpt::navigator::Utils»
+
+«DEFINE NavigatorLinkHelper FOR gmfgen::GenNavigator-»
+	«EXPAND xpt::Common::copyright FOR editorGen-»
+package «packageName»;
+
+	«EXPAND xpt::Common::generatedClassComment»
+public class «linkHelperClassName» implements org.eclipse.ui.navigator.ILinkHelper {
+
+	«EXPAND xpt::navigator::getEditorInput::getEditorInput FOR editorGen-»
+
+	«EXPAND findSelection-»
+	
+	«EXPAND activateEditor-»
+	
+	«EXPAND additions-»
+}
+«ENDDEFINE»
+
+«DEFINE findSelection FOR gmfgen::GenNavigator-»
+	«EXPAND xpt::Common::generatedMemberComment»
+public org.eclipse.jface.viewers.IStructuredSelection findSelection(org.eclipse.ui.IEditorInput anInput) {
+	«EXPAND defineDiagramDocument FOR editorGen.plugin-»
+	«EXPAND findSelectionBody-»
+}
+«ENDDEFINE»
+
+«DEFINE defineDiagramDocument FOR gmfgen::GenPlugin-»
+org.eclipse.gmf.runtime.diagram.ui.resources.editor.document.IDiagramDocument document = «getActivatorQualifiedClassName()».getInstance().getDocumentProvider().getDiagramDocument(anInput);
+«ENDDEFINE»
+
+«DEFINE findSelectionBody FOR gmfgen::GenNavigator-»
+	«EXPAND getDiagramSelection FOR getDiagramTopReference(self)-»
+	return org.eclipse.jface.viewers.StructuredSelection.EMPTY;
+«ENDDEFINE»
+
+«REM»
+	Linking with editor currently supported only for the navigators conteining top 
+	reference to the diagram. In this case diagram node will be selected in navigator.
+«ENDREM»
+«DEFINE getDiagramSelection FOR gmfgen::GenNavigatorChildReference-»
+«EXPAND getDiagram FOR navigator.editorGen-»
+org.eclipse.core.resources.IFile file = org.eclipse.emf.workspace.util.WorkspaceSynchronizer.getFile(diagram.eResource());
+if (file != null) {
+	«IF isInsideGroup()-»
+	«navigator.getNavigatorGroupQualifiedClassName()» parentGroup = new «navigator.getNavigatorGroupQualifiedClassName()»("«groupName»", "«groupIcon»", «EXPAND xpt::editor::VisualIDRegistry::modelID FOR navigator.editorGen.diagram», file);
+	«ENDIF-»
+	«navigator.getNavigatorItemQualifiedClassName()» item = new «navigator.getNavigatorItemQualifiedClassName()»(diagram, «IF isInsideGroup()»parentGroup«ELSE»file«ENDIF», false);
+	«IF isInsideGroup()-»
+	parentGroup.addChild(item);
+	«ENDIF-»
+	return new org.eclipse.jface.viewers.StructuredSelection(«IF isInsideGroup()»parentGroup«ELSE»item«ENDIF»);
+}
+«ENDDEFINE»
+
+«DEFINE getDiagram FOR gmfgen::GenEditorGenerator-»
+if (document == null) {
+	return org.eclipse.jface.viewers.StructuredSelection.EMPTY;
+}
+org.eclipse.gmf.runtime.notation.Diagram diagram = document.getDiagram();
+«ENDDEFINE»
+
+«DEFINE activateEditor FOR gmfgen::GenNavigator-»
+	«EXPAND xpt::Common::generatedMemberComment»
+public void activateEditor(org.eclipse.ui.IWorkbenchPage aPage, org.eclipse.jface.viewers.IStructuredSelection aSelection) {
+	if (aSelection == null || aSelection.isEmpty()) {
+		return;
+	}
+	if (false == aSelection.getFirstElement() instanceof «getAbstractNavigatorItemQualifiedClassName()») {
+		return;
+	}
+		
+	«getAbstractNavigatorItemQualifiedClassName()» abstractNavigatorItem = («getAbstractNavigatorItemQualifiedClassName()») aSelection.getFirstElement();
+	org.eclipse.gmf.runtime.notation.View navigatorView = null;
+	if (abstractNavigatorItem instanceof «getNavigatorItemQualifiedClassName()») {
+		navigatorView = ((«getNavigatorItemQualifiedClassName()») abstractNavigatorItem).getView();
+	} else if (abstractNavigatorItem instanceof «getNavigatorGroupQualifiedClassName()») {
+		«getNavigatorGroupQualifiedClassName()» navigatorGroup = («getNavigatorGroupQualifiedClassName()») abstractNavigatorItem;
+		if (navigatorGroup.getParent() instanceof «getNavigatorItemQualifiedClassName()») {
+			navigatorView = ((«getNavigatorItemQualifiedClassName()») navigatorGroup.getParent()).getView();
+		}«EXPAND getViewFromShortcut-»
+	}
+	if (navigatorView == null) {
+		return;
+	}
+	org.eclipse.ui.IEditorInput editorInput = getEditorInput(navigatorView.getDiagram());
+	org.eclipse.ui.IEditorPart editor = aPage.findEditor(editorInput);
+	if (editor == null) {
+		return;
+	}
+	aPage.bringToTop(editor);
+	if (editor instanceof «EXPAND diagramEditorClassFQName») {
+		«EXPAND diagramEditorClassFQName» diagramEditor = («EXPAND diagramEditorClassFQName») editor;
+		org.eclipse.emf.ecore.resource.ResourceSet diagramEditorResourceSet = diagramEditor.getEditingDomain().getResourceSet();
+		org.eclipse.emf.ecore.EObject selectedView = diagramEditorResourceSet.getEObject(org.eclipse.emf.ecore.util.EcoreUtil.getURI(navigatorView), true);	
+		if (selectedView == null) {
+			return;
+		}
+		org.eclipse.gef.GraphicalViewer graphicalViewer = (org.eclipse.gef.GraphicalViewer) diagramEditor.getAdapter(org.eclipse.gef.GraphicalViewer.class);
+		org.eclipse.gef.EditPart selectedEditPart = (org.eclipse.gef.EditPart) graphicalViewer.getEditPartRegistry().get(selectedView);
+		if (selectedEditPart != null) {
+			graphicalViewer.select(selectedEditPart);
+		}
+	}
+}
+«ENDDEFINE»
+
+«DEFINE getViewFromShortcut FOR gmfgen::GenNavigator-»
+	«IF editorGen.diagram.generateShortcutIcon()-»
+else if (navigatorGroup.getParent() instanceof org.eclipse.core.runtime.IAdaptable) {
+	navigatorView = (org.eclipse.gmf.runtime.notation.View) ((org.eclipse.core.runtime.IAdaptable) navigatorGroup.getParent()).getAdapter(org.eclipse.gmf.runtime.notation.View.class);
+}
+	«ENDIF-»
+«ENDDEFINE»
+
+«DEFINE diagramEditorClassFQName FOR gmfgen::GenNavigator»org.eclipse.gmf.runtime.diagram.ui.parts.DiagramEditor«ENDDEFINE»
+
+«DEFINE additions FOR gmfgen::GenNavigator-»
+«ENDDEFINE»

@@ -1,0 +1,74 @@
+﻿/*
+ * Copyright (c) 2007, 2009 Borland Software Corporation
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Dmitry Stadnik (Borland) - initial API and implementation
+ */
+
+«IMPORT 'http://www.eclipse.org/gmf/2009/GenModel'»
+
+«DEFINE RegexpExpressionFactory FOR gmfgen::GenExpressionInterpreter-»
+«EXPAND xpt::Common::copyright FOR container.editorGen-»
+package «container.expressionsPackageName»;
+
+«EXPAND xpt::Common::generatedClassComment»
+public class «className» {
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	private «className»() {
+	}
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	public static «container.getAbstractExpressionQualifiedClassName()» getExpression(
+			String body, org.eclipse.emf.ecore.EClassifier context, java.util.Map environment) {
+		return new Expression(body, context, environment);
+	}
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	public static «container.getAbstractExpressionQualifiedClassName()» getExpression(
+			String body, org.eclipse.emf.ecore.EClassifier context) {
+		return getExpression(body, context, java.util.Collections.EMPTY_MAP);
+	}
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	private static class Expression extends «container.getAbstractExpressionQualifiedClassName()» {
+
+		«EXPAND xpt::Common::generatedMemberComment»
+		private final java.util.regex.Pattern pattern;
+
+		«EXPAND xpt::Common::generatedMemberComment»
+		public Expression(String body, org.eclipse.emf.ecore.EClassifier context, java.util.Map environment) {
+			super(body, context);
+			java.util.regex.Pattern p;
+			try {
+				p = java.util.regex.Pattern.compile(body);
+			} catch (java.util.regex.PatternSyntaxException e) {
+				setStatus(org.eclipse.core.runtime.IStatus.ERROR, e.getMessage(), e);
+				p = null;
+			}
+			this.pattern = p;
+		}
+
+		«EXPAND xpt::Common::generatedMemberComment»
+		protected Object doEvaluate(Object contextInstance, java.util.Map env) {
+			if (pattern == null) {
+				return null;
+			}
+			if (context() instanceof org.eclipse.emf.ecore.EDataType) {
+				contextInstance = org.eclipse.emf.ecore.util.EcoreUtil.convertToString(
+						(org.eclipse.emf.ecore.EDataType) context(), contextInstance);
+			}
+			java.util.regex.Matcher matcher = this.pattern.matcher(String.valueOf(contextInstance));
+			return Boolean.valueOf(«IF language = gmfgen::GenLanguage::nregexp»!«ENDIF»matcher.matches());
+		}
+	}
+	«EXPAND additions-»
+}
+«ENDDEFINE»
+
+«DEFINE additions FOR gmfgen::GenExpressionInterpreter»«ENDDEFINE»

@@ -1,0 +1,64 @@
+﻿/*
+ * Copyright (c) 2007, 2009 Borland Software Corporation
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Alexander Shatalin (Borland) - initial API and implementation
+ */
+
+«IMPORT 'http://www.eclipse.org/gmf/2009/GenModel'»
+
+«DEFINE NodeDescriptor FOR gmfgen::GenDiagramUpdater-»
+	«EXPAND xpt::Common::copyright FOR editorGen-»
+package «editorGen.editor.packageName»;
+
+	«EXPAND xpt::Common::generatedClassComment»
+public class «nodeDescriptorClassName» {
+
+	«EXPAND attributes-»
+	
+	«EXPAND _constructor-»
+	
+	«EXPAND getModelElement-»
+	
+	«EXPAND getVisualID-»
+		
+	«EXPAND additions-»
+}
+«ENDDEFINE»
+
+«DEFINE attributes FOR gmfgen::GenDiagramUpdater-»
+	«EXPAND xpt::Common::generatedMemberComment»
+	private final org.eclipse.emf.ecore.EObject myModelElement;
+	
+	«EXPAND xpt::Common::generatedMemberComment»
+	private final int myVisualID;
+«ENDDEFINE»
+
+«DEFINE _constructor FOR gmfgen::GenDiagramUpdater-»
+	«EXPAND xpt::Common::generatedMemberComment»
+public «nodeDescriptorClassName»(org.eclipse.emf.ecore.EObject modelElement, int visualID) {
+	myModelElement = modelElement;
+	myVisualID = visualID;
+}
+«ENDDEFINE»
+
+«DEFINE getModelElement FOR gmfgen::GenDiagramUpdater-»
+	«EXPAND xpt::Common::generatedMemberComment»
+public org.eclipse.emf.ecore.EObject getModelElement() {
+	return myModelElement;
+}
+«ENDDEFINE»
+	
+«DEFINE getVisualID FOR gmfgen::GenDiagramUpdater-»
+	«EXPAND xpt::Common::generatedMemberComment»
+public int getVisualID() {
+	return myVisualID;
+}
+«ENDDEFINE»
+
+«DEFINE additions FOR gmfgen::GenDiagramUpdater»«ENDDEFINE»

@@ -1,0 +1,19 @@
+/*
+ * Copyright (c) 2007, 2009 Borland Software Corporation
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Anna Karjakina (Borland) - initial API and implementation
+ */
+
+modeltype gmfgen uses "http://www.eclipse.org/gmf/2009/GenModel";
+
+library i18n;
+
+helper i18nKeyForModelingAssistantProvider(diagram : gmfgen::GenDiagram) : String { return diagram.modelingAssistantProviderClassName }
+helper titleKey(dialogKey : String) : String { return dialogKey + 'Title' }
+helper messageKey(dialogKey : String) : String { return dialogKey + 'Message' }

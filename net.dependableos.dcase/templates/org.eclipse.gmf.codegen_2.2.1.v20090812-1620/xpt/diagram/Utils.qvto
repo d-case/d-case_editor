@@ -1,0 +1,64 @@
+/*
+ * Copyright (c) 2006, 2009 Borland Software Corporation
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Dmitry Stadnik (Borland) - initial API and implementation
+ */
+import gmf.GenModelUtils;
+
+modeltype gmfgen uses "http://www.eclipse.org/gmf/2009/GenModel";
+modeltype notation uses "http://www.eclipse.org/gmf/runtime/1.0.2/notation";
+
+library Utils;
+
+-- all elements that may have element type: diagram, nodes and links
+helper GenDiagram::getAllTypedElements() : Sequence(gmfgen::GenCommonBase) {
+	return Sequence { self }[gmfgen::GenCommonBase]->union(self.getAllNodes()->asSequence())->union(self.links->asSequence());
+}
+
+helper hasExplicitChildFeature(facet : gmfgen::TypeModelFacet) : Boolean {
+	return not isDerived(facet.childMetaFeature) and facet.childMetaFeature <> facet.containmentMetaFeature
+}
+
+-- true when link is contained in an object other than link's source,
+-- (1) sourceMetaFeature is specified
+-- (2) childMetaFeature is not the same as containment and belongs to a different class than container
+-- for (2), consider scenario from bug #226882, container "A", that holds link "L" and link's source and target, 
+-- "N1" and "N2". "N1" has a reference to "L" which is being used as childMetaFeature. Hence, link's container, "C"
+-- is different from link's source, "N1". As nothing can prevent "C" from subclassing "N1", there's no sure way to
+-- tell if container is really different from the source or not, and we'd better assume they are different.  
+helper hasContainerOtherThanSource(facet : gmfgen::TypeLinkModelFacet) : Boolean {
+	return facet.sourceMetaFeature <> null or facet.childMetaFeature <> facet.containmentMetaFeature
+}
+
+helper allPreferencePages(genDiagram : gmfgen::GenDiagram) : Sequence(gmfgen::GenPreferencePage) {
+	return recursePages(genDiagram.preferencePages->asSequence())
+}
+
+helper recursePages(pages : Sequence(gmfgen::GenPreferencePage)) : Sequence(gmfgen::GenPreferencePage) {
+	return (if pages->isEmpty() then pages else pages->union(recursePages(pages.children))->asOrderedSet()->asSequence() endif)
+}
+
+-- check if there's notation::FontStyle among diagram element's custom styles
+-- XXX the reason this is not inlined mostly because of troubles importing notation model into xpt
+helper gmfgen::GenCommonBase::hasFontStyleInCustom() : Boolean {
+	return self.styles->exists(s | s.ecoreClass.oclIsKindOf(notation::FontStyle));
+} 
+
+helper gmfgen::GenCommonBase::hasLineStyleInCustom() : Boolean {
+	return self.styles->exists(s | s.ecoreClass.oclIsKindOf(notation::LineStyle));
+}
+
+helper gmfgen::GenCommonBase::hasFillStyleInCustom() : Boolean {
+	return self.styles->exists(s | s.ecoreClass.oclIsKindOf(notation::FillStyle));
+}
+
+-- if diagram is in pixel map mode, no reason to use getMapMode()
+helper gmfgen::GenDiagram::isPixelMapMode() : Boolean {
+	return self.units = 'Pixel';
+}

@@ -1,0 +1,44 @@
+﻿/*
+ * Copyright (c) 2007, 2009 Borland Software Corporation
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Alexander Shatalin (Borland) - initial API and implementation
+ *    Artem Tikhomirov (Borland) - [174961] migration to Commands/Handlers 
+ */
+
+«IMPORT 'http://www.eclipse.org/gmf/2009/GenModel'»
+«EXTENSION xpt::StringOperations»
+
+«DEFINE Main FOR gmfgen::LoadResourceAction-»
+«EXPAND xpt::Common::copyright FOR owner.editorGen-»
+«EXPAND xpt::Common::packageStatement FOR qualifiedClassName»
+
+«EXPAND xpt::Common::generatedClassComment»
+public class «qualifiedClassName.xpandSplit('\\.')->last()»«EXPAND extendsList»«EXPAND implementsList» {
+«EXPAND executeMethod»
+«EXPAND additions-»
+}
+«ENDDEFINE»
+
+«DEFINE extendsList FOR gmfgen::LoadResourceAction» extends org.eclipse.core.commands.AbstractHandler«ENDDEFINE»
+«DEFINE implementsList FOR gmfgen::LoadResourceAction»«ENDDEFINE» 
+
+«DEFINE executeMethod FOR gmfgen::LoadResourceAction-»
+	«EXPAND xpt::Common::generatedMemberComment»
+	public Object execute(org.eclipse.core.commands.ExecutionEvent event) throws org.eclipse.core.commands.ExecutionException {
+		org.eclipse.ui.IEditorPart diagramEditor = org.eclipse.ui.handlers.HandlerUtil.getActiveEditorChecked(event);
+		org.eclipse.swt.widgets.Shell shell = diagramEditor.getEditorSite().getShell();
+		«EXPAND xpt::Common::_assert('diagramEditor instanceof org.eclipse.gmf.runtime.diagram.ui.parts.DiagramEditor')-»
+		org.eclipse.emf.transaction.TransactionalEditingDomain editingDomain = ((org.eclipse.gmf.runtime.diagram.ui.parts.DiagramEditor) diagramEditor).getEditingDomain();
+		org.eclipse.emf.edit.ui.action.LoadResourceAction.LoadResourceDialog loadResourceDialog = new org.eclipse.emf.edit.ui.action.LoadResourceAction.LoadResourceDialog(shell, editingDomain);
+		loadResourceDialog.open();
+		return null;
+	}
+«ENDDEFINE»
+
+«DEFINE additions FOR gmfgen::LoadResourceAction»«ENDDEFINE»

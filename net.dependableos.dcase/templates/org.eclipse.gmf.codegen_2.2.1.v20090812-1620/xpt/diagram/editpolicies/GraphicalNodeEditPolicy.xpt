@@ -1,0 +1,72 @@
+﻿/*
+ * Copyright (c) 2006, 2009 Borland Software Corporation
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Dmitry Stadnik (Borland) - initial API and implementation
+ */
+
+«IMPORT 'http://www.eclipse.org/gmf/2009/GenModel'»
+
+«DEFINE GraphicalNodeEditPolicy FOR gmfgen::GenNode-»
+«EXPAND xpt::Common::copyright FOR getDiagram().editorGen-»
+package «getDiagram().editPoliciesPackageName»;
+
+«EXPAND xpt::Common::generatedClassComment»
+public class «graphicalNodeEditPolicyClassName» extends org.eclipse.gmf.runtime.diagram.ui.editpolicies.GraphicalNodeEditPolicy {
+
+	«EXPAND xpt::Common::generatedClassComment»
+	protected org.eclipse.gef.commands.Command getConnectionCompleteCommand(
+			org.eclipse.gef.requests.CreateConnectionRequest request) {
+		org.eclipse.gmf.runtime.emf.type.core.IElementType elementType = getElementType(request);
+		«FOREACH reorientedIncomingLinks->asSequence() AS link-»
+		if («EXPAND xpt::providers::ElementTypes::accessElementType FOR link» == elementType) {
+			«IF link.outgoingCreationAllowed-»
+			if (request.getSourceEditPart() != getHost()) {
+			«ENDIF-»
+			return getConnectionWithReorientedViewCompleteCommand(request);
+			«IF link.outgoingCreationAllowed-»
+			}
+			«ENDIF-»
+		}
+		«ENDFOREACH-»
+		return super.getConnectionCompleteCommand(request);
+	}
+
+	«EXPAND xpt::Common::generatedClassComment»
+	protected org.eclipse.gmf.runtime.emf.type.core.IElementType getElementType(
+			org.eclipse.gef.requests.CreateConnectionRequest request) {
+		if (request instanceof org.eclipse.gmf.runtime.diagram.ui.requests.CreateConnectionViewAndElementRequest) {
+			org.eclipse.gmf.runtime.diagram.core.edithelpers.CreateElementRequestAdapter requestAdapter =
+					((org.eclipse.gmf.runtime.diagram.ui.requests.CreateConnectionViewAndElementRequest) request)
+							.getConnectionViewAndElementDescriptor().getCreateElementRequestAdapter();
+			return (org.eclipse.gmf.runtime.emf.type.core.IElementType) requestAdapter.getAdapter(
+					org.eclipse.gmf.runtime.emf.type.core.IElementType.class);
+		}
+		return null;
+	}
+
+	«EXPAND xpt::Common::generatedClassComment»
+	protected org.eclipse.gef.commands.Command getConnectionWithReorientedViewCompleteCommand(
+			org.eclipse.gef.requests.CreateConnectionRequest request) {
+		org.eclipse.gmf.runtime.diagram.ui.commands.ICommandProxy c =
+				(org.eclipse.gmf.runtime.diagram.ui.commands.ICommandProxy) super.getConnectionCompleteCommand(request);
+		org.eclipse.gmf.runtime.common.core.command.CompositeCommand cc =
+				(org.eclipse.gmf.runtime.common.core.command.CompositeCommand) c.getICommand();
+		org.eclipse.emf.transaction.TransactionalEditingDomain editingDomain =
+				((org.eclipse.gmf.runtime.diagram.ui.editparts.IGraphicalEditPart) getHost()).getEditingDomain();
+		«getDiagram().getReorientConnectionViewCommandQualifiedClassName()» rcvCommand =
+				new «getDiagram().getReorientConnectionViewCommandQualifiedClassName()»(editingDomain, null);
+		rcvCommand.setEdgeAdaptor(getViewAdapter());
+		cc.compose(rcvCommand);
+		return c;
+	}
+	«EXPAND additions-»
+}
+«ENDDEFINE»
+
+«DEFINE additions FOR gmfgen::GenNode»«ENDDEFINE»

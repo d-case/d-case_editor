@@ -1,0 +1,98 @@
+﻿/*
+ * Copyright (c) 2007, 2009 Borland Software Corporation
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Alexander Shatalin (Borland) - initial API and implementation
+ */
+ 
+«IMPORT 'http://www.eclipse.org/gmf/2009/GenModel'»
+
+«DEFINE DomainNavigatorContentProvider FOR gmfgen::GenNavigator-»
+	«EXPAND xpt::Common::copyright FOR editorGen-»
+package «packageName»;
+
+	«EXPAND xpt::Common::generatedClassComment»
+public class «domainContentProviderClassName» implements org.eclipse.ui.navigator.ICommonContentProvider {
+
+	«EXPAND attributes-»
+	
+	«EXPAND _constructor-»
+
+	«EXPAND xpt::navigator::NavigatorContentProvider::iContentProvider-»
+	
+	«EXPAND xpt::navigator::NavigatorContentProvider::iStructuredContentProvider-»
+	
+	«EXPAND xpt::navigator::NavigatorContentProvider::iMementoAware-»
+    
+    «EXPAND xpt::navigator::NavigatorContentProvider::iCommonContentProvider-»
+    
+    «EXPAND iTreeContentProvider-»
+    
+    «EXPAND additions-»
+}
+«ENDDEFINE»
+
+«DEFINE attributes FOR gmfgen::GenNavigator-»
+	«EXPAND xpt::Common::generatedMemberComment»
+private org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider myAdapterFctoryContentProvier;
+
+	«EXPAND xpt::navigator::NavigatorContentProvider::attributes-»
+«ENDDEFINE»
+
+«DEFINE _constructor FOR gmfgen::GenNavigator-»
+	«EXPAND xpt::Common::generatedMemberComment»
+public «domainContentProviderClassName»() {
+	myAdapterFctoryContentProvier = new org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider(«editorGen.plugin.getActivatorQualifiedClassName()».getInstance().getItemProvidersAdapterFactory());
+	«EXPAND xpt::navigator::NavigatorContentProvider::initCommonAttributes-»
+}
+«ENDDEFINE»
+
+«DEFINE iTreeContentProvider FOR gmfgen::GenNavigator-»
+	«EXPAND getChildren-»
+	
+	«EXPAND wrapEObjects-»
+	
+	«EXPAND xpt::navigator::NavigatorContentProvider::getParent-»
+	
+	«EXPAND xpt::navigator::NavigatorContentProvider::hasChildren-»
+«ENDDEFINE»
+
+«DEFINE getChildren FOR gmfgen::GenNavigator-»
+	«EXPAND xpt::Common::generatedMemberComment»
+public Object[] getChildren(Object parentElement) {
+	if (parentElement instanceof org.eclipse.core.resources.IFile) {
+		«EXPAND xpt::navigator::NavigatorContentProvider::getFileResoruce-»
+		return wrapEObjects(myAdapterFctoryContentProvier.getChildren(resource), parentElement);
+	}
+	
+	if (parentElement instanceof «getDomainNavigatorItemQualifiedClassName()») {
+		return wrapEObjects(myAdapterFctoryContentProvier.getChildren(((«getDomainNavigatorItemQualifiedClassName()») parentElement).getEObject()), parentElement);
+	}
+	«EXPAND getOtherChildren-»
+}
+«ENDDEFINE»
+
+«DEFINE getOtherChildren FOR gmfgen::GenNavigator-»
+return EMPTY_ARRAY;
+«ENDDEFINE»
+
+«DEFINE wrapEObjects FOR gmfgen::GenNavigator-»
+	«EXPAND xpt::Common::generatedMemberComment»
+public Object[] wrapEObjects(Object[] objects, Object parentElement) {
+	java.util.Collection result = new java.util.ArrayList();
+	for (int i = 0; i < objects.length; i++) {
+		if (objects[i] instanceof org.eclipse.emf.ecore.EObject) {
+			result.add(new «getDomainNavigatorItemQualifiedClassName()»((org.eclipse.emf.ecore.EObject) objects[i], parentElement, myAdapterFctoryContentProvier));
+		}
+	}
+	return result.toArray();
+}
+«ENDDEFINE»
+
+«DEFINE additions FOR gmfgen::GenNavigator-»
+«ENDDEFINE»

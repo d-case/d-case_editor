@@ -1,0 +1,58 @@
+﻿/*
+ * Copyright (c) 2006, 2009 Borland Software Corporation
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Alexander Shatalin (Borland) - initial API and implementation
+ */
+
+«IMPORT 'http://www.eclipse.org/gmf/2009/GenModel'»
+«EXTENSION xpt::navigator::Utils»
+
+«DEFINE NavigatorSorter FOR gmfgen::GenNavigator-»
+	«EXPAND xpt::Common::copyright FOR editorGen-»
+package «packageName»;
+
+	«EXPAND xpt::Common::generatedClassComment»
+public class «sorterClassName»  extends org.eclipse.jface.viewers.ViewerSorter {
+
+	«EXPAND attributes-»
+	
+	«EXPAND category-»
+
+    «EXPAND additions-»
+}
+«ENDDEFINE»
+
+«DEFINE attributes FOR gmfgen::GenNavigator-»
+	«EXPAND xpt::Common::generatedMemberComment»
+private static final int GROUP_CATEGORY = «getMaxVisualID(self) + 2»;
+	«IF editorGen.diagram.generateCreateShortcutAction()-»
+
+	«EXPAND xpt::Common::generatedMemberComment»
+private static final int SHORTCUTS_CATEGORY = «getMaxVisualID(self) + 1»;
+	«ENDIF-»
+«ENDDEFINE»
+
+«DEFINE category FOR gmfgen::GenNavigator-»
+	«EXPAND xpt::Common::generatedMemberComment»
+public int category(Object element) {
+	if (element instanceof «getNavigatorItemQualifiedClassName()») {
+		«getNavigatorItemQualifiedClassName()» item = («getNavigatorItemQualifiedClassName()») element;
+	«IF editorGen.diagram.generateCreateShortcutAction()-»
+		if (item.getView().getEAnnotation("Shortcut") != null) { «EXPAND xpt::Common::nonNLS»
+			return SHORTCUTS_CATEGORY;
+		}
+	«ENDIF-»
+		return «EXPAND xpt::editor::VisualIDRegistry::getVisualIDMethodCall FOR editorGen.diagram»(item.getView());
+	}
+	return GROUP_CATEGORY;
+}
+«ENDDEFINE»
+
+«DEFINE additions FOR gmfgen::GenNavigator-»
+«ENDDEFINE»

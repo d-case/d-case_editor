@@ -1,0 +1,165 @@
+﻿/*
+ * Copyright (c) 2007, 2009 Borland Software Corporation
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Dmitry Stadnik (Borland) - initial API and implementation
+ */
+«IMPORT 'http://www.eclipse.org/gmf/2009/GenModel'»
+«EXTENSION xpt::editor::Utils»
+
+«DEFINE className FOR gmfgen::GenDiagram»«defaultModelElementSelectionPageClassName(self)»«ENDDEFINE»
+
+«DEFINE qualifiedClassName FOR gmfgen::GenDiagram»«editorGen.editor.packageName».«EXPAND className»«ENDDEFINE»
+
+«DEFINE ModelElementSelectionPage FOR gmfgen::GenDiagram-»
+«EXPAND xpt::Common::copyright FOR editorGen-»
+package «editorGen.editor.packageName»;
+
+«EXPAND xpt::Common::generatedClassComment('Wizard page that allows to select element from model.')»
+public class «EXPAND className» extends org.eclipse.jface.wizard.WizardPage {
+	«EXPAND attributes-»
+
+	«EXPAND ctor-»
+
+	«EXPAND getModelElement-»
+
+	«EXPAND setModelElement-»
+
+	«EXPAND createControl-»
+
+	«EXPAND getSelectionTitle-»
+
+	«EXPAND updateSelection-»
+
+	«EXPAND validatePage-»
+
+	«EXPAND additions-»
+}
+«ENDDEFINE»
+
+«DEFINE attributes FOR gmfgen::GenDiagram-»
+«EXPAND xpt::Common::generatedMemberComment»
+protected org.eclipse.emf.ecore.EObject selectedModelElement;
+
+«EXPAND xpt::Common::generatedMemberComment»
+private org.eclipse.jface.viewers.TreeViewer modelViewer;
+«ENDDEFINE»
+
+«DEFINE ctor FOR gmfgen::GenDiagram-»
+«EXPAND xpt::Common::generatedMemberComment»
+public «EXPAND className»(String pageName) {
+	super(pageName);
+}
+«ENDDEFINE»
+
+«DEFINE getModelElement FOR gmfgen::GenDiagram-»
+«EXPAND xpt::Common::generatedMemberComment»
+public org.eclipse.emf.ecore.EObject getModelElement() {
+	return selectedModelElement;
+}
+«ENDDEFINE»
+
+«DEFINE setModelElement FOR gmfgen::GenDiagram-»
+«EXPAND xpt::Common::generatedMemberComment»
+public void setModelElement(org.eclipse.emf.ecore.EObject modelElement) {
+	selectedModelElement = modelElement;
+	if (modelViewer != null) {
+		if (selectedModelElement != null) {
+			modelViewer.setInput(selectedModelElement.eResource());
+			modelViewer.setSelection(new org.eclipse.jface.viewers.StructuredSelection(selectedModelElement));
+		} else {
+			modelViewer.setInput(null);
+		}
+		setPageComplete(validatePage());
+	}
+}
+«ENDDEFINE»
+
+«DEFINE createControl FOR gmfgen::GenDiagram-»
+«EXPAND xpt::Common::generatedMemberComment»
+public void createControl(org.eclipse.swt.widgets.Composite parent) {
+	initializeDialogUnits(parent);
+
+	org.eclipse.swt.widgets.Composite plate = new org.eclipse.swt.widgets.Composite(parent, org.eclipse.swt.SWT.NONE);
+	plate.setLayoutData(new org.eclipse.swt.layout.GridData(org.eclipse.swt.layout.GridData.FILL_BOTH));
+	org.eclipse.swt.layout.GridLayout layout = new org.eclipse.swt.layout.GridLayout();
+	layout.marginWidth = 0;
+	plate.setLayout(layout);
+	setControl(plate);
+
+	org.eclipse.swt.widgets.Label label = new org.eclipse.swt.widgets.Label(plate, org.eclipse.swt.SWT.NONE);
+	label.setText(getSelectionTitle());
+	label.setLayoutData(new org.eclipse.swt.layout.GridData(org.eclipse.swt.layout.GridData.HORIZONTAL_ALIGN_BEGINNING));
+
+	modelViewer = new org.eclipse.jface.viewers.TreeViewer(
+			plate, org.eclipse.swt.SWT.SINGLE | org.eclipse.swt.SWT.H_SCROLL | org.eclipse.swt.SWT.V_SCROLL | org.eclipse.swt.SWT.BORDER);
+	org.eclipse.swt.layout.GridData layoutData = new org.eclipse.swt.layout.GridData(org.eclipse.swt.layout.GridData.FILL_BOTH);
+	layoutData.heightHint = 300;
+	layoutData.widthHint = 300;
+	modelViewer.getTree().setLayoutData(layoutData);
+	modelViewer.setContentProvider(new org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider(
+			«editorGen.plugin.getActivatorQualifiedClassName()».getInstance().getItemProvidersAdapterFactory()));
+	modelViewer.setLabelProvider(new org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider(
+			«editorGen.plugin.getActivatorQualifiedClassName()».getInstance().getItemProvidersAdapterFactory()));
+	if (selectedModelElement != null) {
+		modelViewer.setInput(selectedModelElement.eResource());
+		modelViewer.setSelection(new org.eclipse.jface.viewers.StructuredSelection(selectedModelElement));
+	}
+	modelViewer.addSelectionChangedListener(new org.eclipse.jface.viewers.ISelectionChangedListener() {
+		public void selectionChanged(org.eclipse.jface.viewers.SelectionChangedEvent event) {
+			«EXPAND className».this.updateSelection((org.eclipse.jface.viewers.IStructuredSelection) event.getSelection());
+		}
+	});
+
+	setPageComplete(validatePage());
+}
+«ENDDEFINE»
+
+«DEFINE getSelectionTitle FOR gmfgen::GenDiagram-»
+«EXPAND xpt::Common::generatedMemberComment('Override to provide custom model element description.')»
+protected String getSelectionTitle() {
+	return «EXPAND xpt::Externalizer::accessorCall(messageKey(i18nKeyForModelElementSelectionPage(self))) FOR editorGen»;
+}
+«ENDDEFINE»
+
+«DEFINE updateSelection FOR gmfgen::GenDiagram-»
+«EXPAND xpt::Common::generatedMemberComment»
+protected void updateSelection(org.eclipse.jface.viewers.IStructuredSelection selection) {
+	selectedModelElement = null;
+	if (selection.size() == 1) {
+		Object selectedElement = selection.getFirstElement();
+		if (selectedElement instanceof org.eclipse.emf.edit.provider.IWrapperItemProvider) {
+			selectedElement = ((org.eclipse.emf.edit.provider.IWrapperItemProvider) selectedElement).getValue();
+		}
+		if (selectedElement instanceof org.eclipse.emf.ecore.util.FeatureMap.Entry) {
+			selectedElement = ((org.eclipse.emf.ecore.util.FeatureMap.Entry) selectedElement).getValue();
+		}
+		if (selectedElement instanceof org.eclipse.emf.ecore.EObject) {
+			selectedModelElement = (org.eclipse.emf.ecore.EObject) selectedElement;
+		}
+	}
+	setPageComplete(validatePage());
+}
+«ENDDEFINE»
+
+«DEFINE validatePage FOR gmfgen::GenDiagram-»
+«EXPAND xpt::Common::generatedMemberComment('Override to provide specific validation of the selected model element.')»
+protected boolean validatePage() {
+	return true;
+}
+«ENDDEFINE»
+
+«DEFINE additions FOR gmfgen::GenDiagram»«ENDDEFINE»
+
+«DEFINE i18nValues FOR gmfgen::GenDiagram-»
+«EXPAND xpt::Externalizer::messageEntry(messageKey(i18nKeyForModelElementSelectionPage(self)), 'Select model element:')-»
+«ENDDEFINE»
+
+«DEFINE i18nAccessors FOR gmfgen::GenDiagram-»
+	«EXPAND xpt::Externalizer::accessorField(messageKey(i18nKeyForModelElementSelectionPage(self)))-»
+«ENDDEFINE»

@@ -1,0 +1,121 @@
+﻿/*
+ * Copyright (c) 2007, 2009 Borland Software Corporation
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Alexander Shatalin (Borland) - initial API and implementation
+ */
+
+«IMPORT 'http://www.eclipse.org/gmf/2009/GenModel'»
+
+«DEFINE DomainNavigatorItem FOR gmfgen::GenNavigator-»
+	«EXPAND xpt::Common::copyright FOR editorGen-»
+package «packageName»;
+
+	«EXPAND xpt::Common::generatedClassComment»
+public class «domainNavigatorItemClassName» extends org.eclipse.core.runtime.PlatformObject {
+
+	«EXPAND registerAdapterFactory-»
+	
+	«EXPAND xpt::navigator::AbstractNavigatorItem::attributes-»
+	
+	«EXPAND attributes-»
+	
+	«EXPAND _constructor-»
+	
+	«EXPAND xpt::navigator::AbstractNavigatorItem::getParent-»
+	
+	«EXPAND getEObject-»
+	
+	«EXPAND getPropertySourceProvider-»
+	
+	«EXPAND equals-»
+	
+	«EXPAND hashCode-»
+
+	«EXPAND additions-»
+}
+«ENDDEFINE»
+
+«DEFINE registerAdapterFactory FOR gmfgen::GenNavigator-»
+	«EXPAND xpt::Common::generatedMemberComment»
+static {
+	final Class[] supportedTypes = new Class[] { org.eclipse.emf.ecore.EObject.class, org.eclipse.ui.views.properties.IPropertySource.class };
+	org.eclipse.core.runtime.Platform.getAdapterManager().registerAdapters(new org.eclipse.core.runtime.IAdapterFactory() {
+		
+		public Object getAdapter(Object adaptableObject, Class adapterType) {
+			if (adaptableObject instanceof «getDomainNavigatorItemQualifiedClassName()») {
+				«getDomainNavigatorItemQualifiedClassName()» domainNavigatorItem = («getDomainNavigatorItemQualifiedClassName()») adaptableObject;
+				org.eclipse.emf.ecore.EObject eObject = domainNavigatorItem.getEObject();
+				if (adapterType == org.eclipse.emf.ecore.EObject.class) {
+					return eObject;
+				}
+				if (adapterType == org.eclipse.ui.views.properties.IPropertySource.class) {
+					return domainNavigatorItem.getPropertySourceProvider().getPropertySource(eObject);
+				}
+			}
+		
+			return null;
+		}
+
+		public Class[] getAdapterList() {
+			return supportedTypes;
+		}
+	}, «getDomainNavigatorItemQualifiedClassName()».class);
+}
+«ENDDEFINE»
+
+«DEFINE  attributes FOR gmfgen::GenNavigator-»
+	«EXPAND xpt::Common::generatedMemberComment»
+private org.eclipse.emf.ecore.EObject myEObject;
+
+	«EXPAND xpt::Common::generatedMemberComment»
+private org.eclipse.ui.views.properties.IPropertySourceProvider myPropertySourceProvider;
+«ENDDEFINE»
+
+«DEFINE  _constructor FOR gmfgen::GenNavigator-»
+	«EXPAND xpt::Common::generatedMemberComment»
+public «domainNavigatorItemClassName»(org.eclipse.emf.ecore.EObject eObject, Object parent, org.eclipse.ui.views.properties.IPropertySourceProvider propertySourceProvider) {
+	myParent = parent;
+	myEObject = eObject;
+	myPropertySourceProvider = propertySourceProvider;
+}
+«ENDDEFINE»
+
+«DEFINE  getEObject FOR gmfgen::GenNavigator-»
+	«EXPAND xpt::Common::generatedMemberComment»
+public org.eclipse.emf.ecore.EObject getEObject() {
+	return myEObject;
+}
+«ENDDEFINE»
+
+«DEFINE getPropertySourceProvider FOR gmfgen::GenNavigator-»
+	«EXPAND xpt::Common::generatedMemberComment»
+public org.eclipse.ui.views.properties.IPropertySourceProvider getPropertySourceProvider() {
+	return myPropertySourceProvider;
+}
+«ENDDEFINE»
+
+«DEFINE  equals FOR gmfgen::GenNavigator-»
+	«EXPAND xpt::Common::generatedMemberComment»
+public boolean equals(Object obj) {
+	if (obj instanceof «getDomainNavigatorItemQualifiedClassName()») {
+		return org.eclipse.emf.ecore.util.EcoreUtil.getURI(getEObject()).equals(org.eclipse.emf.ecore.util.EcoreUtil.getURI(((«getDomainNavigatorItemQualifiedClassName()») obj).getEObject()));
+	}
+	return super.equals(obj);
+}
+«ENDDEFINE»
+	
+«DEFINE  hashCode FOR gmfgen::GenNavigator-»
+	«EXPAND xpt::Common::generatedMemberComment»
+public int hashCode() {
+	return org.eclipse.emf.ecore.util.EcoreUtil.getURI(getEObject()).hashCode();
+}
+«ENDDEFINE»
+
+«DEFINE additions FOR gmfgen::GenNavigator-»
+«ENDDEFINE»

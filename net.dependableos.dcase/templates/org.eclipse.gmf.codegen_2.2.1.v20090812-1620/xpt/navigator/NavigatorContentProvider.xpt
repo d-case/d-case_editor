@@ -1,0 +1,491 @@
+﻿/*
+ * Copyright (c) 2006, 2009 Borland Software Corporation
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Alexander Shatalin (Borland) - initial API and implementation
+ */
+ 
+«IMPORT 'http://www.eclipse.org/gmf/2009/GenModel'»
+«EXTENSION xpt::navigator::Utils»
+«EXTENSION gmf::CodeGenerationUtils»
+
+«DEFINE NavigatorContentProvider FOR gmfgen::GenNavigator-»
+	«EXPAND xpt::Common::copyright FOR editorGen-»
+package «packageName»;
+
+«EXPAND xpt::Common::generatedClassComment»
+public class «contentProviderClassName» implements org.eclipse.ui.navigator.ICommonContentProvider {
+
+	«EXPAND attributes-»
+	
+	«EXPAND _constructor-»
+
+	«EXPAND iContentProvider-»
+	
+	«EXPAND iStructuredContentProvider-»
+	
+	«EXPAND iMementoAware-»
+    
+    «EXPAND iCommonContentProvider-»
+    
+    «EXPAND iTreeContentProvider-»
+    
+    «EXPAND additions-»
+}
+«ENDDEFINE»
+
+«DEFINE attributes FOR gmfgen::GenNavigator-»
+	«EXPAND xpt::Common::generatedMemberComment»
+private static final Object[] EMPTY_ARRAY = new Object[0];
+
+	«EXPAND xpt::Common::generatedMemberComment»
+private org.eclipse.jface.viewers.Viewer myViewer;
+
+	«EXPAND xpt::Common::generatedMemberComment»
+private org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain myEditingDomain;
+
+	«EXPAND xpt::Common::generatedMemberComment»
+private org.eclipse.emf.workspace.util.WorkspaceSynchronizer myWorkspaceSynchronizer;
+
+	«EXPAND xpt::Common::generatedMemberComment»
+private Runnable myViewerRefreshRunnable;
+«ENDDEFINE»
+
+«DEFINE _constructor FOR gmfgen::GenNavigator-»
+	«EXPAND xpt::Common::generatedMemberComment»
+public «contentProviderClassName»() {
+	«EXPAND initCommonAttributes-»
+}
+«ENDDEFINE»
+
+«DEFINE initCommonAttributes FOR gmfgen::GenNavigator-»
+org.eclipse.emf.transaction.TransactionalEditingDomain editingDomain = «EXPAND createEditingDomain»;
+myEditingDomain = (org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain) editingDomain;
+myEditingDomain.setResourceToReadOnlyMap(new java.util.HashMap() {
+	public Object get(Object key) {
+		if (!containsKey(key)) {
+			put(key, Boolean.TRUE);
+		}
+		return super.get(key);
+	}
+});
+myViewerRefreshRunnable = new Runnable() {
+	public void run() {
+		if (myViewer != null) {
+			myViewer.refresh();
+		}
+	}
+};
+myWorkspaceSynchronizer = new org.eclipse.emf.workspace.util.WorkspaceSynchronizer(editingDomain, new org.eclipse.emf.workspace.util.WorkspaceSynchronizer.Delegate() {
+	public void dispose() {
+	}
+
+	public boolean handleResourceChanged(final org.eclipse.emf.ecore.resource.Resource resource) {
+		«EXPAND processChanges-»
+	}
+	
+	public boolean handleResourceDeleted(org.eclipse.emf.ecore.resource.Resource resource) {
+		«EXPAND processChanges-»
+	}
+	
+	public boolean handleResourceMoved(org.eclipse.emf.ecore.resource.Resource resource, final org.eclipse.emf.common.util.URI newURI) {
+		«EXPAND processChanges-»
+	}
+});
+«ENDDEFINE»
+
+«DEFINE processChanges FOR gmfgen::GenNavigator-»
+for (java.util.Iterator it = myEditingDomain.getResourceSet().getResources().iterator(); it.hasNext();) {
+	org.eclipse.emf.ecore.resource.Resource nextResource = (org.eclipse.emf.ecore.resource.Resource) it.next();
+	nextResource.unload();
+}
+if (myViewer != null) {
+	myViewer.getControl().getDisplay().asyncExec(myViewerRefreshRunnable);
+}
+return true;
+«ENDDEFINE»
+
+«DEFINE iContentProvider FOR gmfgen::GenNavigator-»
+	«EXPAND dispose-»
+	
+	«EXPAND inputChanged-»
+«ENDDEFINE»
+
+«DEFINE dispose FOR gmfgen::GenNavigator-»
+	«EXPAND xpt::Common::generatedMemberComment»
+public void dispose() {
+	myWorkspaceSynchronizer.dispose();
+	myWorkspaceSynchronizer = null;
+	myViewerRefreshRunnable = null;
+	for (java.util.Iterator it = myEditingDomain.getResourceSet().getResources().iterator(); it.hasNext();) {
+		org.eclipse.emf.ecore.resource.Resource resource = (org.eclipse.emf.ecore.resource.Resource) it.next();
+		resource.unload();
+	}
+	((org.eclipse.emf.transaction.TransactionalEditingDomain) myEditingDomain).dispose();
+	myEditingDomain = null;
+}
+«ENDDEFINE»
+
+«DEFINE inputChanged FOR gmfgen::GenNavigator-»
+	«EXPAND xpt::Common::generatedMemberComment»
+public void inputChanged(org.eclipse.jface.viewers.Viewer viewer, Object oldInput, Object newInput) {
+	myViewer = viewer;
+}
+«ENDDEFINE»
+
+«DEFINE iStructuredContentProvider FOR gmfgen::GenNavigator-»
+«EXPAND xpt::Common::generatedMemberComment»
+public Object[] getElements(Object inputElement) {
+	return getChildren(inputElement);
+}
+«ENDDEFINE»
+
+«DEFINE iMementoAware FOR gmfgen::GenNavigator-»
+«EXPAND xpt::Common::generatedMemberComment»
+public void restoreState(org.eclipse.ui.IMemento aMemento) {
+}
+
+«EXPAND xpt::Common::generatedMemberComment»
+public void saveState(org.eclipse.ui.IMemento aMemento) {
+}
+«ENDDEFINE»
+
+«DEFINE iCommonContentProvider FOR gmfgen::GenNavigator-»
+«EXPAND xpt::Common::generatedMemberComment»
+public void init(org.eclipse.ui.navigator.ICommonContentExtensionSite aConfig) {
+}
+«ENDDEFINE»
+
+«DEFINE iTreeContentProvider FOR gmfgen::GenNavigator-»
+	«EXPAND getChildren-»
+	
+	«EXPAND getParent-»
+	
+	«EXPAND hasChildren-»
+«ENDDEFINE»
+
+«DEFINE getChildren FOR gmfgen::GenNavigator-»
+«EXPAND xpt::Common::generatedMemberComment»
+public Object[] getChildren(Object parentElement) {
+	if (parentElement instanceof org.eclipse.core.resources.IFile) {
+	«EXPAND getFileChildren-»
+   	} 
+    	
+   	if (parentElement instanceof «getNavigatorGroupQualifiedClassName()») {
+	«EXPAND getGroupChildren-»
+	} 
+		
+	if (parentElement instanceof «getNavigatorItemQualifiedClassName()») {
+	«EXPAND getItemChildren-»
+	}
+		
+	«IF editorGen.diagram.generateShortcutIcon()-»
+		«EXPAND getAdaptableChildren»
+	«ENDIF-»
+	«EXPAND getOtherChildren-»
+}
+    
+	«EXPAND getViewChildren-»
+    
+    «EXPAND utilityMethods-»
+«ENDDEFINE»
+
+«DEFINE getParent FOR gmfgen::GenNavigator-»
+«EXPAND xpt::Common::generatedMemberComment»
+public Object getParent(Object element) {
+	if (element instanceof «getAbstractNavigatorItemQualifiedClassName()») {
+    	«getAbstractNavigatorItemQualifiedClassName()» abstractNavigatorItem = («getAbstractNavigatorItemQualifiedClassName()») element;
+		return abstractNavigatorItem.getParent();
+	}
+	return null;
+}
+«ENDDEFINE»
+
+«DEFINE hasChildren FOR gmfgen::GenNavigator-»
+«EXPAND xpt::Common::generatedMemberComment»
+public boolean hasChildren(Object element) {
+	return element instanceof org.eclipse.core.resources.IFile || getChildren(element).length > 0;
+}
+«ENDDEFINE»
+
+«DEFINE getFileChildren FOR gmfgen::GenNavigator-»
+	«EXPAND getFileResoruce-»
+java.util.Collection result = new java.util.ArrayList();
+	«LET getChildReferencesFrom(self, null) AS _references-»
+		«EXPAND initGroupVariables(self, _references, 'file', null) FOREACH getGroupNames(_references)-»
+		«FOREACH _references AS ref-»
+			«EXPAND addNavigatorItemsPrefix FOR ref»selectViewsByType(resource.getContents(), «EXPAND getChildViewType FOR ref.child»)«EXPAND addNavigatorItemsSuffix('file', false) FOR ref-»
+		«ENDFOREACH-»
+		«EXPAND addGroups(_references) FOREACH getGroupNames(_references)-»
+	«ENDLET-»
+return result.toArray();
+«ENDDEFINE»
+
+«DEFINE getFileResoruce FOR gmfgen::GenNavigator-»
+org.eclipse.core.resources.IFile file = (org.eclipse.core.resources.IFile) parentElement;
+org.eclipse.emf.common.util.URI fileURI = org.eclipse.emf.common.util.URI.createPlatformResourceURI(file.getFullPath().toString(), true);
+org.eclipse.emf.ecore.resource.Resource resource = myEditingDomain.getResourceSet().getResource(fileURI, true);
+«ENDDEFINE»
+
+«DEFINE getGroupChildren FOR gmfgen::GenNavigator-»
+«getNavigatorGroupQualifiedClassName()» group = («getNavigatorGroupQualifiedClassName()») parentElement;
+return group.getChildren();
+«ENDDEFINE»
+
+«DEFINE getItemChildren FOR gmfgen::GenNavigator-»
+«getNavigatorItemQualifiedClassName()» navigatorItem = («getNavigatorItemQualifiedClassName()») parentElement;
+if (navigatorItem.isLeaf() || !isOwnView(navigatorItem.getView())) {
+	return EMPTY_ARRAY;
+}
+return getViewChildren(navigatorItem.getView(), parentElement);
+«ENDDEFINE»
+
+«DEFINE getAdaptableChildren FOR gmfgen::GenNavigator-»
+/*
+ * Due to plugin.xml restrictions this code will be called only for views representing
+ * shortcuts to this diagram elements created on other diagrams. 
+*/ 
+if (parentElement instanceof org.eclipse.core.runtime.IAdaptable) {
+	org.eclipse.gmf.runtime.notation.View view = (org.eclipse.gmf.runtime.notation.View) ((org.eclipse.core.runtime.IAdaptable) parentElement).getAdapter(org.eclipse.gmf.runtime.notation.View.class);
+	if (view != null) {
+		return getViewChildren(view, parentElement);
+	}
+}
+«ENDDEFINE»
+
+«DEFINE getOtherChildren FOR gmfgen::GenNavigator-»
+return EMPTY_ARRAY;
+«ENDDEFINE»
+
+«DEFINE getViewChildren FOR gmfgen::GenNavigator-»
+«EXPAND xpt::Common::generatedMemberComment»
+private Object[] getViewChildren(org.eclipse.gmf.runtime.notation.View view, Object parentElement) {
+   	switch («EXPAND xpt::editor::VisualIDRegistry::getVisualIDMethodCall FOR editorGen.diagram»(view)) {
+	«EXPAND caseNavigatorNode(self) FOREACH getNavigatorContainerNodes(self)-»
+	}
+	return EMPTY_ARRAY;
+}
+«ENDDEFINE»
+
+«DEFINE utilityMethods FOR  gmfgen::GenNavigator-»
+«EXPAND xpt::Common::generatedMemberComment»
+private java.util.Collection getLinksSourceByType(java.util.Collection edges, String type) {
+	java.util.Collection result = new java.util.ArrayList();
+ 	for (java.util.Iterator it = edges.iterator(); it.hasNext();) {
+ 		org.eclipse.gmf.runtime.notation.Edge nextEdge = (org.eclipse.gmf.runtime.notation.Edge) it.next();
+ 		org.eclipse.gmf.runtime.notation.View nextEdgeSource = nextEdge.getSource();
+ 		if (type.equals(nextEdgeSource.getType()) && isOwnView(nextEdgeSource)) {
+ 			result.add(nextEdgeSource);
+ 		}
+ 	}
+ 	return result;
+}
+	
+«EXPAND xpt::Common::generatedMemberComment»
+ private java.util.Collection getLinksTargetByType(java.util.Collection edges, String type) {
+	java.util.Collection result = new java.util.ArrayList();
+ 	for (java.util.Iterator it = edges.iterator(); it.hasNext();) {
+ 		org.eclipse.gmf.runtime.notation.Edge nextEdge = (org.eclipse.gmf.runtime.notation.Edge) it.next();
+ 		org.eclipse.gmf.runtime.notation.View nextEdgeTarget = nextEdge.getTarget();
+ 		if (type.equals(nextEdgeTarget.getType()) && isOwnView(nextEdgeTarget)) {
+ 			result.add(nextEdgeTarget);
+ 		}
+ 	}
+ 	return result;
+}
+
+«EXPAND xpt::Common::generatedMemberComment»
+ private java.util.Collection getOutgoingLinksByType(java.util.Collection nodes, String type) {
+	java.util.Collection result = new java.util.ArrayList();
+ 	for (java.util.Iterator it = nodes.iterator(); it.hasNext();) {
+ 		org.eclipse.gmf.runtime.notation.View nextNode = (org.eclipse.gmf.runtime.notation.View) it.next();
+		result.addAll(selectViewsByType(nextNode.getSourceEdges(), type));
+ 	}
+ 	return result;
+}
+	
+«EXPAND xpt::Common::generatedMemberComment»
+private java.util.Collection getIncomingLinksByType(java.util.Collection nodes, String type) {
+	java.util.Collection result = new java.util.ArrayList();
+ 	for (java.util.Iterator it = nodes.iterator(); it.hasNext();) {
+ 		org.eclipse.gmf.runtime.notation.View nextNode = (org.eclipse.gmf.runtime.notation.View) it.next();
+		result.addAll(selectViewsByType(nextNode.getTargetEdges(), type));
+ 	}
+ 	return result;
+}
+	
+«EXPAND xpt::Common::generatedMemberComment»
+private java.util.Collection getChildrenByType(java.util.Collection nodes, String type) {
+	java.util.Collection result = new java.util.ArrayList();
+	for (java.util.Iterator it = nodes.iterator(); it.hasNext();) {
+		org.eclipse.gmf.runtime.notation.View nextNode = (org.eclipse.gmf.runtime.notation.View) it.next();
+		result.addAll(selectViewsByType(nextNode.getChildren(), type));
+	}
+	return result;
+}
+	
+«EXPAND xpt::Common::generatedMemberComment»
+private java.util.Collection getDiagramLinksByType(java.util.Collection diagrams, String type) {
+	java.util.Collection result = new java.util.ArrayList();
+	for (java.util.Iterator it = diagrams.iterator(); it.hasNext();) {
+		org.eclipse.gmf.runtime.notation.Diagram nextDiagram = (org.eclipse.gmf.runtime.notation.Diagram) it.next();
+		result.addAll(selectViewsByType(nextDiagram.getEdges(), type));
+	}
+	return result;
+}
+
+«EXPAND xpt::Common::generatedMemberComment»
+private java.util.Collection selectViewsByType(java.util.Collection views, String type) {
+	java.util.Collection result = new java.util.ArrayList();
+	for (java.util.Iterator it = views.iterator(); it.hasNext();) {
+		org.eclipse.gmf.runtime.notation.View nextView = (org.eclipse.gmf.runtime.notation.View) it.next();
+		if (type.equals(nextView.getType()) && isOwnView(nextView)) {
+			result.add(nextView);
+		}
+	}
+	return result;
+}
+	
+«EXPAND xpt::Common::generatedMemberComment»
+private boolean isOwnView(org.eclipse.gmf.runtime.notation.View view) {
+	return «EXPAND xpt::editor::VisualIDRegistry::modelID FOR editorGen.diagram».equals(«EXPAND xpt::editor::VisualIDRegistry::getModelIDMethodCall FOR editorGen.diagram»(view));
+}
+	
+«EXPAND xpt::Common::generatedMemberComment»
+private java.util.Collection createNavigatorItems(java.util.Collection views, Object parent, boolean isLeafs) {
+	java.util.Collection result = new java.util.ArrayList();
+	for (java.util.Iterator it = views.iterator(); it.hasNext();) {
+		result.add(new «getNavigatorItemQualifiedClassName()»((org.eclipse.gmf.runtime.notation.View) it.next(), parent, isLeafs));
+	}
+	return result;
+}
+«EXPAND getForeignShortcuts-»
+«ENDDEFINE»
+
+«DEFINE getForeignShortcuts FOR gmfgen::GenNavigator-»
+	«IF editorGen.diagram.generateCreateShortcutAction() and getChildReferencesFrom(self, editorGen.diagram)->size() > 0-»
+	
+«EXPAND xpt::Common::generatedMemberComment»
+private java.util.Collection getForeignShortcuts(org.eclipse.gmf.runtime.notation.Diagram diagram, Object parent) {
+	java.util.Collection result = new java.util.ArrayList();
+	for (java.util.Iterator it = diagram.getChildren().iterator(); it.hasNext();) {
+		org.eclipse.gmf.runtime.notation.View nextView = (org.eclipse.gmf.runtime.notation.View) it.next();
+		if (!isOwnView(nextView) && nextView.getEAnnotation("Shortcut") != null) { «EXPAND xpt::Common::nonNLS»
+			result.add(nextView);
+		}
+	}
+	return createNavigatorItems(result, parent, false);
+}
+	«ENDIF-»
+«ENDDEFINE»
+
+«DEFINE createEditingDomain FOR gmfgen::GenNavigator»org.eclipse.gmf.runtime.emf.core.GMFEditingDomainFactory.INSTANCE.createEditingDomain()«ENDDEFINE»
+
+«DEFINE initGroupVariables(navigator : gmfgen::GenNavigator, _references : Sequence(gmfgen::GenNavigatorChildReference), parentVarName : String, contextElement : gmfgen::GenCommonBase) FOR String-»
+	«navigator.getNavigatorGroupQualifiedClassName()» «validJavaIdentifier(self)» = new «navigator.getNavigatorGroupQualifiedClassName()»(
+	«EXPAND xpt::Externalizer::accessorCall(i18nKeyForGroup(self, contextElement)) FOR navigator.editorGen»,
+	"«getNavigatorReference(self, _references).groupIcon»", «parentVarName»); «EXPAND xpt::Common::nonNLS»
+«ENDDEFINE»
+
+«DEFINE addNavigatorItemsPrefix FOR gmfgen::GenNavigatorChildReference»«IF isInsideGroup()»«validJavaIdentifier(groupName)».addChildren(«ELSE»result.addAll(«ENDIF»createNavigatorItems(«ENDDEFINE»
+
+«DEFINE addNavigatorItemsSuffix(parentVarName : String, isLeaf : Boolean) FOR gmfgen::GenNavigatorChildReference-»
+, «IF isInsideGroup()»«validJavaIdentifier(groupName)»«ELSE»«parentVarName»«ENDIF», «isLeaf»));
+«ENDDEFINE»
+
+«DEFINE addGroups(_references : Sequence(gmfgen::GenNavigatorChildReference)) FOR String-»
+	«LET getNavigatorReference(self, _references) AS ref-»
+		«IF ref.hideIfEmpty-»
+			if (!«validJavaIdentifier(self)».isEmpty()) {«ENDIF-»
+		result.add(«validJavaIdentifier(self)»);
+		«IF ref.hideIfEmpty-»
+			}«ENDIF-»
+	«ENDLET-»
+«ENDDEFINE»
+
+«DEFINE getChildViewType FOR gmfgen::GenDiagram»«EXPAND xpt::editor::VisualIDRegistry::modelID»«ENDDEFINE»
+
+«DEFINE getChildViewType FOR gmfgen::GenCommonBase»«EXPAND xpt::editor::VisualIDRegistry::typeMethodCall»«ENDDEFINE»
+
+«DEFINE caseNavigatorNode(navigator : gmfgen::GenNavigator) FOR gmfgen::GenCommonBase»
+«EXPAND xpt::Common::caseVisualID» {
+	java.util.Collection result = new java.util.ArrayList();
+	«EXPAND addForeignShortcuts FOR self-»
+	«LET getChildReferencesFrom(navigator, self) AS _references-»
+		«EXPAND initGroupVariables(navigator, _references, 'parentElement', self) FOREACH getGroupNames(_references)-»
+		«FOREACH _references AS reference ITERATOR referencesIterator-»
+			«FOREACH reference.findConnectionPaths()->asSequence() AS path ITERATOR pathsIterator-»
+				«FOREACH path.segments->asSequence() AS segment ITERATOR segmentsIterator-»
+					«IF referencesIterator.isFirstIteration() and (pathsIterator.isFirstIteration() and segmentsIterator.isFirstIteration())»java.util.Collection «ENDIF-»
+					connectedViews = «EXPAND childrenMethodName(reference.referenceType, segment) FOR segment._from-»
+					(«IF segmentsIterator.isFirstIteration()»java.util.Collections.singleton(view)«ELSE»connectedViews«ENDIF-»
+					, «EXPAND xpt::editor::VisualIDRegistry::typeMethodCall FOR segment.to»);
+				«ENDFOREACH-»
+				«EXPAND addNavigatorItemsPrefix FOR reference»connectedViews«EXPAND addNavigatorItemsSuffix('parentElement', reference.referenceType <> gmfgen::GenNavigatorReferenceType::children) FOR reference-»
+			«ENDFOREACH-»
+		«ENDFOREACH-»
+		«EXPAND addGroups(_references) FOREACH getGroupNames(_references)-»
+	«ENDLET-»
+	return result.toArray();
+}
+«ENDDEFINE»
+
+«DEFINE addForeignShortcuts FOR gmfgen::GenDiagram-»
+	«IF generateCreateShortcutAction()-»
+result.addAll(getForeignShortcuts((org.eclipse.gmf.runtime.notation.Diagram) view, parentElement));
+	«ENDIF-»
+«ENDDEFINE»
+
+«DEFINE addForeignShortcuts FOR gmfgen::GenCommonBase»«ENDDEFINE»
+
+«DEFINE childrenMethodName(referenceType : gmfgen::GenNavigatorReferenceType, segment : gmfgen::GenNavigatorPathSegment) FOR gmfgen::GenLink-»
+	«IF referenceType = gmfgen::GenNavigatorReferenceType::out_target»getLinksTargetByType«ELSE»getLinksSourceByType«ENDIF-»
+«ENDDEFINE»
+
+«DEFINE childrenMethodName(referenceType : gmfgen::GenNavigatorReferenceType, segment : gmfgen::GenNavigatorPathSegment) FOR gmfgen::GenCommonBase-»
+	«IF referenceType = gmfgen::GenNavigatorReferenceType::out_target-»
+		getOutgoingLinksByType«ELSEIF referenceType = gmfgen::GenNavigatorReferenceType::in_source-»
+		getIncomingLinksByType«ELSE-»
+		«IF (Sequence { segment._from })[gmfgen::GenDiagram]->size() > 0 and (Sequence { segment.to })[gmfgen::GenLink]->size() > 0-»
+			getDiagramLinksByType«ELSE-»
+			getChildrenByType«ENDIF-»
+	«ENDIF-»
+«ENDDEFINE»
+
+«DEFINE additions FOR gmfgen::GenNavigator-»
+«ENDDEFINE»
+
+«DEFINE i18nAccessors FOR gmfgen::GenNavigator-»
+	«LET getChildReferencesFrom(self, null) AS _references-»
+        «EXPAND internal_i18nAccessors(null) FOREACH getGroupNames(_references)-»
+	«ENDLET-»
+	«FOREACH getNavigatorContainerNodes(self) AS contextElement-»
+        «LET getChildReferencesFrom(self, contextElement) AS _references-»
+            «EXPAND internal_i18nAccessors(contextElement) FOREACH getGroupNames(_references)-»
+        «ENDLET-»
+	«ENDFOREACH-»
+«ENDDEFINE»
+
+«DEFINE internal_i18nAccessors(contextElement : gmfgen::GenCommonBase) FOR String-»
+«IF null <> self»«EXPAND xpt::Externalizer::accessorField(i18nKeyForGroup(self, contextElement))»«ENDIF-»
+«ENDDEFINE»
+
+«DEFINE i18nValues FOR gmfgen::GenNavigator-»
+«LET getChildReferencesFrom(self, null) AS _references-»
+«EXPAND internal_i18nValues(null) FOREACH getGroupNames(_references)-»
+«ENDLET-»
+«FOREACH getNavigatorContainerNodes(self) AS contextElement-»
+«LET getChildReferencesFrom(self, contextElement) AS _references-»
+«EXPAND internal_i18nValues(contextElement) FOREACH getGroupNames(_references)-»
+«ENDLET-»
+«ENDFOREACH-»
+«ENDDEFINE»
+
+«DEFINE internal_i18nValues(contextElement : gmfgen::GenCommonBase) FOR String-»
+«IF null <> self»«EXPAND xpt::Externalizer::messageEntry(i18nKeyForGroup(self, contextElement), self)»«ENDIF-»
+«ENDDEFINE»

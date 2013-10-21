@@ -1,0 +1,68 @@
+﻿/*
+ * Copyright (c) 2006, 2009 Borland Software Corporation
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Dmitry Stadnik (Borland) - initial API and implementation
+ *    Alexander Shatalin (Borland) - initial API and implementation
+ */
+
+«IMPORT 'http://www.eclipse.org/gmf/2009/GenModel'»
+
+«DEFINE initializer FOR gmfgen::GenExternalNodeLabel-»
+	«EXPAND xpt::Common::generatedMemberComment»
+	static {
+		registerSnapBackPosition(«EXPAND xpt::editor::VisualIDRegistry::typeMethodCall», new org.eclipse.draw2d.geometry.Point(0, 0));
+	}
+«ENDDEFINE»
+
+«DEFINE _constructor FOR gmfgen::GenExternalNodeLabel-»
+	«EXPAND xpt::Common::generatedMemberComment»
+	public «editPartClassName»(org.eclipse.gmf.runtime.notation.View view) {
+		super(view);
+	}
+«ENDDEFINE»
+
+«DEFINE createDefaultEditPoliciesBody FOR gmfgen::GenExternalNodeLabel-»
+	super.createDefaultEditPolicies();
+	installEditPolicy(org.eclipse.gef.EditPolicy.DIRECT_EDIT_ROLE, new org.eclipse.gmf.runtime.diagram.ui.editpolicies.LabelDirectEditPolicy());
+	installEditPolicy(org.eclipse.gef.EditPolicy.SELECTION_FEEDBACK_ROLE, new «getDiagram().getTextSelectionEditPolicyQualifiedClassName()»());
+	«EXPAND xpt::diagram::editparts::Common::behaviour FOR self-»
+«ENDDEFINE»
+
+«DEFINE getBorderItemLocator FOR gmfgen::GenExternalNodeLabel-»
+	«EXPAND xpt::Common::generatedMemberComment»
+	public org.eclipse.gmf.runtime.diagram.ui.figures.IBorderItemLocator getBorderItemLocator() {
+		org.eclipse.draw2d.IFigure parentFigure = getFigure().getParent();
+		if (parentFigure != null && parentFigure.getLayoutManager() != null) {
+			Object constraint = parentFigure.getLayoutManager().getConstraint(getFigure());
+			return (org.eclipse.gmf.runtime.diagram.ui.figures.IBorderItemLocator) constraint;
+		}
+		return null;
+	}
+«ENDDEFINE»
+
+«DEFINE refreshBounds FOR gmfgen::GenExternalNodeLabel-»
+	«EXPAND xpt::Common::generatedMemberComment»
+	public void refreshBounds() {
+		int x = ((Integer) getStructuralFeatureValue(org.eclipse.gmf.runtime.notation.NotationPackage.eINSTANCE.getLocation_X())).intValue();
+		int y = ((Integer) getStructuralFeatureValue(org.eclipse.gmf.runtime.notation.NotationPackage.eINSTANCE.getLocation_Y())).intValue();
+		int width = ((Integer) getStructuralFeatureValue(org.eclipse.gmf.runtime.notation.NotationPackage.eINSTANCE.getSize_Width())).intValue();
+		int height = ((Integer) getStructuralFeatureValue(org.eclipse.gmf.runtime.notation.NotationPackage.eINSTANCE.getSize_Height())).intValue();
+		getBorderItemLocator().setConstraint(new org.eclipse.draw2d.geometry.Rectangle(x, y, width, height));
+	}
+«ENDDEFINE»
+
+«DEFINE handleNotificationEventBody FOR gmfgen::GenExternalNodeLabel-»
+	Object feature = event.getFeature();
+	«EXPAND xpt::diagram::editparts::Common::handleText FOR self-»
+	super.handleNotificationEvent(event);
+«ENDDEFINE»
+
+«DEFINE createFigure FOR gmfgen::GenExternalNodeLabel-»
+	«EXPAND xpt::diagram::editparts::Common::labelFigure FOR viewmap-»
+«ENDDEFINE»

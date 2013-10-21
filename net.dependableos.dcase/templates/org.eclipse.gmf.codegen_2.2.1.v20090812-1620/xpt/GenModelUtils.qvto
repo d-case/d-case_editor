@@ -1,0 +1,76 @@
+/*
+ * Copyright (c) 2006, 2009 Borland Software Corporation
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Dmitry Stadnik (Borland) - initial API and implementation
+ */
+
+import gmf.GenModelUtils;
+import xpt.StringOperations;
+
+modeltype genmodel uses "http://www.eclipse.org/emf/2002/GenModel";
+modeltype ecore uses "http://www.eclipse.org/emf/2002/Ecore";
+
+library GenModelUtils;
+
+/*
+ * GenModel functionality unrelated to EMF generated code
+ * or metamodel access only.
+ */
+
+--GenFeature#getReverse
+helper getReverse(feature : genmodel::GenFeature) : genmodel::GenFeature {
+	return (if isReferenceType(feature) then let eReverseFeature = feature.ecoreFeature.oclAsType(ecore::EReference).eOpposite in (if eReverseFeature <> null then let genClass = findGenClassifier(feature.genClass.genPackage.genModel, eReverseFeature.eContainingClass).oclAsType(genmodel::GenClass) in (if genClass <> null then genClass.genFeatures->select(e | e.ecoreFeature = eReverseFeature)->first() else null endif) else null endif) else null endif)
+}
+
+-- For primitive types, return their java.lang wrappers, for non-primitive
+-- types returns instanceClassName as is
+helper getObjectCompatibleClassName(dt : ecore::EDataType) : String {
+	return (if dt.instanceClassName.indexOf('.') > 0 then dt.instanceClassName else 
+		switch { 
+		case (dt.instanceClassName = 'boolean') 'java.lang.Boolean'; 
+		case (dt.instanceClassName = 'byte') 'java.lang.Byte'; 
+		case (dt.instanceClassName = 'char') 'java.lang.Character'; 
+		case (dt.instanceClassName = 'double') 'java.lang.Double'; 
+		case (dt.instanceClassName = 'float') 'java.lang.Float'; 
+		case (dt.instanceClassName = 'int') 'java.lang.Integer'; 
+		case (dt.instanceClassName = 'long') 'java.lang.Long'; 
+		case (dt.instanceClassName = 'short') 'java.lang.Short'; 
+		else 'java.lang.Object'; 
+		} 
+		endif)
+}
+
+--GenFeature#getTypeGenClassifier()
+helper getTypeGenClassifier(feature : genmodel::GenFeature) : genmodel::GenClassifier {
+	return findGenClassifier(feature.genClass.genPackage.genModel, feature.ecoreFeature.eType)
+}
+
+-- FIXME: for models loaded from generated package (e.g. gmf tests often
+-- refer to EClass/EOperation directly from EcorePackage) instanceClassName
+-- is always set and thus all metamodel types are treated as external interfaces,
+-- with useless casts to EObject
+--
+-- GenClass#isExternalInterface()
+helper isExternalInterface(genClass : genmodel::GenClass) : Boolean {
+	return null <> genClass.ecoreClass.instanceClassName
+}
+
+-- GenFeatureImpl#isContains
+helper isContains(gf : genmodel::GenFeature) : Boolean {
+	return isReferenceType(gf) and gf.ecoreFeature.oclAsType(ecore::EReference).containment
+}
+
+helper isPrimitiveType(gf : genmodel::GenFeature) : Boolean {
+	return Sequence { 'boolean', 'byte', 'char', 'double', 'float', 'int', 'long', 'short' }->includes(gf.ecoreFeature.eType.instanceClassName)
+}
+
+-- MODIFIERS:private
+helper isReferenceType(gf : genmodel::GenFeature) : Boolean {
+	return gf.ecoreFeature.oclIsKindOf(ecore::EReference)
+}

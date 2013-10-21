@@ -1,0 +1,255 @@
+﻿/*
+ * Copyright (c) 2006, 2009 Borland Software Corporation
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Dmitry Stadnik (Borland) - initial API and implementation
+ */
+
+«IMPORT 'http://www.eclipse.org/gmf/2009/GenModel'»
+«IMPORT 'http://www.eclipse.org/emf/2002/GenModel'»
+«EXTENSION xpt::diagram::Utils»
+
+«DEFINE ElementTypes FOR gmfgen::GenDiagram-»
+«EXPAND xpt::Common::copyright FOR editorGen-»
+package «providersPackageName»;
+
+«EXPAND xpt::Common::generatedClassComment»
+public class «elementTypesClassName» extends ElementInitializers {
+
+	«EXPAND _constructor-»
+	
+	«EXPAND attributes-»
+	
+	«EXPAND elementTypeField FOREACH getAllTypedElements()-»
+	
+	«EXPAND getImageRegistry-»
+
+	«EXPAND getImageRegistryKey-»
+
+	«EXPAND getProvidedImageDescriptor-»
+
+	«EXPAND getNamedElementImageDescriptor-»
+
+	«EXPAND getNamedElementImage-»
+
+	«EXPAND getAdaptableImageDescriptor-»
+
+	«EXPAND getAdaptableImage-»
+
+	«EXPAND getElement-»
+
+	«EXPAND getElementType-»
+
+	«EXPAND isKnownElementType-»
+	
+	«EXPAND getElementTypeByVisualID-»
+
+	«EXPAND additions-»
+}
+«ENDDEFINE»
+
+«DEFINE _constructor FOR gmfgen::GenDiagram-»
+	«EXPAND xpt::Common::generatedMemberComment»
+private «elementTypesClassName»() {
+}
+«ENDDEFINE»
+
+«DEFINE attributes FOR gmfgen::GenDiagram-»
+	«EXPAND xpt::Common::generatedMemberComment»
+private static java.util.Map elements;
+
+	«EXPAND xpt::Common::generatedMemberComment»
+private static org.eclipse.jface.resource.ImageRegistry imageRegistry;
+
+	«EXPAND xpt::Common::generatedMemberComment»
+private static java.util.Set KNOWN_ELEMENT_TYPES;
+«ENDDEFINE»
+
+
+«DEFINE getImageRegistry FOR gmfgen::GenDiagram-»
+	«EXPAND xpt::Common::generatedMemberComment»
+private static org.eclipse.jface.resource.ImageRegistry getImageRegistry() {
+	if (imageRegistry == null) {
+		imageRegistry = new org.eclipse.jface.resource.ImageRegistry();
+	}
+	return imageRegistry;
+}
+«ENDDEFINE»
+
+«DEFINE getImageRegistryKey FOR gmfgen::GenDiagram-»
+	«EXPAND xpt::Common::generatedMemberComment»
+private static String getImageRegistryKey(org.eclipse.emf.ecore.ENamedElement element) {
+	return element.getName();
+}
+«ENDDEFINE»
+
+«DEFINE getProvidedImageDescriptor FOR gmfgen::GenDiagram-»
+	«EXPAND xpt::Common::generatedMemberComment»
+private static org.eclipse.jface.resource.ImageDescriptor getProvidedImageDescriptor(org.eclipse.emf.ecore.ENamedElement element) {
+	if (element instanceof org.eclipse.emf.ecore.EStructuralFeature) {
+		org.eclipse.emf.ecore.EStructuralFeature feature = ((org.eclipse.emf.ecore.EStructuralFeature) element);
+		org.eclipse.emf.ecore.EClass eContainingClass = feature.getEContainingClass();
+		org.eclipse.emf.ecore.EClassifier eType = feature.getEType();
+		if (eContainingClass != null && !eContainingClass.isAbstract()){
+			element = eContainingClass;
+		} else if (eType instanceof org.eclipse.emf.ecore.EClass && !((org.eclipse.emf.ecore.EClass)eType).isAbstract()){
+			element = eType;
+		}
+	}
+	if (element instanceof org.eclipse.emf.ecore.EClass) {
+		org.eclipse.emf.ecore.EClass eClass = (org.eclipse.emf.ecore.EClass) element;
+		if (!eClass.isAbstract()) {
+			return «editorGen.plugin.getActivatorQualifiedClassName()».getInstance().getItemImageDescriptor(
+				eClass.getEPackage().getEFactoryInstance().create(eClass));
+		}
+	}
+	// TODO : support structural features
+	return null;
+}
+«ENDDEFINE»
+
+«DEFINE getNamedElementImageDescriptor FOR gmfgen::GenDiagram-»
+	«EXPAND xpt::Common::generatedMemberComment»
+public static org.eclipse.jface.resource.ImageDescriptor getImageDescriptor(org.eclipse.emf.ecore.ENamedElement element) {
+	String key = getImageRegistryKey(element);
+	org.eclipse.jface.resource.ImageDescriptor imageDescriptor = getImageRegistry().getDescriptor(key);
+	if (imageDescriptor == null) {
+		«EXPAND loadProvidedImageDescriptor-»
+	}
+	return imageDescriptor;
+}
+«ENDDEFINE»
+
+«DEFINE loadProvidedImageDescriptor FOR gmfgen::GenDiagram-»
+imageDescriptor = getProvidedImageDescriptor(element);
+if (imageDescriptor == null) {
+	imageDescriptor = org.eclipse.jface.resource.ImageDescriptor.getMissingImageDescriptor();
+}
+getImageRegistry().put(key, imageDescriptor);
+«ENDDEFINE»
+
+«DEFINE getNamedElementImage FOR gmfgen::GenDiagram-»
+	«EXPAND xpt::Common::generatedMemberComment»
+public static org.eclipse.swt.graphics.Image getImage(org.eclipse.emf.ecore.ENamedElement element) {
+	String key = getImageRegistryKey(element);
+	org.eclipse.swt.graphics.Image image = getImageRegistry().get(key);
+	if (image == null) {
+		org.eclipse.jface.resource.ImageDescriptor «EXPAND loadProvidedImageDescriptor-»
+		image = getImageRegistry().get(key);
+	}
+	return image;
+}
+«ENDDEFINE»
+
+«DEFINE getAdaptableImageDescriptor FOR gmfgen::GenDiagram-»
+	«EXPAND xpt::Common::generatedMemberComment»
+public static org.eclipse.jface.resource.ImageDescriptor getImageDescriptor(org.eclipse.core.runtime.IAdaptable hint) {
+	«EXPAND getNamedElement-»
+	return getImageDescriptor(element);
+}
+«ENDDEFINE»
+
+«DEFINE getNamedElement FOR gmfgen::GenDiagram-»
+org.eclipse.emf.ecore.ENamedElement element = getElement(hint);
+if (element == null) {
+	return null;
+}
+«ENDDEFINE»
+
+«DEFINE getAdaptableImage FOR gmfgen::GenDiagram-»
+	«EXPAND xpt::Common::generatedMemberComment»
+public static org.eclipse.swt.graphics.Image getImage(org.eclipse.core.runtime.IAdaptable hint) {
+	«EXPAND getNamedElement-»
+	return getImage(element);
+}
+«ENDDEFINE»
+
+«DEFINE getElement FOR gmfgen::GenDiagram-»
+	«EXPAND xpt::Common::generatedMemberComment('Returns \'type\' of the ecore object associated with the hint.\n')»
+public static org.eclipse.emf.ecore.ENamedElement getElement(org.eclipse.core.runtime.IAdaptable hint) {
+	Object type = hint.getAdapter(org.eclipse.gmf.runtime.emf.type.core.IElementType.class);
+	if (elements == null) {
+		elements = new java.util.IdentityHashMap();
+		«EXPAND bindUniqueIdentifierToNamedElement(getUniqueIdentifier()) FOR domainDiagramElement-»
+		«FOREACH getAllNodes() AS node-»
+			«EXPAND bindUniqueIdentifierToNamedElement(node.getUniqueIdentifier()) FOR node.modelFacet-»
+		«ENDFOREACH-»
+		«FOREACH links->asSequence() AS link-»
+			«EXPAND bindUniqueIdentifierToNamedElement(link.getUniqueIdentifier()) FOR link.modelFacet-»
+		«ENDFOREACH-»
+	}
+	return (org.eclipse.emf.ecore.ENamedElement) elements.get(type);
+}
+«ENDDEFINE»
+
+«DEFINE bindUniqueIdentifierToNamedElement(id : String) FOR genmodel::GenClass»
+	elements.put(«id», «EXPAND MetaModel::MetaClass»);
+«ENDDEFINE»
+
+«DEFINE bindUniqueIdentifierToNamedElement(id : String) FOR gmfgen::ModelFacet»
+	«ERROR 'Unsupported model facet: ' + self.repr()-»
+«ENDDEFINE»
+
+«DEFINE bindUniqueIdentifierToNamedElement(id : String) FOR gmfgen::TypeModelFacet»
+	«EXPAND bindUniqueIdentifierToNamedElement(id) FOR metaClass-»
+«ENDDEFINE»
+
+«DEFINE bindUniqueIdentifierToNamedElement(id : String) FOR gmfgen::FeatureLinkModelFacet»
+	elements.put(«id», «EXPAND MetaModel::MetaFeature FOR metaFeature»);
+«ENDDEFINE»
+
+«DEFINE elementTypeField FOR gmfgen::GenCommonBase-»
+	«IF null <> elementType-»
+		«EXPAND xpt::Common::generatedMemberComment»
+public static final org.eclipse.gmf.runtime.emf.type.core.IElementType «getUniqueIdentifier()» = getElementType("«elementType.uniqueIdentifier»"); «EXPAND xpt::Common::nonNLS»
+	«ENDIF-»
+«ENDDEFINE»
+
+«DEFINE accessElementType FOR gmfgen::GenCommonBase»«getDiagram().getElementTypesQualifiedClassName()».«getUniqueIdentifier()»«ENDDEFINE»
+
+«DEFINE getElementType FOR gmfgen::GenDiagram-»
+	«EXPAND xpt::Common::generatedMemberComment»
+private static org.eclipse.gmf.runtime.emf.type.core.IElementType getElementType(String id) {
+	return org.eclipse.gmf.runtime.emf.type.core.ElementTypeRegistry.getInstance().getType(id);
+}
+«ENDDEFINE»
+
+«DEFINE isKnownElementType FOR gmfgen::GenDiagram-»
+	«EXPAND xpt::Common::generatedMemberComment»
+public static boolean isKnownElementType(org.eclipse.gmf.runtime.emf.type.core.IElementType elementType) {
+	if (KNOWN_ELEMENT_TYPES == null) {
+		KNOWN_ELEMENT_TYPES = new java.util.HashSet();
+		«EXPAND addKnownElementType FOREACH getAllTypedElements()-»
+	}
+	return KNOWN_ELEMENT_TYPES.contains(elementType);
+}
+«ENDDEFINE»
+
+«DEFINE addKnownElementType FOR gmfgen::GenCommonBase-»
+	«IF null <> elementType-»
+KNOWN_ELEMENT_TYPES.add(«getUniqueIdentifier()»);
+	«ENDIF-»
+«ENDDEFINE»
+
+«DEFINE getElementTypeByVisualID FOR gmfgen::GenDiagram-»
+	«EXPAND xpt::Common::generatedMemberComment»
+	public static org.eclipse.gmf.runtime.emf.type.core.IElementType getElementType(int visualID) {
+		switch (visualID) {
+			«EXPAND caseElementType FOREACH getAllTypedElements()->select(el | el.elementType <> null)-»
+		}
+		return null;
+	}
+«ENDDEFINE»
+
+«DEFINE caseElementType FOR gmfgen::GenCommonBase-»
+	«EXPAND xpt::Common::caseVisualID-»
+		return «getUniqueIdentifier()»;
+«ENDDEFINE»
+
+«DEFINE additions FOR gmfgen::GenDiagram-»
+«ENDDEFINE»

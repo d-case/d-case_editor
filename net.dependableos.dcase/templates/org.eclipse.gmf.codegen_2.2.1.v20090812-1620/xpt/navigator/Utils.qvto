@@ -1,0 +1,80 @@
+/*
+ * Copyright (c) 2006, 2009 Borland Software Corporation
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Alexander Shatalin (Borland) - initial API and implementation
+ */
+
+import gmf.CodeGenerationUtils;
+
+modeltype genModel uses "http://www.eclipse.org/gmf/2009/GenModel";
+modeltype genModel_1 uses "http://www.eclipse.org/emf/2002/GenModel";
+
+library Utils;
+
+helper getMaxVisualID(navigator : genModel::GenNavigator) : Integer {
+	return (if getMaxVisualIDNavigatorNode(navigator)->size() = 1 then getMaxVisualIDNavigatorNode(navigator)->first().oclAsType(genModel::GenCommonBase).visualID else 0 endif)
+}
+
+-- MODIFIERS: private cached
+helper getMaxVisualIDNavigatorNode(navigator : genModel::GenNavigator) : Sequence(genModel::GenCommonBase) {
+	return getNavigatorNodes(navigator)->select(navigatorNode | isMaximumVisualID(navigatorNode, getNavigatorNodes(navigator)))
+}
+
+-- MODIFIERS: private
+helper isMaximumVisualID(commonBase : genModel::GenCommonBase, allNavigatorNodes : Sequence(genModel::GenCommonBase)) : Boolean {
+	return allNavigatorNodes->select(navigatorNode | navigatorNode.visualID > commonBase.visualID)->isEmpty()
+}
+
+helper isStringFeature(feature : genModel_1::GenFeature) : Boolean {
+	return feature.ecoreFeature.eType.name = 'EString'
+}
+
+-- MODIFIERS: cached
+helper getNavigatorContainerNodes(navigator : genModel::GenNavigator) : Sequence(genModel::GenCommonBase) {
+	return getNavigatorNodes(navigator)->select(n | getChildReferencesFrom(navigator, n)->size() > 0)
+}
+
+-- MODIFIERS: cached
+helper getNavigatorContainedNodes(navigator : genModel::GenNavigator) : Sequence(genModel::GenCommonBase) {
+	return getNavigatorNodes(navigator)->select(n | getChildReferencesTo(navigator, n)->size() > 0)
+}
+
+-- MODIFIERS: private
+helper getNavigatorNodes(navigator : genModel::GenNavigator) : Sequence(genModel::GenCommonBase) {
+	return let diagram = navigator.editorGen.diagram in (((Sequence { diagram })[genModel::GenContainerBase]->union(diagram.topLevelNodes->asSequence())->union(diagram.childNodes->asSequence()))[genModel::GenCommonBase]->union(diagram.links->asSequence())->union(diagram.compartments->asSequence()))[genModel::GenCommonBase]
+}
+
+helper getGroupNames(_references : Sequence(genModel::GenNavigatorChildReference)) : Set(String) {
+	return _references->select(ref | ref.isInsideGroup())->collect(ref | ref.groupName)->asOrderedSet()
+}
+
+helper getNavigatorReference(groupName : String, childReferences : Sequence(genModel::GenNavigatorChildReference)) : genModel::GenNavigatorChildReference {
+	return childReferences->select(r | r.groupName = groupName)->first()
+}
+
+helper getChildReferencesFrom(navigator : genModel::GenNavigator, parent : genModel::GenCommonBase) : Sequence(genModel::GenNavigatorChildReference) {
+	return navigator.childReferences->select(r | parent.visualID = r.parent.visualID)->asSequence()
+}
+
+helper getChildReferencesTo(navigator : genModel::GenNavigator, child : genModel::GenCommonBase) : Sequence(genModel::GenNavigatorChildReference) {
+	return navigator.childReferences->select(r | child.visualID = r.child.visualID)->asSequence()
+}
+
+helper getDiagramTopReference(navigator : genModel::GenNavigator) : genModel::GenNavigatorChildReference {
+	return let diagramTopReferences = navigator.childReferences->select(cr | null = cr.parent)->select(cr | cr.child = navigator.editorGen.diagram) in (if diagramTopReferences->size() = 0 then null else diagramTopReferences->at(0 + 1) endif)
+}
+
+
+helper i18nKeyForGroup(groupName : String, contextElement : genModel::GenCommonBase) : String {
+	return 'NavigatorGroupName.' + (if null <> contextElement then contextElement.getUniqueIdentifier() else 'File' endif) + '.' + validJavaIdentifier(groupName)
+}
+
+helper i18nKeyForOpenDiagramActionName() : String {
+	return 'NavigatorActionProvider.OpenDiagramActionName'
+}

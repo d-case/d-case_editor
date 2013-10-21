@@ -1,0 +1,110 @@
+﻿/*
+ * Copyright (c) 2006, 2009 Borland Software Corporation
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Alexander Shatalin (Borland) - initial API and implementation
+ */
+
+«IMPORT 'http://www.eclipse.org/gmf/2009/GenModel'»
+
+«DEFINE ShortcutsDecoratorProvider FOR gmfgen::GenDiagram-»
+	«EXPAND xpt::Common::copyright FOR editorGen-»
+package «providersPackageName»;
+
+	«EXPAND xpt::Common::generatedClassComment»
+public class «shortcutsDecoratorProviderClassName» extends org.eclipse.gmf.runtime.common.core.service.AbstractProvider implements org.eclipse.gmf.runtime.diagram.ui.services.decorator.IDecoratorProvider {
+
+	«EXPAND attributes-»
+	
+	«EXPAND provides-»
+	
+	«EXPAND createDecorators-»
+	
+	«EXPAND ShortcutsDecorator-»
+
+	«EXPAND additions-»
+}
+«ENDDEFINE»
+
+«DEFINE attributes FOR gmfgen::GenDiagram-»
+	«EXPAND xpt::Common::generatedMemberComment»
+public static final String SHORTCUTS_DECORATOR_ID = "shortcuts"; «EXPAND xpt::Common::nonNLS»
+«ENDDEFINE»
+
+«DEFINE provides FOR gmfgen::GenDiagram-»
+	«EXPAND xpt::Common::generatedMemberComment»
+public boolean provides(org.eclipse.gmf.runtime.common.core.service.IOperation operation) {
+	if (!(operation instanceof org.eclipse.gmf.runtime.diagram.ui.services.decorator.CreateDecoratorsOperation)) {
+		return false;
+	}
+	org.eclipse.gmf.runtime.diagram.ui.services.decorator.IDecoratorTarget decoratorTarget = ((org.eclipse.gmf.runtime.diagram.ui.services.decorator.CreateDecoratorsOperation) operation).getDecoratorTarget();
+	org.eclipse.gmf.runtime.notation.View view = (org.eclipse.gmf.runtime.notation.View) decoratorTarget.getAdapter(org.eclipse.gmf.runtime.notation.View.class);
+	return view != null && «EXPAND xpt::editor::VisualIDRegistry::modelID».equals(«EXPAND xpt::editor::VisualIDRegistry::getModelIDMethodCall»(view));
+}
+«ENDDEFINE»
+
+«DEFINE createDecorators FOR gmfgen::GenDiagram-»
+	«EXPAND xpt::Common::generatedMemberComment»
+public void createDecorators(org.eclipse.gmf.runtime.diagram.ui.services.decorator.IDecoratorTarget decoratorTarget) {
+	org.eclipse.gmf.runtime.notation.View view = (org.eclipse.gmf.runtime.notation.View) decoratorTarget.getAdapter(org.eclipse.gmf.runtime.notation.View.class);
+	if (view != null) {
+		org.eclipse.emf.ecore.EAnnotation annotation = view.getEAnnotation("Shortcut"); «EXPAND xpt::Common::nonNLS»
+		if (annotation != null) {
+			decoratorTarget.installDecorator(SHORTCUTS_DECORATOR_ID, new ShortcutsDecorator(decoratorTarget));
+		}
+	}
+}
+«ENDDEFINE»
+
+«DEFINE ShortcutsDecorator FOR gmfgen::GenDiagram-»
+	«EXPAND xpt::Common::generatedClassComment»
+protected class ShortcutsDecorator extends org.eclipse.gmf.runtime.diagram.ui.services.decorator.AbstractDecorator {
+
+	«EXPAND SD_constructor-»
+	
+	«EXPAND SD_activate-»
+
+	«EXPAND SD_refresh-»
+
+	«EXPAND SD_additions-»
+}
+«ENDDEFINE»
+
+«DEFINE SD_constructor FOR gmfgen::GenDiagram-»
+	«EXPAND xpt::Common::generatedMemberComment»
+public ShortcutsDecorator(org.eclipse.gmf.runtime.diagram.ui.services.decorator.IDecoratorTarget decoratorTarget) {
+	super(decoratorTarget);
+}
+«ENDDEFINE»
+
+«DEFINE SD_activate FOR gmfgen::GenDiagram-»
+	«EXPAND xpt::Common::generatedMemberComment»
+public void activate() {
+	refresh();
+}
+«ENDDEFINE»
+
+«DEFINE SD_refresh FOR gmfgen::GenDiagram-»
+	«EXPAND xpt::Common::generatedMemberComment»
+public void refresh() {
+	removeDecoration();
+	org.eclipse.gef.EditPart editPart = (org.eclipse.gef.EditPart) getDecoratorTarget().getAdapter(org.eclipse.gef.EditPart.class);
+	org.eclipse.swt.graphics.Image image = «editorGen.plugin.getActivatorQualifiedClassName()».getInstance().getBundledImage("icons/shortcut.gif"); «EXPAND xpt::Common::nonNLS»
+	if (editPart instanceof org.eclipse.gmf.runtime.diagram.ui.editparts.ShapeEditPart) {
+		setDecoration(getDecoratorTarget().addShapeDecoration(image, org.eclipse.gmf.runtime.diagram.ui.services.decorator.IDecoratorTarget.Direction.SOUTH_WEST, 0, false));
+	} else if (editPart instanceof org.eclipse.gmf.runtime.diagram.ui.editparts.ConnectionEditPart) {
+		setDecoration(getDecoratorTarget().addConnectionDecoration(image, 50, false));
+	}
+}
+«ENDDEFINE»
+
+«DEFINE SD_additions FOR gmfgen::GenDiagram-»
+«ENDDEFINE»
+
+«DEFINE additions FOR gmfgen::GenDiagram-»
+«ENDDEFINE»

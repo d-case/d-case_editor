@@ -1,0 +1,205 @@
+﻿/*
+ * Copyright (c) 2006, 2009 Borland Software Corporation
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Dmitry Stadnik (Borland) - initial API and implementation
+ */
+
+«IMPORT 'http://www.eclipse.org/gmf/2009/GenModel'»
+
+«EXTENSION xpt::application::i18n»
+
+«DEFINE WizardNewFileCreationPage FOR gmfgen::GenApplication-»
+«EXPAND xpt::Common::copyright FOR editorGen-»
+package «packageName»;
+
+«EXPAND xpt::Common::generatedClassComment»
+public class WizardNewFileCreationPage extends org.eclipse.jface.wizard.WizardPage {
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	private final org.eclipse.jface.viewers.IStructuredSelection currentSelection;
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	private String initialFileName;
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	private org.eclipse.core.runtime.IPath initialContainerFullPath;
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	private org.eclipse.swt.widgets.Text fileNameEditor;
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	public WizardNewFileCreationPage(String name, org.eclipse.jface.viewers.IStructuredSelection currentSelection) {
+		super(name);
+		this.currentSelection = currentSelection;
+		String home = System.getProperty("user.home"); //$NON-NLS-1$
+		if (home != null) {
+			initialContainerFullPath = new org.eclipse.core.runtime.Path(home);
+		}
+	}
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	protected org.eclipse.jface.viewers.IStructuredSelection getSelection() {
+		return currentSelection;
+	}
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	public String getFileName() {
+		if (fileNameEditor == null) {
+			return initialFileName;
+		}
+		org.eclipse.core.runtime.IPath path = getFilePath();
+		if (path == null || path.isEmpty() || path.hasTrailingSeparator()) {
+			return null;
+		}
+		return path.lastSegment();
+	}
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	public void setFileName(String fileName) {
+		if (fileNameEditor == null) {
+			initialFileName = fileName;
+			return;
+		}
+		setFilePath(getContainerFullPath(), fileName);
+	}
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	public org.eclipse.core.runtime.IPath getContainerFullPath() {
+		if (fileNameEditor == null) {
+			return initialContainerFullPath;
+		}
+		org.eclipse.core.runtime.IPath path = getFilePath();
+		if (path == null || path.isEmpty()) {
+			return null;
+		}
+		if (path.hasTrailingSeparator()) {
+			return path;
+		}
+		path = path.removeLastSegments(1);
+		if (path.isEmpty()) {
+			return null;
+		}
+		return path.addTrailingSeparator();
+	}
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	public void setContainerFullPath(org.eclipse.core.runtime.IPath containerPath) {
+		if (fileNameEditor == null) {
+			initialContainerFullPath = containerPath;
+			return;
+		}
+		setFilePath(containerPath, getFileName());
+	}
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	protected org.eclipse.core.runtime.IPath getFilePath() {
+		String fileName = fileNameEditor.getText().trim();
+		if (fileName.length() == 0) {
+			return null;
+		}
+		return new org.eclipse.core.runtime.Path(fileNameEditor.getText());
+	}
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	protected void setFilePath(org.eclipse.core.runtime.IPath containerPath, String fileName) {
+		if (fileName == null) {
+			fileName = ""; //$NON-NLS-1$
+		} else {
+			fileName = fileName.trim();
+		}
+		if (containerPath == null) {
+			fileNameEditor.setText(fileName);
+		} else {
+			if (!containerPath.hasTrailingSeparator()) {
+				containerPath = containerPath.addTrailingSeparator();
+			}
+			org.eclipse.core.runtime.IPath path = fileName.length() == 0 ? containerPath : containerPath.append(fileName);
+			fileNameEditor.setText(path.toOSString());
+		}
+		setPageComplete(validatePage());
+	}
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	public void createControl(org.eclipse.swt.widgets.Composite parent) {
+		org.eclipse.swt.widgets.Composite plate = new org.eclipse.swt.widgets.Composite(parent, org.eclipse.swt.SWT.NONE);
+		plate.setLayout(new org.eclipse.swt.layout.GridLayout(2, false));
+		org.eclipse.swt.widgets.Label label = new org.eclipse.swt.widgets.Label(plate, org.eclipse.swt.SWT.NONE);
+		label.setText(«EXPAND xpt::Externalizer::accessorCall(i18nKeyForNewFileWizardFileLabel(self)) FOR editorGen»);
+		label.setLayoutData(new org.eclipse.swt.layout.GridData(org.eclipse.swt.SWT.BEGINNING, org.eclipse.swt.SWT.CENTER, false, false, 2, 1));
+		fileNameEditor = new org.eclipse.swt.widgets.Text(plate, org.eclipse.swt.SWT.SINGLE | org.eclipse.swt.SWT.BORDER);
+		fileNameEditor.setLayoutData(new org.eclipse.swt.layout.GridData(org.eclipse.swt.SWT.FILL, org.eclipse.swt.SWT.CENTER, true, false));
+		org.eclipse.swt.widgets.Button button = new org.eclipse.swt.widgets.Button(plate, org.eclipse.swt.SWT.PUSH);
+		button.setText(«EXPAND xpt::Externalizer::accessorCall(i18nKeyForNewFileWizardBrowseButton(self)) FOR editorGen»);
+		button.setLayoutData(new org.eclipse.swt.layout.GridData(org.eclipse.swt.SWT.BEGINNING, org.eclipse.swt.SWT.CENTER, false, false));
+
+		// logic
+		fileNameEditor.addModifyListener(new org.eclipse.swt.events.ModifyListener() {
+
+			public void modifyText(org.eclipse.swt.events.ModifyEvent e) {
+				setPageComplete(validatePage());
+			}
+		});
+		button.addSelectionListener(new org.eclipse.swt.events.SelectionListener() {
+
+			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
+				org.eclipse.swt.widgets.FileDialog dialog = new org.eclipse.swt.widgets.FileDialog(getShell(), org.eclipse.swt.SWT.SAVE);
+				dialog.setText(«EXPAND xpt::Externalizer::accessorCall(i18nKeyForNewFileWizardSelectDialog(self)) FOR editorGen»);
+				dialog.setFileName(getFileName());
+				String fileName = dialog.open();
+				if (fileName != null) {
+					fileNameEditor.setText(fileName);
+					setPageComplete(validatePage());
+				}
+			}
+
+			public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {
+			}
+		});
+
+		// init
+		setFilePath(initialContainerFullPath, initialFileName);
+		setControl(plate);
+	}
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	protected boolean validatePage() {
+		String fileName = fileNameEditor.getText().trim();
+		if (fileName.length() == 0) {
+			setErrorMessage(«EXPAND xpt::Externalizer::accessorCall(i18nKeyForNewFileWizardEmpty(self)) FOR editorGen»);
+			return false;
+		}
+		if (!new org.eclipse.core.runtime.Path("").isValidPath(fileName)) { //$NON-NLS-1$
+			setErrorMessage(«EXPAND xpt::Externalizer::accessorCall(i18nKeyForNewFileWizardInvalid(self)) FOR editorGen»);
+			return false;
+		}
+		setErrorMessage(null);
+		return true;
+	}
+	«EXPAND additions-»
+}
+«ENDDEFINE»
+
+«DEFINE additions FOR gmfgen::GenApplication-»
+«ENDDEFINE»
+
+«DEFINE i18nValues FOR gmfgen::GenApplication-»
+«EXPAND xpt::Externalizer::messageEntry(i18nKeyForNewFileWizardFileLabel(self), 'File:')-»
+«EXPAND xpt::Externalizer::messageEntry(i18nKeyForNewFileWizardBrowseButton(self), 'Browse')-»
+«EXPAND xpt::Externalizer::messageEntry(i18nKeyForNewFileWizardSelectDialog(self), 'Select new file')-»
+«EXPAND xpt::Externalizer::messageEntry(i18nKeyForNewFileWizardEmpty(self), 'Specify file name')-»
+«EXPAND xpt::Externalizer::messageEntry(i18nKeyForNewFileWizardInvalid(self), 'Invalid file name')-»
+«ENDDEFINE»
+
+«DEFINE i18nAccessors FOR gmfgen::GenApplication-»
+	«EXPAND xpt::Externalizer::accessorField(i18nKeyForNewFileWizardFileLabel(self))-»
+	«EXPAND xpt::Externalizer::accessorField(i18nKeyForNewFileWizardBrowseButton(self))-»
+	«EXPAND xpt::Externalizer::accessorField(i18nKeyForNewFileWizardSelectDialog(self))-»
+	«EXPAND xpt::Externalizer::accessorField(i18nKeyForNewFileWizardEmpty(self))-»
+	«EXPAND xpt::Externalizer::accessorField(i18nKeyForNewFileWizardInvalid(self))-»
+«ENDDEFINE»

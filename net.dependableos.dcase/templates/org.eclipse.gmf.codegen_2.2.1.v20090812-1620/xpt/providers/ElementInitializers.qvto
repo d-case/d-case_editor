@@ -1,0 +1,74 @@
+/*
+ * Copyright (c) 2008, 2009 Borland Software Corporation
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Artem Tikhomirov (Borland) - initial API and implementation
+ */
+
+import xpt.GenModelUtils;
+
+modeltype gmfgen uses "http://www.eclipse.org/gmf/2009/GenModel";
+modeltype genmodel uses "http://www.eclipse.org/emf/2002/GenModel";
+
+library ElementInitializers;
+
+helper genmodel::GenClassifier::expressionResultNeedsCast() : Boolean { return false }
+helper genmodel::GenClass::expressionResultNeedsCast() : Boolean { return false }
+helper genmodel::GenDataType::expressionResultNeedsCast() : Boolean { return self.isNumberObject() or self.isPrimitiveNumberType() }
+helper genmodel::GenEnum::expressionResultNeedsCast() : Boolean { return true }
+
+--
+-- Present approach may result in duplicated methods in few odd scenarios
+-- when same feature gets initialized using java language inside single ElementInitializer hierarchy, 
+-- e.g. for a given diagram element, with feature1 and feature2 of a same/similar kind:
+-- feature1
+--   Instance1
+--     featureX
+--       InstanceX1
+--         featureY = 'aaa' (Java)
+-- feature2
+--   Instance2
+--     featureX
+--       InstanceX2
+--         featureY = 'bbb' (Java)
+-- there would be two featureY_featureY_DiagramElement() methods
+--
+helper javaMethodName(de : gmfgen::GenCommonBase, valueSpec : gmfgen::GenFeatureValueSpec) : String {
+	return valueSpec.feature.ecoreFeature.name + '_' + (if valueSpec.featureSeqInitializer.creatingInitializer <> null then valueSpec.featureSeqInitializer.creatingInitializer.feature.ecoreFeature.name + '_' else '' endif) + de.getUniqueIdentifier()
+}
+
+helper recurseCollectValueSpec(si : gmfgen::GenFeatureSeqInitializer) : Sequence(gmfgen::GenFeatureValueSpec) {
+	return si.initializers[gmfgen::GenFeatureValueSpec]->union(si.initializers[gmfgen::GenReferenceNewElementSpec].newElementInitializers->collect(it | recurseCollectValueSpec(it))->asOrderedSet())->asSequence()
+}
+
+helper getSuffixes(newSuffix : Integer) : Sequence(Integer) {
+	return Sequence { newSuffix }
+}
+
+helper getSuffixes(suffixes : Sequence(Integer), newSuffix : Integer) : Sequence(Integer) {
+	return suffixes->including(newSuffix)
+}
+
+helper getVariableName(prefix : String, suffixes : Sequence(Integer)) : String {
+	return prefix + getSuffix(suffixes)
+}
+
+-- privates
+helper genmodel::GenClassifier::isNumberObject() : Boolean { return false }
+helper genmodel::GenClass::isNumberObject() : Boolean { return false }
+helper genmodel::GenDataType::isNumberObject() : Boolean { return Sequence { 'java.math.BigDecimal', 'java.math.BigInteger', 'java.lang.Byte', 'java.lang.Double', 'java.lang.Float', 'java.lang.Integer', 'java.lang.Long', 'java.lang.Short' }->includes(self.ecoreDataType.instanceClassName) }
+helper genmodel::GenEnum::isNumberObject() : Boolean { return false }
+
+helper genmodel::GenClassifier::isPrimitiveNumberType() : Boolean {	return false }
+helper genmodel::GenClass::isPrimitiveNumberType() : Boolean { return false }
+helper genmodel::GenDataType::isPrimitiveNumberType() : Boolean { return Sequence { 'byte', 'double', 'float', 'int', 'long', 'short' }->includes(self.ecoreDataType.instanceClassName) }
+helper genmodel::GenEnum::isPrimitiveNumberType() : Boolean { return false }
+
+helper getSuffix(suffixes : Sequence(Integer)) : String {
+	return '_' + suffixes->first().repr() + (if suffixes->size() > 1 then getSuffix(suffixes->subSequence(2, suffixes->size())) else '' endif)
+}

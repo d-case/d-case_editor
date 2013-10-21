@@ -1,0 +1,22 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: D-Case Editor Common
+Bundle-SymbolicName: net.dependableos.dcase.diagram.common
+Bundle-Version: 0.8.15.axe_qualifier
+Bundle-Vendor: DEOSC.
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Export-Package: net.dependableos.dcase.diagram.common.command,
+ net.dependableos.dcase.diagram.common.constant,
+ net.dependableos.dcase.diagram.common.exception,
+ net.dependableos.dcase.diagram.common.model,
+ net.dependableos.dcase.diagram.common.util,
+ net.dependableos.dcase.diagram.common.validator,
+ net.dependableos.dcase.diagram.common.xml
+Require-Bundle: org.junit4;bundle-version="4.5.0";resolution:=optional,
+ org.eclipse.core.resources;bundle-version="3.5.1",
+ org.eclipse.core.runtime;bundle-version="3.5.0",
+ net.dependableos.dcase;bundle-version="0.6.3",
+ org.eclipse.gmf.runtime.emf.commands.core;bundle-version="1.2.0",
+ org.eclipse.jface;bundle-version="3.5.1",
+ org.eclipse.ui;bundle-version="3.5.1",
+ org.eclipse.ui.ide;bundle-version="3.5.1"

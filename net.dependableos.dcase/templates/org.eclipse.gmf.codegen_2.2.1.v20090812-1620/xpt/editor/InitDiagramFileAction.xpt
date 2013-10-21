@@ -1,0 +1,144 @@
+﻿/*
+ * Copyright (c) 2007, 2009 Borland Software Corporation
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Alexander Shatalin (Borland) - initial API and implementation
+ *    Dmitry Stadnik (Borland) - rewritten in xpand
+ */
+
+«IMPORT 'http://www.eclipse.org/gmf/2009/GenModel'»
+
+«EXTENSION xpt::editor::Utils»
+«EXTENSION xpt::StringOperations»
+
+«DEFINE InitDiagramFileAction(editorGen : gmfgen::GenEditorGenerator) FOR gmfgen::InitDiagramAction-»
+«EXPAND xpt::Common::copyright FOR editorGen-»
+«EXPAND xpt::Common::packageStatement FOR qualifiedClassName»
+
+«EXPAND xpt::Common::generatedClassComment»
+public class «qualifiedClassName.xpandSplit('\\.')->last()»
+	«IF editorGen.application = null-»
+implements org.eclipse.ui.IObjectActionDelegate {
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	private org.eclipse.ui.IWorkbenchPart targetPart;
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	private org.eclipse.emf.common.util.URI domainModelURI;
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	public void setActivePart(org.eclipse.jface.action.IAction action, org.eclipse.ui.IWorkbenchPart targetPart) {
+		this.targetPart = targetPart;
+	}
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	public void selectionChanged(org.eclipse.jface.action.IAction action, org.eclipse.jface.viewers.ISelection selection) {
+		domainModelURI = null;
+		action.setEnabled(false);
+		if (selection instanceof org.eclipse.jface.viewers.IStructuredSelection == false || selection.isEmpty()) {
+			return;
+		}
+		org.eclipse.core.resources.IFile file =
+			(org.eclipse.core.resources.IFile) ((org.eclipse.jface.viewers.IStructuredSelection) selection).getFirstElement();
+		domainModelURI = org.eclipse.emf.common.util.URI.createPlatformResourceURI(file.getFullPath().toString(), true);
+		action.setEnabled(true);
+	}
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	private org.eclipse.swt.widgets.Shell getShell() {
+		return targetPart.getSite().getShell();
+	}
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	public void run(org.eclipse.jface.action.IAction action) {
+		org.eclipse.emf.transaction.TransactionalEditingDomain editingDomain =
+			org.eclipse.gmf.runtime.emf.core.GMFEditingDomainFactory.INSTANCE.createEditingDomain();
+		«IF editorGen.sameFileForDiagramAndModel-»
+		org.eclipse.emf.ecore.resource.ResourceSet resourceSet = new org.eclipse.emf.ecore.resource.impl.ResourceSetImpl();
+		«ELSE-»
+		org.eclipse.emf.ecore.resource.ResourceSet resourceSet = editingDomain.getResourceSet();
+		«ENDIF-»
+		org.eclipse.emf.ecore.EObject diagramRoot = null;
+		try {
+			org.eclipse.emf.ecore.resource.Resource resource = resourceSet.getResource(domainModelURI, true);
+			diagramRoot = (org.eclipse.emf.ecore.EObject) resource.getContents().get(0);
+		} catch (org.eclipse.emf.common.util.WrappedException ex) {
+			«editorGen.plugin.getActivatorQualifiedClassName()».getInstance().logError(
+				"Unable to load resource: " + domainModelURI, ex);«EXPAND xpt::Common::nonNLS»
+		}
+		if (diagramRoot == null) {
+			org.eclipse.jface.dialogs.MessageDialog.openError(getShell(), 
+                «EXPAND xpt::Externalizer::accessorCall(titleKey(i18nKeyForInitDiagramFileResourceErrorDialog())) FOR editorGen»,
+                «EXPAND xpt::Externalizer::accessorCall(messageKey(i18nKeyForInitDiagramFileResourceErrorDialog())) FOR editorGen»);
+			return;
+		}
+		org.eclipse.jface.wizard.Wizard wizard = new «editorGen.diagram.getNewDiagramFileWizardQualifiedClassName()»(domainModelURI, diagramRoot, editingDomain);
+		wizard.setWindowTitle(org.eclipse.osgi.util.NLS.bind(
+				    «EXPAND xpt::Externalizer::accessorCall(i18nKeyForInitDiagramFileWizardTitle()) FOR editorGen»,
+				    «EXPAND xpt::editor::VisualIDRegistry::modelID FOR editorGen.diagram»));
+		«editorGen.diagram.getDiagramEditorUtilQualifiedClassName()».runWizard(getShell(), wizard, "InitDiagramFile");«EXPAND xpt::Common::nonNLS»
+	}
+	«ELSE-»
+implements org.eclipse.ui.IWorkbenchWindowActionDelegate {
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	private org.eclipse.ui.IWorkbenchWindow window;
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	public void init(org.eclipse.ui.IWorkbenchWindow window) {
+		this.window = window;
+	}
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	public void dispose() {
+		window = null;
+	}
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	public void selectionChanged(org.eclipse.jface.action.IAction action, org.eclipse.jface.viewers.ISelection selection) {
+	}
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	private org.eclipse.swt.widgets.Shell getShell() {
+		return window.getShell();
+	}
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	public void run(org.eclipse.jface.action.IAction action) {
+		org.eclipse.emf.transaction.TransactionalEditingDomain editingDomain =
+			org.eclipse.gmf.runtime.emf.core.GMFEditingDomainFactory.INSTANCE.createEditingDomain();
+		org.eclipse.emf.ecore.resource.Resource resource =
+				«editorGen.diagram.getDiagramEditorUtilQualifiedClassName()».openModel(getShell(), 
+					«EXPAND xpt::Externalizer::accessorCall(i18nKeyForInitDiagramOpenFileDialogTitle()) FOR editorGen», editingDomain);
+		if (resource == null || resource.getContents().isEmpty()) {
+			return;
+		}
+		org.eclipse.emf.ecore.EObject diagramRoot = (org.eclipse.emf.ecore.EObject) resource.getContents().get(0);
+		org.eclipse.jface.wizard.Wizard wizard = new «editorGen.diagram.getNewDiagramFileWizardQualifiedClassName()»(resource.getURI(), diagramRoot, editingDomain);
+		wizard.setWindowTitle(org.eclipse.osgi.util.NLS.bind(
+				    «EXPAND xpt::Externalizer::accessorCall(i18nKeyForInitDiagramFileWizardTitle()) FOR editorGen»,
+				    «EXPAND xpt::editor::VisualIDRegistry::modelID FOR editorGen.diagram»));
+		«editorGen.diagram.getDiagramEditorUtilQualifiedClassName()».runWizard(getShell(), wizard, "InitDiagramFile");«EXPAND xpt::Common::nonNLS»
+	}
+	«ENDIF-»
+}
+«ENDDEFINE»
+
+«DEFINE i18nAccessors FOR gmfgen::GenDiagram-»
+«EXPAND xpt::Externalizer::accessorField(titleKey(i18nKeyForInitDiagramFileResourceErrorDialog()))-»
+«EXPAND xpt::Externalizer::accessorField(messageKey(i18nKeyForInitDiagramFileResourceErrorDialog()))-»
+«EXPAND xpt::Externalizer::accessorField(i18nKeyForInitDiagramFileWizardTitle())-»
+«EXPAND xpt::Externalizer::accessorField(i18nKeyForInitDiagramOpenFileDialogTitle())-»
+«ENDDEFINE»
+
+«DEFINE i18nValues FOR gmfgen::GenDiagram-»
+«EXPAND xpt::Externalizer::messageEntry(titleKey(i18nKeyForInitDiagramFileResourceErrorDialog()), 'Error')-»
+«EXPAND xpt::Externalizer::messageEntry(messageKey(i18nKeyForInitDiagramFileResourceErrorDialog()), 'Model file loading failed')-»
+«EXPAND xpt::Externalizer::messageEntry(i18nKeyForInitDiagramFileWizardTitle(), 'Initialize new {0} diagram file')-»
+«EXPAND xpt::Externalizer::messageEntry(i18nKeyForInitDiagramOpenFileDialogTitle(), 'Select domain model')-»
+«ENDDEFINE»

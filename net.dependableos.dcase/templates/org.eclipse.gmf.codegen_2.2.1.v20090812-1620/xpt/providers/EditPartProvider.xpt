@@ -1,0 +1,125 @@
+﻿/*
+ * Copyright (c) 2007, 2009 Borland Software Corporation
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Dmitry Stadnik (Borland) - initial API and implementation
+ */
+
+«IMPORT 'http://www.eclipse.org/gmf/2009/GenModel'»
+
+«DEFINE EditPartProvider FOR gmfgen::GenDiagram-»
+«EXPAND xpt::Common::copyright FOR editorGen-»
+package «providersPackageName»;
+
+«EXPAND xpt::Common::generatedClassComment»
+public class «editPartProviderClassName»
+		extends org.eclipse.gmf.runtime.diagram.ui.services.editpart.AbstractEditPartProvider {
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	private org.eclipse.gef.EditPartFactory factory;
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	private boolean allowCaching;
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	private java.lang.ref.WeakReference cachedPart;
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	private java.lang.ref.WeakReference cachedView;
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	public «editPartProviderClassName»() {
+		setFactory(new «getEditPartFactoryQualifiedClassName()»());
+		setAllowCaching(true);
+	}
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	public final org.eclipse.gef.EditPartFactory getFactory() {
+		return factory;
+	}
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	protected void setFactory(org.eclipse.gef.EditPartFactory factory) {
+		this.factory = factory;
+	}
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	public final boolean isAllowCaching() {
+		return allowCaching;
+	}
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	protected synchronized void setAllowCaching(boolean allowCaching) {
+		this.allowCaching = allowCaching;
+		if (!allowCaching) {
+			cachedPart = null;
+			cachedView = null;
+		}
+	}
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	protected org.eclipse.gmf.runtime.diagram.ui.editparts.IGraphicalEditPart createEditPart(
+			org.eclipse.gmf.runtime.notation.View view) {
+		org.eclipse.gef.EditPart part = factory.createEditPart(null, view);
+		if (part instanceof org.eclipse.gmf.runtime.diagram.ui.editparts.IGraphicalEditPart) {
+			return (org.eclipse.gmf.runtime.diagram.ui.editparts.IGraphicalEditPart) part;
+		}
+		return null;
+	}
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	protected org.eclipse.gmf.runtime.diagram.ui.editparts.IGraphicalEditPart getCachedPart(
+			org.eclipse.gmf.runtime.notation.View view) {
+		if (cachedView != null && cachedView.get() == view) {
+			return (org.eclipse.gmf.runtime.diagram.ui.editparts.IGraphicalEditPart) cachedPart.get();
+		}
+		return null;
+	}
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	public synchronized org.eclipse.gmf.runtime.diagram.ui.editparts.IGraphicalEditPart createGraphicEditPart(
+			org.eclipse.gmf.runtime.notation.View view) {
+		if (isAllowCaching()) {
+			org.eclipse.gmf.runtime.diagram.ui.editparts.IGraphicalEditPart part = getCachedPart(view);
+			cachedPart = null;
+			cachedView = null;
+			if (part != null) {
+				return part;
+			}
+		}
+		return createEditPart(view);
+	}
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	public synchronized boolean provides(org.eclipse.gmf.runtime.common.core.service.IOperation operation) {
+		if (operation instanceof org.eclipse.gmf.runtime.diagram.ui.services.editpart.CreateGraphicEditPartOperation) {
+			org.eclipse.gmf.runtime.notation.View view =
+					((org.eclipse.gmf.runtime.diagram.ui.services.editpart.IEditPartOperation) operation).getView();
+			if (!«getEditPartQualifiedClassName()».MODEL_ID.equals(
+					«getVisualIDRegistryQualifiedClassName()».getModelID(view))) {
+				return false;
+			}
+			if (isAllowCaching() && getCachedPart(view) != null) {
+				return true;
+			}
+			org.eclipse.gmf.runtime.diagram.ui.editparts.IGraphicalEditPart part = createEditPart(view);
+			if (part != null) {
+				if (isAllowCaching()) {
+					cachedPart = new java.lang.ref.WeakReference(part);
+					cachedView = new java.lang.ref.WeakReference(view);
+				}
+				return true;
+			}
+		}
+		return false;
+	}
+	«EXPAND additions-»
+}
+«ENDDEFINE»
+
+«DEFINE additions FOR gmfgen::GenDiagram»«ENDDEFINE»

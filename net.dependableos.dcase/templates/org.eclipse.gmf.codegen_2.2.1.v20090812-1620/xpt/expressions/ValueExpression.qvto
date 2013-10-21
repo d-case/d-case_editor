@@ -1,0 +1,27 @@
+/*
+ * Copyright (c) 2008, 2009 Borland Software Corporation
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Artem Tikhomirov (Borland) - initial API and implementation
+ */
+
+modeltype gmfgen uses "http://www.eclipse.org/gmf/2009/GenModel";
+
+library ValueExpression;
+
+helper constraintFieldName(cb : gmfgen::GenCommonBase) : String {
+	return cb.getUniqueIdentifier() + '_Constraint'
+}
+
+helper sourceConstraintFieldName(l : gmfgen::GenLink) : String {
+	return l.getUniqueIdentifier() + '_SourceExpression'
+}
+
+helper targetConstraintFieldName(l : gmfgen::GenLink) : String {
+	return l.getUniqueIdentifier() + '_TargetExpression'
+}

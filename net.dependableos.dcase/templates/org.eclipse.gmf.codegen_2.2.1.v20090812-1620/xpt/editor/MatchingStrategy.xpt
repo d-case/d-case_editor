@@ -1,0 +1,49 @@
+﻿/*
+ * Copyright (c) 2007, 2009 Borland Software Corporation
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Alexander Shatalin (Borland) - initial API and implementation
+ */
+
+«IMPORT 'http://www.eclipse.org/gmf/2009/GenModel'»
+
+«DEFINE MatchingStrategy FOR gmfgen::GenDiagram-»
+	«EXPAND xpt::Common::copyright FOR editorGen-»
+package «editorGen.editor.packageName»;
+
+	«EXPAND xpt::Common::generatedClassComment»
+public class «matchingStrategyClassName» implements org.eclipse.ui.IEditorMatchingStrategy {
+
+	«EXPAND matches-»
+
+}
+«ENDDEFINE»
+
+«DEFINE matches FOR gmfgen::GenDiagram-»
+	«EXPAND xpt::Common::generatedMemberComment»
+public boolean matches(org.eclipse.ui.IEditorReference editorRef, org.eclipse.ui.IEditorInput input) {
+	org.eclipse.ui.IEditorInput editorInput;
+	try {
+		editorInput = editorRef.getEditorInput();
+	} catch (org.eclipse.ui.PartInitException e) {
+		return false;
+	}
+        
+	if (editorInput.equals(input)) {
+		return true;
+	}
+«REM»
+	Should be removed then https://bugs.eclipse.org/bugs/show_bug.cgi?id=175260 commited.
+	Problem is: URIEditorInput has no .equals() overriden
+«ENDREM-»
+	if (editorInput instanceof org.eclipse.emf.common.ui.URIEditorInput && input instanceof org.eclipse.emf.common.ui.URIEditorInput) {
+		return ((org.eclipse.emf.common.ui.URIEditorInput) editorInput).getURI().equals(((org.eclipse.emf.common.ui.URIEditorInput) input).getURI());
+	}
+	return false;
+}
+«ENDDEFINE»

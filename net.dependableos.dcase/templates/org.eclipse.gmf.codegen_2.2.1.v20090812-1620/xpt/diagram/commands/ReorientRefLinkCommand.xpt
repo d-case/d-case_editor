@@ -1,0 +1,46 @@
+﻿/*
+ * Copyright (c) 2007, 2009 Borland Software Corporation
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Dmitry Stadnik (Borland) - initial API and implementation
+ */
+
+«IMPORT 'http://www.eclipse.org/gmf/2009/GenModel'»
+
+«DEFINE ReorientRefLinkCommand FOR gmfgen::GenLink-»
+«EXPAND xpt::Common::copyright FOR diagram.editorGen-»
+package «diagram.editCommandsPackageName»;
+
+«EXPAND xpt::Common::generatedClassComment»
+public class «reorientCommandClassName» extends org.eclipse.gmf.runtime.emf.type.core.commands.EditElementCommand {
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	private final int reorientDirection;
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	private final org.eclipse.emf.ecore.EObject referenceOwner;
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	private final org.eclipse.emf.ecore.EObject oldEnd;
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	private final org.eclipse.emf.ecore.EObject newEnd;
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	public «reorientCommandClassName»(org.eclipse.gmf.runtime.emf.type.core.requests.ReorientReferenceRelationshipRequest request) {
+		super(request.getLabel(), null, request);
+		reorientDirection = request.getDirection();
+		referenceOwner = request.getReferenceOwner();
+		oldEnd = request.getOldRelationshipEnd();
+		newEnd = request.getNewRelationshipEnd();
+	}
+	«EXPAND xpt::diagram::commands::ReorientLinkUtils::canReorient(self) FOR modelFacet-»
+	«EXPAND xpt::diagram::commands::ReorientLinkUtils::reorient FOR modelFacet-»
+	«EXPAND xpt::diagram::commands::ReorientLinkUtils::accessors-»
+}
+«ENDDEFINE»

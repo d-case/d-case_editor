@@ -1,0 +1,142 @@
+﻿/*
+ * Copyright (c) 2007, 2009 Borland Software Corporation
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Alexander Shatalin (Borland) - initial API and implementation
+ *    Dmitry Stadnik (Borland) - creation logic was moved in commands
+ *    Michael Golubev (Borland) - [243151] explicit source/target for links
+ */
+
+«IMPORT 'http://www.eclipse.org/gmf/2009/GenModel'»
+«EXTENSION xpt::diagram::editpolicies::Utils»
+
+«REM»
+ * Start  		start of link creation. 
+ *				User click to this editpart and start dragging with link tool.
+ * Complete 	end of the command
+ *				User points to this editpart as a link target and release mouse button.
+ *
+ * Outgoing 	the node is link source
+ *				This element could be a source for this type of link.
+ * Incoming		the node is link destination
+ *				This element could be a target for this type of link.
+ *
+ * Parameters:
+ *
+ * 	diagram 	GenDiagram used to collect all defined links
+ *
+ *	this		Instance of GenLinkEnd for the element link could be creates to/from.
+ *				This could be GenNode or GenLink in case of links to links, 
+ *              in the latter case it is assumed that its a TypeLink (so its model facet is LinkTypeModelFacet), 
+ *              because RefLinks don't have underlying semantic identity   
+ *
+«ENDREM»
+
+«DEFINE linkCommands FOR gmfgen::GenLinkEnd-»
+	«IF getAllPotentialLinks(self)->size() > 0-»
+		«EXPAND createLinkCommands -»
+	«ENDIF-»
+	«IF getReroutableTypeLinks(self)->size() > 0-»
+		«EXPAND reorientTypeLinkCommands -»
+	«ENDIF-»
+	«IF getReroutableRefLinks(self)->size() > 0-»
+		«EXPAND reorientRefLinkCommands -»
+	«ENDIF-»
+«ENDDEFINE»
+
+«DEFINE createLinkCommands FOR gmfgen::GenLinkEnd-»
+
+«EXPAND xpt::Common::generatedMemberComment»
+protected org.eclipse.gef.commands.Command getCreateRelationshipCommand(
+		org.eclipse.gmf.runtime.emf.type.core.requests.CreateRelationshipRequest req) {
+	org.eclipse.gef.commands.Command command = req.getTarget() == null ?
+			getStartCreateRelationshipCommand(req) : getCompleteCreateRelationshipCommand(req);
+	return command != null ? command : super.getCreateRelationshipCommand(req);
+}
+
+«EXPAND xpt::Common::generatedMemberComment»
+protected org.eclipse.gef.commands.Command getStartCreateRelationshipCommand(
+		org.eclipse.gmf.runtime.emf.type.core.requests.CreateRelationshipRequest req) {
+	«EXPAND startLinkCommands(self) FOREACH getAllPotentialLinks(self)-»
+	return null;
+}
+
+«EXPAND xpt::Common::generatedMemberComment»
+protected org.eclipse.gef.commands.Command getCompleteCreateRelationshipCommand(
+		org.eclipse.gmf.runtime.emf.type.core.requests.CreateRelationshipRequest req) {
+	«EXPAND completeLinkCommands(self) FOREACH getAllPotentialLinks(self)-»
+	return null;
+}
+«ENDDEFINE»
+
+«DEFINE startLinkCommands(linkEnd : gmfgen::GenLinkEnd) FOR gmfgen::GenLink-»
+if («EXPAND xpt::providers::ElementTypes::accessElementType» == req.getElementType()) {
+	«IF createStartLinkCommand(self, linkEnd)-»
+	return getGEFWrapper(new «getCreateCommandQualifiedClassName()»(req,
+		«IF createStartIncomingLinkCommand(self, linkEnd)-»
+			req.getTarget(), req.getSource()
+		«ELSE-»
+			req.getSource(), req.getTarget()
+		«ENDIF-»
+	));
+	«ELSE-»
+	return null;
+	«ENDIF-»
+}
+«ENDDEFINE»
+
+«DEFINE completeLinkCommands(linkEnd : gmfgen::GenLinkEnd) FOR gmfgen::GenLink-»
+if («EXPAND xpt::providers::ElementTypes::accessElementType» == req.getElementType()) {
+	«IF createCompleteLinkCommand(self, linkEnd)-»
+	return getGEFWrapper(new «getCreateCommandQualifiedClassName()»(req,
+		«IF createCompleteOutgoingLinkCommand(self, linkEnd)-»
+			req.getTarget(), req.getSource()
+		«ELSE-»
+			req.getSource(), req.getTarget()
+		«ENDIF-»
+	));
+	«ELSE-»
+	return null;
+	«ENDIF-»
+}
+«ENDDEFINE»
+
+«DEFINE reorientTypeLinkCommands FOR gmfgen::GenLinkEnd-»
+
+«EXPAND xpt::Common::generatedMemberComment(
+	'Returns command to reorient EClass based link. New link target or source\n' + 
+	'should be the domain model element associated with this node.\n'
+)»
+protected org.eclipse.gef.commands.Command getReorientRelationshipCommand(
+		org.eclipse.gmf.runtime.emf.type.core.requests.ReorientRelationshipRequest req) {
+	switch (getVisualID(req)) {
+	«EXPAND reorientLinkCommand FOREACH getReroutableTypeLinks(self)-»
+	}
+	return super.getReorientRelationshipCommand(req);
+}
+«ENDDEFINE»
+
+«DEFINE reorientRefLinkCommands FOR gmfgen::GenLinkEnd-»
+
+«EXPAND xpt::Common::generatedMemberComment(
+	'Returns command to reorient EReference based link. New link target or source\n' + 
+	'should be the domain model element associated with this node.\n'
+)»
+protected org.eclipse.gef.commands.Command getReorientReferenceRelationshipCommand(
+		org.eclipse.gmf.runtime.emf.type.core.requests.ReorientReferenceRelationshipRequest req) {
+	switch (getVisualID(req)) {
+	«EXPAND reorientLinkCommand FOREACH getReroutableRefLinks(self)-»
+	}
+	return super.getReorientReferenceRelationshipCommand(req);
+}
+«ENDDEFINE»
+
+«DEFINE reorientLinkCommand FOR gmfgen::GenLink-»
+«EXPAND xpt::Common::caseVisualID»
+	return getGEFWrapper(new «getReorientCommandQualifiedClassName()»(req));
+«ENDDEFINE»

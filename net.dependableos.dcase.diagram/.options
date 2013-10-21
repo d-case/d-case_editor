@@ -1,0 +1,7 @@
+# Tracing options for the net.dependableos.diagram plug-in
+
+# Common issues
+net.dependableos.diagram/debug=false
+
+# Visual IDs
+net.dependableos.diagram/debug/visualID=false

@@ -1,0 +1,68 @@
+﻿/*
+ * Copyright (c) 2006, 2009 Borland Software Corporation
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Dmitry Stadnik (Borland) - initial API and implementation
+ *    Alexander Shatalin (Borland) - initial API and implementation
+ */
+
+«IMPORT 'http://www.eclipse.org/gmf/2009/GenModel'»
+
+«DEFINE Main FOR gmfgen::GenLinkLabel-»
+«EXPAND xpt::Common::copyright FOR getDiagram().editorGen-»
+package «getDiagram().editPartsPackageName»;
+
+«EXPAND xpt::Common::generatedClassComment»
+public class «editPartClassName» «EXPAND extendsList» «EXPAND implementsList» {
+
+	«EXPAND attributes-»
+	
+	«EXPAND impl::diagram::editparts::LinkLabelEditPart::initializer-»
+	
+	«EXPAND impl::diagram::editparts::LinkLabelEditPart::_constructor-»
+	
+	«EXPAND createDefaultEditPolicies-»
+	
+	«EXPAND impl::diagram::editparts::LinkLabelEditPart::getKeyPoint-»
+	
+	«EXPAND impl::diagram::editparts::TextAware::methods(false, readOnly, elementIcon, viewmap, modelFacet, link, getDiagram())-»
+	
+	«EXPAND handleNotificationEvent-»
+	
+	«EXPAND xpt::diagram::editparts::Common::labelFigure FOR viewmap-»
+
+	«EXPAND additions-»
+}
+«ENDDEFINE»
+
+«DEFINE extendsList FOR gmfgen::GenLinkLabel»extends org.eclipse.gmf.runtime.diagram.ui.editparts.LabelEditPart«ENDDEFINE»
+
+«DEFINE implementsList FOR gmfgen::GenLinkLabel»implements org.eclipse.gmf.runtime.diagram.ui.editparts.ITextAwareEditPart«ENDDEFINE»
+
+«DEFINE attributes FOR gmfgen::GenLinkLabel-»
+	«EXPAND xpt::diagram::editparts::Common::visualIDConstant-»
+
+	«EXPAND impl::diagram::editparts::TextAware::fields-»
+«ENDDEFINE»
+
+«DEFINE createDefaultEditPolicies FOR gmfgen::GenLinkLabel-»
+	«EXPAND xpt::Common::generatedMemberComment»
+	protected void createDefaultEditPolicies() {
+		«EXPAND impl::diagram::editparts::LinkLabelEditPart::createDefaultEditPoliciesBody-»
+	}
+«ENDDEFINE»
+
+«DEFINE handleNotificationEvent FOR gmfgen::GenLinkLabel-»
+	«EXPAND xpt::Common::generatedMemberComment»
+	protected void handleNotificationEvent(org.eclipse.emf.common.notify.Notification event) {
+		«EXPAND impl::diagram::editparts::LinkLabelEditPart::handleNotificationEventBody-»
+	}
+«ENDDEFINE»
+
+«DEFINE additions FOR gmfgen::GenLinkLabel-»
+«ENDDEFINE»

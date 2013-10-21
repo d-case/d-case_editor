@@ -1,0 +1,63 @@
+﻿/*
+ * Copyright (c) 2007, 2009 Borland Software Corporation
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Dmitry Stadnik (Borland) - initial API and implementation
+ */
+
+«IMPORT 'http://www.eclipse.org/gmf/2009/GenModel'»
+
+«DEFINE ReorientLinkViewCommand FOR gmfgen::GenDiagram-»
+«EXPAND xpt::Common::copyright FOR editorGen-»
+package «editCommandsPackageName»;
+
+«EXPAND xpt::Common::generatedClassComment»
+public class «reorientConnectionViewCommandClassName»
+		extends org.eclipse.gmf.runtime.emf.commands.core.command.AbstractTransactionalCommand {
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	private org.eclipse.core.runtime.IAdaptable edgeAdaptor;
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	public «reorientConnectionViewCommandClassName»(
+			org.eclipse.emf.transaction.TransactionalEditingDomain editingDomain, String label) {
+		super(editingDomain, label, null);
+	}
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	public java.util.List getAffectedFiles() {
+		org.eclipse.gmf.runtime.notation.View view =
+				(org.eclipse.gmf.runtime.notation.View) edgeAdaptor.getAdapter(org.eclipse.gmf.runtime.notation.View.class);
+		if (view != null) {
+			return getWorkspaceFiles(view);
+		}
+		return super.getAffectedFiles();
+	}
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	public org.eclipse.core.runtime.IAdaptable getEdgeAdaptor() {
+		return edgeAdaptor;
+	}
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	public void setEdgeAdaptor(org.eclipse.core.runtime.IAdaptable edgeAdaptor) {
+		this.edgeAdaptor = edgeAdaptor;
+	}
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	protected org.eclipse.gmf.runtime.common.core.command.CommandResult doExecuteWithResult(org.eclipse.core.runtime.IProgressMonitor progressMonitor, org.eclipse.core.runtime.IAdaptable info) {
+		«EXPAND xpt::Common::_assert('null != edgeAdaptor : \"Null child in ' + reorientConnectionViewCommandClassName + '\"')-»
+		org.eclipse.gmf.runtime.notation.Edge edge = (org.eclipse.gmf.runtime.notation.Edge) getEdgeAdaptor().getAdapter(org.eclipse.gmf.runtime.notation.Edge.class);
+		«EXPAND xpt::Common::_assert('null != edge : \"Null edge in ' + reorientConnectionViewCommandClassName + '\"')-»
+		org.eclipse.gmf.runtime.notation.View tempView = edge.getSource();
+		edge.setSource(edge.getTarget());
+		edge.setTarget(tempView);
+		return org.eclipse.gmf.runtime.common.core.command.CommandResult.newOKCommandResult();
+	}
+}
+«ENDDEFINE»

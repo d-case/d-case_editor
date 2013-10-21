@@ -1,0 +1,165 @@
+﻿/*
+ * Copyright (c) 2007, 2009 Borland Software Corporation
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Alexander Shatalin (Borland) - initial API and implementation
+ */
+
+«IMPORT 'http://www.eclipse.org/gmf/2009/GenModel'»
+«IMPORT 'http://www.eclipse.org/emf/2002/GenModel'»
+
+«EXTENSION xpt::diagram::updater::Utils»
+
+«DEFINE containerBaseCanonicalMethods FOR gmfgen::GenContainerBase-»
+	«EXPAND attributes-»
+	
+	«EXPAND getSemanticChildrenList-»
+	«EXPAND shouldDeleteView-»
+	
+	«EXPAND isOrphaned-»
+	«IF hasConformableSemanticChildren(self)-»
+	
+		«EXPAND populateViewProperties-»
+	«ENDIF-»
+	
+	«EXPAND getDefaultFactoryHint-»
+	«EXPAND getFeaturesToSynchronize-»
+«ENDDEFINE»
+
+«DEFINE attributes FOR gmfgen::GenContainerBase-»
+«IF getSemanticChildrenContainmentFeatures(self)->size() > 0-»
+
+	«EXPAND xpt::Common::generatedMemberComment»
+java.util.Set myFeaturesToSynchronize;
+«ENDIF-»
+«ENDDEFINE»
+
+«DEFINE getSemanticChildrenList FOR gmfgen::GenContainerBase-»
+	«EXPAND xpt::Common::generatedMemberComment»
+protected java.util.List getSemanticChildrenList() {
+	«IF hasSemanticChildren(self)-»
+	org.eclipse.gmf.runtime.notation.View viewObject = (org.eclipse.gmf.runtime.notation.View) getHost().getModel();
+	java.util.List result = new java.util.LinkedList();
+	for (java.util.Iterator it = «EXPAND xpt::diagram::updater::DiagramUpdater::getSemanticChildrenMethodCall»(viewObject).iterator(); it.hasNext();) {
+		result.add(((«getDiagram().editorGen.diagramUpdater.getNodeDescriptorQualifiedClassName()») it.next()).getModelElement());
+	}
+	return result;
+	«ELSE-»
+	return java.util.Collections.EMPTY_LIST;
+	«ENDIF-»
+}
+«ENDDEFINE»
+
+«DEFINE shouldDeleteView FOR gmfgen::GenContainerBase»«ENDDEFINE»
+
+«DEFINE shouldDeleteView FOR gmfgen::GenDiagram-»
+
+	«EXPAND xpt::Common::generatedMemberComment»
+protected boolean shouldDeleteView(org.eclipse.gmf.runtime.notation.View view) {
+	return true;
+}
+«ENDDEFINE»
+
+«DEFINE checkShortcutProperty FOR gmfgen::GenDiagram-»
+	«IF not containsShortcutsTo->isEmpty()-»
+if (view.getEAnnotation("Shortcut") != null) {«EXPAND xpt::Common::nonNLS»
+	return «editorGen.diagramUpdater.getDiagramUpdaterQualifiedClassName()».isShortcutOrphaned(view);
+}
+	«ENDIF-»
+«ENDDEFINE»
+
+«DEFINE checkShortcutProperty FOR gmfgen::GenContainerBase»«ENDDEFINE»
+
+«DEFINE getDefaultFactoryHint FOR gmfgen::GenContainerBase-»
+	«EXPAND xpt::Common::generatedMemberComment»
+protected String getDefaultFactoryHint() {
+	return null;
+}
+«ENDDEFINE»
+
+«DEFINE isOrphaned FOR gmfgen::GenContainerBase-»
+	«EXPAND xpt::Common::generatedMemberComment»
+protected boolean isOrphaned(java.util.Collection semanticChildren, final org.eclipse.gmf.runtime.notation.View view) {
+	«EXPAND checkShortcutProperty-»
+	«IF not getSemanticChildren(self)->isEmpty()-»
+	int visualID = «EXPAND xpt::editor::VisualIDRegistry::getVisualIDMethodCall FOR getDiagram()»(view);
+	switch (visualID) {
+		«EXPAND xpt::Common::caseVisualID FOREACH getSemanticChildren(self)»
+		if (!semanticChildren.contains(view.getElement())) {
+			return true;
+		}
+		«IF hasConformableSemanticChildren(self)-»
+			«EXPAND updateNotationModelElement-»
+		«ENDIF-»
+	}
+	«ENDIF-»
+	return false;	
+}
+«ENDDEFINE»
+
+«DEFINE updateNotationModelElement FOR gmfgen::GenCommonBase-»
+	org.eclipse.emf.ecore.EObject domainModelElement = view.getElement();
+	if (visualID != «EXPAND xpt::editor::VisualIDRegistry::getNodeVisualIDMethodCall FOR getDiagram()»((org.eclipse.gmf.runtime.notation.View) getHost().getModel(), domainModelElement)) {
+		java.util.List createdViews = createViews(java.util.Collections.singletonList(domainModelElement));
+		«EXPAND xpt::Common::_assert('createdViews.size() == 1')-»
+		final org.eclipse.gmf.runtime.notation.View createdView = (org.eclipse.gmf.runtime.notation.View) ((org.eclipse.core.runtime.IAdaptable) createdViews.get(0)).getAdapter(org.eclipse.gmf.runtime.notation.View.class);
+		if (createdView != null) {
+			try {
+				new org.eclipse.emf.workspace.AbstractEMFOperation(host().getEditingDomain(), org.eclipse.gmf.runtime.common.core.util.StringStatics.BLANK, Collections.singletonMap(org.eclipse.emf.transaction.Transaction.OPTION_UNPROTECTED, Boolean.TRUE)) {
+					protected org.eclipse.core.runtime.IStatus doExecute(org.eclipse.core.runtime.IProgressMonitor monitor, org.eclipse.core.runtime.IAdaptable info) throws org.eclipse.core.commands.ExecutionException {
+						populateViewProperties(view, createdView);
+						return org.eclipse.core.runtime.Status.OK_STATUS;
+					}
+				}.execute(new org.eclipse.core.runtime.NullProgressMonitor(), null);
+			} catch (org.eclipse.core.commands.ExecutionException e) {
+				«getDiagram().editorGen.plugin.getActivatorQualifiedClassName()».getInstance().logError("Error while copyign view information to newly created view", e); //$NON-NLS-1$
+			}
+		}
+		deleteViews(java.util.Collections.singletonList(view).iterator());	
+	}
+«ENDDEFINE»
+
+«DEFINE populateViewProperties FOR gmfgen::GenCommonBase-»
+	«EXPAND xpt::Common::generatedMemberComment»
+private void populateViewProperties(org.eclipse.gmf.runtime.notation.View oldView, org.eclipse.gmf.runtime.notation.View newView) {
+	if (oldView instanceof org.eclipse.gmf.runtime.notation.Node && newView instanceof org.eclipse.gmf.runtime.notation.Node) {
+		org.eclipse.gmf.runtime.notation.Node oldNode = (org.eclipse.gmf.runtime.notation.Node) oldView; 
+		org.eclipse.gmf.runtime.notation.Node newNode = (org.eclipse.gmf.runtime.notation.Node) newView;
+		if (oldNode.getLayoutConstraint() instanceof org.eclipse.gmf.runtime.notation.Location && newNode.getLayoutConstraint() instanceof org.eclipse.gmf.runtime.notation.Location) {
+			((org.eclipse.gmf.runtime.notation.Location) newNode.getLayoutConstraint()).setX(((org.eclipse.gmf.runtime.notation.Location) oldNode.getLayoutConstraint()).getX());
+			((org.eclipse.gmf.runtime.notation.Location) newNode.getLayoutConstraint()).setY(((org.eclipse.gmf.runtime.notation.Location) oldNode.getLayoutConstraint()).getY());
+		}
+		if (oldNode.getLayoutConstraint() instanceof org.eclipse.gmf.runtime.notation.Size && newNode.getLayoutConstraint() instanceof org.eclipse.gmf.runtime.notation.Size) {
+			((org.eclipse.gmf.runtime.notation.Size) newNode.getLayoutConstraint()).setWidth(((org.eclipse.gmf.runtime.notation.Size) oldNode.getLayoutConstraint()).getWidth());
+			((org.eclipse.gmf.runtime.notation.Size) newNode.getLayoutConstraint()).setHeight(((org.eclipse.gmf.runtime.notation.Size) oldNode.getLayoutConstraint()).getHeight());
+		}
+		if (oldNode.getLayoutConstraint() instanceof org.eclipse.gmf.runtime.notation.Ratio && newNode.getLayoutConstraint() instanceof org.eclipse.gmf.runtime.notation.Ratio) {
+			((org.eclipse.gmf.runtime.notation.Ratio) newNode.getLayoutConstraint()).setValue(((org.eclipse.gmf.runtime.notation.Ratio) oldNode.getLayoutConstraint()).getValue());
+		}
+		newNode.persist();
+	}
+}
+«ENDDEFINE»
+
+«DEFINE getFeaturesToSynchronize FOR gmfgen::GenContainerBase-»
+«IF getSemanticChildrenChildFeatures(self)->size() > 0-»
+
+		«EXPAND xpt::Common::generatedMemberComment»
+protected java.util.Set getFeaturesToSynchronize(){
+	if (myFeaturesToSynchronize == null) {
+		myFeaturesToSynchronize = new java.util.HashSet();
+		«EXPAND addContainmentFeature FOREACH getSemanticChildrenContainmentFeatures(self)-»
+	}
+	return myFeaturesToSynchronize;
+}
+«ENDIF-»
+«ENDDEFINE»
+
+«DEFINE addContainmentFeature FOR genmodel::GenFeature-»
+myFeaturesToSynchronize.add(«EXPAND MetaModel::MetaFeature»);
+«ENDDEFINE»

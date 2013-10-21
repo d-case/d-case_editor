@@ -1,0 +1,61 @@
+/*
+ * Copyright (c) 2006, 2009 Borland Software Corporation
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Artem Tikhomirov (Borland) - initial API and implementation
+ */
+
+import xpt.StringOperations;
+
+modeltype gmfgen uses "http://www.eclipse.org/gmf/2009/GenModel";
+
+library Utils;
+
+helper gmfgen::Palette::activatorFQN() : String {
+	return self.diagram.editorGen.plugin.getActivatorQualifiedClassName()
+}
+
+helper gmfgen::AbstractToolEntry::activatorFQN() : String {
+	return self.group.palette.activatorFQN()
+}
+
+helper gmfgen::ToolGroup::activatorFQN() : String {
+	return self.palette.activatorFQN()
+}
+
+helper i18nKey(group : gmfgen::EntryBase) : String {
+	return let rv = group.createMethodName in (if rv.xpandStartsWith('get') then rv.xpandSubstring(3) else (if rv.xpandStartsWith('create') then rv.xpandSubstring(6) else rv endif) endif)
+}
+
+helper i18nTitleKey(group : gmfgen::EntryBase) : String {
+	return i18nKey(group) + '_title'
+}
+
+helper i18nDescKey(group : gmfgen::EntryBase) : String {
+	return i18nKey(group) + '_desc'
+}
+
+helper collectGroups(palette : gmfgen::Palette) : Sequence(gmfgen::ToolGroup) {
+	return palette.groups->asSequence()->union(palette.groups->collect(it | collectSubGroups(it)))->asOrderedSet()->asSequence()
+}
+
+helper collectSubGroups(group : gmfgen::ToolGroup) : Sequence(gmfgen::ToolGroup) {
+	return let rv = (group.entries)[gmfgen::ToolGroup] in rv->union(rv->collect(g | collectSubGroups(g))->flatten()->asSet())->asSequence()
+}
+
+helper collectTools(palette : gmfgen::Palette) : Sequence(gmfgen::AbstractToolEntry) {
+	return collectGroups(palette).entries[gmfgen::AbstractToolEntry]
+}
+
+helper needsNodeToolEntryClass(palette : gmfgen::Palette) : Boolean {
+	return collectTools(palette)[gmfgen::ToolEntry]->exists(genNodes->notEmpty())
+}
+
+helper needsLinkToolEntryClass(palette : gmfgen::Palette) : Boolean {
+	return collectTools(palette)[gmfgen::ToolEntry]->exists(genLinks->notEmpty())
+}

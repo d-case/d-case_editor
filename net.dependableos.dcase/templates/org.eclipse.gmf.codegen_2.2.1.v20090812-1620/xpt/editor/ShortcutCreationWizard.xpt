@@ -1,0 +1,154 @@
+﻿/*
+ * Copyright (c) 2007, 2009 Borland Software Corporation
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Dmitry Stadnik (Borland) - initial API and implementation
+ */
+«IMPORT 'http://www.eclipse.org/gmf/2009/GenModel'»
+«EXTENSION xpt::editor::Utils»
+
+«DEFINE className FOR gmfgen::GenDiagram»«defaultShortcutCreationWizardClassName(self)»«ENDDEFINE»
+
+«DEFINE qualifiedClassName FOR gmfgen::GenDiagram»«editorGen.editor.packageName».«EXPAND className»«ENDDEFINE»
+
+«DEFINE ShortcutCreationWizard FOR gmfgen::GenDiagram-»
+«EXPAND xpt::Common::copyright FOR editorGen-»
+package «editorGen.editor.packageName»;
+
+/**
+ * Allows to select foreign model element and add shortcut to the diagram.
+ * 
+ * @generated
+ */
+public class «EXPAND className» extends org.eclipse.jface.wizard.Wizard {
+
+	/**
+	 * @generated
+	 */
+	private ReferencedElementSelectionPage referencedElementSelectionPage;
+
+	/**
+	 * @generated
+	 */
+	private org.eclipse.emf.transaction.TransactionalEditingDomain editingDomain;
+
+	/**
+	 * @generated
+	 */
+	public «EXPAND className»(org.eclipse.emf.ecore.EObject modelElement, org.eclipse.gmf.runtime.notation.View view,
+			org.eclipse.emf.transaction.TransactionalEditingDomain editingDomain) {
+		referencedElementSelectionPage = new ReferencedElementSelectionPage(«EXPAND xpt::Externalizer::accessorCall(nameKey(i18nKeyForShortcutWizardReferencedElementPage(self))) FOR editorGen», view);
+		referencedElementSelectionPage.setTitle(«EXPAND xpt::Externalizer::accessorCall(titleKey(i18nKeyForShortcutWizardReferencedElementPage(self))) FOR editorGen»);
+		referencedElementSelectionPage.setDescription(«EXPAND xpt::Externalizer::accessorCall(descriptionKey(i18nKeyForShortcutWizardReferencedElementPage(self))) FOR editorGen»);
+		referencedElementSelectionPage.setModelElement(modelElement);
+
+		this.editingDomain = editingDomain;
+	}
+
+	/**
+	 * @generated
+	 */
+	public void addPages() {
+		addPage(referencedElementSelectionPage);
+	}
+
+	/**
+	 * @generated
+	 */
+	public boolean performFinish() {
+		org.eclipse.gmf.runtime.diagram.ui.requests.CreateViewRequest.ViewDescriptor viewDescriptor =
+				new org.eclipse.gmf.runtime.diagram.ui.requests.CreateViewRequest.ViewDescriptor(
+						new org.eclipse.gmf.runtime.emf.core.util.EObjectAdapter(referencedElementSelectionPage.getModelElement()),
+						org.eclipse.gmf.runtime.notation.Node.class, null, «EXPAND xpt::plugin::Activator::preferenceHintAccess FOR editorGen»);
+		org.eclipse.gmf.runtime.common.core.command.ICommand command =
+				new org.eclipse.gmf.runtime.diagram.ui.commands.CreateCommand(
+						editingDomain, viewDescriptor, referencedElementSelectionPage.getView());
+		command = command.compose(new «getCreateShortcutDecorationsCommandQualifiedClassName()»(
+				editingDomain, referencedElementSelectionPage.getView(), viewDescriptor));
+		try {
+			org.eclipse.core.commands.operations.OperationHistoryFactory.getOperationHistory().execute(
+				command, new org.eclipse.core.runtime.NullProgressMonitor(), null);
+		} catch (org.eclipse.core.commands.ExecutionException ee) {
+			«editorGen.plugin.getActivatorQualifiedClassName()».getInstance().logError("Unable to create shortcut", ee);«EXPAND xpt::Common::nonNLS»
+		}
+		return true;
+	}
+
+	/**
+	 * @generated
+	 */
+	private static class ReferencedElementSelectionPage extends «EXPAND xpt::editor::ModelElementSelectionPage::qualifiedClassName» {
+
+		/**
+		 * @generated
+		 */
+		private org.eclipse.gmf.runtime.notation.View view;
+
+		/**
+		 * @generated
+		 */
+		public ReferencedElementSelectionPage(String pageName, org.eclipse.gmf.runtime.notation.View view) {
+			super(pageName);
+			this.view = view;
+		}
+
+		/**
+		 * @generated
+		 */
+		public org.eclipse.gmf.runtime.notation.View getView() {
+			return view;
+		}
+
+		/**
+		 * @generated
+		 */
+		protected String getSelectionTitle() {
+			return «EXPAND xpt::Externalizer::accessorCall(messageKey(i18nKeyForShortcutWizardReferencedElementPage(self))) FOR editorGen»;
+		}
+
+		/**
+		 * @generated
+		 */
+		protected boolean validatePage() {
+			if (selectedModelElement == null) {
+				setErrorMessage(«EXPAND xpt::Externalizer::accessorCall(i18nKeyForShortcutWizardReferencedElementPageEmptyError(self)) FOR editorGen»);
+				return false;
+			}
+			boolean result = org.eclipse.gmf.runtime.diagram.core.services.ViewService.getInstance().provides(
+					org.eclipse.gmf.runtime.notation.Node.class,
+					new org.eclipse.gmf.runtime.emf.core.util.EObjectAdapter(selectedModelElement),
+					view, null, org.eclipse.gmf.runtime.diagram.core.util.ViewUtil.APPEND, true,
+					«EXPAND xpt::plugin::Activator::preferenceHintAccess FOR editorGen»);
+			setErrorMessage(result ? null : «EXPAND xpt::Externalizer::accessorCall(i18nKeyForShortcutWizardReferencedElementPageInvalidError(self)) FOR editorGen»);
+			return result;
+		}
+	}
+}
+«ENDDEFINE»
+
+«DEFINE i18nValues FOR gmfgen::GenDiagram-»
+«IF null <> editorGen.application-»
+«EXPAND xpt::Externalizer::messageEntry(nameKey(i18nKeyForShortcutWizardReferencedElementPage(self)), 'Select referenced element')-»
+«EXPAND xpt::Externalizer::messageEntry(titleKey(i18nKeyForShortcutWizardReferencedElementPage(self)), 'Referenced element')-»
+«EXPAND xpt::Externalizer::messageEntry(descriptionKey(i18nKeyForShortcutWizardReferencedElementPage(self)), 'Select element that the new shortcut will refer to.')-»
+«EXPAND xpt::Externalizer::messageEntry(messageKey(i18nKeyForShortcutWizardReferencedElementPage(self)), 'Select referenced element:')-»
+«EXPAND xpt::Externalizer::messageEntry(i18nKeyForShortcutWizardReferencedElementPageEmptyError(self), 'Referenced element is not selected')-»
+«EXPAND xpt::Externalizer::messageEntry(i18nKeyForShortcutWizardReferencedElementPageInvalidError(self), 'Invalid referenced element is selected')-»
+«ENDIF-»
+«ENDDEFINE»
+
+«DEFINE i18nAccessors FOR gmfgen::GenDiagram-»
+«IF null <> editorGen.application-»
+	«EXPAND xpt::Externalizer::accessorField(nameKey(i18nKeyForShortcutWizardReferencedElementPage(self)))-»
+	«EXPAND xpt::Externalizer::accessorField(titleKey(i18nKeyForShortcutWizardReferencedElementPage(self)))-»
+	«EXPAND xpt::Externalizer::accessorField(descriptionKey(i18nKeyForShortcutWizardReferencedElementPage(self)))-»
+	«EXPAND xpt::Externalizer::accessorField(messageKey(i18nKeyForShortcutWizardReferencedElementPage(self)))-»
+	«EXPAND xpt::Externalizer::accessorField(i18nKeyForShortcutWizardReferencedElementPageEmptyError(self))-»
+	«EXPAND xpt::Externalizer::accessorField(i18nKeyForShortcutWizardReferencedElementPageInvalidError(self))-»
+«ENDIF-»
+«ENDDEFINE»

@@ -1,0 +1,1165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<!--
+Copyright (C) Yutaka Matsuno 2010-2012 All rights reserved.
+-->
+<plugin>
+	<extension
+			point="org.eclipse.ui.commands">
+		<category
+			name="D-Case Editor"
+			id="net.dependableos.dcase.diagram.editor.category">
+		</category>
+		<command
+			name="XML Convert to D-Case Format Command"
+			categoryId="net.dependableos.dcase.diagram.editor.category"
+			id="net.dependableos.dcase.diagram.editor.command.xmlconversiontodcasewizard">
+		</command>
+		<command
+			name="XML Convert to GMF Format Command"
+			categoryId="net.dependableos.dcase.diagram.editor.category"
+			id="net.dependableos.dcase.diagram.editor.command.xmlconversiontogmfwizard">
+		</command>
+		<command
+		    name="XML Convert to ARM Format Command"
+		    categoryId="net.dependableos.dcase.diagram.editor.category"
+		    id="net.dependableos.dcase.diagram.editor.command.xmlconversiontoarmwizard">
+		</command>
+		<command
+			name="XML Convert to Text Format Command"
+			categoryId="net.dependableos.dcase.diagram.editor.category"
+			id="net.dependableos.dcase.diagram.editor.command.xmlconversiontotextwizard">
+		</command>
+        <command
+            name="Node Children Hide"
+            categoryId="net.dependableos.dcase.diagram.editor.category"
+            id="net.dependableos.dcase.diagram.editor.command.NodeChildrenHideHandler">
+        </command>
+        <command
+            name="Node Children Show"
+            categoryId="net.dependableos.dcase.diagram.editor.category"
+            id="net.dependableos.dcase.diagram.editor.command.NodeChildrenShowHandler">
+        </command>
+        <command
+            name="Open with Web Browser"
+            categoryId="net.dependableos.dcase.diagram.editor.category"
+            id="net.dependableos.dcase.diagram.editor.command.OpenUrlHandler">
+	        <commandParameter
+	           id="net.dependableos.dcase.diagram.editor.command.OpenUrl.parameter.Attribute"
+	           name="property">
+	        </commandParameter>
+        </command>
+        <command
+            name="Node Link/Select from Workspace..."
+            categoryId="net.dependableos.dcase.diagram.editor.category"
+            id="net.dependableos.dcase.diagram.editor.systemnode.command.selectdiagram">
+        </command>
+        <command
+            name="Node Link/Open with Default Editor"
+            categoryId="net.dependableos.dcase.diagram.editor.category"
+            id="net.dependableos.dcase.diagram.editor.systemnode.command.opendiagram">
+        </command>
+        <command
+            name="Attachment/Select from Workspace..."
+            categoryId="net.dependableos.dcase.diagram.editor.category"
+            id="net.dependableos.dcase.diagram.editor.command.selectattachmentfromws">
+        </command>
+        <command
+            name="Attachment/Select from Web..."
+            categoryId="net.dependableos.dcase.diagram.editor.category"
+            id="net.dependableos.dcase.diagram.editor.command.selectattachmentfromweb">
+        </command>
+        <command
+            name="Find and Replace"
+            categoryId="net.dependableos.dcase.diagram.editor.category"
+            id="net.dependableos.dcase.diagram.editor.command.findandreplace">
+        </command>
+        <command
+            name="Attachment/Open"
+            categoryId="net.dependableos.dcase.diagram.editor.category"
+            id="net.dependableos.dcase.diagram.editor.command.openattachment">
+            <commandParameter
+	           id="net.dependableos.dcase.diagram.editor.command.OpenUrl.parameter.Attribute"
+	           name="property">
+	        </commandParameter>
+        </command>
+        <command
+            name="Set Sibling Order"
+            categoryId="net.dependableos.dcase.diagram.editor.category"
+            id="net.dependableos.dcase.diagram.editor.command.setsiblingorder">
+        </command>
+        <command
+            name="Define Parameters..."
+            categoryId="net.dependableos.dcase.diagram.editor.category"
+            id="net.dependableos.dcase.diagram.editor.command.defineParameter" >
+        </command>
+        <command
+            name="Set Parameters..."
+            categoryId="net.dependableos.dcase.diagram.editor.category"
+            id="net.dependableos.dcase.diagram.editor.command.setParameter" >
+        </command>
+        <command
+            name="ArrangeAngle"
+            categoryId="net.dependableos.dcase.diagram.editor.category"
+            id="net.dependableos.dcase.diagram.editor.command.arrangeAngle" >
+            <commandParameter
+                id="org.eclipse.ui.commands.radioStateParameter"
+                name="Angle"
+                optional="false"/>
+            <state
+                id="org.eclipse.ui.commands.radioState">
+                <class
+                    class="org.eclipse.ui.handlers.RadioState">
+                    <parameter
+                        name="default"
+                        value="vertical"/>
+                    <parameter
+                        name="persisted"
+                        value="horizontal"/>
+                </class>
+            </state>
+        </command>
+        <command
+            name="SelectSubtree"
+            categoryId="net.dependableos.dcase.diagram.editor.category"
+            id="net.dependableos.dcase.diagram.editor.command.selectSubtree" >
+        </command>
+        <command
+            name="ComputeNodes"
+            categoryId="net.dependableos.dcase.diagram.editor.category"
+            id="net.dependableos.dcase.diagram.editor.command.computeNodes" >
+        </command>
+        <command
+            name="CreateModule"
+            categoryId="net.dependableos.dcase.diagram.editor.category"
+            id="net.dependableos.dcase.diagram.editor.command.createModule" >
+        </command>
+        <command
+            name="RestoreModule"
+            categoryId="net.dependableos.dcase.diagram.editor.category"
+            id="net.dependableos.dcase.diagram.editor.command.restoreModule" >
+        </command>
+        <command
+            name="SetPrivateFlag"
+            categoryId="net.dependableos.dcase.diagram.editor.category"
+            id="net.dependableos.dcase.diagram.editor.command.setPrivateFlag" >
+        </command>
+        <command
+            name="SetPublicFlag"
+            categoryId="net.dependableos.dcase.diagram.editor.category"
+            id="net.dependableos.dcase.diagram.editor.command.setPublicFlag" >
+        </command>
+        <command
+            name="ModuleHide"
+            categoryId="net.dependableos.dcase.diagram.editor.category"
+            id="net.dependableos.dcase.diagram.editor.command.moduleHide" >
+        </command>
+        <command
+            name="AdjustReferences"
+            categoryId="net.dependableos.dcase.diagram.editor.category"
+            id="net.dependableos.dcase.diagram.editor.command.adjustReferences" >
+        </command>
+        <command
+            name="CreateDstar"
+            categoryId="net.dependableos.dcase.diagram.editor.category"
+            id="net.dependableos.dcase.diagram.editor.command.createDstar" >
+        </command>
+        <command
+            name="Copy To"
+            id="net.dependableos.dcase.diagram.editor.command.copyTo">
+        </command>
+	</extension>
+	<extension
+			point="org.eclipse.ui.handlers">
+        <handler
+            commandId="org.eclipse.ui.edit.rename"
+            class="net.dependableos.dcase.diagram.editor.command.RenameDcaseFileHandler">
+            <activeWhen>
+                <with variable="selection">
+                    <iterate>
+                        <and>
+                            <instanceof value="org.eclipse.core.resources.IFile"/>
+                            <test property="org.eclipse.core.resources.extension" value="dcase_diagram"/>
+                        </and>
+                    </iterate>
+                </with>
+            </activeWhen>
+        </handler>
+        <handler
+            commandId="org.eclipse.ltk.ui.refactoring.commands.renameResource"
+            class="net.dependableos.dcase.diagram.editor.command.RenameDcaseFileHandler">
+            <activeWhen>
+                <with variable="selection">
+                    <iterate>
+                        <and>
+                            <instanceof value="org.eclipse.core.resources.IFile"/>
+                            <test property="org.eclipse.core.resources.extension" value="dcase_diagram"/>
+                        </and>
+                    </iterate>
+                </with>
+            </activeWhen>
+        </handler>
+		<handler
+			commandId="net.dependableos.dcase.diagram.editor.command.xmlconversiontodcasewizard"
+			class="net.dependableos.dcase.diagram.editor.command.XmlConversionToDcaseWizardHandler">
+		</handler>
+		<handler
+			commandId="net.dependableos.dcase.diagram.editor.command.xmlconversiontogmfwizard"
+			class="net.dependableos.dcase.diagram.editor.command.XmlConversionToGmfWizardHandler">
+		</handler>
+        <handler
+            commandId="net.dependableos.dcase.diagram.editor.command.xmlconversiontoarmwizard"
+            class="net.dependableos.dcase.diagram.editor.command.XmlConversionToArmWizardHandler">
+        </handler>
+		<handler
+			commandId="net.dependableos.dcase.diagram.editor.command.xmlconversiontotextwizard"
+			class="net.dependableos.dcase.diagram.editor.command.XmlConversionToTextWizardHandler">
+		</handler>
+        <handler
+            commandId="net.dependableos.dcase.diagram.editor.command.NodeChildrenHideHandler"
+            class="net.dependableos.dcase.diagram.editor.command.NodeChildrenHideHandler">
+        </handler>
+        <handler
+            commandId="net.dependableos.dcase.diagram.editor.command.NodeChildrenShowHandler"
+            class="net.dependableos.dcase.diagram.editor.command.NodeChildrenShowHandler">
+        </handler>
+        <handler
+            commandId="net.dependableos.dcase.diagram.editor.command.OpenUrlHandler"
+            class="net.dependableos.dcase.diagram.editor.command.OpenUrlHandler">
+        </handler>
+        <handler
+            commandId="net.dependableos.dcase.diagram.editor.systemnode.command.selectdiagram"
+            class="net.dependableos.dcase.diagram.editor.systemnode.SelectLinkedDiagramHandler">
+        </handler>
+        <handler
+            commandId="net.dependableos.dcase.diagram.editor.systemnode.command.opendiagram"
+            class="net.dependableos.dcase.diagram.editor.systemnode.OpenLinkedDiagramHandler">
+        </handler>
+        <handler
+            commandId="net.dependableos.dcase.diagram.editor.command.selectattachmentfromws"
+            class="net.dependableos.dcase.diagram.editor.command.SelectAttachmentFromWSHandler">
+        </handler>
+        <handler
+            commandId="net.dependableos.dcase.diagram.editor.command.selectattachmentfromweb"
+            class="net.dependableos.dcase.diagram.editor.command.SelectAttachmentFromWebHandler">
+        </handler>
+        <handler
+            commandId="org.eclipse.ui.edit.findReplace"
+            class="net.dependableos.dcase.diagram.editor.command.FindAndReplaceHandler">
+            <activeWhen>
+                <with variable="activeEditorId">
+                    <equals value="net.dependableos.dcase.diagram.part.DcaseDiagramEditorID" />
+                </with>
+            </activeWhen>
+        </handler>
+        <handler
+            commandId="net.dependableos.dcase.diagram.editor.command.openattachment"
+            class="net.dependableos.dcase.diagram.editor.command.OpenAttachmentHandler">
+        </handler>
+        <handler
+            commandId="net.dependableos.dcase.diagram.editor.command.setsiblingorder"
+            class="net.dependableos.dcase.diagram.editor.command.SetSiblingOrderHandler">
+        </handler>
+        <handler
+            commandId="net.dependableos.dcase.diagram.editor.command.defineParameter"
+            class="net.dependableos.dcase.diagram.editor.command.DefineParameterHandler">
+        </handler>
+        <handler
+            commandId="net.dependableos.dcase.diagram.editor.command.setParameter"
+            class="net.dependableos.dcase.diagram.editor.command.SetParameterHandler">
+        </handler>
+        <handler
+            commandId="net.dependableos.dcase.diagram.editor.command.arrangeAngle"
+            class="net.dependableos.dcase.diagram.editor.command.ArrangeAngleHandler">
+        </handler>
+        <handler
+            commandId="net.dependableos.dcase.diagram.editor.command.selectSubtree"
+            class="net.dependableos.dcase.diagram.editor.command.SelectSubtreeHandler">
+        </handler>
+        <handler
+            commandId="net.dependableos.dcase.diagram.editor.command.computeNodes"
+            class="net.dependableos.dcase.diagram.editor.command.ComputeNodesHandler">
+        </handler>
+        <handler
+            commandId="net.dependableos.dcase.diagram.editor.command.createModule"
+            class="net.dependableos.dcase.diagram.editor.command.CreateModuleHandler">
+        </handler>
+        <handler
+            commandId="net.dependableos.dcase.diagram.editor.command.restoreModule"
+            class="net.dependableos.dcase.diagram.editor.command.RestoreModuleHandler">
+        </handler>
+        <handler
+            commandId="net.dependableos.dcase.diagram.editor.command.setPrivateFlag"
+            class="net.dependableos.dcase.diagram.editor.command.SetPrivateFlagHandler">
+        </handler>
+        <handler
+            commandId="net.dependableos.dcase.diagram.editor.command.setPublicFlag"
+            class="net.dependableos.dcase.diagram.editor.command.SetPublicFlagHandler">
+        </handler>
+        <handler
+            commandId="net.dependableos.dcase.diagram.editor.command.moduleHide"
+            class="net.dependableos.dcase.diagram.editor.command.ModuleHideHandler">
+        </handler>
+        <handler
+            commandId="net.dependableos.dcase.diagram.editor.command.adjustReferences"
+            class="net.dependableos.dcase.diagram.editor.command.AdjustReferencesHandler">
+        </handler>
+        <handler
+            commandId="net.dependableos.dcase.diagram.editor.command.createDstar"
+            class="net.dependableos.dcase.diagram.editor.command.CreateDstarHandler">
+        </handler>
+        <handler
+            commandId="net.dependableos.dcase.diagram.editor.command.copyTo"
+            class="net.dependableos.dcase.diagram.editor.command.CopyDcaseFileHandler">
+                <activeWhen>
+                    <with variable="selection">
+                        <iterate>
+                            <and>
+                                <instanceof value="org.eclipse.core.resources.IFile"/>
+                                <test property="org.eclipse.core.resources.extension" value="dcase_diagram"/>
+                            </and>
+                        </iterate>
+                    </with>
+                </activeWhen>
+        </handler>
+	</extension>
+
+    <extension point="org.eclipse.ui.popupMenus">
+        <objectContribution
+            adaptable="false"
+            id="net.dependableos.dcase.diagram.ui.objectContribution.ArgumentEditPart"
+            objectClass="net.dependableos.dcase.diagram.edit.parts.ArgumentEditPart">
+        <action
+              class="net.dependableos.dcase.diagram.editor.command.CalculateScoreAction"
+              enablesFor="1"
+              id="net.dependableos.dcase.diagram.editor.CalculateScoreActionID"
+              label="%net.dependableos.dcase.diagram.editor.CalculateScoreActionID.label"
+              menubarPath="restGroup">
+        </action>
+        <action
+              class="net.dependableos.dcase.diagram.editor.command.SetResponsibilityAction"
+              enablesFor="1"
+              id="net.dependableos.dcase.diagram.editor.SetResponsibilityActionID"
+              label="%net.dependableos.dcase.diagram.editor.SetResponsibilityActionID.label"
+              menubarPath="restGroup">
+        </action>
+        <action
+              class="net.dependableos.dcase.diagram.editor.parameter.DefineParameterAction"
+              id="net.dependableos.dcase.diagram.editor.configglobalparams"
+              label="%net.dependableos.dcase.diagram.editor.parameter.DefineParameters.label"
+              menubarPath="params/parameterGroup">
+        </action>
+        </objectContribution>
+        <objectContribution 
+            id="net.dependableos.dcase.diagram.editor.popupmenu" 
+            objectClass="net.dependableos.dcase.diagram.edit.parts.ArgumentEditPart">
+            <!--<filter name="Userdef009" value="PARAM FORMAT"/>-->
+            <action
+                  class="net.dependableos.dcase.diagram.editor.parameter.SetParameterAction"
+                  id="net.dependableos.dcase.diagram.editor.setglobalparams"
+                  label="%net.dependableos.dcase.diagram.editor.parameter.SetGlobalParameters.label"
+                  menubarPath="params/parameterGroup">
+            </action>
+        </objectContribution>
+        <objectContribution
+              adaptable="false"
+              id="net.dependableos.dcase.diagram.ui.objectContribution.ArgumentEditPart"
+              objectClass="net.dependableos.dcase.diagram.edit.parts.ContextEditPart">
+           <action
+                 class="net.dependableos.dcase.diagram.editor.requirement.ConfigureRequirementAction"
+                 enablesFor="1"
+                 id="net.dependableos.dcase.requirement.ui.configurerequirement"
+                 label="%net.dependableos.dcase.requirement.ui.configurerequirement.label"
+                 menubarPath="restGroup">
+           </action>
+        </objectContribution>                    
+    </extension>
+
+	<extension point="org.eclipse.ui.menus">
+           <menuContribution
+               locationURI="menu:file?after=export">
+            <menu
+                label="%net.dependableos.dcase.diagram.editor.menu.xmlconversion.label"
+                id="net.dependableos.dcase.diagram.editor.menu.xmlconversion">
+                <command
+                    commandId="net.dependableos.dcase.diagram.editor.command.xmlconversiontodcasewizard"
+                    id="net.dependableos.dcase.diagram.editor.menu.xmlconversiontodcasewizard"
+                    label="%net.dependableos.dcase.diagram.editor.menu.xmlconversiontodcasewizard.label">
+                </command>
+                <command
+                    commandId="net.dependableos.dcase.diagram.editor.command.xmlconversiontogmfwizard"
+                    id="net.dependableos.dcase.diagram.editor.menu.xmlconversiontogmfwizard"
+                    label="%net.dependableos.dcase.diagram.editor.menu.xmlconversiontogmfwizard.label">
+                </command>
+                <command
+                   commandId="net.dependableos.dcase.diagram.editor.command.xmlconversiontoarmwizard"
+                   id="net.dependableos.dcase.diagram.editor.menu.xmlconversiontoarmwizard"
+                   label="%net.dependableos.dcase.diagram.editor.menu.xmlconversiontoarmwizard.label">
+                </command>
+                <command
+                   commandId="net.dependableos.dcase.diagram.editor.command.xmlconversiontotextwizard"
+                   id="net.dependableos.dcase.diagram.editor.menu.xmlconversiontotextwizard"
+                   label="%net.dependableos.dcase.diagram.editor.menu.xmlconversiontotextwizard.label">
+                </command>
+                <menu
+                   id="net.dependableos.dcase.diagram.editor.menu.xsltransform"
+                   label="%net.dependableos.dcase.diagram.editor.menu.xsltransform.label">
+                   <dynamic
+                       class="net.dependableos.dcase.diagram.editor.command.XslTransfromContributionItem"
+                       id="net.dependableos.dcase.diagram.editor.command.xmltransfromcontributionitem">
+                   </dynamic>
+                </menu>
+              </menu>
+           </menuContribution>
+        <menuContribution
+                locationURI="menu:org.eclipse.ui.main.menu?after=additions">
+            <menu
+                id="net.dependableos.dcase.menu"
+                label="%net.dependableos.dcase.menu.label">
+            </menu>
+        </menuContribution>
+        <menuContribution
+                locationURI="menu:net.dependableos.dcase.menu?after=additions">
+            <menu
+                id="net.dependableos.dcase.diagram.editor.menu.dcasecompare"
+                label="%net.dependableos.dcase.diagram.editor.menu.dcasecompare.label">
+                <dynamic 
+                    class = "net.dependableos.dcase.diagram.editor.command.DcaseCompareMenuContributionItem"
+                    id="net.dependableos.dcase.diagram.editor.command.dcasecomparemenucontributionitem">
+                </dynamic>
+            </menu>
+
+            <menu
+                label="%net.dependableos.dcase.diagram.editor.menu.arrangeAngle.label"
+                id="net.dependableos.dcase.diagram.editor.menu.arrangeAngle">
+                <command
+                    commandId="net.dependableos.dcase.diagram.editor.command.arrangeAngle"
+                    id="net.dependableos.dcase.diagram.editor.menu.arrangeangle.vertical"
+                    label="%net.dependableos.dcase.diagram.editor.menu.arrangeAngle.Vertical.label"
+                    style="radio">
+                    <parameter
+                        name="org.eclipse.ui.commands.radioStateParameter"
+                        value="vertical"/>
+                </command>
+                <command
+                    commandId="net.dependableos.dcase.diagram.editor.command.arrangeAngle"
+                    id="net.dependableos.dcase.diagram.editor.menu.arrangeangle.horizontal"
+                    label="%net.dependableos.dcase.diagram.editor.menu.arrangeAngle.Horizontal.label"
+                    style="radio">
+                    <parameter
+                        name="org.eclipse.ui.commands.radioStateParameter"
+                        value="horizontal"/>
+                </command>
+            </menu>
+        </menuContribution>
+        
+        <menuContribution
+            locationURI="popup:org.eclipse.ui.popup.any?after=restGroup">
+            <menu
+                id="net.dependableos.dcase.diagram.editor.command.addChildren"
+                label="%net.dependableos.dcase.diagram.editor.command.addChildren.label">
+                <menu
+                    id="net.dependableos.dcase.diagram.editor.complement.node"
+                    label="%net.dependableos.dcase.diagram.editor.complement.node.label">
+                    <dynamic
+                        class="net.dependableos.dcase.diagram.editor.complement.NodeContributionItem"
+                        id="net.dependableos.dcase.diagram.editor.complement.nodeMenuItem">
+                    </dynamic>
+                </menu>
+                <menu
+                	id="net.dependableos.dcase.diagram.editor.complement.addPattern"
+                	label="%net.dependableos.dcase.diagram.editor.complement.addPattern.label">
+                	<dynamic 
+                    	class="net.dependableos.dcase.diagram.editor.command.AddPatternContributionItem"
+                    	id="net.dependableos.dcase.diagram.editor.command.AddPatternCommand">
+                	</dynamic>
+                	<visibleWhen>
+                		<reference definitionId="net.dependableos.dcase.diagram.editor.isDcasePart"/>
+                	</visibleWhen>
+            	</menu>
+            	<!--
+                <menu
+                    id="net.dependableos.dcase.diagram.editor.complement.template"
+                    label="%net.dependableos.dcase.diagram.editor.complement.template.label">
+                    <dynamic
+                        class="net.dependableos.dcase.diagram.editor.complement.TemplateMenuContributionItem"
+                        id="net.dependableos.dcase.diagram.editor.complement.templateMenuItem">
+                    </dynamic>
+                </menu>
+                -->
+                <visibleWhen>
+                    <reference definitionId="net.dependableos.dcase.diagram.editor.isDcasePart"/>
+                </visibleWhen>
+            </menu>
+            <menu
+                id="net.dependableos.dcase.diagram.editor.command.menu.convertnodetype"
+                label="%net.dependableos.dcase.diagram.editor.command.menu.convertnodetype.label">
+                <dynamic 
+                    class="net.dependableos.dcase.diagram.editor.command.ConvertNodeTypeContributionItem"
+                    id="net.dependableos.dcase.diagram.editor.command.convertnodetype">
+                </dynamic>
+                <visibleWhen>
+                    <reference definitionId="net.dependableos.dcase.diagram.editor.isDcasePart"/>
+                </visibleWhen>
+            </menu>
+            <menu
+                label="%net.dependableos.dcase.diagram.editor.command.Attachment.label"
+                id="net.dependableos.dcase.diagram.editor.command.Attachment">
+                <separator name="additions" />
+	            <menu
+                	id="net.dependableos.dcase.diagram.editor.command.menu.selectModuleAttachment"
+                	label="%net.dependableos.dcase.diagram.editor.command.menu.selectModuleAttachment.label">
+					<dynamic 
+                 	   class="net.dependableos.dcase.diagram.editor.command.SelectModuleContributionItem"
+                 	   id="net.dependableos.dcase.diagram.editor.command.selectModuleAttachment">
+                	</dynamic>
+                	<visibleWhen>
+                    	<reference definitionId="net.dependableos.dcase.diagram.editor.isModuleOrGoalPart"/>
+                	</visibleWhen>
+            	</menu>
+	            <command
+	                commandId="net.dependableos.dcase.diagram.editor.command.selectattachmentfromws"
+	                id="net.dependableos.dcase.diagram.editor.menu.selectattachmentfromws"
+	                label="%net.dependableos.dcase.diagram.editor.menu.selectattachmentfromws.label">
+	                <visibleWhen>
+	                    <iterate><or>
+	                        <with variable="selection">
+	                            <and>
+	                                <count value="1" />
+	                                    <iterate>
+	                                        <adapt type="net.dependableos.dcase.diagram.edit.parts.ArgumentEditPart" />
+	                                    </iterate>
+	                            </and>
+	                        </with>
+	                        <reference definitionId="net.dependableos.dcase.diagram.editor.isDcasePart"/>                        
+	                    </or></iterate>
+	                </visibleWhen>
+	            </command>
+	           	<command
+	                commandId="net.dependableos.dcase.diagram.editor.command.selectattachmentfromweb"
+	                id="net.dependableos.dcase.diagram.editor.menu.selectattachmentfromweb"
+	                label="%net.dependableos.dcase.diagram.editor.menu.selectattachmentfromweb.label">
+	                <visibleWhen>
+	                    <iterate><or>
+	                        <with variable="selection">
+	                            <and>
+	                                <count value="1" />
+	                                    <iterate>
+	                                        <adapt type="net.dependableos.dcase.diagram.edit.parts.ArgumentEditPart" />
+	                                    </iterate>
+	                            </and>
+	                        </with>
+	                        <reference definitionId="net.dependableos.dcase.diagram.editor.isDcasePart"/>                        
+	                    </or></iterate>
+	                </visibleWhen>
+	            </command> 
+	            <command
+	                commandId="net.dependableos.dcase.diagram.editor.command.openattachment"
+	                id="net.dependableos.dcase.diagram.editor.menu.openattachment"
+	                label="%net.dependableos.dcase.diagram.editor.menu.openattachment.label">
+	                <visibleWhen>
+	                    <iterate><or>
+	                        <with variable="selection">
+	                            <and>
+	                                <count value="1" />
+	                                    <iterate>
+	                                        <adapt type="net.dependableos.dcase.diagram.edit.parts.ArgumentEditPart" />
+	                                    </iterate>
+	                            </and>
+	                        </with>
+	                        <reference definitionId="net.dependableos.dcase.diagram.editor.isDcasePart"/>                        
+	                    </or></iterate>
+	                </visibleWhen>
+	                <parameter
+                        name="net.dependableos.dcase.diagram.editor.command.OpenUrl.parameter.Attribute"
+                        value="Attachment" />
+	            </command>
+	            <menu
+                	id="net.dependableos.dcase.diagram.editor.command.menu.copyModuleAttachment"
+                	label="%net.dependableos.dcase.diagram.editor.command.menu.copyModuleAttachment.label">
+					<dynamic 
+                 	   class="net.dependableos.dcase.diagram.editor.command.CopyModuleContributionItem"
+                 	   id="net.dependableos.dcase.diagram.editor.command.copyModuleAttachment">
+                	</dynamic>
+                	<visibleWhen>
+                    	<reference definitionId="net.dependableos.dcase.diagram.editor.isModulePart"/>
+                	</visibleWhen>
+            	</menu>
+	            <menu
+                	id="net.dependableos.dcase.diagram.editor.command.menu.copySubtreeAttachment"
+                	label="%net.dependableos.dcase.diagram.editor.command.menu.copySubtreeAttachment.label">
+					<dynamic 
+                 	   class="net.dependableos.dcase.diagram.editor.command.CopySubtreeContributionItem"
+                 	   id="net.dependableos.dcase.diagram.editor.command.copySubtreeAttachment">
+                	</dynamic>
+                	<visibleWhen>
+                    	<reference definitionId="net.dependableos.dcase.diagram.editor.isGoalPart"/>
+                	</visibleWhen>
+            	</menu>
+            </menu>
+            <menu
+                label="%net.dependableos.dcase.diagram.editor.command.Attachment.label"
+                id="net.dependableos.dcase.diagram.editor.command.selectAttachmentLink003">
+				<dynamic 
+					class="net.dependableos.dcase.diagram.editor.command.SelectModuleContributionItem"
+                 	id="net.dependableos.dcase.diagram.editor.command.selectModuleAttachmentLink003">
+                </dynamic>
+                <visibleWhen>
+                	<reference definitionId="net.dependableos.dcase.diagram.editor.isLink003Part"/>
+                </visibleWhen>
+            </menu>
+            <menu
+                label="%net.dependableos.dcase.diagram.editor.menu.RiskAnalysis.label"
+                id="net.dependableos.dcase.diagram.editor.menu.RiskAnalysis">
+                <separator name="additions" />
+                <command
+                    commandId="net.dependableos.dcase.diagram.editor.command.OpenUrlHandler"
+                    id="net.dependableos.dcase.diagram.editor.command.riskanalysis"
+                    label="%net.dependableos.dcase.diagram.editor.command.riskanalysis.label">
+                    <parameter
+                        name="net.dependableos.dcase.diagram.editor.command.OpenUrl.parameter.Attribute"
+                        value="RiskAnalysis" />
+                </command>
+                <visibleWhen>
+                    <with variable="selection">
+                        <and>
+                            <count value="1" />
+                            <iterate>
+                                <adapt type="net.dependableos.dcase.diagram.edit.parts.JustificationEditPart" />
+                            </iterate>
+                        </and>
+                    </with>
+                </visibleWhen>
+            </menu>
+            <!-- System Node was obsoleted...
+            <menu
+                label="%net.dependableos.dcase.diagram.editor.menu.NodeLink.label"
+                id="net.dependableos.dcase.diagram.editor.menu.NodeLink">
+                <separator name="additions" />
+	            <command
+	                commandId="net.dependableos.dcase.diagram.editor.systemnode.command.selectdiagram"
+	                id="net.dependableos.dcase.diagram.editor.systemnode.menu.selectdiagram"
+	                label="%net.dependableos.dcase.diagram.editor.systemnode.menu.selectdiagram.label">
+	            </command> 
+	            <command
+	                commandId="net.dependableos.dcase.diagram.editor.systemnode.command.opendiagram"
+	                id="net.dependableos.dcase.diagram.editor.systemnode.menu.opendiagram"
+	                label="%net.dependableos.dcase.diagram.editor.systemnode.menu.opendiagram.label">
+	            </command>
+                <visibleWhen>
+                    <with variable="selection">
+                        <and>
+                            <count value="1" />
+                            <iterate>
+                                <adapt type="net.dependableos.dcase.diagram.edit.parts.SystemEditPart" />
+                            </iterate>
+                        </and>
+                    </with>
+                </visibleWhen>
+            </menu>
+            -->
+            <menu
+                label="%net.dependableos.dcase.diagram.editor.menu.NodeChildrenVisible.label"
+                id="net.dependableos.dcase.diagram.editor.menu.NodeChildrenVisible">
+                <separator name="additions" />
+                <!--
+                <command
+                    commandId="net.dependableos.dcase.diagram.editor.command.NodeChildrenShowHandler"
+                    id="net.dependableos.dcase.diagram.editor.popup.command.NodeChildrenShow"
+                    label="%net.dependableos.dcase.diagram.editor.popup.command.NodeChildrenShow.label">
+                    <visibleWhen>
+                        <reference definitionId="net.dependableos.dcase.diagram.editor.isDcasePart"/>
+                    </visibleWhen>
+                </command>
+                <command
+                    commandId="net.dependableos.dcase.diagram.editor.command.NodeChildrenHideHandler"
+                    id="net.dependableos.dcase.diagram.editor.popup.command.NodeChildrenHide"
+                    label="%net.dependableos.dcase.diagram.editor.popup.command.NodeChildrenHide.label">
+                    <visibleWhen>
+                        <reference definitionId="net.dependableos.dcase.diagram.editor.isDcasePart"/>
+                    </visibleWhen>
+                </command>
+                -->
+                <dynamic 
+					class="net.dependableos.dcase.diagram.editor.command.NodeChildrenContributionItem"
+                 	id="net.dependableos.dcase.diagram.editor.command.NodeChildrenShowHide">
+                    <visibleWhen>
+                        <reference definitionId="net.dependableos.dcase.diagram.editor.isDcasePart"/>
+                    </visibleWhen>
+                </dynamic>
+                
+            </menu>
+            <command
+                commandId="net.dependableos.dcase.diagram.editor.command.setsiblingorder"
+                id="net.dependableos.dcase.diagram.editor.menu.setsiblingorder"
+                label="%net.dependableos.dcase.diagram.editor.command.menu.setsiblingorder.label">
+                <visibleWhen>
+                    <with variable="selection">
+                        <and>
+                            <count value="1"/>
+                            <iterate>
+                                <adapt
+                                      type="net.dependableos.dcase.diagram.edit.parts.StrategyEditPart">
+                                </adapt>
+                            </iterate>
+                        </and>
+                    </with>
+                </visibleWhen>
+            </command>
+            <menu
+                  id="params"
+                  label="%net.dependableos.dcase.diagram.editor.parameter.Parameters.label">
+               <groupMarker
+                     name="parametersGroup">
+               </groupMarker>
+            </menu>
+            <command
+                commandId="net.dependableos.dcase.diagram.editor.command.selectSubtree"
+                id="net.dependableos.dcase.diagram.editor.menu.selectSubtree"
+                label="%net.dependableos.dcase.diagram.editor.menu.selectSubtree.label">
+                <visibleWhen>
+                    <reference definitionId="net.dependableos.dcase.diagram.editor.isDcasePart"/>                        
+                </visibleWhen>
+            </command>
+            <command
+                commandId="net.dependableos.dcase.diagram.editor.command.computeNodes"
+                id="net.dependableos.dcase.diagram.editor.menu.computeNodes"
+                label="Compute nodes">
+               	<visibleWhen>
+	                    <iterate>
+	                        <with variable="selection">                            
+	                            <iterate>
+	                                <adapt type="net.dependableos.dcase.diagram.edit.parts.ArgumentEditPart" />
+	                            </iterate>
+	                        </with>
+	                    </iterate>
+	            </visibleWhen>
+            </command>
+            <command
+                commandId="net.dependableos.dcase.diagram.editor.command.createModule"
+                id="net.dependableos.dcase.diagram.editor.menu.createModule"
+                label="%net.dependableos.dcase.diagram.editor.menu.createModule.label">
+                <visibleWhen>
+                    <reference definitionId="net.dependableos.dcase.diagram.editor.isDcaseAndNotModulePart"/>
+                </visibleWhen>
+            </command>
+            <command
+                commandId="net.dependableos.dcase.diagram.editor.command.restoreModule"
+                id="net.dependableos.dcase.diagram.editor.menu.restoreModule"
+                label="%net.dependableos.dcase.diagram.editor.menu.restoreModule.label">
+                <visibleWhen>
+                    <reference definitionId="net.dependableos.dcase.diagram.editor.isModulePart"/>
+                </visibleWhen>
+            </command>
+            <menu
+                label="%net.dependableos.dcase.diagram.editor.menu.setFlags.label"
+                id="net.dependableos.dcase.diagram.editor.menu.SetFlags">
+                <separator name="additions" />
+                <command
+                    commandId="net.dependableos.dcase.diagram.editor.command.setPrivateFlag"
+                    id="net.dependableos.dcase.diagram.editor.command.setPrivateFlag"
+                    label="%net.dependableos.dcase.diagram.editor.popup.command.setPrivateFlag.label">
+	                <visibleWhen>
+	                    <iterate><or>
+	                        <with variable="selection">
+	                            <and>
+	                                <count value="1" />
+	                                    <iterate>
+	                                        <adapt type="net.dependableos.dcase.diagram.edit.parts.ArgumentEditPart" />
+	                                    </iterate>
+	                            </and>
+	                        </with>
+	                        <reference definitionId="net.dependableos.dcase.diagram.editor.isDcasePart"/>                        
+	                    </or></iterate>
+	                </visibleWhen>
+                </command>
+                <command
+                    commandId="net.dependableos.dcase.diagram.editor.command.setPublicFlag"
+                    id="net.dependableos.dcase.diagram.editor.command.setPublicFlag"
+                    label="%net.dependableos.dcase.diagram.editor.popup.command.setPublicFlag.label">
+	                <visibleWhen>
+	                    <iterate><or>
+	                        <with variable="selection">
+	                            <and>
+	                                <count value="1" />
+	                                    <iterate>
+	                                        <adapt type="net.dependableos.dcase.diagram.edit.parts.ArgumentEditPart" />
+	                                    </iterate>
+	                            </and>
+	                        </with>
+	                        <reference definitionId="net.dependableos.dcase.diagram.editor.isDcasePart"/>                        
+	                    </or></iterate>
+	                </visibleWhen>
+                </command>
+            </menu>
+            <menu
+                label="%net.dependableos.dcase.diagram.editor.menu.moduleMenu.label"
+                id="net.dependableos.dcase.diagram.editor.menu.ModuleMenu">
+                <visibleWhen>
+                    <reference definitionId="net.dependableos.dcase.diagram.editor.isModuleOrGoalOrLink003Part"/>
+                </visibleWhen>
+                <separator name="additions" />
+                <command
+                	commandId="net.dependableos.dcase.diagram.editor.command.openattachment"
+                    id="net.dependableos.dcase.diagram.editor.command.moduleShow"
+                    label="%net.dependableos.dcase.diagram.editor.menu.moduleShow.label">
+	                <visibleWhen>
+    	                <reference definitionId="net.dependableos.dcase.diagram.editor.isModuleOrGoalOrLink003Part"/>
+        	        </visibleWhen>
+                </command>
+                <command
+                    commandId="net.dependableos.dcase.diagram.editor.command.moduleHide"
+                    id="net.dependableos.dcase.diagram.editor.command.moduleHide"
+                    label="%net.dependableos.dcase.diagram.editor.menu.moduleHide.label">
+	                <visibleWhen>
+    	                <reference definitionId="net.dependableos.dcase.diagram.editor.isModuleOrGoalOrLink003Part"/>
+        	        </visibleWhen>
+                </command>
+            </menu>
+            <menu
+                id="net.dependableos.dcase.diagram.editor.command.menu.addPattern"
+                label="%net.dependableos.dcase.diagram.editor.command.menu.addPattern.label">
+                <dynamic 
+                    class="net.dependableos.dcase.diagram.editor.command.AddPatternContributionItem"
+                    id="net.dependableos.dcase.diagram.editor.command.AddPatternCommand">
+                </dynamic>
+                <visibleWhen>
+                    <with variable="selection">
+                        <and>
+                            <count value="1" />
+                            <iterate>
+                                <adapt type="net.dependableos.dcase.diagram.edit.parts.ArgumentEditPart" />
+                            </iterate>
+                        </and>
+                    </with>
+                </visibleWhen>
+            </menu>
+            <menu
+                id="net.dependableos.dcase.diagram.editor.command.menu.externalCommand"
+                label="%net.dependableos.dcase.diagram.editor.command.menu.externalCommand.label">
+                <dynamic 
+                    class="net.dependableos.dcase.diagram.editor.command.ExternalCommandContributionItem"
+                    id="net.dependableos.dcase.diagram.editor.command.ExternalCommand">
+                </dynamic>
+            </menu>
+			<command
+                commandId="net.dependableos.dcase.diagram.editor.command.adjustReferences"
+                id="net.dependableos.dcase.diagram.editor.menu.adjustReferences"
+                label="%net.dependableos.dcase.diagram.editor.menu.adjustReferences.label">
+            </command>
+			<command
+                commandId="net.dependableos.dcase.diagram.editor.command.createDstar"
+                id="net.dependableos.dcase.diagram.editor.menu.createDstar"
+                label="%net.dependableos.dcase.diagram.editor.menu.createDstar.label">
+            </command>
+            
+            <separator name="dcaseExtensionsGroup"
+                       visible="true" />
+        </menuContribution>
+
+        <menuContribution
+            locationURI="menu:file?before=rename">
+            <command
+                commandId="net.dependableos.dcase.diagram.editor.command.copyTo"
+                id="net.dependableos.dcase.diagram.editor.menu.copyTo"
+                label="%net.dependableos.dcase.diagram.editor.menu.copyTo.label">
+            </command>
+        </menuContribution>
+    </extension>
+	<extension point="org.eclipse.core.contenttype.contentTypes">
+		<content-type
+				base-type="org.eclipse.core.runtime.xml"
+				file-extensions="dcase"
+				id="dcaseModelXML"
+				name="D-Case Model XML File"
+				priority="high">
+			<describer
+					class="org.eclipse.core.runtime.content.XMLRootElementContentDescriber2">
+				<parameter
+						name="element"
+						value="argument">
+				</parameter>
+			</describer>
+		</content-type>
+	</extension>
+
+    <extension id="net.dependableos.dcased.diagram.editor.dcaseproblem" name="D-Case problem" point="org.eclipse.core.resources.markers">
+        <super type="org.eclipse.core.resources.problemmarker">
+        </super>
+        <persistent value="true">
+        </persistent>
+    </extension>    
+    <extension id="net.dependableos.dcase.diagram.editor.dcaseproblem.calculatescore" name="D-Case calculatescore problem" point="org.eclipse.core.resources.markers">
+        <super type="org.eclipse.core.resources.problemmarker">
+        </super>
+        <persistent value="true">
+        </persistent>
+    </extension>
+
+	<extension point="org.eclipse.ui.views">
+	    <category
+    		id="net.dependableos.dcase.diagram.editor.views.category"
+        	name="%net.dependableos.dcase.diagram.editor.views.category.label">
+	    </category>
+		<view
+        	category="net.dependableos.dcase.diagram.editor.views.category"
+        	class="net.dependableos.dcase.diagram.editor.template.TemplateViewPart"
+        	id="net.dependableos.dcase.diagram.editor.views.template"
+        	name="%net.dependableos.dcase.diagram.editor.views.template.label"
+        	restorable="true">
+    	</view>
+  <view
+        category="net.dependableos.dcase.diagram.editor.views.category"
+        class="net.dependableos.dcase.diagram.editor.requirement.RequirementViewPart"
+        id="net.dependableos.dcase.requrement.views.requirementview"
+        name="%net.dependableos.dcase.requrement.views.requirementview.name"
+        restorable="true">
+  </view>
+  <view
+        category="net.dependableos.dcase.diagram.editor.views.category"
+        class="net.dependableos.dcase.diagram.editor.computenodes.ComputeNodesViewPart"
+        id="net.dependableos.dcase.diagram.editor.views.computenodes"
+        name="Compute nodes">
+  </view>
+  	 <view
+       category="net.dependableos.dcase.diagram.editor.views.category"
+       class="net.dependableos.dcase.diagram.editor.ui.ModuleViewPart"
+       id="net.dependableos.dcase.editor.views.module"
+       name="%net.dependableos.dcase.diagram.editor.views.module.label"
+       restorable="true">
+     </view>
+	</extension>
+
+    <extension
+          point="org.eclipse.gmf.runtime.emf.clipboard.core.clipboardSupport">
+       <factory
+             class="net.dependableos.dcase.diagram.editor.clipboard.DcaseClipboardSupportFactory"
+             nsURI="http://www.dependable-os.net/2010/03/dcase/"
+             >
+       </factory>
+    </extension>
+    <!-- Tests whether the Node of the D-Case diagram is selected. -->
+    <extension point="org.eclipse.core.expressions.definitions">
+       <definition id="net.dependableos.dcase.diagram.editor.isDcasePart">
+           <with variable="selection">
+               <and>
+                   <count value="1" />
+                   <iterate><or>
+                       <adapt type="net.dependableos.dcase.diagram.edit.parts.GoalEditPart" />
+                       <adapt type="net.dependableos.dcase.diagram.edit.parts.StrategyEditPart" />
+                       <adapt type="net.dependableos.dcase.diagram.edit.parts.EvidenceEditPart" />
+                       <adapt type="net.dependableos.dcase.diagram.edit.parts.UndevelopedEditPart" />
+                       <adapt type="net.dependableos.dcase.diagram.edit.parts.ContextEditPart" />
+                       <adapt type="net.dependableos.dcase.diagram.edit.parts.MonitorEditPart" />
+                       <adapt type="net.dependableos.dcase.diagram.edit.parts.PolicyEditPart" />
+                       <adapt type="net.dependableos.dcase.diagram.edit.parts.SystemEditPart" />
+                       <adapt type="net.dependableos.dcase.diagram.edit.parts.JustificationEditPart" />
+                       <adapt type="net.dependableos.dcase.diagram.edit.parts.Userdef001EditPart" />
+                       <adapt type="net.dependableos.dcase.diagram.edit.parts.Userdef002EditPart" />
+                       <adapt type="net.dependableos.dcase.diagram.edit.parts.Userdef003EditPart" />
+                       <adapt type="net.dependableos.dcase.diagram.edit.parts.Userdef004EditPart" />
+                       <adapt type="net.dependableos.dcase.diagram.edit.parts.Userdef005EditPart" />
+                       <adapt type="net.dependableos.dcase.diagram.edit.parts.Userdef006EditPart" />
+                  </or></iterate>
+              </and>
+          </with>
+      </definition>
+    </extension>
+    <!-- Tests whether the Link of the D-Case diagram is selected. -->
+    <extension point="org.eclipse.core.expressions.definitions">
+        <definition id="net.dependableos.dcase.diagram.editor.isDcaseLinkPart">
+            <with variable="selection">
+               <and>
+                   <count value="1" />
+                   <iterate><or>                   
+                       <adapt type="net.dependableos.dcase.diagram.edit.parts.DcaseLink001EditPart" />
+                       <adapt type="net.dependableos.dcase.diagram.edit.parts.DcaseLink002EditPart" />
+                       <adapt type="net.dependableos.dcase.diagram.edit.parts.DcaseLink003EditPart" />
+                       <adapt type="net.dependableos.dcase.diagram.edit.parts.DcaseLink004EditPart" />
+                   </or></iterate>
+                </and>
+            </with>
+        </definition>
+    </extension>
+    <!-- Tests whether the Node of the D-Case diagram is selected.(except Module Node) -->
+    <extension point="org.eclipse.core.expressions.definitions">
+       <definition id="net.dependableos.dcase.diagram.editor.isDcaseAndNotModulePart">
+           <with variable="selection">
+               <and>
+                   <count value="1" />
+                   <iterate><or>
+                       <adapt type="net.dependableos.dcase.diagram.edit.parts.GoalEditPart" />
+                       <adapt type="net.dependableos.dcase.diagram.edit.parts.StrategyEditPart" />
+                       <adapt type="net.dependableos.dcase.diagram.edit.parts.EvidenceEditPart" />
+                       <adapt type="net.dependableos.dcase.diagram.edit.parts.UndevelopedEditPart" />
+                       <adapt type="net.dependableos.dcase.diagram.edit.parts.ContextEditPart" />
+                       <adapt type="net.dependableos.dcase.diagram.edit.parts.MonitorEditPart" />
+                       <adapt type="net.dependableos.dcase.diagram.edit.parts.PolicyEditPart" />
+                       <adapt type="net.dependableos.dcase.diagram.edit.parts.SystemEditPart" />
+                       <adapt type="net.dependableos.dcase.diagram.edit.parts.JustificationEditPart" />
+                       <adapt type="net.dependableos.dcase.diagram.edit.parts.Userdef001EditPart" />
+                       <adapt type="net.dependableos.dcase.diagram.edit.parts.Userdef002EditPart" />
+                       <adapt type="net.dependableos.dcase.diagram.edit.parts.Userdef003EditPart" />
+                       <adapt type="net.dependableos.dcase.diagram.edit.parts.Userdef004EditPart" />
+                       <!-- except Module Node -->
+                       <adapt type="net.dependableos.dcase.diagram.edit.parts.Userdef006EditPart" />
+                  </or></iterate>
+              </and>
+          </with>
+      </definition>
+    </extension>
+    <!-- Tests whether the Module Node of the D-Case diagram is selected. -->
+    <extension point="org.eclipse.core.expressions.definitions">
+       <definition id="net.dependableos.dcase.diagram.editor.isModulePart">
+           <with variable="selection">
+               <and>
+                   <count value="1" />
+                   <iterate>
+	                   <adapt type="net.dependableos.dcase.diagram.edit.parts.Userdef005EditPart" />
+	               </iterate>
+              </and>
+          </with>
+      </definition>
+    </extension>
+    <!-- Tests whether the Module or Goal Node of the D-Case diagram is selected. -->
+    <extension point="org.eclipse.core.expressions.definitions">
+       <definition id="net.dependableos.dcase.diagram.editor.isModuleOrGoalPart">
+           <with variable="selection">
+               <and>
+                   <count value="1" />
+                   <iterate><or>
+                       <adapt type="net.dependableos.dcase.diagram.edit.parts.GoalEditPart" />
+	                   <adapt type="net.dependableos.dcase.diagram.edit.parts.Userdef005EditPart" />
+	               </or></iterate>
+              </and>
+          </with>
+      </definition>
+    </extension>
+    <!-- Tests whether the Link003 of the D-Case diagram is selected. -->
+    <extension point="org.eclipse.core.expressions.definitions">
+       <definition id="net.dependableos.dcase.diagram.editor.isLink003Part">
+           <with variable="selection">
+               <and>
+                   <count value="1" />
+                   <iterate>
+                       <adapt type="net.dependableos.dcase.diagram.edit.parts.DcaseLink003EditPart" />
+	               </iterate>
+              </and>
+          </with>
+      </definition>
+    </extension>
+    <!-- Tests whether the Module or Goal Node of the D-Case diagram is selected. -->
+    <extension point="org.eclipse.core.expressions.definitions">
+       <definition id="net.dependableos.dcase.diagram.editor.isModuleOrGoalOrLink003Part">
+           <with variable="selection">
+               <and>
+                   <count value="1" />
+                   <iterate><or>
+                       <adapt type="net.dependableos.dcase.diagram.edit.parts.GoalEditPart" />
+	                   <adapt type="net.dependableos.dcase.diagram.edit.parts.Userdef005EditPart" />
+	                   <!--<adapt type="net.dependableos.dcase.diagram.edit.parts.DcaseLink003EditPart" />-->
+	               </or></iterate>
+              </and>
+          </with>
+      </definition>
+    </extension>
+    <!-- Tests whether the Goal Node of the D-Case diagram is selected. -->
+    <extension point="org.eclipse.core.expressions.definitions">
+       <definition id="net.dependableos.dcase.diagram.editor.isGoalPart">
+           <with variable="selection">
+               <and>
+                   <count value="1" />
+                   <iterate>
+	                   <adapt type="net.dependableos.dcase.diagram.edit.parts.GoalEditPart" />
+	               </iterate>
+              </and>
+          </with>
+      </definition>
+    </extension>
+    <!-- The popup menu that outputs the EPS file. -->
+    <extension point="org.eclipse.ui.popupMenus"> 
+		<objectContribution id="net.dependableos.dcase.diagram.ui.objectContribution.IGraphicalEditPart" objectClass="org.eclipse.gmf.runtime.diagram.ui.editparts.IGraphicalEditPart">
+         <action
+               label="%net.dependableos.dcase.diagram.editor.command.CopyToEpsAction.label"
+               class="net.dependableos.dcase.diagram.editor.command.CopyToEpsAction"
+               menubarPath="fileMenu/saveGroup:additions"
+               id="net.dependableos.dcase.diagram.editor.command.CopyToEpsAction">
+         </action>
+		</objectContribution>
+    </extension>
+    <!-- The popup menu that changes the layout of diagram.  -->
+	<extension point="org.eclipse.gmf.runtime.diagram.ui.layoutProviders"> 
+		<layoutProvider class="net.dependableos.dcase.diagram.editor.layout.DcaseLayoutProvider"> 
+			<Priority name="High" /> 
+		</layoutProvider> 
+ 	</extension> 
+
+    <extension point="org.eclipse.ui.popupMenus"> 
+        <objectContribution id="net.dependableos.dcase.diagram.editor.popupmenu" objectClass="net.dependableos.dcase.diagram.edit.parts.SystemEditPart">
+         <action
+               label="%net.dependableos.dcase.diagram.editor.parameter.DefineParameterActionID.label"
+               class="net.dependableos.dcase.diagram.editor.parameter.DefineParameterAction"
+               menubarPath="params/parameterGroup"
+               enablesFor="1"
+               id="net.dependableos.dcase.diagram.editor.parameter.DefineParameterActionID">
+         </action>
+        </objectContribution>
+    </extension>
+
+ 	<extension point="org.eclipse.ui.popupMenus"> 
+		<objectContribution id="net.dependableos.dcase.diagram.editor.popupmenu" objectClass="net.dependableos.dcase.diagram.edit.parts.SystemEditPart">
+         <action
+               label="%net.dependableos.dcase.diagram.editor.parameter.setParameterActionID.label"
+               class="net.dependableos.dcase.diagram.editor.parameter.SetParameterAction"
+               menubarPath="params/parameterGroup"
+               enablesFor="1"
+               id="net.dependableos.dcase.diagram.editor.parameter.setParameterActionID">
+         </action>
+		</objectContribution>
+    </extension>
+
+    <extension
+          point="net.dependableos.dcase.diagram.setAttributeContribution">
+        <attachmentSelector
+            id="net.dependableos.dcase.diagram.editor.selectFromModule"
+            name="%net.dependableos.dcase.diagram.editor.command.menu.selectModuleAttachment.label"
+            class="net.dependableos.dcase.diagram.editor.command.SelectModuleContributionItem">
+        </attachmentSelector>  
+        <attachmentSelector
+            id="net.dependableos.dcase.diagram.editor.selectFromWS"
+            name="%net.dependableos.dcase.diagram.editor.parameter.attachment.selectfromworkspace.label"
+            class="net.dependableos.dcase.diagram.editor.command.SelectAttachmentFromWSHandler">
+        </attachmentSelector>  
+        <attachmentSelector
+            id="net.dependableos.dcase.diagram.editor.selectFromWeb"
+            name="%net.dependableos.dcase.diagram.editor.parameter.attachment.selectfromweb.label"
+            class="net.dependableos.dcase.diagram.editor.command.SelectAttachmentFromWebHandler">
+        </attachmentSelector>
+        <!-- do not add AttributeDialog
+        <command
+            commandId="net.dependableos.dcase.diagram.editor.command.defineParameter"
+            id="net.dependableos.dcase.diagram.editor.command.defineParameter">
+        </command>
+        <command
+            commandId="net.dependableos.dcase.diagram.editor.command.setParameter"
+            id="net.dependableos.dcase.diagram.editor.command.setParameter">
+        </command>
+        -->
+    </extension>
+    <extension
+          point="org.eclipse.ui.preferencePages">
+       <page
+             class="net.dependableos.dcase.diagram.editor.preferences.BookmarkPreferencePage"
+             id="net.dependableos.dcase.diagram.editor.preferences.BookmarkPreferencePage"
+             category="net.dependableos.dcase.diagram.general"
+             name="%net.dependableos.dcase.diagram.editor.preferences.BookmarkPreferencePage.label">
+       </page>
+       <page
+             class="net.dependableos.dcase.diagram.editor.preferences.XSLTransformPreferencePage"
+             id="net.dependableos.dcase.diagram.editor.preferences.XSLTransformPreferencePage"
+             category="net.dependableos.dcase.diagram.general"
+             name="%net.dependableos.dcase.diagram.editor.preferences.XSLTransformPreferencePage.label">
+       </page>
+    </extension>
+
+</plugin>

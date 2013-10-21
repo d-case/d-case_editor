@@ -1,0 +1,55 @@
+﻿/*
+ * Copyright (c) 2007, 2009 Borland Software Corporation
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Alexander Shatalin (Borland) - initial API and implementation
+ *    Michael Golubev (Borland) - [243151] explicit source/target for links
+ */
+
+«IMPORT 'http://www.eclipse.org/gmf/2009/GenModel'»
+«EXTENSION xpt::diagram::editpolicies::LinkUtils»
+
+«DEFINE LinkItemSemanticEditPolicy FOR gmfgen::GenLink-»
+	«EXPAND xpt::Common::copyright FOR diagram.editorGen-»
+package «getDiagram().editPoliciesPackageName»;
+
+«EXPAND xpt::Common::generatedClassComment»
+public class «itemSemanticEditPolicyClassName» extends «diagram.getBaseItemSemanticEditPolicyQualifiedClassName()» {
+
+	«EXPAND xpt::diagram::editpolicies::BaseItemSemanticEditPolicy::defaultConstructor-»
+
+	«EXPAND classBody-»
+	
+	«EXPAND additions-»
+}
+«ENDDEFINE» 
+
+«DEFINE classBody FOR gmfgen::GenLink-»
+	«EXPAND getDestroySemanticCommand(self) FOR modelFacet -»
+	«IF isTypeLink()»«EXPAND xpt::diagram::editpolicies::linkCommands::linkCommands»«ENDIF-»
+«ENDDEFINE»
+
+«DEFINE getDestroySemanticCommand(gmfgen::GenLink genLink) FOR gmfgen::LinkModelFacet-»
+	«ERROR 'Unsupported model facet: ' + self.repr()-»
+«ENDDEFINE»
+
+«DEFINE getDestroySemanticCommand(gmfgen::GenLink genLink) FOR gmfgen::FeatureLinkModelFacet-»
+	«EXPAND xpt::Common::generatedMemberComment»
+	protected org.eclipse.gef.commands.Command getDestroyReferenceCommand(org.eclipse.gmf.runtime.emf.type.core.requests.DestroyReferenceRequest req) {
+		return getGEFWrapper(«EXPAND impl::diagram::commands::DeleteLinkCommand::newDeleteReferenceLinkCommand(genLink, 'req')»);
+	}
+«ENDDEFINE»
+
+«DEFINE getDestroySemanticCommand(gmfgen::GenLink genLink) FOR gmfgen::TypeLinkModelFacet-»
+	«EXPAND xpt::Common::generatedMemberComment»
+	protected org.eclipse.gef.commands.Command getDestroyElementCommand(org.eclipse.gmf.runtime.emf.type.core.requests.DestroyElementRequest req) {
+		return getGEFWrapper(«EXPAND impl::diagram::commands::DeleteLinkCommand::newDeleteLinkWithClassCommand(genLink, 'req')»);
+	}
+«ENDDEFINE»
+
+«DEFINE additions FOR gmfgen::GenLink»«ENDDEFINE»

@@ -1,0 +1,154 @@
+﻿/*
+ * Copyright (c) 2008, 2009 Borland Software Corporation
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Artem Tikhomirov (Borland) - initial API and implementation
+ */
+
+«IMPORT 'http://www.eclipse.org/gmf/2009/GenModel'»
+
+«EXTENSION impl::actions::MenuAction»
+«EXTENSION xpt::StringOperations»
+
+«DEFINE Main FOR gmfgen::GenEditorGenerator»
+   <extension point="org.eclipse.ui.menus" id="context-menus">
+      «EXPAND xpt::Common::xmlGeneratedTag»
+      <!-- menuContribution locationURI="menu:org.eclipse.ui.main.menu?after=«»">
+      </menuContribution>
+      <menuContribution locationURI="toolbar:org.eclipse.ui.main.toolbar?after=«»">
+      </menuContribution -->
+«EXPAND menuContribution FOREACH contextMenus-»
+   </extension>
+
+«IF hasCommandsToContribute(self)-»
+   <extension point="org.eclipse.ui.commands" id="menu-commands">
+      «EXPAND xpt::Common::xmlGeneratedTag»
+      <category id="«editor.iD»" name="%cmdcategory.name" description="%cmdcategory.desc"/>
+«EXPAND commandContribution FOREACH contextMenus-»
+   </extension>
+«ENDIF-»
+
+«IF hasHandlersToContribute(self)-»
+   <extension point="org.eclipse.ui.handlers" id="menu-handlers">
+      «EXPAND xpt::Common::xmlGeneratedTag»
+«EXPAND handlerContribution FOREACH contextMenus-»
+   </extension>
+«ENDIF-»
+
+   <!-- optionally, specify keybindings -->
+«ENDDEFINE»
+
+«DEFINE menuContribution FOR gmfgen::GenContextMenu-»
+«EXPAND _menuContribution(self, 'popup:org.eclipse.gmf.runtime.diagram.ui.DiagramEditorContextMenu')-»
+«ENDDEFINE»
+
+«DEFINE menuContribution(contextMenu : gmfgen::GenContextMenu) FOR gmfgen::GenContributionManager»«ERROR 'Abstract menuContribution for ' + self.repr()»«ENDDEFINE»
+«DEFINE menuContribution(contextMenu : gmfgen::GenContextMenu) FOR gmfgen::GenMenuManager»«EXPAND _menuContribution(contextMenu, 'popup:' + iD)»«ENDDEFINE»
+«DEFINE menuContribution(contextMenu : gmfgen::GenContextMenu) FOR gmfgen::GenToolBarManager»«EXPAND _menuContribution(contextMenu, 'toolbar:' + iD)»«ENDDEFINE»
+
+«DEFINE _menuContribution(contextMenu : gmfgen::GenContextMenu, locationURI : String) FOR gmfgen::GenContributionManager-»
+      <menuContribution locationURI="«locationURI»">
+«EXPAND menuEntry(contextMenu) FOREACH items-»
+      </menuContribution>
+«EXPAND menuContribution(contextMenu) FOREACH items[gmfgen::GenContributionManager]-»
+«ENDDEFINE»
+
+
+«DEFINE commandContribution FOR gmfgen::GenContributionManager-»
+«EXPAND commandContribution FOREACH items[gmfgen::GenCustomAction]-»
+«EXPAND commandContribution FOREACH items[gmfgen::GenAction]-»
+«EXPAND commandContribution FOREACH items[gmfgen::GenContributionManager]-»
+«ENDDEFINE»
+
+«DEFINE handlerContribution FOR gmfgen::GenContributionManager-»
+«EXPAND handlerContribution FOREACH items[gmfgen::GenCustomAction]-»
+«EXPAND handlerContribution FOREACH items[gmfgen::GenContributionManager]-»
+«ENDDEFINE»
+
+«DEFINE commandContribution FOR gmfgen::GenCustomAction-»
+      <command id="«EXPAND commandIdentifier»"
+         name="«name»"
+         categoryId="«owner.editorGen.editor.iD»"/>
+«ENDDEFINE»
+
+«DEFINE commandContribution FOR gmfgen::GenAction-»
+      <command id="«EXPAND commandIdentifier»"
+         name="«name/*FIXME: into i18n keys*/»"
+         categoryId="«owner.editorGen.editor.iD»"
+         defaultHandler="«qualifiedClassName»"/>
+«ENDDEFINE»
+
+«DEFINE handlerContribution FOR gmfgen::GenCustomAction-»
+      <handler
+         commandId="«EXPAND commandIdentifier»"
+         class="«qualifiedClassName»">
+         <enabledWhen>
+           <with variable="activePartId"><equals value="«owner.editorGen.editor.iD»"/></with>
+         </enabledWhen>
+      </handler>
+«ENDDEFINE»
+
+«DEFINE commandIdentifier FOR gmfgen::GenCustomAction»«owner.editorGen.plugin.iD».«qualifiedClassName.xpandSplit('\\.')->last()»«ENDDEFINE»
+«DEFINE commandIdentifier FOR gmfgen::GenAction»«owner.editorGen.plugin.iD».«qualifiedClassName.xpandSplit('\\.')->last()»«ENDDEFINE»
+
+«DEFINE menuEntry(contextMenu : gmfgen::GenContextMenu) FOR gmfgen::GenContributionItem»«REM»NO-OP XXX or ERROR?«ENDREM»«ENDDEFINE»
+«DEFINE menuEntry(contextMenu : gmfgen::GenContextMenu) FOR gmfgen::GenSeparator-»
+         <separator «IF groupName <> null»name="«groupName»" «ENDIF»visible="true"/>
+«ENDDEFINE»
+«DEFINE menuEntry(contextMenu : gmfgen::GenContextMenu) FOR gmfgen::GenGroupMarker-»
+         <separator name="«groupName»"/>
+«ENDDEFINE»
+«DEFINE menuEntry(contextMenu : gmfgen::GenContextMenu) FOR gmfgen::GenCommandAction-»
+         <command commandId="«commandIdentifier»">
+            <visibleWhen>
+«EXPAND menuCondition FOR contextMenu-»
+            </visibleWhen>
+         </command>
+«ENDDEFINE»
+«DEFINE menuEntry(contextMenu : gmfgen::GenContextMenu) FOR gmfgen::GenCustomAction-»
+         <command commandId="«EXPAND commandIdentifier»">
+            <visibleWhen>
+«EXPAND menuCondition FOR contextMenu-»
+            </visibleWhen>
+         </command>
+«ENDDEFINE»
+«DEFINE menuEntry(contextMenu : gmfgen::GenContextMenu) FOR gmfgen::GenAction-»
+         <command commandId="«EXPAND commandIdentifier»">
+            <visibleWhen>
+«EXPAND menuCondition FOR contextMenu-»
+            </visibleWhen>
+         </command>
+«ENDDEFINE»
+
+«DEFINE menuEntry(contextMenu : gmfgen::GenContextMenu) FOR gmfgen::GenMenuManager»
+         <menu id="«iD»" label="«name»">
+            <visibleWhen>
+«EXPAND menuCondition FOR contextMenu-»
+            </visibleWhen>
+         </menu>
+«ENDDEFINE»
+
+«DEFINE menuCondition FOR gmfgen::GenContextMenu-»
+               <and>
+                  <with variable="activePartId"><equals value="«editorGen.editor.iD»"/></with>
+                  <with variable="selection"><iterate ifEmpty="false">«IF context->size() > 1»<or>«ENDIF» 
+«REM»XXX, perhaps, <adapt type="EditPart">?«ENDREM-»
+«FOREACH context AS de-»
+                     <instanceof value="«de.getEditPartQualifiedClassName()»"/>
+«ENDFOREACH-»
+                  «IF context->size() > 1»</or>«ENDIF»</iterate></with>
+               </and>
+«ENDDEFINE»
+
+«DEFINE i18n FOR gmfgen::GenEditorGenerator-»
+«IF hasCommandsToContribute(self)-»
+# Commands and menu actions
+cmdcategory.name=«modelID» Editor Commands
+cmdcategory.desc=«modelID» Editor Commands
+«ENDIF»
+«ENDDEFINE»

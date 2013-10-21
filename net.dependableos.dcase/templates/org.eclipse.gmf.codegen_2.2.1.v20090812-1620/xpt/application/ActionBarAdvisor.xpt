@@ -1,0 +1,265 @@
+﻿/*
+ * Copyright (c) 2006, 2009 Borland Software Corporation
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Dmitry Stadnik (Borland) - initial API and implementation
+ */
+
+«IMPORT 'http://www.eclipse.org/gmf/2009/GenModel'»
+
+«EXTENSION xpt::application::i18n»
+
+«DEFINE ActionBarAdvisor FOR gmfgen::GenApplication-»
+«EXPAND xpt::Common::copyright FOR editorGen-»
+package «packageName»;
+
+«EXPAND xpt::Common::generatedClassComment»
+public class «actionBarAdvisorClassName» extends org.eclipse.ui.application.ActionBarAdvisor {
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	private org.eclipse.ui.actions.ActionFactory.IWorkbenchAction lockToolBarAction;
+
+	«EXPAND xpt::Common::generatedMemberComment»
+    private org.eclipse.ui.actions.ActionFactory.IWorkbenchAction toggleCoolbarAction;
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	public «actionBarAdvisorClassName»(org.eclipse.ui.application.IActionBarConfigurer configurer) {
+		super(configurer);
+	}
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	private org.eclipse.ui.IWorkbenchWindow getWindow() {
+		return getActionBarConfigurer().getWindowConfigurer().getWindow();
+	}
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	protected void makeActions(org.eclipse.ui.IWorkbenchWindow window) {
+		toggleCoolbarAction = org.eclipse.ui.actions.ActionFactory.TOGGLE_COOLBAR.create(window);
+        register(toggleCoolbarAction);
+        lockToolBarAction = org.eclipse.ui.actions.ActionFactory.LOCK_TOOL_BAR.create(window);
+        register(lockToolBarAction);
+		«EXPAND makeAction('window') FOREACH sharedContributionItems-»
+	}
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	protected void fillMenuBar(org.eclipse.jface.action.IMenuManager menu) {
+		«EXPAND fill('menu') FOR mainMenu-»
+	}
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	protected void fillCoolBar(org.eclipse.jface.action.ICoolBarManager toolBar) {
+		org.eclipse.jface.action.IMenuManager popUpMenu = new org.eclipse.jface.action.MenuManager();
+		popUpMenu.add(new org.eclipse.jface.action.ActionContributionItem(lockToolBarAction));
+		popUpMenu.add(new org.eclipse.jface.action.ActionContributionItem(toggleCoolbarAction));
+		toolBar.setContextMenuManager(popUpMenu);
+		«EXPAND fill('toolBar') FOR mainToolBar-»
+	}
+
+	«EXPAND openEditor FOR editorGen.editor-»
+
+	«EXPAND actions-»
+
+	«EXPAND additions-»
+}
+«ENDDEFINE»
+
+«DEFINE openEditor FOR gmfgen::GenEditorView-»
+	«EXPAND xpt::Common::generatedMemberComment»
+	private static boolean openEditor(org.eclipse.ui.IWorkbench workbench, org.eclipse.emf.common.util.URI fileURI) {
+		org.eclipse.ui.IWorkbenchWindow workbenchWindow = workbench.getActiveWorkbenchWindow();
+		org.eclipse.ui.IWorkbenchPage page = workbenchWindow.getActivePage();
+		org.eclipse.ui.IEditorDescriptor editorDescriptor =
+			workbench.getEditorRegistry().getDefaultEditor(fileURI.toFileString());
+		if (editorDescriptor == null) {
+			org.eclipse.jface.dialogs.MessageDialog.openError(workbenchWindow.getShell(), 
+                «EXPAND xpt::Externalizer::accessorCall(titleKey(i18nKeyForDefaultFileEditorErrorDialog(editorGen.application))) FOR editorGen»,
+				org.eclipse.osgi.util.NLS.bind(
+				    «EXPAND xpt::Externalizer::accessorCall(messageKey(i18nKeyForDefaultFileEditorErrorDialog(editorGen.application))) FOR editorGen», 
+				    fileURI.toFileString()));
+			return false;
+		} else {
+			try {
+				page.openEditor(new org.eclipse.emf.common.ui.URIEditorInput(fileURI), editorDescriptor.getId());
+			} catch (org.eclipse.ui.PartInitException exception) {
+				org.eclipse.jface.dialogs.MessageDialog.openError(
+					workbenchWindow.getShell(), 
+					«EXPAND xpt::Externalizer::accessorCall(titleKey(i18nKeyForDefaultEditorOpenErrorDialog(editorGen.application))) FOR editorGen»,
+					exception.getMessage());
+				return false;
+			}
+		}
+		return true;
+	}
+«ENDDEFINE»
+
+«DEFINE makeAction(windowVar : String) FOR gmfgen::GenContributionItem»
+	«ERROR 'Can not make action for ' + self.repr()»
+«ENDDEFINE»
+
+«DEFINE makeAction(windowVar : String) FOR gmfgen::GenActionFactoryContributionItem»
+	register(org.eclipse.ui.actions.ActionFactory.«name».create(«windowVar»));
+«ENDDEFINE»
+
+«DEFINE fill(managerVar : String) FOR gmfgen::GenContributionManager»
+	«EXPAND contribute(managerVar) FOREACH items-»
+«ENDDEFINE»
+
+«DEFINE contribute(managerVar : String) FOR gmfgen::GenContributionItem»
+	«ERROR 'Can not contribute item: ' + self.repr()»
+«ENDDEFINE»
+
+«DEFINE contribute(managerVar : String) FOR gmfgen::GenGroupMarker»
+	«managerVar».add(new org.eclipse.jface.action.GroupMarker(«groupName»));
+«ENDDEFINE»
+
+«DEFINE contribute(managerVar : String) FOR gmfgen::GenSeparator»
+	«managerVar».add(new org.eclipse.jface.action.Separator(«IF null <> groupName»«groupName»«ENDIF»));
+«ENDDEFINE»
+
+«DEFINE contribute(managerVar : String) FOR gmfgen::GenMenuManager»
+	«LET managerVar + 'X' AS menuVar-»
+	{
+		org.eclipse.jface.action.IMenuManager «menuVar» = new  org.eclipse.jface.action.MenuManager(
+		«IF null <> name»«EXPAND xpt::Externalizer::accessorCall(i18nKeyForMenu(self)) FOR editorGen»«ELSE»null«ENDIF»«IF null <> iD», «iD»«ENDIF»);
+		«EXPAND contribute(menuVar) FOREACH items-»
+		«managerVar».add(«menuVar»);
+	}
+	«ENDLET-»
+«ENDDEFINE»
+
+«DEFINE contribute(managerVar : String) FOR gmfgen::GenToolBarManager»
+	«LET managerVar + 'X' AS toolBarVar-»
+	{
+		org.eclipse.jface.action.IToolBarManager «toolBarVar» = new  org.eclipse.jface.action.ToolBarManager();
+		«EXPAND contribute(toolBarVar) FOREACH items-»
+		«managerVar».add(new org.eclipse.jface.action.ToolBarContributionItem(«toolBarVar»«IF null <> iD», «iD»«ENDIF»));
+	}
+	«ENDLET-»
+«ENDDEFINE»
+
+«DEFINE contribute(managerVar : String) FOR gmfgen::GenSharedContributionItem»
+	«EXPAND contributeShared(managerVar) FOR actualItem-»
+«ENDDEFINE»
+
+«DEFINE contributeShared(managerVar : String) FOR gmfgen::GenContributionItem»
+	«ERROR 'Can not contribute shared item: ' + self.repr()»
+«ENDDEFINE»
+
+«DEFINE contributeShared(managerVar : String) FOR gmfgen::GenActionFactoryContributionItem»
+	«managerVar».add(getAction(org.eclipse.ui.actions.ActionFactory.«name».getId()));
+«ENDDEFINE»
+
+«DEFINE actions FOR gmfgen::GenApplication»
+«EXPAND NewDiagramAction-»
+«EXPAND OpenUriAction-»
+«EXPAND OpenAction-»
+«EXPAND AboutAction-»
+«ENDDEFINE»
+
+«DEFINE NewDiagramAction FOR gmfgen::GenApplication-»
+	«EXPAND xpt::Common::generatedClassComment»
+	public static class NewDiagramAction extends org.eclipse.emf.common.ui.action.WorkbenchWindowActionDelegate {
+
+		«EXPAND xpt::Common::generatedMemberComment»
+		public void run(org.eclipse.jface.action.IAction action) {
+			«editorGen.diagram.getCreationWizardQualifiedClassName()» wizard =
+				new «editorGen.diagram.getCreationWizardQualifiedClassName()»();
+			wizard.init(getWindow().getWorkbench(), org.eclipse.jface.viewers.StructuredSelection.EMPTY);
+			org.eclipse.jface.wizard.WizardDialog wizardDialog =
+				new org.eclipse.jface.wizard.WizardDialog(getWindow().getShell(), wizard);
+			wizardDialog.open();
+		}
+	}
+
+«ENDDEFINE»
+
+«DEFINE OpenUriAction FOR gmfgen::GenApplication-»
+	«EXPAND xpt::Common::generatedClassComment»
+	public static class OpenURIAction extends org.eclipse.emf.common.ui.action.WorkbenchWindowActionDelegate {
+
+		«EXPAND xpt::Common::generatedMemberComment»
+		public void run(org.eclipse.jface.action.IAction action) {
+			org.eclipse.emf.edit.ui.action.LoadResourceAction.LoadResourceDialog loadResourceDialog =
+				new org.eclipse.emf.edit.ui.action.LoadResourceAction.LoadResourceDialog(getWindow().getShell());
+			if (org.eclipse.jface.dialogs.Dialog.OK == loadResourceDialog.open()) {
+				for (java.util.Iterator i = loadResourceDialog.getURIs().iterator(); i.hasNext();) {
+					openEditor(getWindow().getWorkbench(), (org.eclipse.emf.common.util.URI) i.next());
+				}
+			}
+		}
+	}
+
+«ENDDEFINE»
+
+«DEFINE OpenAction FOR gmfgen::GenApplication-»
+	«EXPAND xpt::Common::generatedClassComment»
+	public static class OpenAction extends org.eclipse.emf.common.ui.action.WorkbenchWindowActionDelegate {
+
+		«EXPAND xpt::Common::generatedMemberComment»
+		public void run(org.eclipse.jface.action.IAction action) {
+			org.eclipse.swt.widgets.FileDialog fileDialog =
+				new org.eclipse.swt.widgets.FileDialog(getWindow().getShell(), org.eclipse.swt.SWT.OPEN);
+			fileDialog.open();
+			if (fileDialog.getFileName() != null && fileDialog.getFileName().length() > 0) {
+				openEditor(getWindow().getWorkbench(), org.eclipse.emf.common.util.URI.createFileURI(
+					fileDialog.getFilterPath() + java.io.File.separator + fileDialog.getFileName()));
+			}
+		}
+	}
+«ENDDEFINE»
+
+«DEFINE AboutAction FOR gmfgen::GenApplication-»
+	«EXPAND xpt::Common::generatedClassComment»
+	public static class AboutAction extends org.eclipse.emf.common.ui.action.WorkbenchWindowActionDelegate {
+
+		«EXPAND xpt::Common::generatedMemberComment»
+		public void run(org.eclipse.jface.action.IAction action) {
+			org.eclipse.jface.dialogs.MessageDialog.openInformation(getWindow().getShell(), 
+                «EXPAND xpt::Externalizer::accessorCall(titleKey(i18nKeyForAboutDialog(self))) FOR editorGen»,
+                «EXPAND xpt::Externalizer::accessorCall(messageKey(i18nKeyForAboutDialog(self))) FOR editorGen»
+				);
+		}
+	}
+«ENDDEFINE»
+
+«DEFINE additions FOR gmfgen::GenApplication-»
+«ENDDEFINE»
+
+«DEFINE i18nAccessors FOR gmfgen::GenApplication-»
+«EXPAND xpt::Externalizer::accessorField(titleKey(i18nKeyForDefaultFileEditorErrorDialog(self)))-»
+«EXPAND xpt::Externalizer::accessorField(messageKey(i18nKeyForDefaultFileEditorErrorDialog(self)))-»
+«EXPAND xpt::Externalizer::accessorField(titleKey(i18nKeyForDefaultEditorOpenErrorDialog(self)))-»
+«EXPAND xpt::Externalizer::accessorField(titleKey(i18nKeyForAboutDialog(self)))-»
+«EXPAND xpt::Externalizer::accessorField(messageKey(i18nKeyForAboutDialog(self)))-»
+«IF null <> mainMenu-»
+«EXPAND internal_i18nAccessors FOR mainMenu-»
+«EXPAND internal_i18nAccessors FOREACH collectGenMenuManagers(mainMenu.items)-»
+«ENDIF»
+«EXPAND internal_i18nAccessors FOREACH collectGenMenuManagers(sharedContributionItems)-»
+«ENDDEFINE»
+
+«DEFINE internal_i18nAccessors FOR gmfgen::GenMenuManager-»
+«IF null <> name»«EXPAND xpt::Externalizer::accessorField(i18nKeyForMenu(self))»«ENDIF-»
+«ENDDEFINE»
+
+«DEFINE i18nValues FOR gmfgen::GenApplication-»
+«EXPAND xpt::Externalizer::messageEntry(titleKey(i18nKeyForDefaultFileEditorErrorDialog(self)), 'Error')-»
+«EXPAND xpt::Externalizer::messageEntry(messageKey(i18nKeyForDefaultFileEditorErrorDialog(self)), 'There is no editor registered for the file \"{0}\"')-»
+«EXPAND xpt::Externalizer::messageEntry(titleKey(i18nKeyForDefaultEditorOpenErrorDialog(self)), 'Open Editor')-»
+«EXPAND xpt::Externalizer::messageEntry(titleKey(i18nKeyForAboutDialog(self)), 'About')-»
+«EXPAND xpt::Externalizer::messageEntry(messageKey(i18nKeyForAboutDialog(self)), editorGen.modelID + ' Diagram Editor')-»
+«IF null <> mainMenu-»
+«EXPAND internal_i18nValues FOR mainMenu-»
+«EXPAND internal_i18nValues FOREACH collectGenMenuManagers(mainMenu.items)-»
+«ENDIF»
+«EXPAND internal_i18nValues FOREACH collectGenMenuManagers(sharedContributionItems)-»
+«ENDDEFINE»
+
+«DEFINE internal_i18nValues FOR gmfgen::GenMenuManager-»
+«IF null <> name»«EXPAND xpt::Externalizer::messageEntry(i18nKeyForMenu(self), name)»«ENDIF-»
+«ENDDEFINE»

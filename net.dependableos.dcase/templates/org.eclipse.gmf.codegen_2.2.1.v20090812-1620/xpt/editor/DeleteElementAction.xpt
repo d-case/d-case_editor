@@ -1,0 +1,79 @@
+﻿/*
+ * Copyright (c) 2008, 2009 Borland Software Corporation
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Dmitry Stadnik (Borland) - initial API and implementation
+ */
+
+«IMPORT 'http://www.eclipse.org/gmf/2009/GenModel'»
+
+«DEFINE className FOR gmfgen::GenDiagram»DeleteElementAction«ENDDEFINE»
+
+«DEFINE qualifiedClassName FOR gmfgen::GenDiagram»«editorGen.editor.packageName».«EXPAND className»«ENDDEFINE»
+
+«DEFINE DeleteElementAction FOR gmfgen::GenDiagram-»
+«EXPAND xpt::Common::copyright FOR editorGen-»
+package «editorGen.editor.packageName»;
+
+«EXPAND xpt::Common::generatedClassComment»
+public class «EXPAND className» extends org.eclipse.gmf.runtime.diagram.ui.actions.AbstractDeleteFromAction {
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	public «EXPAND className»(org.eclipse.ui.IWorkbenchPart part) {
+		super(part);
+	}
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	public «EXPAND className»(org.eclipse.ui.IWorkbenchPage workbenchPage) {
+		super(workbenchPage);
+	}
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	public void init() {
+		super.init();
+		setId(org.eclipse.gmf.runtime.diagram.ui.actions.ActionIds.ACTION_DELETE_FROM_MODEL);
+		setText(org.eclipse.gmf.runtime.diagram.ui.l10n.DiagramUIMessages.DiagramEditor_Delete_from_Model);
+		setToolTipText(org.eclipse.gmf.runtime.diagram.ui.l10n.DiagramUIMessages.DiagramEditor_Delete_from_ModelToolTip);
+		org.eclipse.ui.ISharedImages workbenchImages = org.eclipse.ui.PlatformUI.getWorkbench().getSharedImages();
+		setHoverImageDescriptor(workbenchImages.getImageDescriptor(org.eclipse.ui.ISharedImages.IMG_TOOL_DELETE));
+		setImageDescriptor(workbenchImages.getImageDescriptor(org.eclipse.ui.ISharedImages.IMG_TOOL_DELETE));
+		setDisabledImageDescriptor(workbenchImages.getImageDescriptor(org.eclipse.ui.ISharedImages.IMG_TOOL_DELETE_DISABLED));
+	}
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	protected String getCommandLabel() {
+		return org.eclipse.gmf.runtime.diagram.ui.l10n.DiagramUIMessages.DiagramEditor_Delete_from_Model;
+	}
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	protected org.eclipse.gef.commands.Command getCommand(org.eclipse.gef.Request request) {
+		java.util.List operationSet = getOperationSet();
+		if (operationSet.isEmpty()) {
+			return org.eclipse.gef.commands.UnexecutableCommand.INSTANCE;
+		}
+		java.util.Iterator editParts = operationSet.iterator();
+		org.eclipse.gmf.runtime.emf.commands.core.command.CompositeTransactionalCommand command =
+				new org.eclipse.gmf.runtime.emf.commands.core.command.CompositeTransactionalCommand(getEditingDomain(), getCommandLabel());
+		while (editParts.hasNext()) {
+			org.eclipse.gef.EditPart editPart = (org.eclipse.gef.EditPart) editParts.next();
+			org.eclipse.gef.commands.Command curCommand = editPart.getCommand(request);
+			if (curCommand != null) {
+				command.compose(new org.eclipse.gmf.runtime.diagram.ui.commands.CommandProxy(curCommand));
+			}
+		}
+		if (command.isEmpty() || command.size() != operationSet.size()) {
+			return org.eclipse.gef.commands.UnexecutableCommand.INSTANCE;
+		}
+		return new org.eclipse.gmf.runtime.diagram.ui.commands.ICommandProxy(command);
+	}
+	«EXPAND additions-»
+}
+«ENDDEFINE»
+
+«DEFINE additions FOR gmfgen::GenDiagram-»
+«ENDDEFINE»

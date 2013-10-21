@@ -1,0 +1,48 @@
+/*
+ * Copyright (c) 2007, 2009 Borland Software Corporation
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Artem Tikhomirov (Borland) - initial API and implementation
+ */
+
+import xpt.GenEditorGenerator;
+
+modeltype gmfgen uses "http://www.eclipse.org/gmf/2009/GenModel";
+modeltype genmodel uses "http://www.eclipse.org/emf/2002/GenModel";
+
+library GenAuditRoot;
+
+helper getAllTargetedModelPackages(root : gmfgen::GenAuditRoot) : Sequence(genmodel::GenPackage) {
+	return root.rules->select(r | r.target <> null and r.target.getTargetClass() <> null)->collect(r | r.target.getTargetClass().genPackage)->asOrderedSet()->asSequence()
+}
+
+helper getQualifiedIdentity(ctx : gmfgen::GenAuditContext) : String {
+	return ctx.root.editorGen.plugin.iD + ctx.id
+}
+
+helper hasDiagramElementTargetRule(audits : gmfgen::GenAuditRoot) : Boolean {
+	return audits <> null and (audits.rules.target)[gmfgen::GenDiagramElementTarget]->size() > 0
+}
+
+-- MODIFIERS: private
+helper hasAnyNotationElementTargetRule(audits : gmfgen::GenAuditRoot) : Boolean {
+	return audits <> null and (audits.rules.target)[gmfgen::GenNotationElementTarget]->size() > 0
+}
+
+helper shouldRunValidateOnDiagram(audits : gmfgen::GenAuditRoot) : Boolean {
+	return hasDiagramElementTargetRule(audits) or hasAnyNotationElementTargetRule(audits)
+}
+
+helper getTargetDiagramElements(ctx : gmfgen::GenAuditContext) : Sequence(gmfgen::GenCommonBase) {
+	return (ctx.ruleTargets)[gmfgen::GenDiagramElementTarget].element->asOrderedSet()->asSequence()
+}
+
+helper getAllTargetDiagramElements(root : gmfgen::GenAuditRoot) : Sequence(gmfgen::GenCommonBase) {
+	return root.clientContexts->collect(it | getTargetDiagramElements(it))->asOrderedSet()->asSequence()
+}
+

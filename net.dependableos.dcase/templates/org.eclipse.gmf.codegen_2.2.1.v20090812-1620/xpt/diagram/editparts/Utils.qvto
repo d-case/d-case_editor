@@ -1,0 +1,79 @@
+/*
+ * Copyright (c) 2006, 2009 Borland Software Corporation
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Dmitry Stadnik (Borland) - initial API and implementation
+ */
+
+modeltype genModel uses "http://www.eclipse.org/gmf/2009/GenModel";
+
+library Utils;
+
+helper isStoringChildPositions(node : genModel::GenNode) : Boolean {
+	return node.getLayoutType() = genModel::ViewmapLayoutType::XY_LAYOUT
+}
+
+helper getExternalLabels(node : genModel::GenNode) : Sequence(genModel::GenExternalNodeLabel) {
+	return (node.labels)[genModel::GenExternalNodeLabel]->asSequence()
+}
+
+helper getSideAffixedChildren(node : genModel::GenNode) : Sequence(genModel::GenChildSideAffixedNode) {
+	return (node.childNodes)[genModel::GenChildSideAffixedNode]->asSequence()
+}
+
+helper getInnerFixedLabels(node : genModel::GenNode) : Sequence(genModel::GenLabel) {
+	return node.labels->-((node.labels)[genModel::GenExternalNodeLabel])->select(e | (Sequence { e.oclAsType(genModel::GenLabel).viewmap })[genModel::ParentAssignedViewmap]->size() > 0)->asSequence()
+}
+
+helper getPinnedCompartments(node : genModel::GenNode) : Sequence(genModel::GenCompartment) {
+	return node.compartments->select(e | (Sequence { e.viewmap })[genModel::ParentAssignedViewmap]->size() > 0)->asSequence()
+}
+
+helper hasFixedChildren(node : genModel::GenNode) : Boolean {
+	return getInnerFixedLabels(node)->size() > 0 or getPinnedCompartments(node)->size() > 0
+}
+
+helper hasChildren(node : genModel::GenNode) : Boolean {
+	return not node.childNodes->isEmpty()
+}
+
+helper listCompartmentHasChildren(compartment : genModel::GenCompartment) : Boolean {
+	return compartment.listLayout and compartment.childNodes->size() > 0
+}
+
+helper hasChildrenInListCompartments(node : genModel::GenNode) : Boolean {
+	return node.compartments->exists(e | listCompartmentHasChildren(e))
+}
+
+helper hasBorderItems(node : genModel::GenNode) : Boolean {
+	return getSideAffixedChildren(node)->size() > 0 or getExternalLabels(node)->size() > 0
+}
+
+helper needsGraphicalNodeEditPolicy(node : genModel::GenNode) : Boolean {
+	return null <> node.modelFacet and node.reorientedIncomingLinks->size() > 0
+}
+
+helper i18nKeyForCompartmentTitle(compartment : genModel::GenCompartment) : String {
+	return compartment.editPartClassName + '.title'
+}
+
+helper shouldGenerateDiagramViewmap(genDiagram : genModel::GenDiagram) : Boolean {
+	return not Sequence { genModel::ViewmapLayoutType::UNKNOWN, genModel::ViewmapLayoutType::XY_LAYOUT }->includes(genDiagram.viewmap.layoutType)
+}
+
+helper getAssistantOutgoingLinks(node : genModel::GenNode) : Sequence(genModel::GenLink) {
+	return node.genOutgoingLinks->select(link | not selectGenNodes(link.targets->asSequence())->isEmpty())->asSequence()
+}
+
+helper getAssistantIncomingLinks(node : genModel::GenNode) : Sequence(genModel::GenLink) {
+	return node.genIncomingLinks->select(link | not selectGenNodes(link.sources->asSequence())->isEmpty())->asSequence()
+}
+
+helper selectGenNodes(ends : Sequence(genModel::GenLinkEnd)) : Sequence(genModel::GenLinkEnd) {
+	return (ends)[genModel::GenNode]
+}

@@ -1,0 +1,115 @@
+/*
+ * Copyright (c) 2007, 2009 Borland Software Corporation
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Alexander Shatalin (Borland) - initial API and implementation
+ *    Michael Golubev (Borland) - [243151] explicit source/target for links
+ */
+import xpt.diagram.editpolicies.LinkUtils;
+import xpt.GenModelUtils;
+
+modeltype genModel uses "http://www.eclipse.org/gmf/2009/GenModel";
+
+library Utils;
+
+helper hasChildrenOrCompartments(node : genModel::GenNode) : Boolean {
+	return not node.childNodes->isEmpty() or not node.compartments->isEmpty()
+}
+
+helper getContainerVariable(modelFacet : genModel::TypeLinkModelFacet) : String {
+	return (if null <> modelFacet.sourceMetaFeature then 'container' else 'source' endif)
+}
+
+helper getValidLinkConstraints(diagram : genModel::GenDiagram) : Sequence(genModel::GenLinkConstraints) {
+	return diagram.links->select(l | null <> l.creationConstraints and l.creationConstraints.isValid())->collect(l | l.creationConstraints)
+}
+
+helper getAllPotentialLinks(linkEnd : genModel::GenLinkEnd) : Sequence(genModel::GenLink) {
+	return getAllRelatedLinks(linkEnd)->select(link | isCreationAllowed(link))
+}
+
+helper getReroutableTypeLinks(linkEnd : genModel::GenLinkEnd) : Sequence(genModel::GenLink) {
+	return getAllRelatedReroutableLinks(linkEnd)->select(isTypeLink())
+}
+
+helper getReroutableRefLinks(linkEnd : genModel::GenLinkEnd) : Sequence(genModel::GenLink) {
+	return getAllRelatedReroutableLinks(linkEnd)->select(isRefLink())
+}
+
+--XXX[MG]: again, it would be better to use linkEnd.incomingLinks.union(linkEnd.outgoingLinks).toList() 
+--but it will change the ordering and produce meaningless diff in the generated code
+-- MODIFIERS: private cached 
+helper getAllRelatedLinks(linkEnd : genModel::GenLinkEnd) : Sequence(genModel::GenLink) {
+	return linkEnd.getDiagram().links->select(link | canBeSource(link, linkEnd) or canBeTarget(link, linkEnd))->asSequence()
+}
+
+-- MODIFIERS: private cached 
+helper getAllRelatedReroutableLinks(linkEnd : genModel::GenLinkEnd) : Sequence(genModel::GenLink) {
+	return linkEnd.getDiagram().links->select(link | canBeSource(link, linkEnd) and link.sourceReorientingAllowed or (canBeTarget(link, linkEnd) and link.targetReorientingAllowed))->asSequence()
+}
+
+-- MODIFIERS: private
+helper isCreationAllowed(link : genModel::GenLink) : Boolean {
+	return null <> link.modelFacet and (link.outgoingCreationAllowed or link.incomingCreationAllowed)
+}
+
+helper createStartLinkCommand(link : genModel::GenLink, linkEnd : genModel::GenLinkEnd) : Boolean {
+	return createStartOutgoingLinkCommand(link, linkEnd) or createStartIncomingLinkCommand(link, linkEnd)
+}
+
+helper createStartOutgoingLinkCommand(link : genModel::GenLink, linkEnd : genModel::GenLinkEnd) : Boolean {
+	return isSelf(link, linkEnd) or (isOutgoing(link, linkEnd) and link.outgoingCreationAllowed)
+}
+
+helper createStartIncomingLinkCommand(link : genModel::GenLink, linkEnd : genModel::GenLinkEnd) : Boolean {
+	return isIncoming(link, linkEnd) and link.incomingCreationAllowed
+}
+
+helper createCompleteLinkCommand(link : genModel::GenLink, linkEnd : genModel::GenLinkEnd) : Boolean {
+	return createCompleteIncomingLinkCommand(link, linkEnd) or createCompleteOutgoingLinkCommand(link, linkEnd)
+}
+
+helper createCompleteIncomingLinkCommand(link : genModel::GenLink, linkEnd : genModel::GenLinkEnd) : Boolean {
+	return isSelf(link, linkEnd) or (isIncoming(link, linkEnd) and link.outgoingCreationAllowed)
+}
+
+helper createCompleteOutgoingLinkCommand(link : genModel::GenLink, linkEnd : genModel::GenLinkEnd) : Boolean {
+	return isOutgoing(link, linkEnd) and link.incomingCreationAllowed
+}
+
+helper checkSource(reversedRequest : Boolean, isCompleteCommand : Boolean) : Boolean {
+	return not reversedRequest or isCompleteCommand
+}
+
+helper checkTarget(reversedRequest : Boolean, isCompleteCommand : Boolean) : Boolean {
+	return reversedRequest or isCompleteCommand
+}
+
+-- MODIFIERS: private
+helper isSelf(link : genModel::GenLink, linkEnd : genModel::GenLinkEnd) : Boolean {
+	return canBeSource(link, linkEnd) and canBeTarget(link, linkEnd)
+}
+
+-- MODIFIERS: private
+helper isOutgoing(link : genModel::GenLink, linkEnd : genModel::GenLinkEnd) : Boolean {
+	return canBeSource(link, linkEnd) and not canBeTarget(link, linkEnd)
+}
+
+-- MODIFIERS: private
+helper isIncoming(link : genModel::GenLink, linkEnd : genModel::GenLinkEnd) : Boolean {
+	return canBeTarget(link, linkEnd) and not canBeSource(link, linkEnd)
+}
+
+helper i18nKeyForOpenCommandName() : String {
+	return 'CommandName.OpenDiagram'
+}
+-- if child's containment feature comes from the node, assume deletion of the parent would delete the child.
+helper GenChildNode::isDirectlyOwned(genNode : GenNode) : Boolean {
+	if self.modelFacet.oclIsUndefined() or genNode.modelFacet.oclIsUndefined() then return false endif; -- can't assume anything
+	return self.modelFacet.containmentMetaFeature.ecoreFeature.eContainingClass.isSuperTypeOf(genNode.modelFacet.metaClass.ecoreClass)
+}

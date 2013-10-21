@@ -1,0 +1,60 @@
+﻿/*
+ * Copyright (c) 2007, 2009 Borland Software Corporation
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Dmitry Stadnik (Borland) - initial API and implementation
+ */
+
+«IMPORT 'http://www.eclipse.org/gmf/2009/GenModel'»
+
+«DEFINE CreateShortcutDecorationsCommand FOR gmfgen::GenDiagram-»
+«EXPAND xpt::Common::copyright FOR editorGen-»
+package «editCommandsPackageName»;
+
+«EXPAND xpt::Common::generatedClassComment»
+public class «createShortcutDecorationsCommandClassName»
+		extends org.eclipse.gmf.runtime.emf.commands.core.command.AbstractTransactionalCommand {
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	private java.util.List myDescriptors;
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	public «createShortcutDecorationsCommandClassName»(
+			org.eclipse.emf.transaction.TransactionalEditingDomain editingDomain,
+			org.eclipse.gmf.runtime.notation.View parentView,
+			java.util.List viewDescriptors) {
+		super(editingDomain, "Create Shortcuts", getWorkspaceFiles(parentView)); //$NON-NLS-1$
+		myDescriptors = viewDescriptors;
+	}
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	public «createShortcutDecorationsCommandClassName»(
+			org.eclipse.emf.transaction.TransactionalEditingDomain editingDomain,
+			org.eclipse.gmf.runtime.notation.View parentView,
+			org.eclipse.gmf.runtime.diagram.ui.requests.CreateViewRequest.ViewDescriptor viewDescriptor) {
+		this(editingDomain, parentView, java.util.Collections.singletonList(viewDescriptor));
+	}
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	protected org.eclipse.gmf.runtime.common.core.command.CommandResult doExecuteWithResult(
+			org.eclipse.core.runtime.IProgressMonitor monitor, org.eclipse.core.runtime.IAdaptable info)
+			throws org.eclipse.core.commands.ExecutionException {
+		for (java.util.Iterator it = myDescriptors.iterator(); it.hasNext();) {
+			org.eclipse.gmf.runtime.diagram.ui.requests.CreateViewRequest.ViewDescriptor nextDescriptor =
+					(org.eclipse.gmf.runtime.diagram.ui.requests.CreateViewRequest.ViewDescriptor) it.next();
+			org.eclipse.gmf.runtime.notation.View view =
+					(org.eclipse.gmf.runtime.notation.View) nextDescriptor.getAdapter(
+							org.eclipse.gmf.runtime.notation.View.class);
+			if (view != null && view.getEAnnotation("Shortcut") == null) { //$NON-NLS-1$
+				«EXPAND xpt::Common::addShortcutAnnotation('view')-»
+			}
+		}
+		return org.eclipse.gmf.runtime.common.core.command.CommandResult.newOKCommandResult();
+	}
+}
+«ENDDEFINE»

@@ -1,0 +1,32 @@
+/*
+ * Copyright (c) 2009 Borland Software Corporation
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Alexander Shatalin (Borland) - initial API and implementation
+ */
+library NonNLSUtils;
+
+property counter : Sequence(Integer) = Sequence{};
+
+helper incrementNonNLSCounter() : OclVoid {
+	counter := counter->including(counter->size() + 1);
+	return null
+}
+
+helper resetNonNLSCounter() : OclVoid {
+	counter := Sequence {  };
+	return null
+}
+
+helper getNonNLSCounter() : Sequence(Integer) {
+	return counter;
+}
+
+helper getNonNLSCounter(collection : Collection(OclAny)) : Sequence(Integer) {
+	return collection->iterate(element : OclAny; acc : Sequence(Integer) = Sequence{} | acc->including(acc->size() + 1))
+}

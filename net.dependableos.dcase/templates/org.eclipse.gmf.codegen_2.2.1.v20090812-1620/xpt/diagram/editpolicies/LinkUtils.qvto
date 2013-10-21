@@ -1,0 +1,54 @@
+/*
+ * Copyright (c) 2007, 2009 Borland Software Corporation
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Alexander Shatalin (Borland) - initial API and implementation
+ *    Michael Golubev (Borland) - [243151] explicit source/target for links
+ */
+
+modeltype gmfgen uses "http://www.eclipse.org/gmf/2009/GenModel";
+modeltype genmodel uses "http://www.eclipse.org/emf/2002/GenModel";
+
+library LinkUtils;
+
+helper gmfgen::GenLink::isTypeLink() : Boolean {
+	return not self.modelFacet.oclIsUndefined() and self.modelFacet.oclIsKindOf(gmfgen::TypeLinkModelFacet)
+}
+
+helper gmfgen::GenLink::isRefLink() : Boolean {
+	return not self.modelFacet.oclIsUndefined() and self.modelFacet.oclIsKindOf(gmfgen::FeatureLinkModelFacet)
+}
+
+helper canBeSource(link : gmfgen::GenLink, linkEnd : gmfgen::GenLinkEnd) : Boolean {
+	return link.sources->includes(linkEnd)
+}
+
+helper canBeTarget(link : gmfgen::GenLink, linkEnd : gmfgen::GenLinkEnd) : Boolean {
+	return link.targets->includes(linkEnd)
+}
+
+helper canBeContainer(link : gmfgen::GenLink, metaClass : genmodel::GenClass) : Boolean {
+	return null <> link.modelFacet and isCompatible(link.modelFacet.getContainerClass(), metaClass)
+}
+-- MODIFIERS: private
+helper gmfgen::LinkModelFacet::getContainerClass() : genmodel::GenClass {
+	return null
+}
+-- MODIFIERS: private
+helper gmfgen::TypeLinkModelFacet::getContainerClass() : genmodel::GenClass {
+	return self.childMetaFeature.genClass
+}
+-- MODIFIERS: private
+helper gmfgen::FeatureLinkModelFacet::getContainerClass() : genmodel::GenClass {
+	return self.getSourceType()
+}
+
+-- MODIFIERS: private
+helper isCompatible(desiredType : genmodel::GenClass, actualClass : genmodel::GenClass) : Boolean {
+	return null <> desiredType and desiredType.ecoreClass.isSuperTypeOf(actualClass.ecoreClass)
+}

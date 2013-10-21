@@ -1,0 +1,91 @@
+﻿/*
+ * Copyright (c) 2006, 2009 Borland Software Corporation
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Dmitry Stadnik (Borland) - initial API and implementation
+ */
+
+«IMPORT 'http://www.eclipse.org/gmf/2009/GenModel'»
+«EXTENSION xpt::NonNLSUtils»
+«EXTENSION xpt::StringOperations»
+
+«DEFINE copyright FOR gmfgen::GenEditorGenerator-»
+«IF copyrightText <> null-»
+/*
+ * «copyrightText.xpandReplaceAll('\n', '\n * ')»
+ */
+// AUTO_GENERATED:START
+«ENDIF-»
+«ENDDEFINE»
+
+«DEFINE xcopyright FOR gmfgen::GenEditorGenerator-»
+«IF copyrightText <> null-»
+<!--
+«copyrightText»
+-->
+«ENDIF-»
+«ENDDEFINE»
+
+«DEFINE generatedClassComment FOR OclAny»«EXPAND generatedClassComment('')»«ENDDEFINE»
+«DEFINE generatedClassComment(comment : String) FOR OclAny-»
+/**
+«IF comment.xpandLength() > 0-»
+ * «comment.xpandReplaceAll('\n', '\n * ')»
+«ENDIF-»
+ * @generated
+ */«ENDDEFINE»
+
+«DEFINE generatedMemberComment FOR Collection(OclAny)»«EXPAND generatedMemberComment('') FOR ''»«ENDDEFINE»
+«DEFINE generatedMemberComment FOR OclAny»«EXPAND generatedMemberComment('')»«ENDDEFINE»
+«DEFINE generatedMemberComment(comment : String) FOR OclAny-»
+/**
+«IF comment.xpandLength() > 0-»
+ * «comment.xpandReplaceAll('\n', '\n * ')»
+«ENDIF-»
+ * @generated
+ */«ENDDEFINE»
+
+«DEFINE xmlGeneratedTag FOR OclAny»<?gmfgen generated="true"?>«ENDDEFINE»
+
+«DEFINE getSaveOptions FOR gmfgen::GenDiagram»«getDiagramEditorUtilQualifiedClassName()».getSaveOptions()«ENDDEFINE»
+
+«DEFINE setCharset(varName : String) FOR gmfgen::GenDiagram-»
+«getDiagramEditorUtilQualifiedClassName()».setCharset(«varName»);
+«ENDDEFINE»
+
+«DEFINE nonNLS FOR OclAny»«EXPAND nonNLS(1)»«ENDDEFINE»
+
+«DEFINE nonNLS FOR Collection(OclAny)»«EXPAND nonNLS FOR getNonNLSCounter(self)»«ENDDEFINE»
+
+«DEFINE nonNLS FOR Collection(Integer)»«EXPAND nonNLS FOREACH self»«ENDDEFINE»
+
+«DEFINE nonNLS(i : Integer) FOR OclAny»«EXPAND nonNLS FOR i»«ENDDEFINE»
+
+«DEFINE nonNLS FOR Integer» //$NON-NLS-«self»$«ENDDEFINE»
+
+«DEFINE caseVisualID FOR gmfgen::GenCommonBase»case «EXPAND xpt::editor::VisualIDRegistry::visualID»:«ENDDEFINE»
+
+«DEFINE addShortcutAnnotation(viewVar : String) FOR gmfgen::GenDiagram-»
+	org.eclipse.emf.ecore.EAnnotation shortcutAnnotation = org.eclipse.emf.ecore.EcoreFactory.eINSTANCE.createEAnnotation();
+	shortcutAnnotation.setSource("Shortcut");«EXPAND xpt::Common::nonNLS»
+	shortcutAnnotation.getDetails().put("modelID", «EXPAND xpt::editor::VisualIDRegistry::modelID»);«EXPAND xpt::Common::nonNLS»
+	«viewVar».getEAnnotations().add(shortcutAnnotation);
+«ENDDEFINE»
+
+
+«DEFINE packageStatement FOR String-»
+«IF self.xpandSplit('\\.')->size() > 1-»
+package «FOREACH let tmpVar = self.xpandSplit('\\.') in if tmpVar->size() < 2 then Sequence{}[String] else tmpVar->subSequence(1, tmpVar->size() - 1) endif AS s SEPARATOR '.'»«s»«ENDFOREACH»;«ENDIF-»
+«ENDDEFINE»
+
+// Provides handy single point to override generation of assert statements
+// TODO refactor this Common.xpt into different flavours - like CommonCodeStyle (nls, assert), CommonSnippets(pkgStmt, setCharset, getSaveOptions) and so on
+// TODO condition.xpandToCharList()->count('"') / 2 gives better guess about number of nonNLS to generate 
+«DEFINE _assert(condition : String) FOR OclAny-»
+assert «condition»;«IF condition.indexOf('\"') > 0»«EXPAND nonNLS»«ENDIF»
+«ENDDEFINE»

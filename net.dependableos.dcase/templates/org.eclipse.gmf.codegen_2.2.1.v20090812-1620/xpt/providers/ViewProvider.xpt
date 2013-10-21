@@ -1,0 +1,438 @@
+﻿/*
+ * Copyright (c) 2007, 2009 Borland Software Corporation
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Alexander Shatalin (Borland) - initial API and implementation
+ *    Artem Tikhomirov (Borland) - [257119] Create views directly, not through ViewFactories
+ */
+
+«IMPORT 'http://www.eclipse.org/gmf/2009/GenModel'»
+
+«EXTENSION xpt::diagram::Utils»
+«EXTENSION xpt::diagram::ViewmapAttributesUtils»
+«EXTENSION xpt::diagram::editpolicies::LinkUtils»
+
+«DEFINE ViewProvider FOR gmfgen::GenDiagram-»
+«EXPAND xpt::Common::copyright FOR getDiagram().editorGen-»
+package «providersPackageName»;
+
+«EXPAND xpt::Common::generatedClassComment»
+public class «notationViewProviderClassName»«EXPAND extendsList»«EXPAND implementsList» {
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	public final boolean provides(org.eclipse.gmf.runtime.common.core.service.IOperation operation) {
+		if (operation instanceof org.eclipse.gmf.runtime.diagram.core.services.view.CreateViewForKindOperation) {
+			return provides((org.eclipse.gmf.runtime.diagram.core.services.view.CreateViewForKindOperation) operation);
+		}
+		«EXPAND xpt::Common::_assert('operation instanceof org.eclipse.gmf.runtime.diagram.core.services.view.CreateViewOperation')-»
+		if (operation instanceof org.eclipse.gmf.runtime.diagram.core.services.view.CreateDiagramViewOperation) {
+			return provides((org.eclipse.gmf.runtime.diagram.core.services.view.CreateDiagramViewOperation) operation);
+		} else if (operation instanceof org.eclipse.gmf.runtime.diagram.core.services.view.CreateEdgeViewOperation) {
+			return provides((org.eclipse.gmf.runtime.diagram.core.services.view.CreateEdgeViewOperation) operation);
+		} else if (operation instanceof org.eclipse.gmf.runtime.diagram.core.services.view.CreateNodeViewOperation) {
+			return provides((org.eclipse.gmf.runtime.diagram.core.services.view.CreateNodeViewOperation) operation);
+		}
+		return false;
+	}
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	protected boolean provides(org.eclipse.gmf.runtime.diagram.core.services.view.CreateViewForKindOperation op) {
+/*
+		if (op.getViewKind() == Node.class)
+			return getNodeViewClass(op.getSemanticAdapter(), op.getContainerView(), op.getSemanticHint()) != null;
+		if (op.getViewKind() == Edge.class)
+			return getEdgeViewClass(op.getSemanticAdapter(), op.getContainerView(), op.getSemanticHint()) != null;
+*/
+		return true;
+	}
+
+	«EXPAND xpt::Common::generatedMemberComment»«REM»When diagram domain element is null only diagram kind is checked«ENDREM»
+	protected boolean provides(org.eclipse.gmf.runtime.diagram.core.services.view.CreateDiagramViewOperation op) {
+		return «EXPAND xpt::editor::VisualIDRegistry::modelID».equals(op.getSemanticHint())«IF domainDiagramElement <> null» && «EXPAND xpt::editor::VisualIDRegistry::getDiagramVisualIDMethodCall»(getSemanticElement(op.getSemanticAdapter())) != -1«ENDIF»;
+	}
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	protected boolean provides(org.eclipse.gmf.runtime.diagram.core.services.view.CreateNodeViewOperation op) {
+		if (op.getContainerView() == null) {
+			return false;
+		}
+		org.eclipse.gmf.runtime.emf.type.core.IElementType elementType = getSemanticElementType(op.getSemanticAdapter());
+		org.eclipse.emf.ecore.EObject domainElement = getSemanticElement(op.getSemanticAdapter());
+		int visualID;
+		if (op.getSemanticHint() == null) {
+			// Semantic hint is not specified. Can be a result of call from CanonicalEditPolicy.
+			// In this situation there should be NO elementType, visualID will be determined
+			// by VisualIDRegistry.getNodeVisualID() for domainElement.
+			if (elementType != null || domainElement == null) {«REM»XXX Perhaps, better to fix CanonicalEP instead of this hack?«ENDREM»
+				return false;
+			}
+			visualID = «EXPAND xpt::editor::VisualIDRegistry::getNodeVisualIDMethodCall»(op.getContainerView(), domainElement);
+		} else {
+			visualID = «EXPAND xpt::editor::VisualIDRegistry::getVisualIDMethodCall»(op.getSemanticHint());
+			if (elementType != null) {«REM»
+				Semantic hint is specified together with element type.
+				Both parameters should describe exactly the same diagram element.
+				In addition we check that visualID returned by VisualIDRegistry.getNodeVisualID() for
+				domainElement (if specified) is the same as in element type.«ENDREM»
+				if (!«getElementTypesQualifiedClassName()».isKnownElementType(elementType) || (!(elementType instanceof org.eclipse.gmf.runtime.emf.type.core.IHintedType))) {
+					return false; // foreign element type
+				}
+				String elementTypeHint = ((org.eclipse.gmf.runtime.emf.type.core.IHintedType) elementType).getSemanticHint();
+				if (!op.getSemanticHint().equals(elementTypeHint)) {
+					return false; // if semantic hint is specified it should be the same as in element type
+				}
+				if (domainElement != null && visualID != «EXPAND xpt::editor::VisualIDRegistry::getNodeVisualIDMethodCall»(op.getContainerView(), domainElement)) {
+					return false; // visual id for node EClass should match visual id from element type
+				}
+			} else {«REM»
+				Element type is not specified. Domain element should be present (except pure design elements).
+				 This method is called with EObjectAdapter as parameter from:
+				   - ViewService.createNode(View container, EObject eObject, String type, PreferencesHint preferencesHint) 
+				   - generated ViewFactory.decorateView() for parent element«ENDREM»
+«IF getAllTypedElements()->select(e | e.elementType <> null)->size() > 0-»
+				if (!«EXPAND xpt::editor::VisualIDRegistry::modelID».equals(«EXPAND xpt::editor::VisualIDRegistry::getModelIDMethodCall»(op.getContainerView()))) {
+					return false; // foreign diagram
+				}
+				switch (visualID) {
+	«IF getAllNodes().elementType[gmfgen::NotationType]->size() > 0-»
+				«EXPAND caseVisualID FOREACH getAllNodes().elementType[gmfgen::NotationType]-»
+					break; // pure design element
+	«ENDIF-»
+	«IF getAllNodes().elementType[gmfgen::MetamodelType]->size() > 0 or getAllNodes().elementType[gmfgen::SpecializationType]->size() > 0-»
+				«EXPAND caseVisualID FOREACH getAllNodes().elementType[gmfgen::MetamodelType]-»
+				«EXPAND caseVisualID FOREACH getAllNodes().elementType[gmfgen::SpecializationType]-»
+					if (domainElement == null || visualID != «EXPAND xpt::editor::VisualIDRegistry::getNodeVisualIDMethodCall»(op.getContainerView(), domainElement)) {
+						return false; // visual id in semantic hint should match visual id for domain element
+					}
+					break;«REM»FIXME: Perhaps, can return true or false right away, without any further check?«ENDREM»
+	«ENDIF-»
+				default:
+					return false;
+				}
+«ELSE-»
+				return false;
+«ENDIF-»
+			}
+		}
+		return «FOREACH getAllNodes() AS n SEPARATOR '||'»«EXPAND xpt::editor::VisualIDRegistry::visualID FOR n» == visualID«ENDFOREACH»;
+	}
+
+	«EXPAND xpt::Common::generatedMemberComment»«REM»XXX: unlike createNode, we don't check op.containerView() for null here. On purpose?«ENDREM»
+	protected boolean provides(org.eclipse.gmf.runtime.diagram.core.services.view.CreateEdgeViewOperation op) {
+		org.eclipse.gmf.runtime.emf.type.core.IElementType elementType = getSemanticElementType(op.getSemanticAdapter());
+		if (!«getElementTypesQualifiedClassName()».isKnownElementType(elementType) || (!(elementType instanceof org.eclipse.gmf.runtime.emf.type.core.IHintedType))) {
+			return false; // foreign element type
+		}
+		String elementTypeHint = ((org.eclipse.gmf.runtime.emf.type.core.IHintedType) elementType).getSemanticHint();
+		if (elementTypeHint == null || (op.getSemanticHint() != null && !elementTypeHint.equals(op.getSemanticHint()))) {
+			return false; // our hint is visual id and must be specified, and it should be the same as in element type
+		}
+		int visualID = «EXPAND xpt::editor::VisualIDRegistry::getVisualIDMethodCall»(elementTypeHint);
+		org.eclipse.emf.ecore.EObject domainElement = getSemanticElement(op.getSemanticAdapter());
+		if (domainElement != null && visualID != «EXPAND xpt::editor::VisualIDRegistry::getLinkWithClassVisualIDMethodCall»(domainElement)) {
+			return false; // visual id for link EClass should match visual id from element type
+		}
+		return true; «REM»Does it make sense to check visualID here, like we did for nodes?«ENDREM»
+	}
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	public org.eclipse.gmf.runtime.notation.Diagram createDiagram(org.eclipse.core.runtime.IAdaptable semanticAdapter, String diagramKind, org.eclipse.gmf.runtime.diagram.core.preferences.PreferencesHint preferencesHint) {
+		org.eclipse.gmf.runtime.notation.Diagram diagram = org.eclipse.gmf.runtime.notation.NotationFactory.eINSTANCE.createDiagram();«REM»FIXME instantiate diagramRunTimeClass instead«ENDREM»
+		diagram.getStyles().add(org.eclipse.gmf.runtime.notation.NotationFactory.eINSTANCE.createDiagramStyle());
+		«EXPAND xpt::diagram::views::Utils::addCustomStyles('diagram.getStyles()')-»
+		diagram.setType(«EXPAND xpt::editor::VisualIDRegistry::modelID»);
+		diagram.setElement(«IF domainDiagramElement <> null»getSemanticElement(semanticAdapter)«ELSE»null«ENDIF»);
+«IF units <> null-»
+		diagram.setMeasurementUnit(org.eclipse.gmf.runtime.notation.MeasurementUnit.«units.toUpper()»_LITERAL);
+«ENDIF-»
+«IF styles->notEmpty()-»
+		// initializeFromPreferences
+		org.eclipse.jface.preferences.IPreferenceStore store = (org.eclipse.jface.preferences.IPreferenceStore) preferencesHint.getPreferenceStore();
+		«EXPAND initializeStyles('diagram', 'store', false, false, false)-»
+«ENDIF-»
+		return diagram;
+	}
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	public org.eclipse.gmf.runtime.notation.Node createNode(org.eclipse.core.runtime.IAdaptable semanticAdapter, org.eclipse.gmf.runtime.notation.View containerView, String semanticHint, int index, boolean persisted, org.eclipse.gmf.runtime.diagram.core.preferences.PreferencesHint preferencesHint) {
+		final org.eclipse.emf.ecore.EObject domainElement = getSemanticElement(semanticAdapter);
+		final int visualID;
+		if (semanticHint == null) {
+			visualID = «EXPAND xpt::editor::VisualIDRegistry::getNodeVisualIDMethodCall»(containerView, domainElement);
+		} else {
+			visualID = «EXPAND xpt::editor::VisualIDRegistry::getVisualIDMethodCall»(semanticHint);
+		}
+		switch(visualID) {
+		«FOREACH getAllNodes() AS n-»
+		«EXPAND xpt::Common::caseVisualID FOR n» return create«n.getUniqueIdentifier()»(domainElement, containerView, index, persisted, preferencesHint);
+		«ENDFOREACH-»
+		}
+		// can't happen, provided #provides(CreateNodeViewOperation) is correct
+		return null;
+	}
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	public org.eclipse.gmf.runtime.notation.Edge createEdge(org.eclipse.core.runtime.IAdaptable semanticAdapter, org.eclipse.gmf.runtime.notation.View containerView, String semanticHint, int index, boolean persisted, org.eclipse.gmf.runtime.diagram.core.preferences.PreferencesHint preferencesHint) {
+		org.eclipse.gmf.runtime.emf.type.core.IElementType elementType = getSemanticElementType(semanticAdapter);
+		String elementTypeHint = ((org.eclipse.gmf.runtime.emf.type.core.IHintedType) elementType).getSemanticHint();
+		switch («EXPAND xpt::editor::VisualIDRegistry::getVisualIDMethodCall»(elementTypeHint)) {
+		«FOREACH links AS link-»
+		«EXPAND xpt::Common::caseVisualID FOR link» return create«link.getUniqueIdentifier()»(«IF link.isTypeLink()» getSemanticElement(semanticAdapter), «ENDIF»containerView, index, persisted, preferencesHint);
+		«ENDFOREACH-»
+		}
+		// can never happen, provided #provides(CreateEdgeViewOperation) is correct
+		return null;
+	}
+
+«EXPAND createNodeMethod FOREACH getAllNodes()»
+«EXPAND createEdgeMethod FOREACH links»
+
+«IF topLevelNodes->notEmpty()»
+	«EXPAND xpt::Common::generatedMemberComment»
+	private void stampShortcut(org.eclipse.gmf.runtime.notation.View containerView, org.eclipse.gmf.runtime.notation.Node target) {
+		if (!«EXPAND xpt::editor::VisualIDRegistry::modelID».equals(«EXPAND xpt::editor::VisualIDRegistry::getModelIDMethodCall»(containerView))) {
+			«EXPAND xpt::Common::addShortcutAnnotation('target')-»
+		}
+	}
+«ENDIF-»
+
+«IF links.labels->notEmpty() or topLevelNodes.labels->notEmpty() or childNodes.labels->notEmpty()»
+	«EXPAND xpt::Common::generatedMemberComment»
+	private org.eclipse.gmf.runtime.notation.Node createLabel(org.eclipse.gmf.runtime.notation.View owner, String hint) {
+		org.eclipse.gmf.runtime.notation.DecorationNode rv = org.eclipse.gmf.runtime.notation.NotationFactory.eINSTANCE.createDecorationNode();
+		rv.setType(hint);
+		org.eclipse.gmf.runtime.diagram.core.util.ViewUtil.insertChildView(owner, rv, org.eclipse.gmf.runtime.diagram.core.util.ViewUtil.APPEND, true);
+		return rv;
+	}
+«ENDIF-»
+
+«IF getAllNodes().compartments->notEmpty()»
+	«EXPAND xpt::Common::generatedMemberComment»
+	private org.eclipse.gmf.runtime.notation.Node createCompartment(org.eclipse.gmf.runtime.notation.View owner, String hint, boolean canCollapse, boolean hasTitle, boolean canSort, boolean canFilter) {
+		//SemanticListCompartment rv = NotationFactory.eINSTANCE.createSemanticListCompartment();
+		//rv.setShowTitle(showTitle);
+		//rv.setCollapsed(isCollapsed);
+		org.eclipse.gmf.runtime.notation.Node rv;
+		if (canCollapse) {
+			rv = org.eclipse.gmf.runtime.notation.NotationFactory.eINSTANCE.createBasicCompartment();
+		} else {
+			rv = org.eclipse.gmf.runtime.notation.NotationFactory.eINSTANCE.createDecorationNode();
+		}
+		if (hasTitle) {
+			org.eclipse.gmf.runtime.notation.TitleStyle ts = org.eclipse.gmf.runtime.notation.NotationFactory.eINSTANCE.createTitleStyle();
+			ts.setShowTitle(true);
+			rv.getStyles().add(ts);
+		}
+		if (canSort) {
+			rv.getStyles().add(org.eclipse.gmf.runtime.notation.NotationFactory.eINSTANCE.createSortingStyle());
+		}
+		if (canFilter) {
+			rv.getStyles().add(org.eclipse.gmf.runtime.notation.NotationFactory.eINSTANCE.createFilteringStyle());
+		}
+		rv.setType(hint);
+		org.eclipse.gmf.runtime.diagram.core.util.ViewUtil.insertChildView(owner, rv, org.eclipse.gmf.runtime.diagram.core.util.ViewUtil.APPEND, true);
+		return rv;
+	}
+«ENDIF-»
+	«EXPAND getSemanticElementMethod»
+	«EXPAND getSemanticElementTypeMethod-»
+	«EXPAND additions-»
+}
+«ENDDEFINE»
+
+«DEFINE createNodeMethod FOR gmfgen::GenNode-»
+	«EXPAND xpt::Common::generatedMemberComment»
+	public org.eclipse.gmf.runtime.notation.Node create«getUniqueIdentifier()»(org.eclipse.emf.ecore.EObject domainElement, org.eclipse.gmf.runtime.notation.View containerView, int index, boolean persisted, org.eclipse.gmf.runtime.diagram.core.preferences.PreferencesHint preferencesHint) {
+«IF viewmap.canUseShapeStyle()-»
+		org.eclipse.gmf.runtime.notation.Shape node = org.eclipse.gmf.runtime.notation.NotationFactory.eINSTANCE.createShape();
+«ELSE-»
+		org.eclipse.gmf.runtime.notation.Node node = org.eclipse.gmf.runtime.notation.NotationFactory.eINSTANCE.createNode();
+		node.getStyles().add(org.eclipse.gmf.runtime.notation.NotationFactory.eINSTANCE.createDescriptionStyle());«REM»FIXME Contionally add this style, whether toolsmith needs Notes or not«ENDREM»
+		«EXPAND xpt::diagram::views::Utils::addFontLineFillStylesConditionally('node.getStyles()') FOR viewmap-»
+«ENDIF-»
+		«EXPAND xpt::diagram::views::Utils::addLinkedDiagramStyle('node.getStyles()')-»
+		«EXPAND xpt::diagram::views::Utils::addCustomStyles('node.getStyles()')-»
+		node.setLayoutConstraint(org.eclipse.gmf.runtime.notation.NotationFactory.eINSTANCE.createBounds());
+		node.setType(«EXPAND xpt::editor::VisualIDRegistry::typeMethodCall»);
+		org.eclipse.gmf.runtime.diagram.core.util.ViewUtil.insertChildView(containerView, node, index, persisted);
+		node.setElement(domainElement);
+«IF self.oclIsTypeOf(gmfgen::GenTopLevelNode)-»
+		stampShortcut(containerView, node);
+«ENDIF-»
+		// initializeFromPreferences «REM»XXX Perhaps, do init only once, for complete figure?«ENDREM»
+		final org.eclipse.jface.preference.IPreferenceStore prefStore = (org.eclipse.jface.preference.IPreferenceStore) preferencesHint.getPreferenceStore();
+		«EXPAND initializeStyles('node', 'prefStore', not viewmap.isFixedForeground(), not viewmap.isFixedBackground(), not viewmap.isFixedFont())-»
+		«EXPAND initLabel('node', 'prefStore') FOREACH labels-»
+		«EXPAND initCompartment('node', 'prefStore') FOREACH compartments-»
+		return node;
+	}
+«ENDDEFINE»
+
+// Location as layoutConstraint, no children
+«DEFINE createNodeMethod FOR gmfgen::GenChildLabelNode-»
+	«EXPAND xpt::Common::generatedMemberComment»
+	public org.eclipse.gmf.runtime.notation.Node create«getUniqueIdentifier()»(org.eclipse.emf.ecore.EObject domainElement, org.eclipse.gmf.runtime.notation.View containerView, int index, boolean persisted, org.eclipse.gmf.runtime.diagram.core.preferences.PreferencesHint preferencesHint) {
+		org.eclipse.gmf.runtime.notation.Node node = org.eclipse.gmf.runtime.notation.NotationFactory.eINSTANCE.createNode();
+		node.setLayoutConstraint(org.eclipse.gmf.runtime.notation.NotationFactory.eINSTANCE.createLocation());«REM»[artem] XXX not sure, why LabelNode needs location«ENDREM»
+		«EXPAND xpt::diagram::views::Utils::addLinkedDiagramStyle('node.getStyles()')-»
+		«EXPAND xpt::diagram::views::Utils::addCustomStyles('node.getStyles()')-»
+		node.setType(«EXPAND xpt::editor::VisualIDRegistry::typeMethodCall»);
+		org.eclipse.gmf.runtime.diagram.core.util.ViewUtil.insertChildView(containerView, node, index, persisted);
+		node.setElement(domainElement);
+«IF styles->notEmpty()-»
+		final org.eclipse.jface.preference.IPreferenceStore prefStore = (org.eclipse.jface.preference.IPreferenceStore) preferencesHint.getPreferenceStore();
+		«EXPAND initializeStyles('node', 'prefStore', false, false, false)-»
+«ENDIF-»
+		return node;
+	}
+«ENDDEFINE»
+
+// looks for Font/Line/Fill styles in customStyles and initializes, if any (may be forced with boolean params)
+// params has*Style are to force respective style initialization (when callee knows certain style was added)  
+«DEFINE initializeStyles(String viewVar, String prefStoreVar, Boolean hasLineStyle, Boolean hasFillStyle, Boolean hasFontStyle) FOR gmfgen::GenCommonBase-»
+«IF hasLineStyle or self.hasLineStyleInCustom()-»
+	«REM»FIXME ColorAttributes is deprecated, should remove and clean the second branch of the disjunction«ENDREM»
+	«IF viewmap.isFixedForeground() or viewmap.attributes[gmfgen::ColorAttributes]->notEmpty()-»
+		«EXPAND xpt::diagram::views::Utils::foregroundColour(viewVar) FOR viewmap-»
+	«ELSE-»
+		«EXPAND initForegroundFromPrefs(viewVar, prefStoreVar)-»
+	«ENDIF-»
+«ENDIF-»
+«IF (hasFontStyle or self.hasFontStyleInCustom()) and not viewmap.isFixedFont()-»
+		«EXPAND initFontFromPrefs(viewVar, prefStoreVar)-»
+«ENDIF-»
+«IF hasFillStyle or self.hasFillStyleInCustom()-»
+	«IF viewmap.isFixedBackground() or viewmap.attributes[gmfgen::ColorAttributes]->notEmpty()-»
+		«EXPAND xpt::diagram::views::Utils::backgroundColour(viewVar) FOR viewmap-»
+	«ELSE-»
+		«EXPAND initBackgroundFromPrefs(viewVar, prefStoreVar)-»
+	«ENDIF-»
+«ENDIF-»
+«ENDDEFINE»
+
+// FIXME check if there's need for a variable name, see initCompartment for a hint
+«DEFINE initLabel(String nodeVar, String prefStoreVar) FOR gmfgen::GenLabel-»
+«LET 'label' + self.visualID.repr() AS labelVar-»
+		org.eclipse.gmf.runtime.notation.Node «labelVar» = createLabel(«nodeVar», «EXPAND xpt::editor::VisualIDRegistry::typeMethodCall»);
+		«EXPAND xpt::diagram::views::Utils::addTextStyle(labelVar + '.getStyles()') FOR modelFacet-»
+		«EXPAND xpt::diagram::views::Utils::addCustomStyles(labelVar + '.getStyles()')-»
+«IF self.oclIsKindOf(gmfgen::GenExternalNodeLabel) or self.oclIsKindOf(gmfgen::GenLinkLabel)-»
+		«labelVar».setLayoutConstraint(org.eclipse.gmf.runtime.notation.NotationFactory.eINSTANCE.createLocation());
+		«EXPAND xpt::diagram::views::Utils::offset(labelVar)-»
+«ENDIF-»
+		«EXPAND initializeStyles(labelVar, prefStoreVar, false, false, false)-»
+«ENDLET-»
+«ENDDEFINE»
+
+«DEFINE initCompartment(String nodeVar, String prefStoreVar) FOR gmfgen::GenCompartment-»
+«LET 'compartment' + self.visualID.repr() AS compartmentVar-»
+		«IF styles->notEmpty() or isStoringChildPositions(getLayoutType())»org.eclipse.gmf.runtime.notation.Node «compartmentVar» = «ENDIF»createCompartment(«nodeVar», «EXPAND xpt::editor::VisualIDRegistry::typeMethodCall», «canCollapse», «needsTitle», «listLayout», «listLayout»);
+		«EXPAND xpt::diagram::views::Utils::addCustomStyles(compartmentVar + '.getStyles()')-»
+«IF isStoringChildPositions(getLayoutType())-»
+	«IF viewmap.canUseShapeStyle()-»
+		«compartmentVar».add(org.eclipse.gmf.runtime.notation.NotationFactory.eINSTANCE.createShapeStyle());
+	«ELSE-»
+«REM»Intentionally not adding Description style, as it deemed to be useless for compartments (can't avoid for ShapeStyle - benefits of a single style overwheight drawbacks of Description presence)«ENDREM»
+		«EXPAND xpt::diagram::views::Utils::addFontLineFillStylesConditionally(compartmentVar + '.getStyles()') FOR viewmap-»
+	«ENDIF-»
+		«compartmentVar».setLayoutConstraint(org.eclipse.gmf.runtime.notation.NotationFactory.eINSTANCE.createBounds());
+		«EXPAND initializeStyles(compartmentVar, prefStoreVar, not viewmap.isFixedForeground(), not viewmap.isFixedBackground(), not viewmap.isFixedFont())-»
+«ELSE-»
+		«EXPAND initializeStyles(compartmentVar, prefStoreVar, false, false, false)-»
+«ENDIF-»
+«ENDLET-»
+«ENDDEFINE»
+
+«DEFINE initForegroundFromPrefs(String viewVar, String prefStoreVar) FOR gmfgen::GenCommonBase-»
+	org.eclipse.swt.graphics.RGB lineRGB = org.eclipse.jface.preference.PreferenceConverter.getColor(«prefStoreVar», org.eclipse.gmf.runtime.diagram.ui.preferences.IPreferenceConstants.PREF_LINE_COLOR);
+	org.eclipse.gmf.runtime.diagram.core.util.ViewUtil.setStructuralFeatureValue(«viewVar», org.eclipse.gmf.runtime.notation.NotationPackage.eINSTANCE.getLineStyle_LineColor(), org.eclipse.gmf.runtime.draw2d.ui.figures.FigureUtilities.RGBToInteger(lineRGB));
+«ENDDEFINE»
+
+«DEFINE initBackgroundFromPrefs(String viewVar, String prefStoreVar) FOR gmfgen::GenCommonBase-»
+	org.eclipse.swt.graphics.RGB fillRGB = org.eclipse.jface.preference.PreferenceConverter.getColor(«prefStoreVar», org.eclipse.gmf.runtime.diagram.ui.preferences.IPreferenceConstants.PREF_FILL_COLOR);
+	org.eclipse.gmf.runtime.diagram.core.util.ViewUtil.setStructuralFeatureValue(«viewVar», org.eclipse.gmf.runtime.notation.NotationPackage.eINSTANCE.getFillStyle_FillColor(), org.eclipse.gmf.runtime.draw2d.ui.figures.FigureUtilities.RGBToInteger(fillRGB));
+«ENDDEFINE»
+
+«DEFINE initFontFromPrefs(String viewVar, String prefStoreVar) FOR gmfgen::GenCommonBase-»
+	org.eclipse.gmf.runtime.notation.FontStyle «viewVar»FontStyle = (org.eclipse.gmf.runtime.notation.FontStyle) «viewVar».getStyle(org.eclipse.gmf.runtime.notation.NotationPackage.Literals.FONT_STYLE);
+	if («viewVar»FontStyle != null) {«REM»Given this template is invoked only when FontStyle is present, no need to check fontStyle for null, but at least this gives a scope for fontData var«ENDREM»
+		org.eclipse.swt.graphics.FontData fontData = org.eclipse.jface.preference.PreferenceConverter.getFontData(«prefStoreVar», org.eclipse.gmf.runtime.diagram.ui.preferences.IPreferenceConstants.PREF_DEFAULT_FONT);
+		«viewVar»FontStyle.setFontName(fontData.getName());
+		«viewVar»FontStyle.setFontHeight(fontData.getHeight());
+		«viewVar»FontStyle.setBold((fontData.getStyle() & org.eclipse.swt.SWT.BOLD) != 0);
+		«viewVar»FontStyle.setItalic((fontData.getStyle() & org.eclipse.swt.SWT.ITALIC) != 0);
+		org.eclipse.swt.graphics.RGB fontRGB = org.eclipse.jface.preference.PreferenceConverter.getColor(«prefStoreVar», org.eclipse.gmf.runtime.diagram.ui.preferences.IPreferenceConstants.PREF_FONT_COLOR);
+		«viewVar»FontStyle.setFontColor(org.eclipse.gmf.runtime.draw2d.ui.figures.FigureUtilities.RGBToInteger(fontRGB).intValue());
+	}
+«ENDDEFINE»
+
+
+«DEFINE createEdgeMethod FOR gmfgen::GenLink-»
+	«EXPAND xpt::Common::generatedMemberComment»
+	public org.eclipse.gmf.runtime.notation.Edge create«getUniqueIdentifier()»(«IF isTypeLink()»org.eclipse.emf.ecore.EObject domainElement, «ENDIF»org.eclipse.gmf.runtime.notation.View containerView, int index, boolean persisted, org.eclipse.gmf.runtime.diagram.core.preferences.PreferencesHint preferencesHint) {
+	«IF viewmap.isFixedForeground()-»
+		org.eclipse.gmf.runtime.notation.Edge edge = org.eclipse.gmf.runtime.notation.NotationFactory.eINSTANCE.createEdge();
+		edge.getStyles().add(org.eclipse.gmf.runtime.notation.NotationFactory.eINSTANCE.createRoutingStyle());
+	«ELSE-»
+		org.eclipse.gmf.runtime.notation.Connector edge = org.eclipse.gmf.runtime.notation.NotationFactory.eINSTANCE.createConnector();
+	«ENDIF-»
+	«IF not viewmap.isFixedFont()-»
+		edge.getStyles().add(org.eclipse.gmf.runtime.notation.NotationFactory.eINSTANCE.createFontStyle());
+	«ENDIF-»
+		«EXPAND xpt::diagram::views::Utils::addCustomStyles('edge.getStyles()')-»
+		org.eclipse.gmf.runtime.notation.RelativeBendpoints bendpoints = org.eclipse.gmf.runtime.notation.NotationFactory.eINSTANCE.createRelativeBendpoints();
+		java.util.ArrayList points = new java.util.ArrayList(2);
+		points.add(new org.eclipse.gmf.runtime.notation.datatype.RelativeBendpoint());
+		points.add(new org.eclipse.gmf.runtime.notation.datatype.RelativeBendpoint());
+		bendpoints.setPoints(points);
+		edge.setBendpoints(bendpoints);
+		org.eclipse.gmf.runtime.diagram.core.util.ViewUtil.insertChildView(containerView, edge, index, persisted);
+		edge.setType(«EXPAND xpt::editor::VisualIDRegistry::typeMethodCall»);
+		edge.setElement(«IF isTypeLink()»domainElement«ELSE»null«ENDIF»);
+		// initializePreferences
+		final org.eclipse.jface.preference.IPreferenceStore prefStore = (org.eclipse.jface.preference.IPreferenceStore) preferencesHint.getPreferenceStore();
+		«EXPAND initializeStyles('edge', 'prefStore', not viewmap.isFixedForeground(), false, not viewmap.isFixedFont())-»
+		org.eclipse.gmf.runtime.notation.Routing routing = org.eclipse.gmf.runtime.notation.Routing.get(prefStore.getInt(org.eclipse.gmf.runtime.diagram.ui.preferences.IPreferenceConstants.PREF_LINE_STYLE));
+		if (routing != null) {
+			org.eclipse.gmf.runtime.diagram.core.util.ViewUtil.setStructuralFeatureValue(edge, org.eclipse.gmf.runtime.notation.NotationPackage.eINSTANCE.getRoutingStyle_Routing(), routing);
+		}
+«EXPAND initLabel('edge', 'prefStore') FOREACH labels-»
+		return edge;
+	}
+«ENDDEFINE»
+
+«DEFINE extendsList FOR gmfgen::GenDiagram» extends org.eclipse.gmf.runtime.common.core.service.AbstractProvider«ENDDEFINE»
+«DEFINE implementsList FOR gmfgen::GenDiagram» implements org.eclipse.gmf.runtime.diagram.core.providers.IViewProvider«ENDDEFINE»
+
+«DEFINE caseVisualID FOR gmfgen::ElementType»«EXPAND xpt::Common::caseVisualID FOR diagramElement»«ENDDEFINE»
+
+«DEFINE getSemanticElementMethod FOR gmfgen::GenDiagram»
+	«EXPAND xpt::Common::generatedMemberComment»
+	private org.eclipse.emf.ecore.EObject getSemanticElement(org.eclipse.core.runtime.IAdaptable semanticAdapter) {
+		if (semanticAdapter == null) {
+			return null;
+		}
+		org.eclipse.emf.ecore.EObject eObject = (org.eclipse.emf.ecore.EObject) semanticAdapter.getAdapter(org.eclipse.emf.ecore.EObject.class);
+		if (eObject != null) {
+			return org.eclipse.gmf.runtime.emf.core.util.EMFCoreUtil.resolve(org.eclipse.emf.transaction.util.TransactionUtil.getEditingDomain(eObject), eObject);
+		}
+		return null;
+	}
+«ENDDEFINE»
+
+«DEFINE getSemanticElementTypeMethod FOR gmfgen::GenDiagram»
+«EXPAND xpt::Common::generatedMemberComment»
+private org.eclipse.gmf.runtime.emf.type.core.IElementType getSemanticElementType(org.eclipse.core.runtime.IAdaptable semanticAdapter) {
+	if (semanticAdapter == null) {
+		return null;
+	}
+	return (org.eclipse.gmf.runtime.emf.type.core.IElementType) semanticAdapter.getAdapter(org.eclipse.gmf.runtime.emf.type.core.IElementType.class);
+}
+«ENDDEFINE»
+
+«DEFINE additions FOR gmfgen::GenDiagram»«ENDDEFINE»

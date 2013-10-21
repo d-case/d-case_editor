@@ -1,0 +1,76 @@
+/*
+ * Copyright (c) 2007, 2009 Borland Software Corporation
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Anna Karjakina (Borland) - initial API and implementation
+ */
+modeltype gmfgen uses "http://www.eclipse.org/gmf/2009/GenModel";
+
+library i18n;
+
+helper i18nKeyForDefaultFileEditorErrorDialog(app : gmfgen::GenApplication) : String {
+	return app.actionBarAdvisorClassName + '.DefaultFileEditor'
+}
+
+helper i18nKeyForDefaultEditorOpenErrorDialog(app : gmfgen::GenApplication) : String {
+	return app.actionBarAdvisorClassName + '.DefaultEditorOpenError'
+}
+
+helper i18nKeyForWindowTitle(app : gmfgen::GenApplication) : String {
+	return app.workbenchWindowAdvisorClassName + '.Title'
+}
+
+helper i18nKeyForAboutDialog(app : gmfgen::GenApplication) : String {
+	return app.actionBarAdvisorClassName + '.AboutDialog'
+}
+
+helper titleKey(dialogKey : String) : String {
+	return dialogKey + 'Title'
+}
+
+helper messageKey(dialogKey : String) : String {
+	return dialogKey + 'Message'
+}
+
+helper i18nKeyForMenu(menuManager : gmfgen::GenMenuManager) : String {
+	return 'ApplicationMenuName.' + menuManager.name
+}
+
+-- FIXME move out from i18n, has nothing to do with l10n
+helper collectGenMenuManagers(allItems : OrderedSet(gmfgen::GenContributionItem)) : Sequence(gmfgen::GenMenuManager) {
+	return collectAllContributionItems(allItems->asSequence())[gmfgen::GenMenuManager]
+}
+
+helper collectAllContributionItems(allItems : Sequence(gmfgen::GenContributionItem)) : Sequence(gmfgen::GenContributionManager) {
+	-- FIXME simplify the expression
+	return let managers = allItems[gmfgen::GenContributionManager] in managers->union(managers->collect(item | collectAllContributionItems(item.items->asSequence())))
+}
+
+helper i18nKeyForNewFileWizardFileLabel(app : gmfgen::GenApplication) : String {
+	return wizardNewFileCreationPageClassName(app) + '.FileLabel'
+}
+
+helper i18nKeyForNewFileWizardBrowseButton(app : gmfgen::GenApplication) : String {
+	return wizardNewFileCreationPageClassName(app) + '.BrowseButton'
+}
+
+helper i18nKeyForNewFileWizardSelectDialog(app : gmfgen::GenApplication) : String {
+	return wizardNewFileCreationPageClassName(app) + '.SelectNewFileDialog'
+}
+
+helper i18nKeyForNewFileWizardEmpty(app : gmfgen::GenApplication) : String {
+	return wizardNewFileCreationPageClassName(app) + '.EmptyFileNameError'
+}
+
+helper i18nKeyForNewFileWizardInvalid(app : gmfgen::GenApplication) : String {
+	return wizardNewFileCreationPageClassName(app) + '.InvalidFileNameError'
+}
+
+helper wizardNewFileCreationPageClassName(app : gmfgen::GenApplication) : String {
+	return 'WizardNewFileCreationPage'
+}

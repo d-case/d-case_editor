@@ -1,0 +1,123 @@
+﻿/*
+ * Copyright (c) 2007, 2009 Borland Software Corporation
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Alexander Shatalin (Borland) - initial API and implementation
+ */
+ 
+«IMPORT 'http://www.eclipse.org/gmf/2009/GenModel'»
+
+«DEFINE DomainNavigatorLabelProvider FOR gmfgen::GenNavigator-»
+		«EXPAND xpt::Common::copyright FOR editorGen-»
+package «packageName»;
+
+	«EXPAND xpt::Common::generatedClassComment»
+public class «domainLabelProviderClassName» implements org.eclipse.ui.navigator.ICommonLabelProvider {
+
+	«EXPAND attributes-»
+	
+	«EXPAND iCommonLabelProvider-»
+	
+	«EXPAND iLabelProvider-»
+	
+	«EXPAND iBaseLabelProvider-»
+	
+	«EXPAND xpt::navigator::NavigatorContentProvider::iMementoAware-»
+	
+	«EXPAND iDescriptionProvider-»
+	
+    «EXPAND additions-»
+}
+«ENDDEFINE»
+
+«DEFINE attributes FOR gmfgen::GenNavigator-»
+	«EXPAND xpt::Common::generatedMemberComment»
+private org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider myAdapterFactoryLabelProvider = new org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider(«editorGen.plugin.getActivatorQualifiedClassName()».getInstance().getItemProvidersAdapterFactory());
+«ENDDEFINE»
+
+«DEFINE iCommonLabelProvider FOR gmfgen::GenNavigator-»
+	«EXPAND xpt::Common::generatedMemberComment»
+public void init(org.eclipse.ui.navigator.ICommonContentExtensionSite aConfig) {
+}
+«ENDDEFINE»
+
+«DEFINE iLabelProvider FOR gmfgen::GenNavigator-»
+	«EXPAND getImage-»
+	
+	«EXPAND getText-»
+«ENDDEFINE»
+
+«DEFINE iBaseLabelProvider FOR gmfgen::GenNavigator-»
+	«EXPAND addListener-»
+
+	«EXPAND dispose-»
+
+	«EXPAND isLabelProperty-»
+
+	«EXPAND removeListener-»
+«ENDDEFINE»
+
+«DEFINE iDescriptionProvider FOR gmfgen::GenNavigator-»
+	«EXPAND xpt::Common::generatedMemberComment»
+public String getDescription(Object anElement) {
+	return null;
+}
+«ENDDEFINE»
+
+«DEFINE addListener FOR gmfgen::GenNavigator-»
+	«EXPAND xpt::Common::generatedMemberComment»
+public void addListener(org.eclipse.jface.viewers.ILabelProviderListener listener) {
+	myAdapterFactoryLabelProvider.addListener(listener);
+}
+«ENDDEFINE»
+
+«DEFINE dispose FOR gmfgen::GenNavigator-»
+	«EXPAND xpt::Common::generatedMemberComment»
+public void dispose() {
+	myAdapterFactoryLabelProvider.dispose();
+}
+«ENDDEFINE»
+
+«DEFINE isLabelProperty FOR gmfgen::GenNavigator-»
+	«EXPAND xpt::Common::generatedMemberComment»
+public boolean isLabelProperty(Object element, String property) {
+	return myAdapterFactoryLabelProvider.isLabelProperty(element, property);
+}
+«ENDDEFINE»
+
+«DEFINE removeListener FOR gmfgen::GenNavigator-»
+	«EXPAND xpt::Common::generatedMemberComment»
+public void removeListener(org.eclipse.jface.viewers.ILabelProviderListener listener) {
+	myAdapterFactoryLabelProvider.removeListener(listener);
+}
+«ENDDEFINE»
+
+«DEFINE getImage FOR gmfgen::GenNavigator-»
+	«EXPAND xpt::Common::generatedMemberComment»
+public org.eclipse.swt.graphics.Image getImage(Object element) {
+	if (element instanceof «getDomainNavigatorItemQualifiedClassName()») {
+		return myAdapterFactoryLabelProvider.getImage(«EXPAND getEObject»);
+	}
+	return null;
+}
+«ENDDEFINE»
+
+«DEFINE getEObject FOR gmfgen::GenNavigator»((«getDomainNavigatorItemQualifiedClassName()») element).getEObject()«ENDDEFINE»
+
+«DEFINE getText FOR gmfgen::GenNavigator-»
+	«EXPAND xpt::Common::generatedMemberComment»
+public String getText(Object element) {
+	if (element instanceof «getDomainNavigatorItemQualifiedClassName()») {
+		return myAdapterFactoryLabelProvider.getText(«EXPAND getEObject»);
+	}
+	return null;
+}
+«ENDDEFINE»
+
+«DEFINE additions FOR gmfgen::GenNavigator-»
+«ENDDEFINE»

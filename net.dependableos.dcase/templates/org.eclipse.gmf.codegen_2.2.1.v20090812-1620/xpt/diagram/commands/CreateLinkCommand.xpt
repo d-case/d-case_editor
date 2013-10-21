@@ -1,0 +1,123 @@
+﻿/*
+ * Copyright (c) 2007, 2009 Borland Software Corporation
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Dmitry Stadnik (Borland) - initial API and implementation
+ */
+
+«IMPORT 'http://www.eclipse.org/gmf/2009/GenModel'»
+
+«EXTENSION xpt::diagram::Utils»
+
+«DEFINE CreateLinkCommand FOR gmfgen::GenLink»«EXPAND Main»«ENDDEFINE»
+
+«DEFINE Main FOR gmfgen::GenLink-»
+«EXPAND xpt::Common::copyright FOR diagram.editorGen-»
+package «diagram.editCommandsPackageName»;
+
+«EXPAND xpt::Common::generatedClassComment»
+public class «createCommandClassName» extends org.eclipse.gmf.runtime.emf.type.core.commands.EditElementCommand {
+	«EXPAND xpt::diagram::commands::CreateLinkUtils::fields FOR modelFacet-»
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	public «createCommandClassName»(org.eclipse.gmf.runtime.emf.type.core.requests.CreateRelationshipRequest request, org.eclipse.emf.ecore.EObject source, org.eclipse.emf.ecore.EObject target) {
+		super(request.getLabel(), null, request);
+		«EXPAND xpt::diagram::commands::CreateLinkUtils::_init FOR modelFacet-»
+	}
+	«EXPAND xpt::diagram::commands::CreateLinkUtils::canCreate(self) FOR modelFacet-»
+
+	«EXPAND doExecuteWithResultMethod»
+
+	«EXPAND doConfigure(self) FOR modelFacet-»
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	protected void setElementToEdit(org.eclipse.emf.ecore.EObject element) {
+		throw new UnsupportedOperationException();
+	}
+	«EXPAND xpt::diagram::commands::CreateLinkUtils::accessors FOR modelFacet-»
+«EXPAND additions-»
+}
+«ENDDEFINE»
+
+«DEFINE additions FOR gmfgen::GenLink»«ENDDEFINE»
+
+«DEFINE doExecuteWithResultMethod FOR gmfgen::GenLink»
+	«EXPAND xpt::Common::generatedMemberComment»
+	protected org.eclipse.gmf.runtime.common.core.command.CommandResult doExecuteWithResult(org.eclipse.core.runtime.IProgressMonitor monitor, org.eclipse.core.runtime.IAdaptable info) throws org.eclipse.core.commands.ExecutionException {
+		if (!canExecute()) {
+			throw new org.eclipse.core.commands.ExecutionException("Invalid arguments in create link command");«EXPAND xpt::Common::nonNLS»
+		}
+		«EXPAND execute(self) FOR modelFacet»
+	}
+«ENDDEFINE»
+
+«DEFINE execute(link : gmfgen::GenLink) FOR gmfgen::LinkModelFacet»«ENDDEFINE»
+
+«DEFINE execute(link : gmfgen::GenLink) FOR gmfgen::TypeLinkModelFacet»
+«IF (if sourceMetaFeature = null then containmentMetaFeature.ecoreFeature.changeable else sourceMetaFeature.ecoreFeature.changeable endif) and targetMetaFeature.ecoreFeature.changeable-»
+		«EXPAND MetaModel::NewInstance('newElement') FOR metaClass-»
+		«EXPAND MetaModel::modifyFeature((if hasContainerOtherThanSource(self) then 'getContainer()' else 'getSource()' endif), containmentMetaFeature.genClass, 'newElement') FOR containmentMetaFeature-»
+		«IF sourceMetaFeature <> null-»
+			«EXPAND MetaModel::modifyFeature('newElement', metaClass, 'getSource()') FOR sourceMetaFeature-»
+		«ENDIF-»
+		«EXPAND MetaModel::modifyFeature('newElement', metaClass, 'getTarget()') FOR targetMetaFeature-»
+		«IF hasExplicitChildFeature(self)-»
+			«IF sourceMetaFeature <> null-»
+				«EXPAND MetaModel::modifyFeature('getContainer()', containmentMetaFeature.genClass, 'newElement') FOR childMetaFeature-»
+			«ELSE-»
+				«EXPAND MetaModel::modifyFeature('getSource()', getSourceType(), 'newElement') FOR childMetaFeature-»
+			«ENDIF-»
+		«ENDIF-»
+		«EXPAND initialize(link, 'newElement')-»
+		doConfigure(newElement, monitor, info);
+		((org.eclipse.gmf.runtime.emf.type.core.requests.CreateElementRequest) getRequest()).setNewElement(«EXPAND MetaModel::DowncastToEObject('newElement') FOR metaClass»);
+		return org.eclipse.gmf.runtime.common.core.command.CommandResult.newOKCommandResult(newElement);
+«ELSE-»
+		throw new UnsupportedOperationException();
+«ENDIF-»
+«ENDDEFINE»
+
+
+«DEFINE initialize(link : gmfgen::GenLink, newElementvVar : String) FOR gmfgen::TypeModelFacet»«IF modelElementInitializer <> null-»
+«link.diagram.getElementTypesQualifiedClassName()».init_«link.getUniqueIdentifier()»(«newElementvVar»);
+«ENDIF»«ENDDEFINE»
+
+
+«DEFINE execute(link : gmfgen::GenLink) FOR gmfgen::FeatureLinkModelFacet»
+«IF metaFeature.ecoreFeature.changeable-»
+	if (getSource() != null && getTarget() != null) {
+		«EXPAND MetaModel::modifyFeature('getSource()', getSourceType(), 'getTarget()') FOR metaFeature-»
+	}
+	return org.eclipse.gmf.runtime.common.core.command.CommandResult.newOKCommandResult();
+«ELSE-»
+	throw new UnsupportedOperationException();
+«ENDIF-»
+«ENDDEFINE»
+
+
+«DEFINE doConfigure(link : gmfgen::GenLink) FOR gmfgen::LinkModelFacet»«ENDDEFINE»
+
+/*
+ * TODO invocation of configure command should be optional, and better yet, 
+ * configuration should rather happen from EditPolicy then from within creation command 
+ */
+«DEFINE doConfigure(link : gmfgen::GenLink) FOR gmfgen::TypeLinkModelFacet-»
+	«EXPAND xpt::Common::generatedMemberComment»
+	protected void doConfigure(«EXPAND MetaModel::QualifiedClassName FOR metaClass» newElement, org.eclipse.core.runtime.IProgressMonitor monitor, org.eclipse.core.runtime.IAdaptable info) throws org.eclipse.core.commands.ExecutionException {
+		org.eclipse.gmf.runtime.emf.type.core.IElementType elementType = ((org.eclipse.gmf.runtime.emf.type.core.requests.CreateElementRequest) getRequest()).getElementType();
+		org.eclipse.gmf.runtime.emf.type.core.requests.ConfigureRequest configureRequest = new org.eclipse.gmf.runtime.emf.type.core.requests.ConfigureRequest(getEditingDomain(), «EXPAND MetaModel::DowncastToEObject('newElement') FOR metaClass», elementType);
+		configureRequest.setClientContext(((org.eclipse.gmf.runtime.emf.type.core.requests.CreateElementRequest) getRequest()).getClientContext());
+		configureRequest.addParameters(getRequest().getParameters());
+		configureRequest.setParameter(org.eclipse.gmf.runtime.emf.type.core.requests.CreateRelationshipRequest.SOURCE, getSource());
+		configureRequest.setParameter(org.eclipse.gmf.runtime.emf.type.core.requests.CreateRelationshipRequest.TARGET, getTarget());
+		org.eclipse.gmf.runtime.common.core.command.ICommand configureCommand = elementType.getEditCommand(configureRequest);
+		if (configureCommand != null && configureCommand.canExecute()) {
+			configureCommand.execute(monitor, info);
+		}
+	}
+«ENDDEFINE»

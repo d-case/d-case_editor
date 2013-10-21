@@ -1,0 +1,62 @@
+﻿/*
+ * Copyright (c) 2006, 2009 Borland Software Corporation
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Dmitry Stadnik (Borland) - initial API and implementation
+ */
+
+«IMPORT 'http://www.eclipse.org/gmf/2009/GenModel'»
+
+«EXTENSION xpt::application::i18n»
+
+«DEFINE WorkbenchWindowAdvisor FOR gmfgen::GenApplication-»
+«EXPAND xpt::Common::copyright FOR editorGen-»
+package «packageName»;
+
+«EXPAND xpt::Common::generatedClassComment»
+public class «workbenchWindowAdvisorClassName» extends org.eclipse.ui.application.WorkbenchWindowAdvisor {
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	public «workbenchWindowAdvisorClassName»(org.eclipse.ui.application.IWorkbenchWindowConfigurer configurer) {
+		super(configurer);
+	}
+
+	«EXPAND createActionBarAdvisor-»
+
+	«EXPAND preWindowOpen-»
+
+	«EXPAND additions-»
+}
+«ENDDEFINE»
+
+«DEFINE createActionBarAdvisor FOR gmfgen::GenApplication-»
+	«EXPAND xpt::Common::generatedMemberComment»
+	public org.eclipse.ui.application.ActionBarAdvisor createActionBarAdvisor(org.eclipse.ui.application.IActionBarConfigurer configurer) {
+		return new «getActionBarAdvisorQualifiedClassName()»(configurer);
+	}
+«ENDDEFINE»
+
+«DEFINE preWindowOpen FOR gmfgen::GenApplication-»
+	«EXPAND xpt::Common::generatedMemberComment»
+	public void preWindowOpen() {
+		org.eclipse.ui.application.IWorkbenchWindowConfigurer configurer = getWindowConfigurer();
+		configurer.setInitialSize(new org.eclipse.swt.graphics.Point(1000, 700));
+		configurer.setTitle(«EXPAND xpt::Externalizer::accessorCall(i18nKeyForWindowTitle(self)) FOR editorGen»);
+	}
+«ENDDEFINE»
+
+«DEFINE additions FOR gmfgen::GenApplication-»
+«ENDDEFINE»
+
+«DEFINE i18nAccessors FOR gmfgen::GenApplication-»
+«EXPAND xpt::Externalizer::accessorField(i18nKeyForWindowTitle(self))-»
+«ENDDEFINE»
+
+«DEFINE i18nValues FOR gmfgen::GenApplication-»
+«EXPAND xpt::Externalizer::messageEntry(i18nKeyForWindowTitle(self), title)-»
+«ENDDEFINE»

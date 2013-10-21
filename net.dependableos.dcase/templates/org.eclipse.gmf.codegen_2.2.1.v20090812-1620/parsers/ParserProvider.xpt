@@ -1,0 +1,58 @@
+﻿/*
+ * Copyright (c) 2007, 2009 Borland Software Corporation
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Dmitry Stadnik (Borland) - initial API and implementation
+ *    Artem Tikhomirov (Borland) - [235113] alternative parser access
+ *                                 [244419] custom parsers
+ */
+
+«IMPORT 'http://www.eclipse.org/gmf/2009/GenModel'»
+
+«DEFINE Main FOR gmfgen::GenParsers-»
+«EXPAND xpt::Common::copyright FOR editorGen-»
+package «packageName»;
+
+«EXPAND xpt::Common::generatedClassComment»
+public class «className»«EXPAND extendsList»«EXPAND implementsList» {
+	«EXPAND impl::parsers::ParserProvider::parsers FOREACH editorGen.diagram.topLevelNodes»
+	«EXPAND impl::parsers::ParserProvider::parsers FOREACH editorGen.diagram.childNodes»
+	«EXPAND impl::parsers::ParserProvider::parsers FOREACH editorGen.diagram.links»
+
+«IF extensibleViaService-»
+	«EXPAND impl::parsers::ParserProvider::getParserByVisualIdMethod-»
+	«EXPAND impl::parsers::ParserProvider::accessorMethod_delegate2providers-»
+	«EXPAND impl::parsers::ParserProvider::provider_getParserMethod»
+	«EXPAND impl::parsers::ParserProvider::provider_providesMethod»
+	«EXPAND impl::parsers::ParserProvider::HintAdapterClass»
+«ELSE-»
+	«EXPAND impl::parsers::ParserProvider::accessorMethod_direct-»
+«ENDIF-»
+	«EXPAND additions-»
+}
+«ENDDEFINE»
+
+«DEFINE extendsList FOR gmfgen::GenParsers»«IF extensibleViaService» extends org.eclipse.gmf.runtime.common.core.service.AbstractProvider«ENDIF»«ENDDEFINE»
+
+«DEFINE implementsList FOR gmfgen::GenParsers»«IF extensibleViaService» implements org.eclipse.gmf.runtime.common.ui.services.parser.IParserProvider«ENDIF»«ENDDEFINE»
+
+/*
+ * this/self - aka hintHolder, visual element to present a text (i.e. one of Node's labels)
+ * elementTypeHolder - model element being displayed
+ * modelFacet - may be null
+ * parsedElement - accessor to EObject being edited 
+ */
+«DEFINE accessorCall(elementTypeHolder : gmfgen::GenCommonBase, labelModelFacet : gmfgen::LabelModelFacet, parsedElement : String) FOR gmfgen::GenCommonBase-»
+«IF getDiagram().editorGen.labelParsers.extensibleViaService-»
+«EXPAND impl::parsers::ParserProvider::accessorCall_delegate2providers(elementTypeHolder, labelModelFacet, parsedElement)-»
+«ELSE-»
+«EXPAND impl::parsers::ParserProvider::accessorCall_direct(elementTypeHolder, labelModelFacet, parsedElement)-»
+«ENDIF-»
+«ENDDEFINE»
+
+«DEFINE additions FOR gmfgen::GenParsers»«ENDDEFINE»

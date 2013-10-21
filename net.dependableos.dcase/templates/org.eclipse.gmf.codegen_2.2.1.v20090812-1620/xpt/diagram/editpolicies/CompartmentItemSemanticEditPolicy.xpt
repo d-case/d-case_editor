@@ -1,0 +1,38 @@
+﻿/*
+ * Copyright (c) 2006, 2009 Borland Software Corporation
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Alexander Shatalin (Borland) - initial API and implementation
+ */
+
+«IMPORT 'http://www.eclipse.org/gmf/2009/GenModel'»
+
+«DEFINE CompartmentItemSemanticEditPolicy FOR gmfgen::GenCompartment-»
+	«EXPAND xpt::Common::copyright FOR getDiagram().editorGen-»
+package «getDiagram().editPoliciesPackageName»;
+
+	«EXPAND xpt::Common::generatedClassComment»
+public class «itemSemanticEditPolicyClassName» extends «getDiagram().getBaseItemSemanticEditPolicyQualifiedClassName()» {
+
+	«EXPAND _constructor-»
+
+	«EXPAND xpt::diagram::editpolicies::childContainerCreateCommand::childContainerCreateCommand FOR childNodes->asSequence()-»
+	
+	«EXPAND additions-»
+}
+«ENDDEFINE»
+
+«DEFINE _constructor FOR gmfgen::GenCompartment-»
+	«EXPAND xpt::Common::generatedMemberComment»
+	public «itemSemanticEditPolicyClassName»() {
+		«EXPAND xpt::diagram::editpolicies::BaseItemSemanticEditPolicy::defaultConstructorBody FOR node-»		
+	}
+«ENDDEFINE»
+
+«DEFINE additions FOR gmfgen::GenCompartment-»
+«ENDDEFINE»

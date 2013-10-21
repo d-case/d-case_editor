@@ -1,0 +1,176 @@
+﻿/*
+ * Copyright (c) 2007, 2009 Borland Software Corporation
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Dmitry Stadnik (Borland) - initial API and implementation
+ *    Artem Tikhomirov (Borland) - refactored javaInitilizers not to use methods from GMFGen model
+ *                               [221347] Got rid of generated interfaces 
+ *                               (IObjectInitializer, IFeatureInitializer) and implementation thereof
+ */
+
+«IMPORT 'http://www.eclipse.org/gmf/2009/GenModel'»
+«IMPORT 'http://www.eclipse.org/emf/2002/GenModel'»
+
+«EXTENSION xpt::providers::ElementInitializers»
+«EXTENSION xpt::GenModelUtils»
+«EXTENSION gmf::GenModelUtils»
+«EXTENSION xpt::StringOperations»
+
+«DEFINE ElementInitializers FOR gmfgen::GenDiagram-»
+«EXPAND xpt::Common::copyright FOR editorGen-»
+package «providersPackageName»;
+
+«EXPAND xpt::Common::generatedClassComment»
+public class ElementInitializers {
+	«EXPAND Initializers»
+	«EXPAND JavaSupport»
+	«EXPAND additions-»
+}
+«ENDDEFINE»
+
+«DEFINE Initializers FOR gmfgen::GenDiagram-»
+	«EXPAND initMethod FOREACH getAllNodes()-»
+	«EXPAND initMethod FOREACH links-»
+«ENDDEFINE»
+
+«DEFINE JavaSupport FOR gmfgen::GenDiagram-»
+«IF editorGen.expressionProviders <> null and editorGen.expressionProviders.providers[gmfgen::GenJavaExpressionProvider]->notEmpty()-»
+	«EXPAND javaMethod FOREACH getAllNodes()-»
+	«EXPAND javaMethod FOREACH links-»
+«ENDIF-»
+«ENDDEFINE»
+
+
+«DEFINE additions FOR gmfgen::GenDiagram»«ENDDEFINE»
+
+
+«REM»
+	Definitions of initializer objects.
+«ENDREM»
+
+«DEFINE initMethod FOR gmfgen::GenNode»«EXPAND initMethod(self) FOR modelFacet»«ENDDEFINE»
+«DEFINE initMethod FOR gmfgen::GenLink»«EXPAND initMethod(self) FOR modelFacet»«ENDDEFINE»
+
+«DEFINE initMethod(diagramElement : gmfgen::GenCommonBase) FOR gmfgen::ModelFacet»«ENDDEFINE»
+
+«DEFINE initMethod(diagramElement : gmfgen::GenCommonBase) FOR gmfgen::TypeModelFacet-»
+«EXPAND initMethod(diagramElement) FOR modelElementInitializer-»
+«ENDDEFINE»
+
+«DEFINE initMethod(diagramElement : gmfgen::GenCommonBase) FOR gmfgen::GenElementInitializer»«ERROR 'No idea how to init using ' + self.repr()»«ENDDEFINE»
+
+«DEFINE initMethod(diagramElement : gmfgen::GenCommonBase) FOR gmfgen::GenFeatureSeqInitializer-»
+	«EXPAND xpt::Common::generatedMemberComment»
+	public static void init_«diagramElement.getUniqueIdentifier()»(«EXPAND MetaModel::QualifiedClassName FOR elementClass» instance) {
+		try {
+			«FOREACH initializers->asSequence() AS i»«EXPAND performInit(diagramElement, 'instance', elementClass, getSuffixes((initializers->indexOf(i) - 1))) FOR i»«ENDFOREACH-»
+		} catch(RuntimeException e) {
+			«diagramElement.getDiagram().editorGen.plugin.getActivatorQualifiedClassName()».getInstance().logError("Element initialization failed", e); //$NON-NLS-1$						
+		}
+	}
+«ENDDEFINE»
+
+«DEFINE performInit(diagramElement : gmfgen::GenCommonBase, instanceVar : String, instanceClass : genmodel::GenClass, counters : Sequence(Integer)) FOR gmfgen::GenFeatureInitializer»«ENDDEFINE»
+
+«REM»
+		FIXME: need cleaner appoach to provider's language switch (not to mix if == literal and polymorphism)
+«ENDREM»
+«DEFINE performInit(diagramElement : gmfgen::GenCommonBase, instanceVar : String, instanceClass : genmodel::GenClass, counters : Sequence(Integer)) FOR gmfgen::GenFeatureValueSpec-»
+«IF value.provider.getLanguage() = gmfgen::GenLanguage::_literal-»
+	«EXPAND MetaModel::modifyFeature(instanceVar, instanceClass, value.body) FOR feature»
+«ELSE-»
+«LET getVariableName('value', counters) AS expressionVarName-»
+	Object «expressionVarName» = «EXPAND evaluateExpr(diagramElement, self, instanceVar) FOR value.provider»;
+«IF isListType(feature)-»
+	if («expressionVarName» instanceof java.util.Collection) {
+		«EXPAND MetaModel::getFeatureValue(instanceVar, instanceClass, true) FOR feature».clear();
+«IF getTypeGenClassifier(feature).expressionResultNeedsCast()-»
+		for (java.util.Iterator it = ((java.util.Collection) «expressionVarName»).iterator(); it.hasNext(); ) {
+			Object next = «diagramElement.getDiagram().editorGen.expressionProviders.getAbstractExpressionQualifiedClassName()».performCast(it.next(), «EXPAND MetaModel::MetaClass FOR getTypeGenClassifier(feature)»);
+			«EXPAND MetaModel::getFeatureValue(instanceVar, instanceClass, true) FOR feature».add(next);
+		}
+«ELSE-»
+		«EXPAND MetaModel::getFeatureValue(instanceVar, instanceClass, true) FOR feature».addAll(((java.util.Collection) «expressionVarName»));
+«ENDIF-»
+	} else {
+«IF getTypeGenClassifier(feature).expressionResultNeedsCast()-»
+		«expressionVarName» = «diagramElement.getDiagram().editorGen.expressionProviders.getAbstractExpressionQualifiedClassName()».performCast(«expressionVarName», «EXPAND MetaModel::MetaClass FOR getTypeGenClassifier(feature)»);
+«ENDIF-»
+		«EXPAND MetaModel::getFeatureValue(instanceVar, instanceClass, true) FOR feature».add((«EXPAND MetaModel::QualifiedClassName /*XXX sorta hack, better would be MM::setFeatureValue that supports lists*/FOR getTypeGenClassifier(feature)») «expressionVarName»);
+	}
+«ELSE-»
+«IF getTypeGenClassifier(feature).expressionResultNeedsCast()»
+	«expressionVarName» = «diagramElement.getDiagram().editorGen.expressionProviders.getAbstractExpressionQualifiedClassName()».performCast(«expressionVarName», «EXPAND MetaModel::MetaClass FOR getTypeGenClassifier(feature)»);
+«ENDIF-»
+	«EXPAND MetaModel::setFeatureValue(instanceVar, instanceClass, expressionVarName, true) FOR feature»;
+«ENDIF /*isListType*/-»
+«ENDLET-»
+«ENDIF /*is literal expression*/-»
+«ENDDEFINE»
+
+«DEFINE performInit(diagramElement : gmfgen::GenCommonBase, instanceVar : String, instanceClass : genmodel::GenClass, counters : Sequence(Integer)) FOR gmfgen::GenReferenceNewElementSpec-»
+«FOREACH newElementInitializers->asSequence() AS newElemInit-»
+«LET getSuffixes(counters, (newElementInitializers->indexOf(newElemInit) - 1)) AS initializerCounters-»
+«LET getVariableName('newInstance', initializerCounters) AS newInstanceVar-»
+«EXPAND MetaModel::NewInstance(newInstanceVar) FOR newElemInit.elementClass-»
+«EXPAND MetaModel::modifyFeature(instanceVar, instanceClass, newInstanceVar) FOR feature»
+«FOREACH newElemInit.initializers->asSequence() AS i»«EXPAND performInit(diagramElement, newInstanceVar, newElemInit.elementClass, getSuffixes(initializerCounters, (newElemInit.initializers->indexOf(i) - 1))) FOR i»«ENDFOREACH»
+«ENDLET-»
+«ENDLET-»
+«ENDFOREACH-»
+«ENDDEFINE»
+
+/////////////////////////////////
+
+«DEFINE evaluateExpr(diagramElement : gmfgen::GenCommonBase, valueExpr : gmfgen::GenFeatureValueSpec, instanceVar : String) FOR gmfgen::GenExpressionProviderBase»«ENDDEFINE»
+
+// XXX perhaps, using instance.eClass() is better option than MetaModel::MetaClass (though, need to rely on instance variable name/type) 
+«DEFINE evaluateExpr(diagramElement : gmfgen::GenCommonBase, valueExpr : gmfgen::GenFeatureValueSpec, instanceVar : String) FOR gmfgen::GenExpressionInterpreter-»
+«EXPAND xpt::expressions::getExpression::getExpression(valueExpr.value, valueExpr.featureSeqInitializer.elementClass)».evaluate(«instanceVar»)«-»
+«ENDDEFINE»
+
+«REM»
+	XXX revisit: if emf java merge doesn't support genereated NOT methods with modified
+	return type, there's no much sense to keep Object value = invokeJavaMethodWithSpecificReturnType,
+	as client won't benefit from such code (he can't modify return type and thus would get duplicated methods on regeneration)
+	However, if merge does ignore method return type when merging, allowing Object as return type may help. 
+«ENDREM»
+«DEFINE evaluateExpr(diagramElement : gmfgen::GenCommonBase, valueExpr : gmfgen::GenFeatureValueSpec, instanceVar : String) FOR gmfgen::GenJavaExpressionProvider-»
+«javaMethodName(diagramElement, valueExpr)»(«instanceVar»)«-»
+«ENDDEFINE»
+
+/////////////////////////////////
+
+«DEFINE javaMethod FOR gmfgen::GenNode»«EXPAND javaMethod(self) FOR modelFacet»«ENDDEFINE»
+«DEFINE javaMethod FOR gmfgen::GenLink»«EXPAND javaMethod(self) FOR modelFacet»«ENDDEFINE»
+«DEFINE javaMethod(diagramElement : gmfgen::GenCommonBase) FOR gmfgen::ModelFacet»«ENDDEFINE»
+«DEFINE javaMethod(diagramElement : gmfgen::GenCommonBase) FOR gmfgen::TypeModelFacet-»
+«EXPAND javaMethod(diagramElement) FOR modelElementInitializer-»
+«ENDDEFINE»
+
+«DEFINE javaMethod(diagramElement : gmfgen::GenCommonBase) FOR gmfgen::GenElementInitializer»«ERROR 'No idea how to handle ' + self.repr()»«ENDDEFINE»
+«DEFINE javaMethod(diagramElement : gmfgen::GenCommonBase) FOR gmfgen::GenFeatureSeqInitializer-»
+«FOREACH recurseCollectValueSpec(self) AS vs»«EXPAND javaMethod(diagramElement, vs) FOR vs.value.provider»«ENDFOREACH-»
+«ENDDEFINE»
+
+«DEFINE javaMethod(diagramElement : gmfgen::GenCommonBase, vs : gmfgen::GenFeatureValueSpec) FOR gmfgen::GenExpressionProviderBase-»«ENDDEFINE»
+«DEFINE javaMethod(diagramElement : gmfgen::GenCommonBase, vs : gmfgen::GenFeatureValueSpec) FOR gmfgen::GenJavaExpressionProvider-»
+	«EXPAND xpt::Common::generatedMemberComment»
+	private static «EXPAND MetaModel::featureTargetType FOR vs.feature» «javaMethodName(diagramElement, vs)»(«EXPAND MetaModel::QualifiedClassName FOR vs.featureSeqInitializer.elementClass» self) {
+«IF injectExpressionBody and (vs.value.body <> null and vs.value.body.xpandLength() <> 0)-»
+		«vs.value.body»
+«ELSEIF throwException or (injectExpressionBody and (vs.value.body = null or vs.value.body.xpandLength() = 0))-»
+		// TODO: implement this method to return value  
+		// for «EXPAND MetaModel::MetaFeature FOR vs.feature»
+		// Ensure that you remove @generated or mark it @generated NOT
+		throw new java.lang.UnsupportedOperationException("No user java implementation provided in '«javaMethodName(diagramElement, vs)»' operation");«EXPAND xpt::Common::nonNLS»
+«ELSE-»
+		return null;
+«ENDIF-»	
+	}
+«ENDDEFINE»

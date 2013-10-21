@@ -1,0 +1,90 @@
+﻿/*
+ * Copyright (c) 2006, 2009 Borland Software Corporation
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Dmitry Stadnik (Borland) - initial API and implementation
+ *    Alexander Shatalin (Borland) - initial API and implementation
+ */
+
+«IMPORT 'http://www.eclipse.org/gmf/2009/GenModel'»
+
+«EXTENSION xpt::diagram::editparts::Utils»
+
+«DEFINE Main FOR gmfgen::GenChildLabelNode-»
+«EXPAND xpt::Common::copyright FOR getDiagram().editorGen-»
+package «getDiagram().editPartsPackageName»;
+
+«EXPAND xpt::Common::generatedClassComment»
+public class «editPartClassName» «EXPAND extendsList» «EXPAND implementsList» {
+	
+	«EXPAND attributes-»
+	
+	«EXPAND impl::diagram::editparts::ChildNodeLabelEditPart::contsructor-»
+
+	«EXPAND getDragTracker-»
+	
+	«EXPAND createDefaultEditPolicies-»
+
+	«EXPAND impl::diagram::editparts::TextAware::methods(false, labelReadOnly, labelElementIcon, viewmap, labelModelFacet, self, getDiagram())-»
+
+	«EXPAND xpt::diagram::editparts::Common::notationalListeners-»
+
+«IF getAssistantOutgoingLinks(self)->size() > 0-»
+	«EXPAND impl::diagram::editparts::NodeEditPart::getMARelTypesOnSource-»
+
+	«EXPAND impl::diagram::editparts::NodeEditPart::getMARelTypesOnSourceAndTarget-»
+
+	«EXPAND impl::diagram::editparts::NodeEditPart::getMATypesForTarget-»
+«ENDIF-»
+
+«IF getAssistantIncomingLinks(self)->size() > 0-»
+	«EXPAND impl::diagram::editparts::NodeEditPart::getMARelTypesOnTarget-»
+
+	«EXPAND impl::diagram::editparts::NodeEditPart::getMATypesForSource-»
+«ENDIF-»
+
+	«EXPAND handleNotificationEvent-»
+
+	«EXPAND xpt::diagram::editparts::Common::labelFigure FOR viewmap-»
+	
+	«EXPAND additions-»
+}
+«ENDDEFINE»
+
+«DEFINE extendsList FOR gmfgen::GenChildLabelNode»extends org.eclipse.gmf.runtime.diagram.ui.editparts.CompartmentEditPart«ENDDEFINE»
+
+«DEFINE implementsList FOR gmfgen::GenChildLabelNode»implements org.eclipse.gmf.runtime.diagram.ui.editparts.ITextAwareEditPart«ENDDEFINE»
+
+«DEFINE attributes FOR gmfgen::GenChildLabelNode-»
+	«EXPAND xpt::diagram::editparts::Common::visualIDConstant FOR self-»
+
+	«EXPAND impl::diagram::editparts::TextAware::fields FOR self-»
+«ENDDEFINE»
+
+«DEFINE getDragTracker FOR gmfgen::GenChildLabelNode-»
+	«EXPAND xpt::Common::generatedMemberComment»
+public org.eclipse.gef.DragTracker getDragTracker(org.eclipse.gef.Request request) {
+	«EXPAND impl::diagram::editparts::ChildNodeLabelEditPart::getDragTrackerBody-»
+}
+«ENDDEFINE»
+
+«DEFINE createDefaultEditPolicies FOR gmfgen::GenChildLabelNode-»
+	«EXPAND xpt::Common::generatedMemberComment»
+protected void createDefaultEditPolicies() {
+	«EXPAND impl::diagram::editparts::ChildNodeLabelEditPart::createDefaultEditPoliciesBody-»
+}
+«ENDDEFINE»
+
+«DEFINE handleNotificationEvent FOR gmfgen::GenChildLabelNode-»
+	«EXPAND xpt::Common::generatedMemberComment»
+protected void handleNotificationEvent(org.eclipse.emf.common.notify.Notification event) {
+	«EXPAND impl::diagram::editparts::ChildNodeLabelEditPart::handleNotificationEventBody-»
+}
+«ENDDEFINE»
+
+«DEFINE additions FOR gmfgen::GenChildLabelNode»«ENDDEFINE»

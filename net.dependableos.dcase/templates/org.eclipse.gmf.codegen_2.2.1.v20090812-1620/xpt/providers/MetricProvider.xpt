@@ -1,0 +1,430 @@
+﻿/*
+ * Copyright (c) 2007, 2009 Borland Software Corporation
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Dmitry Stadnik (Borland) - initial API and implementation
+ *    Artem Tikhomirov (Borland) - refactoring (https://bugs.eclipse.org/230014)
+ */
+
+«IMPORT 'http://www.eclipse.org/gmf/2009/GenModel'»
+«IMPORT 'http://www.eclipse.org/emf/2002/GenModel'»
+
+«EXTENSION xpt::providers::Metrics»
+«EXTENSION xpt::StringOperations»
+«EXTENSION gmf::CodeGenerationUtils»
+
+«DEFINE MetricProvider FOR gmfgen::GenDiagram-»
+«EXPAND xpt::Common::copyright FOR editorGen-»
+package «providersPackageName»;
+
+«EXPAND xpt::Common::generatedClassComment»
+public class «metricProviderClassName» {
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	public static class MetricsAction extends org.eclipse.jface.action.Action {
+
+		«EXPAND xpt::Common::generatedMemberComment»
+		private org.eclipse.ui.IWorkbenchPage page;
+
+		«EXPAND xpt::Common::generatedMemberComment»
+		public MetricsAction(org.eclipse.ui.IWorkbenchPage page) {
+			setText("Metrics");
+			this.page = page;
+		}
+
+		«EXPAND xpt::Common::generatedMemberComment»
+		public void run() {
+			org.eclipse.ui.IWorkbenchPart workbenchPart = page.getActivePart();
+			org.eclipse.ui.IViewPart metricsView = null;
+			try {
+				metricsView = page.findView(«EXPAND resultViewID»);
+				if (metricsView == null) {
+					metricsView = page.showView(«EXPAND resultViewID»);
+				} else {
+					if (metricsView != null && workbenchPart instanceof org.eclipse.gmf.runtime.diagram.ui.parts.IDiagramWorkbenchPart) {
+						final org.eclipse.gmf.runtime.diagram.ui.parts.IDiagramWorkbenchPart part = (org.eclipse.gmf.runtime.diagram.ui.parts.IDiagramWorkbenchPart) workbenchPart;
+						((ResultView) metricsView).setInput(part);
+					}
+					page.activate(metricsView);
+				}
+			} catch (org.eclipse.ui.PartInitException e) {
+				«editorGen.plugin.getActivatorQualifiedClassName()».getInstance().logError("Diagram metric view failure", e);«EXPAND xpt::Common::nonNLS»
+			}
+		}
+	}
+
+«EXPAND calculateMetricsMethods-»
+
+«EXPAND formatNotationElementNameMethod-»
+«EXPAND formatSemanticElementNameMethod-»
+
+«EXPAND metricsClasses»
+
+«EXPAND keysAndToolTipsMethods FOR editorGen.metrics»
+
+«EXPAND metricCalcField FOREACH editorGen.metrics.metrics->select(m | m.rule <> null and (m.target <> null and m.target.getContext() <> null))»
+«EXPAND metricCalcMethod FOREACH editorGen.metrics.metrics->select(m | m.rule <> null and (m.target <> null and m.target.getContext() <> null))»
+
+«EXPAND MetricsResultView::Class»
+
+«EXPAND additions-»
+}
+«ENDDEFINE»
+
+«DEFINE resultViewQualifiedClassName FOR gmfgen::GenDiagram»«providersPackageName».«metricProviderClassName».«EXPAND MetricsResultView::className»«ENDDEFINE» 
+«DEFINE resultViewID FOR gmfgen::GenDiagram»«EXPAND resultViewQualifiedClassName».VIEW_ID«ENDDEFINE» 
+
+
+//////////////////////////////////////////////////////////////////////////
+
+«DEFINE calculateMetricsMethods FOR gmfgen::GenDiagram-»
+	«EXPAND xpt::Common::generatedMemberComment»
+	static java.util.List calculateMetrics(org.eclipse.gmf.runtime.diagram.ui.parts.IDiagramWorkbenchPart diagramPart) {
+		final org.eclipse.gmf.runtime.diagram.ui.editparts.DiagramEditPart diagramEditPart = diagramPart.getDiagramEditPart();
+		try {
+			return (java.util.List) diagramPart.getDiagramEditPart().getEditingDomain().runExclusive(
+				new org.eclipse.emf.transaction.RunnableWithResult.Impl() {
+
+					public void run() {
+						org.eclipse.gmf.runtime.notation.Diagram diagram = diagramEditPart.getDiagramView();
+						java.util.ArrayList/*<ElementMetrics>*/ metrics = new java.util.ArrayList/*<ElementMetrics>*/(50);
+«IF not getNotationMetrics(editorGen.metrics)->isEmpty()-»
+						calculateNotationElementMetrics(diagram, metrics);
+«ENDIF-»
+«IF not getDiagramMetrics(editorGen.metrics)->isEmpty()-»
+						calculateDiagramElementMetrics(diagram, metrics);
+«ENDIF-»
+«IF not getDomainMetrics(editorGen.metrics)->isEmpty()-»
+						calculateSemanticElementMetrics(diagramEditPart, metrics);
+«ENDIF-»
+						setResult(metrics);
+					}
+				});
+		} catch (InterruptedException e) {
+			return java.util.Collections.EMPTY_LIST;
+		}
+	}
+
+«IF not getNotationMetrics(editorGen.metrics)->isEmpty()»«EXPAND calcNotationMetricsMethod FOR editorGen»«ENDIF»
+«IF not getDiagramMetrics(editorGen.metrics)->isEmpty()»«EXPAND calcDiagramMetricsMethod FOR editorGen»«ENDIF»
+«IF not getDomainMetrics(editorGen.metrics)->isEmpty()»«EXPAND calcDomainMetricsMethod FOR editorGen»«ENDIF»
+«ENDDEFINE»
+
+
+«DEFINE metricsClasses FOR gmfgen::GenDiagram»
+	«EXPAND xpt::Common::generatedMemberComment»
+	private static class ElementMetrics {
+
+		«EXPAND xpt::Common::generatedMemberComment»
+		final Metric[] metrics;
+
+		«EXPAND xpt::Common::generatedMemberComment»
+		final String targetElementQName;
+
+		«EXPAND xpt::Common::generatedMemberComment»
+		final org.eclipse.swt.graphics.Image elementImage;
+
+		«EXPAND xpt::Common::generatedMemberComment»
+		String diagramElementID; «REM»FIXME add specific constructor for View elements, set diagramElementID from there«ENDREM»
+
+		«EXPAND xpt::Common::generatedMemberComment»
+		ElementMetrics(org.eclipse.emf.ecore.EObject target, String name, Metric[] metrics) {
+			«EXPAND xpt::Common::_assert('metrics.length > 0')-»
+			«EXPAND xpt::Common::_assert('name != null')-»
+			this.metrics = metrics;	
+			this.targetElementQName = name;
+			org.eclipse.emf.ecore.EClass imageTarget = target.eClass();
+			if (target instanceof org.eclipse.gmf.runtime.notation.View) {
+				org.eclipse.gmf.runtime.notation.View viewTarget = (org.eclipse.gmf.runtime.notation.View) target;
+				if ("".equals(viewTarget.getType()) && viewTarget.getElement() != null) {«EXPAND xpt::Common::nonNLS»
+					imageTarget = viewTarget.getElement().eClass();
+				}
+			}
+			this.elementImage = «EXPAND getImageAccessor('imageTarget')»;
+		}
+
+		«EXPAND xpt::Common::generatedMemberComment»
+		Metric getMetricByKey(String key) {
+			for (int i = 0; i < metrics.length; i++) {
+				if (metrics[i].key.equals(key)) {
+					return metrics[i]; 
+				}
+			}
+			return null;
+		}
+	}
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	private static class Metric implements Comparable {
+
+		«EXPAND xpt::Common::generatedMemberComment»
+		final String key;
+
+		«EXPAND xpt::Common::generatedMemberComment»
+		final Double value;
+
+		«EXPAND xpt::Common::generatedMemberComment»
+		final Double lowLimit;
+
+		«EXPAND xpt::Common::generatedMemberComment»
+		final Double highLimit;
+
+		«EXPAND xpt::Common::generatedMemberComment»
+		final String displayValue;
+
+		«EXPAND xpt::Common::generatedMemberComment»
+		Metric(String key, Double value) {
+			this(key, value, null, null);
+		}
+
+		«EXPAND xpt::Common::generatedMemberComment»
+		Metric(String key, Double value, Double low, Double high) {
+			«EXPAND xpt::Common::_assert('key != null')-»
+			this.key = key;
+			this.value = value;
+			this.lowLimit = low;
+			this.highLimit = high;
+			this.displayValue = (value != null) ? java.text.NumberFormat.getInstance().format(value) : "null"; //$NON-NLS-1$
+		}
+
+		«EXPAND xpt::Common::generatedMemberComment»
+		public int compareTo(Object other) {
+			Metric otherMetric = (Metric) other;
+			if (value != null && otherMetric.value != null) {
+				return (value.longValue() < otherMetric.value.longValue()) ? -1
+						: (value.longValue() == otherMetric.value.longValue() ? 0 : 1);
+			}
+			return (value == null && otherMetric.value == null) ? 0
+					: (value == null) ? -1 : 1;
+		}
+	}
+«ENDDEFINE»
+
+«DEFINE getImageAccessor(imageClassVar : String) FOR gmfgen::GenDiagram»«getElementTypesQualifiedClassName()».getImage(«imageClassVar»)«ENDDEFINE»
+
+«DEFINE calcNotationMetricsMethod FOR gmfgen::GenEditorGenerator-»
+	«EXPAND xpt::Common::generatedMemberComment»
+	static void calculateNotationElementMetrics(org.eclipse.gmf.runtime.notation.Diagram diagram, java.util.List/*<ElementMetrics>*/ metricsList) {
+		ElementMetrics row = null;
+«LET getNotationMetrics(metrics)->select(m | m.target.oclAsType(gmfgen::GenNotationElementTarget).element.ecoreClass.name = 'Diagram') AS diagramMetrics-»
+«IF not diagramMetrics->isEmpty()-»
+		row = new ElementMetrics(diagram, formatViewName(diagram), new Metric[] {
+«EXPAND metricResult('diagram', false) FOREACH diagramMetrics SEPARATOR ',\n'»
+		});
+		row.diagramElementID = diagram.eResource().getURIFragment(diagram);
+		metricsList.add(row);
+«ENDIF-»
+«ENDLET-»
+«LET getNotationMetrics(metrics)->collect(m | m.target.oclAsType(gmfgen::GenNotationElementTarget).element)->asOrderedSet() AS notationTargets»
+		for (java.util.Iterator it = diagram.eAllContents(); it.hasNext(); ) {
+			Object next = it.next();
+«FOREACH (notationTargets)[genmodel::GenClass]->asSequence() AS nt-»
+			if («EXPAND MetaModel::IsInstance('next') FOR nt») {
+				«EXPAND MetaModel::DeclareAndAssign('_' + nt.ecoreClass.name.toLower(), 'next', true) FOR nt»
+				row = new ElementMetrics(«'_' + nt.ecoreClass.name.toLower()», formatViewName(«'_' + nt.ecoreClass.name.toLower()»), new Metric[] {«-»
+				«FOREACH getNotationMetrics(metrics)->select(m | m.target.oclAsType(gmfgen::GenNotationElementTarget).element = nt) AS m SEPARATOR ','»
+					«EXPAND metricResult('_' + nt.ecoreClass.name.toLower(), false) FOR m-»
+				«ENDFOREACH»
+				});
+				row.diagramElementID = «'_' + nt.ecoreClass.name.toLower()».eResource().getURIFragment(«'_' + nt.ecoreClass.name.toLower()»);
+				metricsList.add(row);
+			}
+«ENDFOREACH-»
+		}
+«ENDLET-»
+	}
+«ENDDEFINE»
+
+«DEFINE calcDiagramMetricsMethod FOR gmfgen::GenEditorGenerator-»
+	«EXPAND xpt::Common::generatedMemberComment»
+	static void calculateDiagramElementMetrics(org.eclipse.gmf.runtime.notation.Diagram diagram, java.util.List/*<ElementMetrics>*/ metricsList) {
+		org.eclipse.emf.ecore.EObject next = diagram;
+		java.util.Iterator/*<EObject>*/ it = diagram.eAllContents();
+		do {
+			if (next instanceof org.eclipse.gmf.runtime.notation.View) {
+				org.eclipse.gmf.runtime.notation.View view = (org.eclipse.gmf.runtime.notation.View) next;
+				final int vid = «EXPAND xpt::editor::VisualIDRegistry::getVisualIDMethodCall FOR diagram»(view);
+				java.util.ArrayList/*<Metric>*/ res = new java.util.ArrayList/*<Metric>*/(5);
+				switch (vid) {
+«FOREACH (getDiagramMetrics(metrics)->collect(m | m.target.oclAsType(gmfgen::GenDiagramElementTarget).element)->flatten()->asOrderedSet())[gmfgen::GenCommonBase]->asSequence() AS cb-»
+					case «EXPAND xpt::editor::VisualIDRegistry::visualID FOR cb» : {«-»
+«FOREACH getDiagramMetrics(metrics)->select(m | m.target.oclAsType(gmfgen::GenDiagramElementTarget).element->includes(cb)) AS m»
+						res.add(«EXPAND metricResult('view', true) FOR m»);
+«ENDFOREACH-»
+						break;
+					}
+«ENDFOREACH-»
+				}
+				if (!res.isEmpty()) {
+					ElementMetrics row = new ElementMetrics(view, formatViewName(view), (Metric[]) res.toArray(new Metric[res.size()]));
+					row.diagramElementID = view.eResource().getURIFragment(view);
+					metricsList.add(row);
+				}
+			}
+			next = it.hasNext() ? (org.eclipse.emf.ecore.EObject) it.next() : null;
+		} while (next != null);
+	}
+«ENDDEFINE»
+
+/*
+ * FIXME:
+ * 		for now, keep approach from old implementation, i.e. iterate content
+ *		of element associated with diagram. Smarter approach would be
+ *		iteration over diagram elements, then accessing their respective
+ *		semantic elements (if set), and collecting metrics for them.  
+ */
+«DEFINE calcDomainMetricsMethod FOR gmfgen::GenEditorGenerator»
+	«EXPAND xpt::Common::generatedMemberComment('NOTE: metrics are being collected for domain elements contained in the semantic element associated with diagram view, actual diagram content (elements present there) is not taken into account.')»
+	static void calculateSemanticElementMetrics(org.eclipse.gmf.runtime.diagram.ui.editparts.DiagramEditPart diagramEditPart, java.util.List/*<ElementMetrics>*/ metricsList) {
+		org.eclipse.gmf.runtime.notation.Diagram diagram = diagramEditPart.getDiagramView();
+		org.eclipse.emf.ecore.EObject next = diagram.getElement();
+		java.util.Iterator/*<EObject>*/ it = next != null ? next.eAllContents() : java.util.Collections.EMPTY_LIST.iterator();
+		java.util.HashMap/*<EObject, ElementMetrics>*/ target2row = new java.util.HashMap/*<EObject, ElementMetrics>*/();
+		while (next != null) {
+			java.util.ArrayList/*<Metric>*/ res = new java.util.ArrayList/*<Metric>*/(5);
+«FOREACH ((metrics.metrics.target)[gmfgen::GenDomainElementTarget].element->asOrderedSet()->asSequence())[genmodel::GenClass] AS e-»
+			if («EXPAND MetaModel::MetaClass FOR e».isInstance(next)) {
+«FOREACH metrics.metrics->select(m | m.target.getContext() = e)->asSequence() AS m-»
+				res.add(«EXPAND metricResult('next', true) FOR m»);
+«ENDFOREACH-»
+			}
+«ENDFOREACH-»
+			if (!res.isEmpty()) {
+				ElementMetrics row = new ElementMetrics(next, formatElementName(next), (Metric[]) res.toArray(new Metric[res.size()]));
+				metricsList.add(row);
+				target2row.put(next, row);
+			}
+			next = it.hasNext() ? (org.eclipse.emf.ecore.EObject) it.next() : null;
+		}
+		if (!target2row.isEmpty()) { // list was modified, need to process only semantic metrics
+			// bind semantic elements to notation
+			«diagram.getDiagramEditorUtilQualifiedClassName()».LazyElement2ViewMap element2ViewMap = new «diagram.getDiagramEditorUtilQualifiedClassName()».LazyElement2ViewMap(diagram, target2row.keySet());
+			for (java.util.Iterator it2 = target2row.entrySet().iterator(); it2.hasNext();) {
+				java.util.Map.Entry entry = (java.util.Map.Entry) it2.next();
+				org.eclipse.emf.ecore.EObject semanticElement = (org.eclipse.emf.ecore.EObject) entry.getKey();
+				org.eclipse.gmf.runtime.notation.View targetView = «diagram.getDiagramEditorUtilQualifiedClassName()».findView(diagramEditPart, semanticElement, element2ViewMap);
+				ElementMetrics elementMetrics = (ElementMetrics) entry.getValue();
+				elementMetrics.diagramElementID = targetView.eResource().getURIFragment(targetView);
+			}
+		}
+	}
+«ENDDEFINE»
+
+«DEFINE formatNotationElementNameMethod FOR gmfgen::GenDiagram-»
+	«EXPAND xpt::Common::generatedMemberComment»
+	private static String formatViewName(org.eclipse.gmf.runtime.notation.View viewTarget) {
+		StringBuffer notationQNameBuf = new StringBuffer();
+		notationQNameBuf.append(formatElementName(viewTarget));
+		if (viewTarget.getElement() != null) {
+			notationQNameBuf.append("->").append(formatElementName(viewTarget.getElement()));	«EXPAND xpt::Common::nonNLS»
+		}
+		int visualID = «EXPAND xpt::editor::VisualIDRegistry::getVisualIDMethodCall»(viewTarget);
+		notationQNameBuf.append('[').append(visualID < 0 ? Integer.toString(System.identityHashCode(viewTarget)) : Integer.toString(visualID)).append(']');
+		return notationQNameBuf.toString();
+	}
+«ENDDEFINE»
+
+«DEFINE formatSemanticElementNameMethod FOR gmfgen::GenDiagram-»
+	«EXPAND xpt::Common::generatedMemberComment»
+	private static String formatElementName(org.eclipse.emf.ecore.EObject object) {
+		return org.eclipse.gmf.runtime.emf.core.util.EMFCoreUtil.getQualifiedName(object, true);
+	}
+«ENDDEFINE»
+
+«DEFINE metricCalcMethod FOR gmfgen::GenMetricRule»
+	«EXPAND xpt::Common::generatedMemberComment»
+	public static«REM»FIXME: (1) refactor to get rid of statics (2) 'public' only those referenced from audits«ENDREM» Double «calcMethodName(self)»(«EXPAND calcMethodArgs(self) FOR target») {
+		«EXPAND calcMethodBody(self) FOR rule.provider-»
+	}
+«ENDDEFINE»
+
+«DEFINE calcMethodArgs(metric : gmfgen::GenMetricRule) FOR gmfgen::GenMeasurable»«ERROR 'Unrecognized metric target: ' + self.repr()»«ENDDEFINE»
+
+«DEFINE calcMethodArgs(metric : gmfgen::GenMetricRule) FOR gmfgen::GenDomainElementTarget»«EXPAND MetaModel::QualifiedClassName FOR element» target«ENDDEFINE»
+
+«REM»
+	We do check all elements to be of specific kind to provide most narrow type cast
+	However, GenDiagramElementTargetImpl#getContext uses first element's notation class only
+«ENDREM»
+«DEFINE calcMethodArgs(metric : gmfgen::GenMetricRule) FOR gmfgen::GenDiagramElementTarget-»
+«IF (element)[gmfgen::GenNode]->size() = element->size()»org.eclipse.gmf.runtime.notation.Node«-»
+«ELSEIF (element)[gmfgen::GenLink]->size() = element->size()»org.eclipse.gmf.runtime.notation.Edge«-»
+«ELSEIF (element)[gmfgen::GenDiagram]->size() = element->size()»org.eclipse.gmf.runtime.notation.Diagram«-»
+«ELSE»org.eclipse.gmf.runtime.notation.View«ENDIF» target«ENDDEFINE»
+
+«REM»Note, use of QualifiedClassName here assumes it always works the same for the notation model, regardless of 'dynamic model' use (i.e. always gives qName of oeg.runtime.notation.* Java class)«ENDREM»
+«DEFINE calcMethodArgs(metric : gmfgen::GenMetricRule) FOR gmfgen::GenNotationElementTarget»«EXPAND MetaModel::QualifiedClassName FOR element» target«ENDDEFINE»
+
+
+«DEFINE calcMethodBody(metric : gmfgen::GenMetricRule) FOR gmfgen::GenExpressionProviderBase»«ERROR 'No idea how to calculate metric\'s value for ' + self.repr()»«ENDDEFINE»
+
+«DEFINE calcMethodBody(metric : gmfgen::GenMetricRule) FOR gmfgen::GenExpressionInterpreter-»
+	if («exprFieldName(metric)» == null) {
+		«exprFieldName(metric)» = «EXPAND xpt::expressions::getExpression::getExpression(metric.rule, metric.target.getContext())»;
+	}
+	Object val = «exprFieldName(metric)».evaluate(target);
+	if (val instanceof Number) {
+		return val.getClass() == Double.class ? (Double) val : new Double(((Number) val).doubleValue());
+	}
+	return null;
+«ENDDEFINE»
+
+«DEFINE calcMethodBody(metric : gmfgen::GenMetricRule) FOR gmfgen::GenJavaExpressionProvider-»
+«IF injectExpressionBody and (metric.rule.body <> null and metric.rule.body.xpandLength() <> 0)-»
+	«metric.rule.body»
+«ELSEIF throwException or (injectExpressionBody and (metric.rule.body = null or metric.rule.body.xpandLength() = 0))-»
+	// TODO: implement this method
+	// Ensure that you remove @generated or mark it @generated NOT
+	throw new java.lang.UnsupportedOperationException("No user java implementation provided");«EXPAND xpt::Common::nonNLS»
+«ELSE-»
+	return new Double(Double.NaN);
+«ENDIF-»
+«ENDDEFINE»
+
+«DEFINE metricCalcField FOR gmfgen::GenMetricRule-»
+«EXPAND metricCalcField(self) FOR rule.provider-»
+«ENDDEFINE» 
+
+«DEFINE metricCalcField(metric : gmfgen::GenMetricRule) FOR gmfgen::GenExpressionProviderBase»«REM»NO-OP«ENDREM»«ENDDEFINE»
+«DEFINE metricCalcField(metric : gmfgen::GenMetricRule) FOR gmfgen::GenExpressionInterpreter-»
+	«EXPAND xpt::Common::generatedMemberComment»
+	private static«REM»FIXME: refactor to get rid of static fields«ENDREM» «container.getAbstractExpressionQualifiedClassName()» «exprFieldName(metric)»;
+«ENDDEFINE»
+
+«DEFINE invokeCalcMethod(accessor : String, isSpecific : Boolean) FOR gmfgen::GenMetricRule»
+«container.editorGen.diagram.getMetricProviderQualifiedClassName()».«calcMethodName(self)»(«IF not isSpecific /*CastEObject would be better, however need GenClassifier*/»(«EXPAND MetaModel::QualifiedClassName FOR target.getContext()») «ENDIF»«accessor»)«ENDDEFINE»
+
+
+/*
+ * Next two methods should return arrays of identical length, hence are placed into a single template
+ */
+«DEFINE keysAndToolTipsMethods FOR gmfgen::GenMetricContainer»
+	«EXPAND xpt::Common::generatedMemberComment»
+	private static String[] getMetricKeys() {
+		return new String[] {
+			«FOREACH metrics->asSequence() AS m SEPARATOR ',\n'»«toStringLiteral(m.key)»«ENDFOREACH»
+		};
+	}
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	private static String[] getMetricToolTips() {
+		return new String[] {
+			«FOREACH metrics->asSequence() AS m SEPARATOR ',\n'-»
+«toStringLiteral((if m.name = null then m.key else m.name endif))»«IF m.description <> null» + '\n' + «toStringLiteral(m.description)» + '\n'«ENDIF»«IF null <> m.lowLimit» + «toStringLiteral('low: ' + m.lowLimit.repr())»«ENDIF»«IF null <> m.highLimit» + «toStringLiteral('high: ' + m.highLimit.repr())»«ENDIF-»
+			«ENDFOREACH»
+		};
+	} 
+«ENDDEFINE»
+
+«DEFINE metricResult(targetAccessor : String, isJustEObject : Boolean) FOR gmfgen::GenMetricRule-»
+new Metric(«toStringLiteral(key)», «calcMethodName(self)»(«IF isJustEObject and not (Sequence { target.getContext() })[genmodel::GenClass]->isEmpty()»«EXPAND MetaModel::CastEObject(targetAccessor) FOR target.getContext().oclAsType(genmodel::GenClass)»«ELSE»«targetAccessor»«ENDIF»), «IF null = lowLimit»null«ELSE»new Double(«lowLimit»)«ENDIF», «IF null = highLimit»null«ELSE»new Double(«highLimit»)«ENDIF»)
+«ENDDEFINE»
+
+
+
+«DEFINE additions FOR gmfgen::GenDiagram»«ENDDEFINE»

@@ -1,0 +1,93 @@
+﻿/*
+ * Copyright (c) 2007, 2009 Borland Software Corporation
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Artem Tikhomirov (Borland) - initial API and implementation
+ */
+«IMPORT 'http://www.eclipse.org/gmf/2009/GenModel'»
+
+«DEFINE Class FOR gmfgen::GenPropertySheet»
+	«EXPAND xpt::Common::copyright FOR editorGen-»
+package «packageName»;
+
+«EXPAND xpt::Common::generatedClassComment»
+public class «labelProviderClassName» extends «EXPAND extendsList» implements «EXPAND implementsList» {
+
+«EXPAND getTextMethod»
+«EXPAND getImageMethod»
+«EXPAND unwrapMethods»
+
+«EXPAND additions»
+}
+«ENDDEFINE»
+
+«DEFINE extendsList FOR gmfgen::GenPropertySheet»org.eclipse.jface.viewers.BaseLabelProvider«ENDDEFINE»
+
+«DEFINE implementsList FOR gmfgen::GenPropertySheet»org.eclipse.jface.viewers.ILabelProvider«ENDDEFINE»
+
+«DEFINE getTextMethod FOR gmfgen::GenPropertySheet»
+	«EXPAND xpt::Common::generatedMemberComment»
+	public String getText(Object element) {
+		element = unwrap(element);
+«IF editorGen.navigator <> null-»
+		if (element instanceof «editorGen.navigator.getNavigatorGroupQualifiedClassName()») {
+			return ((«editorGen.navigator.getNavigatorGroupQualifiedClassName()») element).getGroupName();
+		}
+«ENDIF-»
+		org.eclipse.gmf.runtime.emf.type.core.IElementType etype = getElementType(getView(element));
+		return etype == null ? "" : etype.getDisplayName();
+	}
+«ENDDEFINE»
+
+«DEFINE getImageMethod FOR gmfgen::GenPropertySheet»
+	«EXPAND xpt::Common::generatedMemberComment»
+	public org.eclipse.swt.graphics.Image getImage(Object element) {
+		org.eclipse.gmf.runtime.emf.type.core.IElementType etype = getElementType(getView(unwrap(element)));
+		return etype == null ? null : «editorGen.diagram.getElementTypesQualifiedClassName()».getImage(etype);
+	}
+«ENDDEFINE»
+
+«DEFINE unwrapMethods FOR gmfgen::GenPropertySheet»
+	«EXPAND xpt::Common::generatedMemberComment»
+	private Object unwrap(Object element) {
+		if (element instanceof org.eclipse.jface.viewers.IStructuredSelection) {
+			return ((org.eclipse.jface.viewers.IStructuredSelection) element).getFirstElement();
+		}
+		return element;
+	}
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	private org.eclipse.gmf.runtime.notation.View getView(Object element) {
+		if (element instanceof org.eclipse.gmf.runtime.notation.View) {
+			return (org.eclipse.gmf.runtime.notation.View) element;
+		}
+		if (element instanceof org.eclipse.core.runtime.IAdaptable) {
+			return (org.eclipse.gmf.runtime.notation.View)
+					((org.eclipse.core.runtime.IAdaptable) element).getAdapter(org.eclipse.gmf.runtime.notation.View.class);
+		}
+		return null;
+	}
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	private org.eclipse.gmf.runtime.emf.type.core.IElementType getElementType(org.eclipse.gmf.runtime.notation.View view) {
+		// For intermediate views climb up the containment hierarchy to find the one associated with an element type.
+		while (view != null) {
+			int vid = «editorGen.diagram.getVisualIDRegistryQualifiedClassName()».getVisualID(view);
+			org.eclipse.gmf.runtime.emf.type.core.IElementType etype =
+					«editorGen.diagram.getElementTypesQualifiedClassName()».getElementType(vid);
+			if (etype != null) {
+				return etype;
+			}
+			view = view.eContainer() instanceof org.eclipse.gmf.runtime.notation.View ?
+					(org.eclipse.gmf.runtime.notation.View) view.eContainer() : null;
+		}
+		return null;
+	}
+«ENDDEFINE»
+
+«DEFINE additions FOR gmfgen::GenPropertySheet»«ENDDEFINE»

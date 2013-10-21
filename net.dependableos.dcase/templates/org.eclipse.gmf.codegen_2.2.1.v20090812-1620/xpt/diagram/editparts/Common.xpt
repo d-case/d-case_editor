@@ -1,0 +1,154 @@
+﻿/*
+ * Copyright (c) 2006, 2009 Borland Software Corporation
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Dmitry Stadnik (Borland) - initial API and implementation
+ */
+
+«IMPORT 'http://www.eclipse.org/gmf/2009/GenModel'»
+«EXTENSION xpt::StringOperations»
+
+«DEFINE visualIDConstant FOR gmfgen::GenCommonBase-»
+	«EXPAND xpt::Common::generatedMemberComment»
+	public static final int VISUAL_ID = «visualID»;
+«ENDDEFINE»
+
+«DEFINE behaviour FOR gmfgen::GenCommonBase-»
+	«EXPAND behaviour FOREACH behaviour-»
+«ENDDEFINE»
+
+«DEFINE behaviour FOR gmfgen::Behaviour-»
+«ENDDEFINE»
+
+«DEFINE behaviour FOR gmfgen::CustomBehaviour-»
+«IF editPolicyQualifiedClassName = null or editPolicyQualifiedClassName.trim().xpandLength() = 0-»
+	removeEditPolicy(«key»); «IF key.xpandStartsWith('\"') and key.xpandEndsWith('\"')»«EXPAND xpt::Common::nonNLS»«ENDIF»
+«ELSE-»
+	installEditPolicy(«key», new «getEditPolicyQualifiedClassName()»()); «IF key.xpandStartsWith('\"') and key.xpandEndsWith('\"')»«EXPAND xpt::Common::nonNLS»«ENDIF»
+«ENDIF-»
+«ENDDEFINE»
+
+«DEFINE behaviour FOR gmfgen::OpenDiagramBehaviour-»
+	installEditPolicy(org.eclipse.gmf.runtime.diagram.ui.editpolicies.EditPolicyRoles.OPEN_ROLE,
+		new «getEditPolicyQualifiedClassName()»());
+«ENDDEFINE»
+
+«DEFINE labelFigure FOR gmfgen::ParentAssignedViewmap-»
+	«EXPAND xpt::Common::generatedMemberComment»
+	protected org.eclipse.draw2d.IFigure createFigure() {
+		// Parent should assign one using «EXPAND impl::diagram::editparts::TextAware::labelSetterName»() method
+		return null;
+	}
+«ENDDEFINE»
+
+«DEFINE labelFigure FOR gmfgen::Viewmap-»
+	«EXPAND xpt::Common::generatedMemberComment»
+	protected org.eclipse.draw2d.IFigure createFigure() {
+		org.eclipse.draw2d.IFigure label = createFigurePrim();
+		defaultText = getLabelTextHelper(label);
+		return label;
+	}
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	protected org.eclipse.draw2d.IFigure createFigurePrim() {
+		«EXPAND labelFigurePrim FOR self-»
+«ENDDEFINE»
+
+«DEFINE labelFigurePrim FOR gmfgen::FigureViewmap-»
+«IF figureQualifiedClassName = null-»
+	return new org.eclipse.draw2d.Label();
+«ELSE-»
+	return new «figureQualifiedClassName»();
+«ENDIF-»
+	}
+«ENDDEFINE»
+
+«DEFINE labelFigurePrim FOR gmfgen::SnippetViewmap-»
+	return «body»;
+	}
+«ENDDEFINE»
+
+«DEFINE labelFigurePrim FOR gmfgen::InnerClassViewmap-»
+	return new «className»();
+	}
+
+	«classBody»
+«ENDDEFINE»
+
+«DEFINE labelFigurePrim FOR gmfgen::Viewmap-»
+	«ERROR 'Unknown viewmap: ' + self.repr()-»
+	}
+«ENDDEFINE»
+
+«DEFINE notationalListeners FOR gmfgen::GenCommonBase-»
+	«EXPAND xpt::Common::generatedMemberComment»
+	protected void addNotationalListeners() {
+		super.addNotationalListeners();
+		addListenerFilter("PrimaryView", this, getPrimaryView()); «EXPAND xpt::Common::nonNLS»
+	}
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	protected void removeNotationalListeners() {
+		super.removeNotationalListeners();
+		removeListenerFilter("PrimaryView"); «EXPAND xpt::Common::nonNLS»
+	}
+«ENDDEFINE»
+
+«DEFINE handleBounds FOR gmfgen::GenCommonBase-»
+	if (org.eclipse.gmf.runtime.notation.NotationPackage.eINSTANCE.getSize_Width().equals(feature) ||
+			org.eclipse.gmf.runtime.notation.NotationPackage.eINSTANCE.getSize_Height().equals(feature) ||
+			org.eclipse.gmf.runtime.notation.NotationPackage.eINSTANCE.getLocation_X().equals(feature) ||
+			org.eclipse.gmf.runtime.notation.NotationPackage.eINSTANCE.getLocation_Y().equals(feature)) {
+		refreshBounds();
+	}
+«ENDDEFINE»
+
+«DEFINE handleText FOR gmfgen::GenCommonBase-»
+	if (org.eclipse.gmf.runtime.notation.NotationPackage.eINSTANCE.getFontStyle_FontColor().equals(feature)) {
+		Integer c = (Integer) event.getNewValue();
+		setFontColor(org.eclipse.gmf.runtime.diagram.ui.l10n.DiagramColorRegistry.getInstance().getColor(c));
+	} else if (org.eclipse.gmf.runtime.notation.NotationPackage.eINSTANCE.getFontStyle_Underline().equals(feature)) {
+		refreshUnderline();
+	} else if (org.eclipse.gmf.runtime.notation.NotationPackage.eINSTANCE.getFontStyle_StrikeThrough().equals(feature)) {
+		refreshStrikeThrough();
+	} else if (org.eclipse.gmf.runtime.notation.NotationPackage.eINSTANCE.getFontStyle_FontHeight().equals(feature) ||
+			org.eclipse.gmf.runtime.notation.NotationPackage.eINSTANCE.getFontStyle_FontName().equals(feature) ||
+			org.eclipse.gmf.runtime.notation.NotationPackage.eINSTANCE.getFontStyle_Bold().equals(feature) ||
+			org.eclipse.gmf.runtime.notation.NotationPackage.eINSTANCE.getFontStyle_Italic().equals(feature)) {
+		refreshFont();
+	} else {
+		if (getParser() != null && getParser().isAffectingEvent(event, getParserOptions().intValue())) {
+			refreshLabel();
+		}
+		if (getParser() instanceof org.eclipse.gmf.runtime.emf.ui.services.parser.ISemanticParser) {
+			org.eclipse.gmf.runtime.emf.ui.services.parser.ISemanticParser modelParser =
+				(org.eclipse.gmf.runtime.emf.ui.services.parser.ISemanticParser) getParser();
+			if (modelParser.areSemanticElementsAffected(null, event)) {
+				removeSemanticListeners();
+				if (resolveSemanticElement() != null) {
+					addSemanticListeners();
+				}
+				refreshLabel();
+			}
+		}
+	}
+«ENDDEFINE»
+
+«DEFINE installSemanticEditPolicy FOR gmfgen::GenCommonBase-»
+	«IF sansDomain-»
+removeEditPolicy(org.eclipse.gmf.runtime.diagram.ui.editpolicies.EditPolicyRoles.SEMANTIC_ROLE);
+	«ELSE-»
+installEditPolicy(org.eclipse.gmf.runtime.diagram.ui.editpolicies.EditPolicyRoles.SEMANTIC_ROLE, new «getItemSemanticEditPolicyQualifiedClassName()»());
+	«ENDIF-»
+«ENDDEFINE»
+
+«DEFINE installCanonicalEditPolicy FOR gmfgen::GenContainerBase-»
+	«IF needsCanonicalEditPolicy()-»
+installEditPolicy(org.eclipse.gmf.runtime.diagram.ui.editpolicies.EditPolicyRoles.CANONICAL_ROLE, new «getCanonicalEditPolicyQualifiedClassName()»());
+	«ENDIF-»
+«ENDDEFINE»

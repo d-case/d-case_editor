@@ -1,0 +1,63 @@
+﻿/*
+ * Copyright (c) 2008, 2009 Borland Software Corporation
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Artem Tikhomirov (Borland) - [244419] custom parsers
+ */
+
+«IMPORT 'http://www.eclipse.org/gmf/2009/GenModel'»
+«EXTENSION xpt::StringOperations»
+
+«DEFINE Main FOR gmfgen::CustomParser»
+«EXPAND xpt::Common::copyright FOR holder.editorGen-»
+«EXPAND xpt::Common::packageStatement FOR qualifiedName»
+
+«EXPAND xpt::Common::generatedClassComment»
+public class «qualifiedName.xpandSplit('\\.')->last()»«EXPAND extendsList»«EXPAND implementsList» {
+«EXPAND body»
+«EXPAND additions»
+}
+«ENDDEFINE»
+
+«DEFINE additions FOR gmfgen::CustomParser»«ENDDEFINE»
+«DEFINE extendsList FOR gmfgen::CustomParser»«ENDDEFINE»
+«DEFINE implementsList FOR gmfgen::CustomParser» implements org.eclipse.gmf.runtime.common.ui.services.parser.IParser«ENDDEFINE»
+
+«DEFINE body FOR gmfgen::CustomParser»
+	«EXPAND xpt::Common::generatedMemberComment»
+	public String getEditString(org.eclipse.core.runtime.IAdaptable element, int flags) {
+		return "";
+	}
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	public org.eclipse.gmf.runtime.common.ui.services.parser.IParserEditStatus isValidEditString(org.eclipse.core.runtime.IAdaptable element, String editString) {
+		// TODO change to EDITABLE_STATUS as appropriate
+		return org.eclipse.gmf.runtime.common.ui.services.parser.ParserEditStatus.UNEDITABLE_STATUS;
+	}
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	public org.eclipse.gmf.runtime.common.core.command.ICommand getParseCommand(org.eclipse.core.runtime.IAdaptable element, String newString, int flags) {
+		// TODO
+		throw new UnsupportedOperationException(); 
+	}
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	public String getPrintString(org.eclipse.core.runtime.IAdaptable element, int flags) {
+		return "";
+	}
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	public boolean isAffectingEvent(Object event, int flags) {
+		return false;
+	}
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	public org.eclipse.jface.text.contentassist.IContentAssistProcessor getCompletionProcessor(org.eclipse.core.runtime.IAdaptable element) {
+    	return null;
+	}
+«ENDDEFINE»

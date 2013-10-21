@@ -1,0 +1,158 @@
+﻿/*
+ * Copyright (c) 2007, 2009 Borland Software Corporation
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Dmitry Stadnik (Borland) - initial API and implementation
+ */
+
+«IMPORT 'http://www.eclipse.org/gmf/2009/GenModel'»
+«EXTENSION xpt::diagram::Utils»
+
+«DEFINE CreateNodeCommand FOR gmfgen::GenNode-»
+«EXPAND xpt::Common::copyright FOR getDiagram().editorGen-»
+package «getDiagram().editCommandsPackageName»;
+
+«EXPAND xpt::Common::generatedClassComment»
+public class «createCommandClassName» extends org.eclipse.gmf.runtime.emf.type.core.commands.EditElementCommand {
+
+	«EXPAND _constructor-»
+
+	«EXPAND getElementToEdit-»
+
+	«EXPAND canExecuteMethod-»
+
+	«EXPAND doExecuteWithResultMethod»
+
+	«EXPAND doConfigureMethod»	
+}
+«ENDDEFINE»
+
+«DEFINE _constructor FOR gmfgen::GenNode-»
+	«EXPAND xpt::Common::generatedMemberComment»
+	public «createCommandClassName»(org.eclipse.gmf.runtime.emf.type.core.requests.CreateElementRequest req) {
+		super(req.getLabel(), null, req);
+	}
+«ENDDEFINE»
+
+/*
+ * TODO: either use setElementToEdit, or generate downcasted version (which may be troublesome if containment and child features point to a different parent) 
+ */
+«DEFINE getElementToEdit FOR gmfgen::GenNode-»
+	«EXPAND xpt::Common::generatedMemberComment('FIXME: replace with setElementToEdit()')»
+protected org.eclipse.emf.ecore.EObject getElementToEdit() {
+	org.eclipse.emf.ecore.EObject container = ((org.eclipse.gmf.runtime.emf.type.core.requests.CreateElementRequest) getRequest()).getContainer();
+	if (container instanceof org.eclipse.gmf.runtime.notation.View) {
+		container = ((org.eclipse.gmf.runtime.notation.View) container).getElement();
+	}
+	return container;
+}
+«ENDDEFINE»
+
+«DEFINE doExecuteWithResultMethod FOR gmfgen::GenNode-»
+	«EXPAND xpt::Common::generatedMemberComment»
+	protected org.eclipse.gmf.runtime.common.core.command.CommandResult doExecuteWithResult(org.eclipse.core.runtime.IProgressMonitor monitor, org.eclipse.core.runtime.IAdaptable info) throws org.eclipse.core.commands.ExecutionException {
+«IF modelFacet.isPhantomElement()-»
+		«EXPAND phantomElementCreation(self, 'newElement') FOR modelFacet»
+«ELSE-»
+		«EXPAND normalElementCreation(self, 'newElement') FOR modelFacet»
+«ENDIF»
+		«EXPAND initialize(self, 'newElement') FOR modelFacet-»
+«IF true/*FIXME boolean needsExternalConfiguration*/»
+		doConfigure(newElement, monitor, info);
+«ENDIF»
+		((org.eclipse.gmf.runtime.emf.type.core.requests.CreateElementRequest) getRequest()).setNewElement(«EXPAND MetaModel::DowncastToEObject('newElement') FOR modelFacet.metaClass»);
+		return org.eclipse.gmf.runtime.common.core.command.CommandResult.newOKCommandResult(newElement);
+	}
+«ENDDEFINE»
+
+/*
+ * Unlike original CreateElementCommand, we don't keep track of IStatus from configureCommand.execute,
+ * nor allow status setting from doDefaultCreation. The reason is ICommandProxy#execute implementation,
+ * which ignores any status from wrapped ICommand. Besides, both CommandResult and IStatus seems too much to me.
+ */
+«DEFINE doConfigureMethod FOR gmfgen::GenNode-»
+	«EXPAND xpt::Common::generatedMemberComment»
+	protected void doConfigure(«EXPAND MetaModel::QualifiedClassName FOR modelFacet.metaClass» newElement, org.eclipse.core.runtime.IProgressMonitor monitor, org.eclipse.core.runtime.IAdaptable info) throws org.eclipse.core.commands.ExecutionException {
+		org.eclipse.gmf.runtime.emf.type.core.IElementType elementType = ((org.eclipse.gmf.runtime.emf.type.core.requests.CreateElementRequest) getRequest()).getElementType();
+		org.eclipse.gmf.runtime.emf.type.core.requests.ConfigureRequest configureRequest = new org.eclipse.gmf.runtime.emf.type.core.requests.ConfigureRequest(getEditingDomain(), «EXPAND MetaModel::DowncastToEObject('newElement') FOR modelFacet.metaClass», elementType);
+		configureRequest.setClientContext(((org.eclipse.gmf.runtime.emf.type.core.requests.CreateElementRequest) getRequest()).getClientContext());
+		configureRequest.addParameters(getRequest().getParameters());
+		org.eclipse.gmf.runtime.common.core.command.ICommand configureCommand = elementType.getEditCommand(configureRequest);
+		if (configureCommand != null && configureCommand.canExecute()) {
+			configureCommand.execute(monitor, info);
+		}
+	}
+«ENDDEFINE»
+
+«DEFINE canExecuteMethod FOR gmfgen::GenNode-»
+	«EXPAND xpt::Common::generatedMemberComment»
+	public boolean canExecute() {
+«IF modelFacet.isPhantomElement()-»
+		return true;
+«ELSE-»
+	«EXPAND canExecute_Normal FOR modelFacet»
+«ENDIF-»
+	}
+«ENDDEFINE»
+
+«DEFINE canExecute_Normal FOR gmfgen::TypeModelFacet-»
+«IF containmentMetaFeature.ecoreFeature.upperBound.oclAsType(Integer) > 0 or (childMetaFeature <> containmentMetaFeature and childMetaFeature.ecoreFeature.upperBound.oclAsType(Integer) > 0)-»
+	«EXPAND MetaModel::DeclareAndAssign('container', 'getElementToEdit()') FOR containmentMetaFeature.genClass-»
+	«IF containmentMetaFeature.ecoreFeature.upperBound.oclAsType(Integer) > 0-»
+			«IF containmentMetaFeature.ecoreFeature.upperBound.oclAsType(Integer) = 1»
+		if («EXPAND MetaModel::getFeatureValue('container', containmentMetaFeature.genClass) FOR containmentMetaFeature» != null) {
+			«ELSE-»
+		if («EXPAND MetaModel::getFeatureValue('container', containmentMetaFeature.genClass) FOR containmentMetaFeature».size() >= «containmentMetaFeature.ecoreFeature.upperBound.oclAsType(Integer)») {
+			«ENDIF-»
+			return false;
+		}
+		«ENDIF-»
+		«IF childMetaFeature <> containmentMetaFeature and childMetaFeature.ecoreFeature.upperBound.oclAsType(Integer) > 0-»
+			«IF childMetaFeature.ecoreFeature.upperBound.oclAsType(Integer) = 1-»
+		if («EXPAND MetaModel::getFeatureValue('container', containmentMetaFeature.genClass) FOR childMetaFeature» != null) {
+			«ELSE-»
+		if («EXPAND MetaModel::getFeatureValue('container', containmentMetaFeature.genClass) FOR childMetaFeature».size() >= «childMetaFeature.ecoreFeature.upperBound.oclAsType(Integer)») {
+			«ENDIF-»
+			return false;
+		}
+	«ENDIF-»
+«ENDIF-»
+	return true;
+«ENDDEFINE»
+
+«DEFINE phantomElementCreation(node : gmfgen::GenNode, varName : String) FOR gmfgen::TypeModelFacet-»
+	// Uncomment to put "phantom" objects into the diagram file.		
+	// org.eclipse.emf.ecore.resource.Resource resource = 
+	// 		((org.eclipse.gmf.runtime.emf.type.core.requests.CreateElementRequest) getRequest()).getContainer().eResource();
+	// if (resource == null) {
+	// 	return null;
+	// }
+	org.eclipse.emf.ecore.resource.Resource resource = getElementToEdit().eResource();
+	«EXPAND MetaModel::NewInstance(varName) FOR metaClass»
+	resource.getContents().add(«EXPAND MetaModel::DowncastToEObject(varName) FOR metaClass»);
+«ENDDEFINE»
+
+«DEFINE normalElementCreation(node : gmfgen::GenNode, varName : String) FOR gmfgen::TypeModelFacet-»
+	«EXPAND MetaModel::NewInstance(varName) FOR metaClass»
+«IF containmentMetaFeature <> null-»
+	«EXPAND MetaModel::DeclareAndAssign('owner', 'getElementToEdit()') FOR containmentMetaFeature.genClass»
+	«EXPAND MetaModel::modifyFeature('owner', containmentMetaFeature.genClass, varName) FOR containmentMetaFeature-»
+«ELSE-»
+	//
+	// FIXME no containment feature found in the genmodel, toolsmith need to manually write code here to add «varName» to a parent
+	//
+«ENDIF»
+«IF hasExplicitChildFeature(self)-»
+	«EXPAND MetaModel::DeclareAndAssign('childHolder', 'getElementToEdit()') FOR childMetaFeature.genClass»
+	«EXPAND MetaModel::modifyFeature('childHolder', childMetaFeature.genClass, varName) FOR childMetaFeature»
+«ENDIF-»
+«ENDDEFINE»
+
+«DEFINE initialize(node : gmfgen::GenNode, newElementVar : String) FOR gmfgen::TypeModelFacet»«IF modelElementInitializer <> null-»
+«node.getDiagram().getElementTypesQualifiedClassName()».init_«node.getUniqueIdentifier()»(«newElementVar»);
+«ENDIF»«ENDDEFINE»

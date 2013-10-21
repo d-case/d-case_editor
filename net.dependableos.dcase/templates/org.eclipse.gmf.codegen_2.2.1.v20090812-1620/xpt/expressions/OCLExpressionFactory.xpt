@@ -1,0 +1,148 @@
+﻿/*
+ * Copyright (c) 2007, 2009 Borland Software Corporation
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Dmitry Stadnik (Borland) - initial API and implementation
+ */
+
+«IMPORT 'http://www.eclipse.org/gmf/2009/GenModel'»
+
+«DEFINE OCLExpressionFactory FOR gmfgen::GenExpressionInterpreter-»
+«EXPAND xpt::Common::copyright FOR container.editorGen-»
+package «container.expressionsPackageName»;
+
+«EXPAND xpt::Common::generatedClassComment»
+public class «className» {
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	private «className»() {
+	}
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	public static «container.getAbstractExpressionQualifiedClassName()» getExpression(
+			String body, org.eclipse.emf.ecore.EClassifier context, java.util.Map environment) {
+		return new Expression(body, context, environment);
+	}
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	public static «container.getAbstractExpressionQualifiedClassName()» getExpression(
+			String body, org.eclipse.emf.ecore.EClassifier context) {
+		return getExpression(body, context, java.util.Collections.EMPTY_MAP);
+	}
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	private static class Expression extends «container.getAbstractExpressionQualifiedClassName()» {
+
+		«EXPAND xpt::Common::generatedMemberComment»
+		private java.lang.ref.WeakReference queryRef;
+
+		«EXPAND xpt::Common::generatedMemberComment»
+		private final org.eclipse.ocl.ecore.OCL oclInstance;
+
+		«EXPAND xpt::Common::generatedMemberComment»
+		public Expression(String body, org.eclipse.emf.ecore.EClassifier context, java.util.Map environment) {
+			super(body, context);
+			oclInstance = org.eclipse.ocl.ecore.OCL.newInstance();
+			initCustomEnv(oclInstance.getEnvironment(), environment);
+		}
+
+		«EXPAND xpt::Common::generatedMemberComment»
+		protected org.eclipse.ocl.Query getQuery() {
+			org.eclipse.ocl.Query oclQuery = null;
+			if (this.queryRef != null) {
+				oclQuery = (org.eclipse.ocl.Query) this.queryRef.get();
+			}
+			if (oclQuery == null) {
+				org.eclipse.ocl.helper.OCLHelper oclHelper = oclInstance.createOCLHelper();
+				oclHelper.setContext(context());
+				try {
+					org.eclipse.ocl.expressions.OCLExpression oclExpression = oclHelper.createQuery(body());
+					oclQuery = oclInstance.createQuery(oclExpression);
+					this.queryRef = new java.lang.ref.WeakReference(oclQuery);
+					setStatus(org.eclipse.core.runtime.IStatus.OK, null, null);
+				} catch (org.eclipse.ocl.ParserException e) {
+					setStatus(org.eclipse.core.runtime.IStatus.ERROR, e.getMessage(), e);
+				}
+			}
+			return oclQuery;
+		}
+
+		«EXPAND xpt::Common::generatedMemberComment»
+		protected Object doEvaluate(Object context, java.util.Map env) {
+			org.eclipse.ocl.Query oclQuery = getQuery();
+			if (oclQuery == null) {
+				return null;
+			}
+			org.eclipse.ocl.EvaluationEnvironment evalEnv = oclQuery.getEvaluationEnvironment();
+			// init environment
+			for (java.util.Iterator it = env.entrySet().iterator(); it.hasNext();) {
+				java.util.Map.Entry nextEntry = (java.util.Map.Entry) it.next();
+				evalEnv.replace((String) nextEntry.getKey(), nextEntry.getValue());
+			}
+			try {
+				initExtentMap(context);
+				Object result = oclQuery.evaluate(context);
+				return (result != oclInstance.getEnvironment().getOCLStandardLibrary().getOclInvalid()) ? result : null;
+			} finally {
+				evalEnv.clear();
+				oclQuery.getExtentMap().clear();
+			}
+		}
+
+		«EXPAND xpt::Common::generatedMemberComment»
+		private void initExtentMap(Object context) {
+			if (!getStatus().isOK() || context == null) {
+				return;
+			}
+			final org.eclipse.ocl.Query queryToInit = getQuery();
+			final Object extentContext = context;
+			queryToInit.getExtentMap().clear();
+			if (queryToInit.queryText() != null
+					&& queryToInit.queryText().indexOf(org.eclipse.ocl.utilities.PredefinedType.ALL_INSTANCES_NAME) >= 0) {
+				org.eclipse.ocl.utilities.AbstractVisitor visitior = new org.eclipse.ocl.utilities.AbstractVisitor() {
+
+					private boolean usesAllInstances  = false;
+
+					public Object visitOperationCallExp(org.eclipse.ocl.expressions.OperationCallExp oc) {
+						if (!usesAllInstances) {
+							usesAllInstances = org.eclipse.ocl.utilities.PredefinedType.ALL_INSTANCES == oc.getOperationCode();
+							if (usesAllInstances) {
+								queryToInit.getExtentMap().putAll(
+										oclInstance.getEvaluationEnvironment().createExtentMap(extentContext));
+							}
+						}
+						return super.visitOperationCallExp(oc);
+					}
+				};
+				queryToInit.getExpression().accept(visitior);
+			}
+		}
+
+		«EXPAND xpt::Common::generatedMemberComment»
+		private static void initCustomEnv(org.eclipse.ocl.Environment ecoreEnv, java.util.Map environment) {
+			for (java.util.Iterator it = environment.keySet().iterator(); it.hasNext();) {
+				String varName = (String) it.next();
+				org.eclipse.emf.ecore.EClassifier varType = (org.eclipse.emf.ecore.EClassifier) environment.get(varName);
+				ecoreEnv.addElement(varName, createVar(ecoreEnv, varName, varType), false);
+			}
+		}
+
+		«EXPAND xpt::Common::generatedMemberComment»
+		private static org.eclipse.ocl.expressions.Variable createVar(
+				org.eclipse.ocl.Environment ecoreEnv, String name, org.eclipse.emf.ecore.EClassifier type) {
+			org.eclipse.ocl.expressions.Variable var = org.eclipse.ocl.ecore.EcoreFactory.eINSTANCE.createVariable();
+			var.setName(name);
+			var.setType(ecoreEnv.getUMLReflection().getOCLType(type));
+			return var;
+		}
+	}
+	«EXPAND additions-»
+}
+«ENDDEFINE»
+
+«DEFINE additions FOR gmfgen::GenExpressionInterpreter»«ENDDEFINE»

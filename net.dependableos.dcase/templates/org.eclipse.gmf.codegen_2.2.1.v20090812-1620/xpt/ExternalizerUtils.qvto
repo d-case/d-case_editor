@@ -1,0 +1,29 @@
+/*
+ * Copyright (c) 2006, 2009 Borland Software Corporation
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Anna Karjakina (Borland) - initial API and implementation
+ */
+
+import xpt.StringOperations;
+
+modeltype gmfgen uses "http://www.eclipse.org/gmf/2009/GenModel";
+
+library ExternalizerUtils;
+
+helper getExternalizerPackageName(generator : gmfgen::GenEditorGenerator) : String { return generator.editor.packageName }
+
+helper getExternalizerClassName() : String { return 'Messages' }
+
+helper escapeIllegalKeySymbols(key : String) : String {
+	return key.xpandReplaceAll('[=&\"]', '').xpandReplaceAll('[ .]', '_')
+}
+
+helper escapeIllegalMessageSymbols(message : String) : String {
+	return message.xpandReplaceAll('!', '\\\\!')
+}

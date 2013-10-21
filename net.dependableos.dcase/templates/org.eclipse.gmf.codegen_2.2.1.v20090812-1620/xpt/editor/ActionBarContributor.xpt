@@ -1,0 +1,70 @@
+﻿/*
+ * Copyright (c) 2007, 2009 Borland Software Corporation
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Dmitry Stadnik (Borland) - initial API and implementation
+ */
+«IMPORT 'http://www.eclipse.org/gmf/2009/GenModel'»
+
+«EXTENSION xpt::GenEditorGenerator»
+
+«DEFINE ActionBarContributor FOR gmfgen::GenEditorView-»
+«EXPAND xpt::Common::copyright FOR editorGen-»
+package «packageName»;
+
+«EXPAND xpt::Common::generatedClassComment»
+public class «actionBarContributorClassName»«EXPAND extendsList» {
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	protected Class getEditorClass() {
+		return «getQualifiedClassName()».class;
+	}
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	protected String getEditorId() {
+		return «getQualifiedClassName()».ID;
+	}
+	«EXPAND initMethod-»
+	«EXPAND additions-»
+}
+«ENDDEFINE»
+
+«DEFINE extendsList FOR gmfgen::GenEditorView» extends org.eclipse.gmf.runtime.diagram.ui.parts.DiagramActionBarContributor«ENDDEFINE»
+
+«DEFINE initMethod FOR gmfgen::GenEditorView»
+	«EXPAND xpt::Common::generatedMemberComment»
+	public void init(org.eclipse.ui.IActionBars bars, org.eclipse.ui.IWorkbenchPage page) {
+		super.init(bars, page);
+		// print preview
+		org.eclipse.jface.action.IMenuManager fileMenu = bars.getMenuManager().findMenuUsingPath(org.eclipse.ui.IWorkbenchActionConstants.M_FILE);
+		«EXPAND xpt::Common::_assert('fileMenu != null')-»
+«IF editorGen.plugin.printingEnabled-»
+		org.eclipse.jface.action.IAction printPreviewAction = new org.eclipse.gmf.runtime.diagram.ui.printing.render.actions.RenderedPrintPreviewAction(new org.eclipse.gmf.runtime.diagram.ui.printing.render.actions.EnhancedPrintActionHelper());
+		fileMenu.insertBefore("print", printPreviewAction);«EXPAND xpt::Common::nonNLS»
+«ELSE-»
+		fileMenu.remove("pageSetupAction");«EXPAND xpt::Common::nonNLS»
+«ENDIF-»
+«IF /*hasAudits || hasMetrics */editorGen.diagram.validationEnabled or hasAudits(editorGen) or (editorGen.metrics <> null and editorGen.metrics.metrics->size() > 0)-»
+		org.eclipse.jface.action.IMenuManager editMenu = bars.getMenuManager().findMenuUsingPath(org.eclipse.ui.IWorkbenchActionConstants.M_EDIT);
+		«EXPAND xpt::Common::_assert('editMenu != null')-»
+		if (editMenu.find("validationGroup") == null) {«EXPAND xpt::Common::nonNLS»
+			editMenu.add(new org.eclipse.jface.action.GroupMarker("validationGroup"));«EXPAND xpt::Common::nonNLS»
+		}
+«IF editorGen.diagram.validationEnabled or hasAudits(editorGen)-»
+		org.eclipse.jface.action.IAction validateAction = new «EXPAND xpt::editor::ValidateAction::qualifiedClassName FOR editorGen.diagram»(page);
+		editMenu.appendToGroup("validationGroup", validateAction);«EXPAND xpt::Common::nonNLS»
+«ENDIF-»
+«IF editorGen.metrics <> null and editorGen.metrics.metrics->size() > 0-»
+		org.eclipse.jface.action.IAction metricsAction = new «editorGen.diagram.getMetricProviderQualifiedClassName()».MetricsAction(page);
+		editMenu.appendToGroup("validationGroup", metricsAction);«EXPAND xpt::Common::nonNLS»
+«ENDIF-»
+«ENDIF /*hasAudits || hasMetrics */-»
+	}
+«ENDDEFINE»
+
+«DEFINE additions FOR gmfgen::GenEditorView»«ENDDEFINE»

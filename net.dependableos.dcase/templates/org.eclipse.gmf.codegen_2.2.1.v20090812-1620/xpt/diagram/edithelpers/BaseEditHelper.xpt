@@ -1,0 +1,99 @@
+﻿/*
+ * Copyright (c) 2006, 2009 Borland Software Corporation
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Dmitry Stadnik (Borland) - initial API and implementation
+ */
+
+«IMPORT 'http://www.eclipse.org/gmf/2009/GenModel'»
+
+«DEFINE BaseEditHelper FOR gmfgen::GenDiagram-»
+«EXPAND xpt::Common::copyright FOR editorGen-»
+package «editHelpersPackageName»;
+
+«EXPAND xpt::Common::generatedClassComment»
+public class «baseEditHelperClassName» extends org.eclipse.gmf.runtime.emf.type.core.edithelper.AbstractEditHelper {
+
+	«EXPAND attributes-»
+	
+	«EXPAND getEditHelperAdvice-»
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	protected org.eclipse.gmf.runtime.common.core.command.ICommand getInsteadCommand(
+			org.eclipse.gmf.runtime.emf.type.core.requests.IEditCommandRequest req) {
+		org.eclipse.gmf.runtime.common.core.command.ICommand epCommand =
+				(org.eclipse.gmf.runtime.common.core.command.ICommand) req.getParameter(«EXPAND editPolicyCommand»);
+		req.setParameter(«EXPAND editPolicyCommand», null);
+		org.eclipse.gmf.runtime.common.core.command.ICommand ehCommand = super.getInsteadCommand(req);
+		if (epCommand == null) {
+			return ehCommand;
+		}
+		if (ehCommand == null) {
+			return epCommand;
+		}
+		org.eclipse.gmf.runtime.common.core.command.CompositeCommand command =
+				new org.eclipse.gmf.runtime.common.core.command.CompositeCommand(null);
+		command.add(epCommand);
+		command.add(ehCommand);
+		return command;
+	}
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	protected org.eclipse.gmf.runtime.common.core.command.ICommand getCreateCommand(
+			org.eclipse.gmf.runtime.emf.type.core.requests.CreateElementRequest req) {
+		return null;
+	}
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	protected org.eclipse.gmf.runtime.common.core.command.ICommand getCreateRelationshipCommand(
+			org.eclipse.gmf.runtime.emf.type.core.requests.CreateRelationshipRequest req) {
+		return null;
+	}
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	protected org.eclipse.gmf.runtime.common.core.command.ICommand getDestroyElementCommand(
+			org.eclipse.gmf.runtime.emf.type.core.requests.DestroyElementRequest req) {
+		return null;
+	}
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	protected org.eclipse.gmf.runtime.common.core.command.ICommand getDestroyReferenceCommand(
+			org.eclipse.gmf.runtime.emf.type.core.requests.DestroyReferenceRequest req) {
+		return null;
+	}
+	«EXPAND additions-»
+}
+«ENDDEFINE»
+
+«DEFINE attributes FOR gmfgen::GenDiagram-»
+	«EXPAND xpt::Common::generatedMemberComment»
+	public static final String «EXPAND editPolicyCommand» = "edit policy command"; //$NON-NLS-1$
+	
+	«EXPAND xpt::Common::generatedMemberComment»
+	public static final String «EXPAND contextElementType» = "context element type"; //$NON-NLS-1$
+«ENDDEFINE»
+
+«DEFINE editPolicyCommand FOR gmfgen::GenDiagram»EDIT_POLICY_COMMAND«ENDDEFINE»
+
+«DEFINE contextElementType FOR gmfgen::GenDiagram»CONTEXT_ELEMENT_TYPE«ENDDEFINE»
+
+«DEFINE editPolicyCommandConstant FOR gmfgen::GenDiagram»«getBaseEditHelperQualifiedClassName()».«EXPAND editPolicyCommand»«ENDDEFINE»
+
+«DEFINE contextElementTypeConstant FOR gmfgen::GenDiagram»«getBaseEditHelperQualifiedClassName()».«EXPAND contextElementType»«ENDDEFINE»
+
+«DEFINE getEditHelperAdvice FOR gmfgen::GenDiagram-»
+	«EXPAND xpt::Common::generatedMemberComment»
+	protected org.eclipse.gmf.runtime.emf.type.core.edithelper.IEditHelperAdvice[] getEditHelperAdvice(org.eclipse.gmf.runtime.emf.type.core.requests.IEditCommandRequest req) {
+		if (req.getParameter(«EXPAND contextElementType») instanceof org.eclipse.gmf.runtime.emf.type.core.IElementType) {
+			return org.eclipse.gmf.runtime.emf.type.core.ElementTypeRegistry.getInstance().getEditHelperAdvice((org.eclipse.gmf.runtime.emf.type.core.IElementType) req.getParameter(«EXPAND contextElementType»));
+		}
+		return super.getEditHelperAdvice(req);
+	}
+«ENDDEFINE»
+
+«DEFINE additions FOR gmfgen::GenDiagram»«ENDDEFINE»

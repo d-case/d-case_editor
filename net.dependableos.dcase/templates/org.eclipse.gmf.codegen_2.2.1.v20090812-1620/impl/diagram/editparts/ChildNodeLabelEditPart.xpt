@@ -1,0 +1,43 @@
+﻿/*
+ * Copyright (c) 2006, 2009 Borland Software Corporation
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Dmitry Stadnik (Borland) - initial API and implementation
+ *    Alexander Shatalin (Borland) - initial API and implementation
+ */
+
+«IMPORT 'http://www.eclipse.org/gmf/2009/GenModel'»
+
+«DEFINE contsructor FOR gmfgen::GenChildLabelNode-»
+	«EXPAND xpt::Common::generatedMemberComment»
+	public «editPartClassName»(org.eclipse.gmf.runtime.notation.View view) {
+		super(view);
+	}
+«ENDDEFINE»
+
+«DEFINE getDragTrackerBody FOR gmfgen::GenChildLabelNode-»
+	if (request instanceof org.eclipse.gef.requests.SelectionRequest && ((org.eclipse.gef.requests.SelectionRequest) request).getLastButtonPressed() == 3) {
+		return null;
+	}
+	return new org.eclipse.gmf.runtime.diagram.ui.tools.DragEditPartsTrackerEx(this);
+«ENDDEFINE»
+
+«DEFINE createDefaultEditPoliciesBody FOR gmfgen::GenChildLabelNode-»
+	super.createDefaultEditPolicies();
+	installEditPolicy(org.eclipse.gmf.runtime.diagram.ui.editpolicies.EditPolicyRoles.SEMANTIC_ROLE, new «getItemSemanticEditPolicyQualifiedClassName()»());
+	installEditPolicy(org.eclipse.gef.EditPolicy.PRIMARY_DRAG_ROLE, new «getDiagram().getTextNonResizableEditPolicyQualifiedClassName()»());
+	installEditPolicy(org.eclipse.gef.EditPolicy.COMPONENT_ROLE, new org.eclipse.gmf.runtime.diagram.ui.editpolicies.ListItemComponentEditPolicy());
+	installEditPolicy(org.eclipse.gef.EditPolicy.DIRECT_EDIT_ROLE, new org.eclipse.gmf.runtime.diagram.ui.editpolicies.LabelDirectEditPolicy());
+	«EXPAND xpt::diagram::editparts::Common::behaviour FOR self-»
+«ENDDEFINE»
+
+«DEFINE handleNotificationEventBody FOR gmfgen::GenChildLabelNode-»
+	Object feature = event.getFeature();
+	«EXPAND xpt::diagram::editparts::Common::handleText FOR self-»
+	super.handleNotificationEvent(event);
+«ENDDEFINE»

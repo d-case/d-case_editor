@@ -1,0 +1,83 @@
+﻿/*
+ * Copyright (c) 2008, 2009 Borland Software Corporation
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Artem Tikhomirov (Borland) - initial API and implementation
+ */
+
+«IMPORT 'http://www.eclipse.org/gmf/2009/GenModel'»
+«EXTENSION xpt::StringOperations»
+
+«DEFINE Main FOR gmfgen::GenCustomPreferencePage-»
+«EXPAND xpt::Common::copyright FOR getDiagram().editorGen-»
+package «(if qualifiedClassName = getClassName() then getDiagram().preferencesPackageName else qualifiedClassName.substring(1 + 0, qualifiedClassName.xpandLength() - getClassName().xpandLength() - 1) endif)»;
+
+«EXPAND xpt::Common::generatedClassComment»
+public class «getClassName()»«EXPAND extendsList»«EXPAND implementsList» {
+
+«EXPAND _constant FOREACH preferences-»
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	public «getClassName()»() {
+		setPreferenceStore(«getDiagram().editorGen.plugin.getActivatorQualifiedClassName()».getInstance().getPreferenceStore());
+	}
+«EXPAND methods»
+«EXPAND initDefaultsMethod»
+«EXPAND additions»
+}
+«ENDDEFINE»
+
+«DEFINE extendsList FOR gmfgen::GenCustomPreferencePage» extends org.eclipse.gmf.runtime.common.ui.preferences.AbstractPreferencePage«ENDDEFINE»
+«DEFINE implementsList FOR gmfgen::GenCustomPreferencePage»«REM»no-op«ENDREM»«ENDDEFINE»
+
+«DEFINE additions FOR gmfgen::GenCustomPreferencePage»«ENDDEFINE»
+
+// the reason I didn't split this template up into two distinct, addFieldsMethod and initHelpMethod, is that
+// using superclass other than oe.gmf...AbstractPreferencePage may require implementation of completely different
+// set of methods. Besides, there's not to much generated, anyway.
+«DEFINE methods FOR gmfgen::GenCustomPreferencePage»
+	«EXPAND xpt::Common::generatedMemberComment»
+	protected void addFields(org.eclipse.swt.widgets.Composite parent) {
+		// TODO  Provide method implementation
+		throw new UnsupportedOperationException();
+	}
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	protected void initHelp() {
+		// TODO implement this method if needed, or leave as no-op
+	}
+«ENDDEFINE»
+
+
+«DEFINE initDefaultsMethod FOR gmfgen::GenCustomPreferencePage-»
+	«EXPAND xpt::Common::generatedMemberComment»
+	public static void initDefaults(org.eclipse.jface.preference.IPreferenceStore store) {
+«IF preferences->isEmpty() or preferences->exists(p | p.defaultValue = null)-»
+		// TODO this code is invoked during preference store initialization, please fill
+		// the store passed with default preference values.
+«ENDIF-»
+«EXPAND _setDefaultValue('store') FOREACH preferences->select(p | p.defaultValue <> null)-»
+	}
+«ENDDEFINE»
+
+// pair template to initDefaultsMethod, allows external templates invoke generated initDefaults method
+// Note, CustomPage::Main is expected to be invoked only for templates with generateBoilerplate == true,
+// hence no extra check when generating with initDefaultsMethod,
+// however, call_initDefaults may get invoked for any CustomPreferencePage
+«DEFINE call_initDefaults(storeVarName : String) FOR gmfgen::GenCustomPreferencePage-»
+«IF generateBoilerplate»«qualifiedClassName».initDefaults(«storeVarName»);«ENDIF-»
+«ENDDEFINE»
+
+«DEFINE _constant FOR gmfgen::GenPreference-»
+	«EXPAND xpt::Common::generatedMemberComment»
+	public static final String «name» = "«key»";«EXPAND xpt::Common::nonNLS»
+«ENDDEFINE»
+
+«DEFINE _setDefaultValue(store : String) FOR gmfgen::GenPreference-»
+		«store».setDefault(«name», «defaultValue»);
+«ENDDEFINE»

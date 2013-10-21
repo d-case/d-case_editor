@@ -1,0 +1,93 @@
+﻿/*
+ * Copyright (c) 2007, 2009 Borland Software Corporation
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Dmitry Stadnik (Borland) - initial API and implementation
+ */
+
+«IMPORT 'http://www.eclipse.org/gmf/2009/GenModel'»
+
+«DEFINE extensions FOR gmfgen::GenApplication-»
+
+   <extension id="«iD»" point="org.eclipse.core.runtime.applications">
+      «EXPAND xpt::Common::xmlGeneratedTag»
+      <application>
+         <run class="«getQualifiedClassName()»"/>
+      </application>
+   </extension>
+
+   <extension point="org.eclipse.ui.perspectives" id="rcp-perspective">
+      «EXPAND xpt::Common::xmlGeneratedTag»
+      <perspective
+            id="«perspectiveId»"
+            name="%perspectiveName"
+            class="«getPerspectiveQualifiedClassName()»">
+      </perspective>
+   </extension>
+
+   <extension point="org.eclipse.ui.commands" id="rcp-menu-commands">
+      «EXPAND xpt::Common::xmlGeneratedTag»
+      <command
+            name="%openURIActionLabel"
+            description="%openURIActionDescription"
+            categoryId="org.eclipse.ui.category.file"
+            id="«editorGen.plugin.iD».OpenURICommand"/>  
+      <command
+            name="%openActionLabel"
+            description="%openActionDescription"
+            categoryId="org.eclipse.ui.category.file"
+            id="«editorGen.plugin.iD».OpenCommand"/>  
+   </extension>
+
+   <extension point="org.eclipse.ui.bindings" id="rcp-command-bindings">
+      «EXPAND xpt::Common::xmlGeneratedTag»
+      <key
+            commandId="«editorGen.plugin.iD».OpenURICommand"
+            sequence="M1+U"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+      <key
+            commandId="«editorGen.plugin.iD».OpenCommand"
+            sequence="M1+O"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+   </extension>
+
+   <extension point="org.eclipse.ui.actionSets" id="rcp-actions">
+      «EXPAND xpt::Common::xmlGeneratedTag»
+      <actionSet
+            label="%applicationActionSetLabel"
+            visible="true"
+            id="«editorGen.plugin.iD».ActionSet">
+         <action
+               label="%newDiagramActionLabel"
+               class="«getActionBarAdvisorQualifiedClassName()»$NewDiagramAction"
+               menubarPath="file/new/additions"
+               id="«editorGen.plugin.iD».NewDiagramAction">
+         </action>
+         <action
+               label="%aboutActionLabel"
+               class="«getActionBarAdvisorQualifiedClassName()»$AboutAction"
+               menubarPath="help/additions"
+               id="«editorGen.plugin.iD».AboutAction">
+         </action>
+         <action
+               label="%openURIActionLabel"
+               definitionId="«editorGen.plugin.iD».OpenURICommand"
+               class="«getActionBarAdvisorQualifiedClassName()»$OpenURIAction"
+               menubarPath="file/additions"
+               id="«editorGen.plugin.iD».OpenURIAction">
+         </action>
+         <action
+               label="%openActionLabel"
+               definitionId="«editorGen.plugin.iD».OpenCommand"
+               class="«getActionBarAdvisorQualifiedClassName()»$OpenAction"
+               menubarPath="file/additions"
+               id="«editorGen.plugin.iD».OpenAction">
+         </action>
+      </actionSet>
+   </extension>
+«ENDDEFINE»

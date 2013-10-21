@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" copyrightText="Copyright (C) Yutaka Matsuno 2010-2012 All rights reserved."
+    modelDirectory="/net.dependableos/src" modelPluginID="net.dependableos"
+    templateDirectory="/net.dependableos/templates/org.eclipse.emf.codegen.ecore_2.5.0.v200906151043"
+    dynamicTemplates="true" modelName="Dcase" importerID="org.eclipse.emf.importer.ecore"
+    complianceLevel="5.0" copyrightFields="false">
+  <foreignModel>dcase.ecore</foreignModel>
+  <genPackages prefix="Dcase" basePackage="net.dependableos" resource="XML" disposableProviderFactory="true"
+      ecorePackage="dcase.ecore#/">
+    <genClasses image="false" ecoreClass="dcase.ecore#//BasicNode">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dcase.ecore#//BasicNode/name"/>
+      <genFeatures createChild="false" propertyMultiLine="true" ecoreFeature="ecore:EAttribute dcase.ecore#//BasicNode/desc"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dcase.ecore#//BasicNode/attachment"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dcase.ecore#//BasicNode/status"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dcase.ecore#//BasicNode/userdef001"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dcase.ecore#//BasicNode/userdef002"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dcase.ecore#//BasicNode/userdef003"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dcase.ecore#//BasicNode/userdef004"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dcase.ecore#//BasicNode/userdef005"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dcase.ecore#//BasicNode/userdef006"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dcase.ecore#//BasicNode/userdef007"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dcase.ecore#//BasicNode/userdef008"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dcase.ecore#//BasicNode/userdef009"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dcase.ecore#//BasicNode/userdef010"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dcase.ecore#//BasicNode/userdef011"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dcase.ecore#//BasicNode/userdef012"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dcase.ecore#//BasicNode/userdef013"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dcase.ecore#//BasicNode/userdef014"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dcase.ecore#//BasicNode/userdef015"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dcase.ecore#//BasicNode/userdef016"/>
+    </genClasses>
+    <genClasses ecoreClass="dcase.ecore#//Argument">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference dcase.ecore#//Argument/rootBasicNode"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference dcase.ecore#//Argument/rootBasicLink"/>
+    </genClasses>
+    <genClasses ecoreClass="dcase.ecore#//Goal">
+      <genFeatures property="Readonly" createChild="false" ecoreFeature="ecore:EAttribute dcase.ecore#//Goal/score"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dcase.ecore#//Goal/weight"/>
+    </genClasses>
+    <genClasses ecoreClass="dcase.ecore#//System">
+      <genFeatures property="Readonly" createChild="false" ecoreFeature="ecore:EAttribute dcase.ecore#//System/score"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dcase.ecore#//System/weight"/>
+      <genFeatures property="Readonly" createChild="false" ecoreFeature="ecore:EAttribute dcase.ecore#//System/nodeLink"/>
+    </genClasses>
+    <genClasses ecoreClass="dcase.ecore#//Strategy"/>
+    <genClasses ecoreClass="dcase.ecore#//Evidence"/>
+    <genClasses ecoreClass="dcase.ecore#//Monitor">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dcase.ecore#//Monitor/isNormal"/>
+    </genClasses>
+    <genClasses ecoreClass="dcase.ecore#//Undeveloped"/>
+    <genClasses ecoreClass="dcase.ecore#//Context"/>
+    <genClasses ecoreClass="dcase.ecore#//Justification">
+      <genFeatures createChild="false" propertyMultiLine="true" ecoreFeature="ecore:EAttribute dcase.ecore#//Justification/stakeholder"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dcase.ecore#//Justification/riskAnalysis"/>
+    </genClasses>
+    <genClasses ecoreClass="dcase.ecore#//Policy"/>
+    <genClasses ecoreClass="dcase.ecore#//Userdef001"/>
+    <genClasses ecoreClass="dcase.ecore#//Userdef002"/>
+    <genClasses ecoreClass="dcase.ecore#//Userdef003"/>
+    <genClasses ecoreClass="dcase.ecore#//Userdef004"/>
+    <genClasses ecoreClass="dcase.ecore#//Userdef005"/>
+    <genClasses ecoreClass="dcase.ecore#//Userdef006"/>
+    <genClasses image="false" ecoreClass="dcase.ecore#//BasicLink">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dcase.ecore#//BasicLink/source"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference dcase.ecore#//BasicLink/target"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dcase.ecore#//BasicLink/name"/>
+      <genFeatures createChild="false" propertyMultiLine="true" ecoreFeature="ecore:EAttribute dcase.ecore#//BasicLink/desc"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dcase.ecore#//BasicLink/attachment"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dcase.ecore#//BasicLink/status"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dcase.ecore#//BasicLink/userdef001"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dcase.ecore#//BasicLink/userdef002"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dcase.ecore#//BasicLink/userdef003"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dcase.ecore#//BasicLink/userdef004"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dcase.ecore#//BasicLink/userdef005"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dcase.ecore#//BasicLink/userdef006"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dcase.ecore#//BasicLink/userdef007"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dcase.ecore#//BasicLink/userdef008"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dcase.ecore#//BasicLink/userdef009"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dcase.ecore#//BasicLink/userdef010"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dcase.ecore#//BasicLink/userdef011"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dcase.ecore#//BasicLink/userdef012"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dcase.ecore#//BasicLink/userdef013"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dcase.ecore#//BasicLink/userdef014"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dcase.ecore#//BasicLink/userdef015"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute dcase.ecore#//BasicLink/userdef016"/>
+    </genClasses>
+    <genClasses ecoreClass="dcase.ecore#//DcaseLink001"/>
+    <genClasses ecoreClass="dcase.ecore#//DcaseLink002"/>
+    <genClasses ecoreClass="dcase.ecore#//DcaseLink003"/>
+    <genClasses ecoreClass="dcase.ecore#//DcaseLink004"/>
+  </genPackages>
+</genmodel:GenModel>

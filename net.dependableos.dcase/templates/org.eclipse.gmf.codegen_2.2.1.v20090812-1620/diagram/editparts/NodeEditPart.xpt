@@ -1,0 +1,131 @@
+﻿/*
+ * Copyright (c) 2006, 2009 Borland Software Corporation
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Dmitry Stadnik (Borland) - initial API and implementation
+ *    Alexander Shatalin (Borland) - initial API and implementation
+ */
+
+«IMPORT 'http://www.eclipse.org/gmf/2009/GenModel'»
+
+«EXTENSION xpt::diagram::editparts::Utils»
+
+«DEFINE Main FOR gmfgen::GenNode-»
+«EXPAND xpt::Common::copyright FOR getDiagram().editorGen-»
+package «getDiagram().editPartsPackageName»;
+
+«EXPAND xpt::Common::generatedClassComment»
+public class «editPartClassName» «EXPAND extendsList» «EXPAND implementsList» {
+
+	«EXPAND attributes-»
+	
+	«EXPAND impl::diagram::editparts::NodeEditPart::_constructor-»
+	
+	«EXPAND createDefaultEditPolicies-»
+	
+	«EXPAND impl::diagram::editparts::NodeEditPart::createLayoutEditPolicy-»
+	
+	«EXPAND impl::diagram::editparts::NodeEditPart::createNodeShape(self) FOR viewmap-»
+	
+«IF hasFixedChildren(self)-»
+	«EXPAND impl::diagram::editparts::NodeEditPart::addFixedChild-»
+
+	«EXPAND impl::diagram::editparts::NodeEditPart::removeFixedChild-»
+
+	«EXPAND impl::diagram::editparts::NodeEditPart::addChildVisual-»
+
+	«EXPAND impl::diagram::editparts::NodeEditPart::removeChildVisual-»
+
+	«EXPAND impl::diagram::editparts::NodeEditPart::getContentPaneFor-»
+«ENDIF-»
+
+	«EXPAND impl::diagram::editparts::NodeEditPart::addBorderItem-»
+	
+	«EXPAND impl::diagram::editparts::NodeEditPart::createNodePlate-»
+	
+	«EXPAND impl::diagram::editparts::NodeEditPart::getPrimaryDragEditPolicy-»
+	
+	«EXPAND impl::diagram::editparts::NodeEditPart::createFigure-»
+	
+	«EXPAND impl::diagram::editparts::NodeEditPart::setupContentPane-»
+	
+	«EXPAND impl::diagram::editparts::NodeEditPart::getContentPane-»
+
+	«EXPAND impl::diagram::editparts::NodeEditPart::setForegroundColor-»
+
+	«EXPAND impl::diagram::editparts::NodeEditPart::setBackgroundColor-»
+
+	«EXPAND impl::diagram::editparts::NodeEditPart::setLineWidth-»
+
+	«EXPAND impl::diagram::editparts::NodeEditPart::setLineStyle-»
+
+	«EXPAND impl::diagram::editparts::NodeEditPart::getPrimaryChildEditPart-»
+
+«IF getAssistantOutgoingLinks(self)->size() > 0-»
+	«EXPAND impl::diagram::editparts::NodeEditPart::getMARelTypesOnSource-»
+
+	«EXPAND impl::diagram::editparts::NodeEditPart::getMARelTypesOnSourceAndTarget-»
+
+	«EXPAND impl::diagram::editparts::NodeEditPart::getMATypesForTarget-»
+«ENDIF-»
+
+«IF getAssistantIncomingLinks(self)->size() > 0-»
+	«EXPAND impl::diagram::editparts::NodeEditPart::getMARelTypesOnTarget-»
+
+	«EXPAND impl::diagram::editparts::NodeEditPart::getMATypesForSource-»
+«ENDIF-»
+
+«IF hasChildrenInListCompartments(self)-»
+	«EXPAND impl::diagram::editparts::NodeEditPart::getTargetEditPartMethod-»
+«ENDIF-»
+
+	«EXPAND handleNotificationEvent-»
+
+	«EXPAND impl::diagram::editparts::NodeEditPart::innerClassDeclaration FOR viewmap-»
+	
+	«EXPAND additions-»
+}
+«ENDDEFINE»
+
+«DEFINE extendsList FOR gmfgen::GenNode»extends «EXPAND impl::diagram::editparts::NodeEditPart::extendsListContents»«ENDDEFINE»
+
+«DEFINE implementsList FOR gmfgen::GenNode»«ENDDEFINE»
+
+«DEFINE attributes FOR gmfgen::GenNode-»
+	«EXPAND xpt::diagram::editparts::Common::visualIDConstant FOR self-»
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	protected org.eclipse.draw2d.IFigure contentPane;
+
+	«EXPAND xpt::Common::generatedMemberComment»
+	protected org.eclipse.draw2d.IFigure primaryShape;
+«ENDDEFINE»
+
+«DEFINE createDefaultEditPolicies FOR gmfgen::GenNode-»
+	«EXPAND xpt::Common::generatedMemberComment»
+	protected void createDefaultEditPolicies() {
+		«EXPAND impl::diagram::editparts::NodeEditPart::createDefaultEditPoliciesBody-»
+	}
+«ENDDEFINE»
+
+«DEFINE handleNotificationEvent FOR gmfgen::GenNode-»
+«ENDDEFINE»
+
+«DEFINE handleNotificationEvent FOR gmfgen::GenTopLevelNode-»
+	«REM»This code is important for refreshing shortcut decoration
+	on adding corresponding annotation to the View instance.«ENDREM»
+	«IF getDiagram().generateShortcutIcon()-»
+		«EXPAND xpt::Common::generatedMemberComment»
+		protected void handleNotificationEvent(org.eclipse.emf.common.notify.Notification event) {
+			«EXPAND impl::diagram::editparts::NodeEditPart::handleNotificationEventBody-»
+		}
+	«ENDIF-»
+«ENDDEFINE»
+
+«DEFINE additions FOR gmfgen::GenNode-»
+«ENDDEFINE»

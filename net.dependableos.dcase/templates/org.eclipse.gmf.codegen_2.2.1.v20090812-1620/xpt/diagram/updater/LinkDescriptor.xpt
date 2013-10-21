@@ -1,0 +1,120 @@
+﻿/*
+ * Copyright (c) 2007, 2009 Borland Software Corporation
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Alexander Shatalin (Borland) - initial API and implementation
+ */
+
+«IMPORT 'http://www.eclipse.org/gmf/2009/GenModel'»
+
+«DEFINE LinkDescriptor FOR gmfgen::GenDiagramUpdater-»
+	«EXPAND xpt::Common::copyright FOR editorGen-»
+package «editorGen.editor.packageName»;
+
+	«EXPAND xpt::Common::generatedClassComment»
+public class «linkDescriptorClassName» extends «getNodeDescriptorQualifiedClassName()» {
+
+	«EXPAND attributes-»
+	
+	«EXPAND _constructor-»
+	
+	«EXPAND refOnlyLinkConstructor-»
+	
+	«EXPAND typeLinkConstructor-»
+	
+	«EXPAND getSource-»
+
+	«EXPAND getDestination-»
+	
+	«EXPAND getSemanticAdapter-»
+		
+	«EXPAND additions-»
+}
+«ENDDEFINE»
+
+
+«DEFINE attributes FOR gmfgen::GenDiagramUpdater-»
+	«EXPAND xpt::Common::generatedMemberComment»
+private org.eclipse.emf.ecore.EObject mySource;
+		
+	«EXPAND xpt::Common::generatedMemberComment»
+private org.eclipse.emf.ecore.EObject myDestination;
+	
+	«EXPAND xpt::Common::generatedMemberComment»
+private org.eclipse.core.runtime.IAdaptable mySemanticAdapter;
+«ENDDEFINE»
+
+«DEFINE _constructor FOR gmfgen::GenDiagramUpdater-»
+	«EXPAND xpt::Common::generatedMemberComment»
+private «linkDescriptorClassName»(org.eclipse.emf.ecore.EObject source, org.eclipse.emf.ecore.EObject destination, org.eclipse.emf.ecore.EObject linkElement, int linkVID) {
+	super(linkElement, linkVID);
+	mySource = source;
+	myDestination = destination;
+}
+«ENDDEFINE»
+
+«DEFINE refOnlyLinkConstructor FOR gmfgen::GenDiagramUpdater-»
+	«EXPAND xpt::Common::generatedMemberComment»
+public «linkDescriptorClassName»(org.eclipse.emf.ecore.EObject source, org.eclipse.emf.ecore.EObject destination, org.eclipse.gmf.runtime.emf.type.core.IElementType elementType, int linkVID) {
+	this(source, destination, (org.eclipse.emf.ecore.EObject) null, linkVID);
+	«EXPAND elementTypeCopy-»
+	mySemanticAdapter = new org.eclipse.core.runtime.IAdaptable() {
+		public Object getAdapter(Class adapter) {
+			«EXPAND elementTypeAdapter-»
+			return null;
+		}
+	};
+}
+«ENDDEFINE»
+
+«DEFINE typeLinkConstructor FOR gmfgen::GenDiagramUpdater-»
+	«EXPAND xpt::Common::generatedMemberComment»
+public «linkDescriptorClassName»(org.eclipse.emf.ecore.EObject source, org.eclipse.emf.ecore.EObject destination, org.eclipse.emf.ecore.EObject linkElement, org.eclipse.gmf.runtime.emf.type.core.IElementType elementType, int linkVID) {
+	this(source, destination, linkElement, linkVID);
+	«EXPAND elementTypeCopy-»
+	mySemanticAdapter = new org.eclipse.gmf.runtime.emf.core.util.EObjectAdapter(linkElement) {
+		public Object getAdapter(Class adapter) {
+			«EXPAND elementTypeAdapter-»
+			return super.getAdapter(adapter);
+		}
+	};
+}
+«ENDDEFINE»
+
+«DEFINE elementTypeCopy FOR gmfgen::GenDiagramUpdater-»
+final org.eclipse.gmf.runtime.emf.type.core.IElementType elementTypeCopy = elementType;
+«ENDDEFINE»
+
+«DEFINE elementTypeAdapter FOR gmfgen::GenDiagramUpdater-»
+if (org.eclipse.gmf.runtime.emf.type.core.IElementType.class.equals(adapter)) {
+	return elementTypeCopy;
+}
+«ENDDEFINE»
+
+«DEFINE getSource FOR gmfgen::GenDiagramUpdater-»
+	«EXPAND xpt::Common::generatedMemberComment»
+public org.eclipse.emf.ecore.EObject getSource() {
+	return mySource;
+}
+«ENDDEFINE»
+		
+«DEFINE getDestination FOR gmfgen::GenDiagramUpdater-»
+	«EXPAND xpt::Common::generatedMemberComment»
+public org.eclipse.emf.ecore.EObject getDestination() {
+	return myDestination;
+}
+«ENDDEFINE»
+	
+«DEFINE getSemanticAdapter FOR gmfgen::GenDiagramUpdater-»
+	«EXPAND xpt::Common::generatedMemberComment»
+public org.eclipse.core.runtime.IAdaptable getSemanticAdapter() {
+	return mySemanticAdapter;
+}
+«ENDDEFINE»
+
+«DEFINE additions FOR gmfgen::GenDiagramUpdater»«ENDDEFINE»
