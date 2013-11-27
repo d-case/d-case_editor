@@ -1,0 +1,1000 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xsd:schema xmlns:ARM="www.omg.org/spec/SACM/20120501/Argumentation"
+            xmlns:EM="www.omg.org/spec/SACM/20120501/Evidence"
+            xmlns:SACM="www.omg.org/spec/SACM/20120501"
+            xmlns:xmi="http://www.omg.org/XMI"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            targetNamespace="www.omg.org/spec/SACM/20120501/Evidence">
+  <xsd:import namespace="http://www.omg.org/XMI" schemaLocation="XMI.xsd"/>
+  <xsd:import namespace="www.omg.org/spec/SACM/20120501/Argumentation" schemaLocation="Argumentation.xsd"/>
+  <xsd:import namespace="www.omg.org/spec/SACM/20120501" schemaLocation="SACM.xsd"/>
+  <xsd:simpleType name="ReliabilityLevel">
+    <xsd:restriction base="xsd:NCName">
+      <xsd:enumeration value="unknown"/>
+      <xsd:enumeration value="unReliable"/>
+      <xsd:enumeration value="notUsuallyReliable"/>
+      <xsd:enumeration value="usuallyReliable"/>
+      <xsd:enumeration value="fairlyReliable"/>
+      <xsd:enumeration value="completelyReliable"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="CompletenessLevel">
+    <xsd:restriction base="xsd:NCName">
+      <xsd:enumeration value="unknown"/>
+      <xsd:enumeration value="incomplete"/>
+      <xsd:enumeration value="draft"/>
+      <xsd:enumeration value="final"/>
+      <xsd:enumeration value="obsolete"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="OriginalityLevel">
+    <xsd:restriction base="xsd:NCName">
+      <xsd:enumeration value="unknown"/>
+      <xsd:enumeration value="derivative"/>
+      <xsd:enumeration value="original"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="ConsistencyLevel">
+    <xsd:restriction base="xsd:NCName">
+      <xsd:enumeration value="unknown"/>
+      <xsd:enumeration value="informal"/>
+      <xsd:enumeration value="semiformal"/>
+      <xsd:enumeration value="formal"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="Level">
+    <xsd:restriction base="xsd:NCName">
+      <xsd:enumeration value="unknown"/>
+      <xsd:enumeration value="low"/>
+      <xsd:enumeration value="mediumLow"/>
+      <xsd:enumeration value="medium"/>
+      <xsd:enumeration value="mediumHigh"/>
+      <xsd:enumeration value="high"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="SupportLevel">
+    <xsd:restriction base="xsd:NCName">
+      <xsd:enumeration value="unknown"/>
+      <xsd:enumeration value="indirect"/>
+      <xsd:enumeration value="direct"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="ReportingLevel">
+    <xsd:restriction base="xsd:NCName">
+      <xsd:enumeration value="unknown"/>
+      <xsd:enumeration value="secondary"/>
+      <xsd:enumeration value="primary"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="ConfidenceLevel">
+    <xsd:restriction base="xsd:NCName">
+      <xsd:enumeration value="unknown"/>
+      <xsd:enumeration value="reportedAsUncertain"/>
+      <xsd:enumeration value="reportedAsPlausible"/>
+      <xsd:enumeration value="reportedAsFact"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="AccuracyLevel">
+    <xsd:restriction base="xsd:NCName">
+      <xsd:enumeration value="unknown"/>
+      <xsd:enumeration value="improbable"/>
+      <xsd:enumeration value="doubtful"/>
+      <xsd:enumeration value="possible"/>
+      <xsd:enumeration value="probable"/>
+      <xsd:enumeration value="confirmed"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="StandardOfProof">
+    <xsd:restriction base="xsd:NCName">
+      <xsd:enumeration value="unknown"/>
+      <xsd:enumeration value="other"/>
+      <xsd:enumeration value="POE"/>
+      <xsd:enumeration value="RCE"/>
+      <xsd:enumeration value="CCE"/>
+      <xsd:enumeration value="BRD"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType abstract="true" name="EvidenceAttribute">
+    <xsd:complexContent>
+      <xsd:extension base="EM:EvidenceAssertion"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="EvidenceAttribute" type="EM:EvidenceAttribute"/>
+  <xsd:complexType name="Consistency">
+    <xsd:complexContent>
+      <xsd:extension base="EM:DocumentProperty">
+        <xsd:attribute name="value" type="EM:ConsistencyLevel" use="required"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="Consistency" type="EM:Consistency"/>
+  <xsd:complexType name="Completeness">
+    <xsd:complexContent>
+      <xsd:extension base="EM:DocumentProperty">
+        <xsd:attribute name="status" type="EM:CompletenessLevel" use="required"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="Completeness" type="EM:Completeness"/>
+  <xsd:complexType name="Document">
+    <xsd:complexContent>
+      <xsd:extension base="EM:Exhibit">
+        <xsd:attribute name="title" type="xsd:string" use="required"/>
+        <xsd:attribute name="citation" type="xsd:string" use="required"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="Document" type="EM:Document"/>
+  <xsd:complexType name="Confidence">
+    <xsd:complexContent>
+      <xsd:extension base="EM:EvidenceAttribute">
+        <xsd:attribute name="value" type="EM:ConfidenceLevel" use="required"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="Confidence" type="EM:Confidence"/>
+  <xsd:complexType name="ApprovedBy">
+    <xsd:complexContent>
+      <xsd:extension base="EM:Provenance">
+        <xsd:choice maxOccurs="unbounded" minOccurs="0">
+          <xsd:element name="supervisor" type="EM:Stakeholder"/>
+        </xsd:choice>
+        <xsd:attribute name="supervisor" type="xsd:string"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="ApprovedBy" type="EM:ApprovedBy"/>
+  <xsd:complexType name="CreatedBy">
+    <xsd:complexContent>
+      <xsd:extension base="EM:Provenance">
+        <xsd:choice maxOccurs="unbounded" minOccurs="0">
+          <xsd:element name="source" type="EM:Stakeholder"/>
+        </xsd:choice>
+        <xsd:attribute name="source" type="xsd:string"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="CreatedBy" type="EM:CreatedBy"/>
+  <xsd:complexType name="Tool">
+    <xsd:complexContent>
+      <xsd:extension base="EM:CollectionMethod">
+        <xsd:attribute name="version" type="xsd:string" use="required"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="Tool" type="EM:Tool"/>
+  <xsd:complexType name="Method">
+    <xsd:complexContent>
+      <xsd:extension base="EM:CollectionMethod"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="Method" type="EM:Method"/>
+  <xsd:complexType abstract="true" name="EvidenceItem">
+    <xsd:complexContent>
+      <xsd:extension base="EM:EvidenceElement"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="EvidenceItem" type="EM:EvidenceItem"/>
+  <xsd:complexType name="IsBasedOn">
+    <xsd:complexContent>
+      <xsd:extension base="EM:ExhibitProperty">
+        <xsd:choice maxOccurs="unbounded" minOccurs="0">
+          <xsd:element name="source" type="EM:EvidenceItem"/>
+        </xsd:choice>
+        <xsd:attribute name="source" type="xsd:string"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="IsBasedOn" type="EM:IsBasedOn"/>
+  <xsd:complexType abstract="true" name="FormalAssertion">
+    <xsd:complexContent>
+      <xsd:extension base="EM:FormalElement">
+        <xsd:attribute name="content" type="xsd:string" use="required"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="FormalAssertion" type="EM:FormalAssertion"/>
+  <xsd:complexType name="IsA">
+    <xsd:complexContent>
+      <xsd:extension base="EM:EvidenceInterpretation">
+        <xsd:choice maxOccurs="unbounded" minOccurs="0">
+          <xsd:element name="definition" type="EM:FormalElement"/>
+        </xsd:choice>
+        <xsd:attribute name="definition" type="xsd:string"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="IsA" type="EM:IsA"/>
+  <xsd:complexType name="IsCharacterizedBy">
+    <xsd:complexContent>
+      <xsd:extension base="EM:EvidenceInterpretation">
+        <xsd:choice maxOccurs="unbounded" minOccurs="0">
+          <xsd:element name="assertion" type="EM:FormalAssertion"/>
+        </xsd:choice>
+        <xsd:attribute name="assertion" type="xsd:string"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="IsCharacterizedBy" type="EM:IsCharacterizedBy"/>
+  <xsd:complexType name="Person">
+    <xsd:complexContent>
+      <xsd:extension base="EM:Stakeholder"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="Person" type="EM:Person"/>
+  <xsd:complexType name="Organization">
+    <xsd:complexContent>
+      <xsd:extension base="EM:Stakeholder">
+        <xsd:attribute name="address" type="xsd:string" use="required"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="Organization" type="EM:Organization"/>
+  <xsd:complexType name="EvidenceContainer">
+    <xsd:complexContent>
+      <xsd:extension base="SACM:ModelElement">
+        <xsd:choice maxOccurs="unbounded" minOccurs="0">
+          <xsd:element name="evaluation" type="EM:EvidenceEvaluation"/>
+          <xsd:element name="item" type="EM:EvidenceItem"/>
+          <xsd:element name="property" type="EM:ProjectProperty"/>
+          <xsd:element name="element" type="EM:ProjectElement"/>
+        </xsd:choice>
+        <xsd:attribute name="name" type="xsd:string" use="required"/>
+        <xsd:attribute name="gid" type="xsd:string" use="required"/>
+        <xsd:attribute name="version" type="xsd:string" use="required"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="EvidenceContainer" type="EM:EvidenceContainer"/>
+  <xsd:complexType name="EndTime">
+    <xsd:complexContent>
+      <xsd:extension base="EM:EffectiveTime">
+        <xsd:choice maxOccurs="unbounded" minOccurs="0">
+          <xsd:element name="datetime" type="SACM:Datetime"/>
+        </xsd:choice>
+        <xsd:attribute name="datetime" type="xsd:string"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="EndTime" type="EM:EndTime"/>
+  <xsd:complexType name="Assertion">
+    <xsd:complexContent>
+      <xsd:extension base="EM:FormalAssertion">
+        <xsd:choice maxOccurs="unbounded" minOccurs="0">
+          <xsd:element name="role" type="EM:RoleBinding"/>
+          <xsd:element name="definition" type="xsd:anyURI"/>
+        </xsd:choice>
+        <xsd:attribute name="facttype" type="xsd:string" use="required"/>
+        <xsd:attribute name="definition" type="xsd:string"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="Assertion" type="EM:Assertion"/>
+  <xsd:complexType name="Object">
+    <xsd:complexContent>
+      <xsd:extension base="EM:FormalObject">
+        <xsd:choice maxOccurs="unbounded" minOccurs="0">
+          <xsd:element name="definition" type="xsd:anyURI"/>
+        </xsd:choice>
+        <xsd:attribute name="concept" type="xsd:string" use="required"/>
+        <xsd:attribute name="definition" type="xsd:string"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="Object" type="EM:Object"/>
+  <xsd:complexType name="CompositeObject">
+    <xsd:complexContent>
+      <xsd:extension base="EM:FormalObject">
+        <xsd:choice maxOccurs="unbounded" minOccurs="0">
+          <xsd:element name="element" type="EM:FormalObject"/>
+        </xsd:choice>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="CompositeObject" type="EM:CompositeObject"/>
+  <xsd:complexType name="RoleBinding">
+    <xsd:complexContent>
+      <xsd:extension base="SACM:UtilityElement">
+        <xsd:choice maxOccurs="unbounded" minOccurs="0">
+          <xsd:element name="subject" type="EM:FormalObject"/>
+        </xsd:choice>
+        <xsd:attribute name="role" type="xsd:string" use="required"/>
+        <xsd:attribute name="subject" type="xsd:string"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="RoleBinding" type="EM:RoleBinding"/>
+  <xsd:complexType name="StartTime">
+    <xsd:complexContent>
+      <xsd:extension base="EM:EffectiveTime">
+        <xsd:choice maxOccurs="unbounded" minOccurs="0">
+          <xsd:element name="datetime" type="SACM:Datetime"/>
+        </xsd:choice>
+        <xsd:attribute name="datetime" type="xsd:string"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="StartTime" type="EM:StartTime"/>
+  <xsd:complexType name="Relevance">
+    <xsd:complexContent>
+      <xsd:extension base="EM:EvidenceAttribute">
+        <xsd:attribute name="value" type="EM:Level" use="required"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="Relevance" type="EM:Relevance"/>
+  <xsd:complexType name="Significance">
+    <xsd:complexContent>
+      <xsd:extension base="EM:EvidenceAttribute">
+        <xsd:attribute name="value" type="EM:Level" use="required"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="Significance" type="EM:Significance"/>
+  <xsd:complexType name="Accuracy">
+    <xsd:complexContent>
+      <xsd:extension base="EM:EvidenceAttribute">
+        <xsd:attribute name="value" type="EM:AccuracyLevel" use="required"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="Accuracy" type="EM:Accuracy"/>
+  <xsd:complexType name="HasRoleIn">
+    <xsd:complexContent>
+      <xsd:extension base="EM:ProjectProperty">
+        <xsd:choice maxOccurs="unbounded" minOccurs="0">
+          <xsd:element name="organization" type="EM:Organization"/>
+        </xsd:choice>
+        <xsd:attribute name="role" type="xsd:string" use="required"/>
+        <xsd:attribute name="organization" type="xsd:string"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="HasRoleIn" type="EM:HasRoleIn"/>
+  <xsd:complexType name="IsScopedBy">
+    <xsd:complexContent>
+      <xsd:extension base="EM:EvidenceInterpretation">
+        <xsd:choice maxOccurs="unbounded" minOccurs="0">
+          <xsd:element name="scope" type="EM:FormalElement"/>
+        </xsd:choice>
+        <xsd:attribute name="scope" type="xsd:string"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="IsScopedBy" type="EM:IsScopedBy"/>
+  <xsd:complexType abstract="true" name="EffectiveTime">
+    <xsd:complexContent>
+      <xsd:extension base="EM:TimingProperty"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="EffectiveTime" type="EM:EffectiveTime"/>
+  <xsd:complexType name="AtTime">
+    <xsd:complexContent>
+      <xsd:extension base="EM:TimingProperty">
+        <xsd:choice maxOccurs="unbounded" minOccurs="0">
+          <xsd:element name="dateTtime" type="SACM:Datetime"/>
+        </xsd:choice>
+        <xsd:attribute name="dateTtime" type="xsd:string"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="AtTime" type="EM:AtTime"/>
+  <xsd:complexType name="Originality">
+    <xsd:complexContent>
+      <xsd:extension base="EM:DocumentProperty">
+        <xsd:attribute name="value" type="EM:OriginalityLevel" use="required"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="Originality" type="EM:Originality"/>
+  <xsd:complexType name="Reporting">
+    <xsd:complexContent>
+      <xsd:extension base="EM:EvidenceAttribute">
+        <xsd:attribute name="value" type="EM:ReportingLevel" use="required"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="Reporting" type="EM:Reporting"/>
+  <xsd:complexType name="Reliability">
+    <xsd:complexContent>
+      <xsd:extension base="EM:DocumentProperty">
+        <xsd:attribute name="value" type="EM:ReliabilityLevel" use="required"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="Reliability" type="EM:Reliability"/>
+  <xsd:complexType name="Supports">
+    <xsd:complexContent>
+      <xsd:extension base="EM:EvidenceRelation"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="Supports" type="EM:Supports"/>
+  <xsd:complexType name="IsGeneratedAt">
+    <xsd:complexContent>
+      <xsd:extension base="EM:EvidenceEvent"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="IsGeneratedAt" type="EM:IsGeneratedAt"/>
+  <xsd:complexType abstract="true" name="CollectionMethod">
+    <xsd:complexContent>
+      <xsd:extension base="EM:ProjectElement"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="CollectionMethod" type="EM:CollectionMethod"/>
+  <xsd:complexType abstract="true" name="EvidenceRelation">
+    <xsd:complexContent>
+      <xsd:extension base="EM:EvidenceEvaluation">
+        <xsd:choice maxOccurs="unbounded" minOccurs="0">
+          <xsd:element name="assertion" type="EM:FormalAssertion"/>
+          <xsd:element name="subject" type="EM:EvidenceItem"/>
+        </xsd:choice>
+        <xsd:attribute name="assertion" type="xsd:string"/>
+        <xsd:attribute name="subject" type="xsd:string"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="EvidenceRelation" type="EM:EvidenceRelation"/>
+  <xsd:complexType name="Support">
+    <xsd:complexContent>
+      <xsd:extension base="EM:EvidenceAttribute">
+        <xsd:attribute name="value" type="EM:SupportLevel" use="required"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="Support" type="EM:Support"/>
+  <xsd:complexType name="Conflicts">
+    <xsd:complexContent>
+      <xsd:extension base="EM:EvidenceObservation">
+        <xsd:choice maxOccurs="unbounded" minOccurs="0">
+          <xsd:element name="assertion" type="EM:FormalAssertion"/>
+          <xsd:element name="subject" type="EM:FormalAssertion"/>
+        </xsd:choice>
+        <xsd:attribute name="assertion" type="xsd:string"/>
+        <xsd:attribute name="subject" type="xsd:string"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="Conflicts" type="EM:Conflicts"/>
+  <xsd:complexType name="Refutes">
+    <xsd:complexContent>
+      <xsd:extension base="EM:EvidenceResolution">
+        <xsd:choice maxOccurs="unbounded" minOccurs="0">
+          <xsd:element name="element" type="EM:FormalAssertion"/>
+        </xsd:choice>
+        <xsd:attribute name="element" type="xsd:string"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="Refutes" type="EM:Refutes"/>
+  <xsd:complexType name="Negates">
+    <xsd:complexContent>
+      <xsd:extension base="EM:EvidenceResolution">
+        <xsd:choice maxOccurs="unbounded" minOccurs="0">
+          <xsd:element name="element" type="EM:EvidenceRelation"/>
+        </xsd:choice>
+        <xsd:attribute name="element" type="xsd:string"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="Negates" type="EM:Negates"/>
+  <xsd:complexType name="UnknownObject">
+    <xsd:complexContent>
+      <xsd:extension base="EM:FormalObject"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="UnknownObject" type="EM:UnknownObject"/>
+  <xsd:complexType abstract="true" name="EvidenceEvaluation">
+    <xsd:complexContent>
+      <xsd:extension base="EM:EvidenceAssertion">
+        <xsd:choice maxOccurs="unbounded" minOccurs="0">
+          <xsd:element name="attribute" type="EM:EvidenceAttribute"/>
+        </xsd:choice>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="EvidenceEvaluation" type="EM:EvidenceEvaluation"/>
+  <xsd:complexType name="Resolves">
+    <xsd:complexContent>
+      <xsd:extension base="EM:EvidenceResolution">
+        <xsd:choice maxOccurs="unbounded" minOccurs="0">
+          <xsd:element name="element" type="EM:EvidenceObservation"/>
+        </xsd:choice>
+        <xsd:attribute name="element" type="xsd:string"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="Resolves" type="EM:Resolves"/>
+  <xsd:complexType abstract="true" name="Stakeholder">
+    <xsd:complexContent>
+      <xsd:extension base="EM:ProjectElement"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="Stakeholder" type="EM:Stakeholder"/>
+  <xsd:complexType name="EvidenceRequest">
+    <xsd:complexContent>
+      <xsd:extension base="EM:ProjectElement">
+        <xsd:choice maxOccurs="unbounded" minOccurs="0">
+          <xsd:element name="item" type="EM:EvidenceItem"/>
+        </xsd:choice>
+        <xsd:attribute name="item" type="xsd:string"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="EvidenceRequest" type="EM:EvidenceRequest"/>
+  <xsd:complexType name="ProjectObjective">
+    <xsd:complexContent>
+      <xsd:extension base="EM:ProjectElement"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="ProjectObjective" type="EM:ProjectObjective"/>
+  <xsd:complexType name="Activity">
+    <xsd:complexContent>
+      <xsd:extension base="EM:ProjectElement"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="Activity" type="EM:Activity"/>
+  <xsd:complexType name="DependsOn">
+    <xsd:complexContent>
+      <xsd:extension base="EM:ProjectProperty">
+        <xsd:choice maxOccurs="unbounded" minOccurs="0">
+          <xsd:element name="element" type="EM:ProjectElement"/>
+        </xsd:choice>
+        <xsd:attribute name="element" type="xsd:string"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="DependsOn" type="EM:DependsOn"/>
+  <xsd:complexType name="Satisfies">
+    <xsd:complexContent>
+      <xsd:extension base="EM:ProjectProperty">
+        <xsd:choice maxOccurs="unbounded" minOccurs="0">
+          <xsd:element name="element" type="EM:ProjectElement"/>
+        </xsd:choice>
+        <xsd:attribute name="element" type="xsd:string"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="Satisfies" type="EM:Satisfies"/>
+  <xsd:complexType abstract="true" name="ProjectElement">
+    <xsd:complexContent>
+      <xsd:extension base="EM:EvidenceElement">
+        <xsd:choice maxOccurs="unbounded" minOccurs="0">
+          <xsd:element name="property" type="EM:ProjectProperty"/>
+        </xsd:choice>
+        <xsd:attribute name="name" type="xsd:string" use="required"/>
+        <xsd:attribute name="content" type="xsd:string" use="required"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="ProjectElement" type="EM:ProjectElement"/>
+  <xsd:complexType name="ReferencedClaim">
+    <xsd:complexContent>
+      <xsd:extension base="EM:FormalAssertion">
+        <xsd:choice maxOccurs="unbounded" minOccurs="0">
+          <xsd:element name="claim" type="ARM:Claim"/>
+        </xsd:choice>
+        <xsd:attribute name="claim" type="xsd:string"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="ReferencedClaim" type="EM:ReferencedClaim"/>
+  <xsd:complexType abstract="true" name="EvidenceObservation">
+    <xsd:complexContent>
+      <xsd:extension base="EM:EvidenceEvaluation"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="EvidenceObservation" type="EM:EvidenceObservation"/>
+  <xsd:complexType abstract="true" name="EvidenceResolution">
+    <xsd:complexContent>
+      <xsd:extension base="EM:EvidenceEvaluation">
+        <xsd:choice maxOccurs="unbounded" minOccurs="0">
+          <xsd:element name="subject" type="EM:EvidenceElement"/>
+        </xsd:choice>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="EvidenceResolution" type="EM:EvidenceResolution"/>
+  <xsd:complexType name="Weakens">
+    <xsd:complexContent>
+      <xsd:extension base="EM:Contributes"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="Weakens" type="EM:Weakens"/>
+  <xsd:complexType name="Amplifies">
+    <xsd:complexContent>
+      <xsd:extension base="EM:Contributes"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="Amplifies" type="EM:Amplifies"/>
+  <xsd:complexType abstract="true" name="Contributes">
+    <xsd:complexContent>
+      <xsd:extension base="EM:EvidenceObservation">
+        <xsd:choice maxOccurs="unbounded" minOccurs="0">
+          <xsd:element name="subject" type="EM:EvidenceRelation"/>
+          <xsd:element name="relation" type="EM:EvidenceRelation"/>
+        </xsd:choice>
+        <xsd:attribute name="subject" type="xsd:string"/>
+        <xsd:attribute name="relation" type="xsd:string"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="Contributes" type="EM:Contributes"/>
+  <xsd:complexType name="Challenges">
+    <xsd:complexContent>
+      <xsd:extension base="EM:EvidenceRelation"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="Challenges" type="EM:Challenges"/>
+  <xsd:complexType name="Strength">
+    <xsd:complexContent>
+      <xsd:extension base="EM:EvidenceAttribute">
+        <xsd:attribute name="value" type="xsd:string" use="required"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="Strength" type="EM:Strength"/>
+  <xsd:complexType name="IsAcquiredAt">
+    <xsd:complexContent>
+      <xsd:extension base="EM:EvidenceEvent"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="IsAcquiredAt" type="EM:IsAcquiredAt"/>
+  <xsd:complexType name="IsTransferredTo">
+    <xsd:complexContent>
+      <xsd:extension base="EM:EvidenceEvent"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="IsTransferredTo" type="EM:IsTransferredTo"/>
+  <xsd:complexType abstract="true" name="DocumentProperty">
+    <xsd:complexContent>
+      <xsd:extension base="EM:ExhibitProperty"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="DocumentProperty" type="EM:DocumentProperty"/>
+  <xsd:complexType abstract="true" name="EvidenceEvent">
+    <xsd:complexContent>
+      <xsd:extension base="EM:EvidenceProperty"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="EvidenceEvent" type="EM:EvidenceEvent"/>
+  <xsd:complexType name="OwnedBy">
+    <xsd:complexContent>
+      <xsd:extension base="EM:Provenance">
+        <xsd:choice maxOccurs="unbounded" minOccurs="0">
+          <xsd:element name="owner" type="EM:Stakeholder"/>
+        </xsd:choice>
+        <xsd:attribute name="owner" type="xsd:string"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="OwnedBy" type="EM:OwnedBy"/>
+  <xsd:complexType abstract="true" name="Provenance">
+    <xsd:complexContent>
+      <xsd:extension base="EM:EvidenceProperty"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="Provenance" type="EM:Provenance"/>
+  <xsd:complexType abstract="true" name="TimingProperty">
+    <xsd:complexContent>
+      <xsd:extension base="EM:EvidenceProperty"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="TimingProperty" type="EM:TimingProperty"/>
+  <xsd:complexType name="IsPartOf">
+    <xsd:complexContent>
+      <xsd:extension base="EM:ExhibitProperty">
+        <xsd:choice maxOccurs="unbounded" minOccurs="0">
+          <xsd:element name="whole" type="EM:Exhibit"/>
+        </xsd:choice>
+        <xsd:attribute name="whole" type="xsd:string"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="IsPartOf" type="EM:IsPartOf"/>
+  <xsd:complexType name="IsRevokedAt">
+    <xsd:complexContent>
+      <xsd:extension base="EM:EvidenceEvent"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="IsRevokedAt" type="EM:IsRevokedAt"/>
+  <xsd:complexType name="ProvidesContext">
+    <xsd:complexContent>
+      <xsd:extension base="EM:EvidenceInterpretation">
+        <xsd:choice maxOccurs="unbounded" minOccurs="0">
+          <xsd:element name="context" type="EM:EvidenceElement"/>
+        </xsd:choice>
+        <xsd:attribute name="context" type="xsd:string"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="ProvidesContext" type="EM:ProvidesContext"/>
+  <xsd:complexType abstract="true" name="FormalObject">
+    <xsd:complexContent>
+      <xsd:extension base="EM:FormalElement">
+        <xsd:attribute name="name" type="xsd:string" use="required"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="FormalObject" type="EM:FormalObject"/>
+  <xsd:complexType name="MeansThat">
+    <xsd:complexContent>
+      <xsd:extension base="EM:EvidenceInterpretation">
+        <xsd:choice maxOccurs="unbounded" minOccurs="0">
+          <xsd:element name="meaning" type="EM:FormalAssertion"/>
+        </xsd:choice>
+        <xsd:attribute name="meaning" type="xsd:string"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="MeansThat" type="EM:MeansThat"/>
+  <xsd:complexType abstract="true" name="EvidenceElement">
+    <xsd:complexContent>
+      <xsd:extension base="SACM:ModelElement">
+        <xsd:choice maxOccurs="unbounded" minOccurs="0">
+          <xsd:element name="timing" type="EM:TimingProperty"/>
+          <xsd:element name="custody" type="EM:CustodyProperty"/>
+          <xsd:element name="provenance" type="EM:Provenance"/>
+          <xsd:element name="event" type="EM:EvidenceEvent"/>
+        </xsd:choice>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="EvidenceElement" type="EM:EvidenceElement"/>
+  <xsd:complexType name="CareOf">
+    <xsd:complexContent>
+      <xsd:extension base="EM:CustodyProperty">
+        <xsd:choice maxOccurs="unbounded" minOccurs="0">
+          <xsd:element name="custodian" type="EM:Person"/>
+        </xsd:choice>
+        <xsd:attribute name="custodian" type="xsd:string"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="CareOf" type="EM:CareOf"/>
+  <xsd:complexType abstract="true" name="CustodyProperty">
+    <xsd:complexContent>
+      <xsd:extension base="EM:EvidenceProperty"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="CustodyProperty" type="EM:CustodyProperty"/>
+  <xsd:complexType name="AtLocation">
+    <xsd:complexContent>
+      <xsd:extension base="EM:CustodyProperty">
+        <xsd:choice maxOccurs="unbounded" minOccurs="0">
+          <xsd:element name="location" type="EM:Organization"/>
+        </xsd:choice>
+        <xsd:attribute name="location" type="xsd:string"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="AtLocation" type="EM:AtLocation"/>
+  <xsd:complexType name="IsCreatedAt">
+    <xsd:complexContent>
+      <xsd:extension base="EM:EvidenceEvent"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="IsCreatedAt" type="EM:IsCreatedAt"/>
+  <xsd:complexType name="RequiresContainer">
+    <xsd:complexContent>
+      <xsd:extension base="EM:ProjectProperty">
+        <xsd:choice maxOccurs="unbounded" minOccurs="0">
+          <xsd:element name="container" type="EM:EvidenceContainer"/>
+        </xsd:choice>
+        <xsd:attribute name="container" type="xsd:string"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="RequiresContainer" type="EM:RequiresContainer"/>
+  <xsd:complexType abstract="true" name="ProjectProperty">
+    <xsd:complexContent>
+      <xsd:extension base="EM:EvidenceProperty"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="ProjectProperty" type="EM:ProjectProperty"/>
+  <xsd:complexType name="Service">
+    <xsd:complexContent>
+      <xsd:extension base="EM:CollectionMethod"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="Service" type="EM:Service"/>
+  <xsd:complexType name="HasElectronicSource">
+    <xsd:complexContent>
+      <xsd:extension base="EM:ExhibitProperty">
+        <xsd:attribute name="source" type="xsd:string" use="required"/>
+        <xsd:attribute name="format" type="xsd:string" use="required"/>
+        <xsd:attribute name="fileSize" type="xsd:string" use="required"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="HasElectronicSource" type="EM:HasElectronicSource"/>
+  <xsd:complexType name="IsExpressedInLanguage">
+    <xsd:complexContent>
+      <xsd:extension base="EM:DocumentProperty">
+        <xsd:attribute name="language" type="xsd:string" use="required"/>
+        <xsd:attribute name="IsPrimary" type="xsd:string" use="required"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="IsExpressedInLanguage" type="EM:IsExpressedInLanguage"/>
+  <xsd:complexType name="UsingProcess">
+    <xsd:complexContent>
+      <xsd:extension base="EM:CustodyProperty">
+        <xsd:choice maxOccurs="unbounded" minOccurs="0">
+          <xsd:element name="method" type="EM:CollectionMethod"/>
+        </xsd:choice>
+        <xsd:attribute name="method" type="xsd:string"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="UsingProcess" type="EM:UsingProcess"/>
+  <xsd:complexType name="HasSecurityClassification">
+    <xsd:complexContent>
+      <xsd:extension base="EM:DocumentProperty">
+        <xsd:attribute name="securityClassification" type="xsd:string" use="required"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="HasSecurityClassification" type="EM:HasSecurityClassification"/>
+  <xsd:complexType name="IsReleaseableTo">
+    <xsd:complexContent>
+      <xsd:extension base="EM:DocumentProperty">
+        <xsd:attribute name="releasability" type="xsd:string" use="required"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="IsReleaseableTo" type="EM:IsReleaseableTo"/>
+  <xsd:complexType name="EvidenceGroup">
+    <xsd:complexContent>
+      <xsd:extension base="EM:EvidenceItem">
+        <xsd:choice maxOccurs="unbounded" minOccurs="0">
+          <xsd:element name="element" type="EM:EvidenceElement"/>
+        </xsd:choice>
+        <xsd:attribute name="name" type="xsd:string" use="required"/>
+        <xsd:attribute name="element" type="xsd:string"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="EvidenceGroup" type="EM:EvidenceGroup"/>
+  <xsd:complexType name="HasVersion">
+    <xsd:complexContent>
+      <xsd:extension base="EM:DocumentProperty">
+        <xsd:attribute name="version" type="xsd:string" use="required"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="HasVersion" type="EM:HasVersion"/>
+  <xsd:complexType name="HasMedia">
+    <xsd:complexContent>
+      <xsd:extension base="EM:ExhibitProperty">
+        <xsd:attribute name="media" type="xsd:string" use="required"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="HasMedia" type="EM:HasMedia"/>
+  <xsd:complexType name="Exhibit">
+    <xsd:complexContent>
+      <xsd:extension base="EM:EvidenceItem">
+        <xsd:choice maxOccurs="unbounded" minOccurs="0">
+          <xsd:element name="property" type="EM:ExhibitProperty"/>
+        </xsd:choice>
+        <xsd:attribute name="name" type="xsd:string" use="required"/>
+        <xsd:attribute name="url" type="xsd:string" use="required"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="Exhibit" type="EM:Exhibit"/>
+  <xsd:complexType abstract="true" name="FormalElement">
+    <xsd:complexContent>
+      <xsd:extension base="EM:EvidenceItem"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="FormalElement" type="EM:FormalElement"/>
+  <xsd:complexType abstract="true" name="ExhibitProperty">
+    <xsd:complexContent>
+      <xsd:extension base="EM:EvidenceProperty"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="ExhibitProperty" type="EM:ExhibitProperty"/>
+  <xsd:complexType abstract="true" name="EvidenceInterpretation">
+    <xsd:complexContent>
+      <xsd:extension base="EM:EvidenceEvaluation">
+        <xsd:choice maxOccurs="unbounded" minOccurs="0">
+          <xsd:element name="subject" type="EM:EvidenceElement"/>
+        </xsd:choice>
+        <xsd:attribute name="subject" type="xsd:string"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="EvidenceInterpretation" type="EM:EvidenceInterpretation"/>
+  <xsd:complexType abstract="true" name="EvidenceAssertion">
+    <xsd:complexContent>
+      <xsd:extension base="EM:EvidenceElement"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="EvidenceAssertion" type="EM:EvidenceAssertion"/>
+  <xsd:complexType abstract="true" name="EvidenceProperty">
+    <xsd:complexContent>
+      <xsd:extension base="EM:EvidenceAssertion"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="EvidenceProperty" type="EM:EvidenceProperty"/>
+  <xsd:complexType name="ExtendedEvidenceAttribute">
+    <xsd:complexContent>
+      <xsd:extension base="EM:EvidenceAttribute"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="ExtendedEvidenceAttribute" type="EM:ExtendedEvidenceAttribute"/>
+  <xsd:complexType name="ExtendedDocumentProperty">
+    <xsd:complexContent>
+      <xsd:extension base="EM:DocumentProperty"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="ExtendedDocumentProperty" type="EM:ExtendedDocumentProperty"/>
+  <xsd:complexType name="Record">
+    <xsd:complexContent>
+      <xsd:extension base="EM:EvidenceItem">
+        <xsd:attribute name="name" type="xsd:string" use="required"/>
+        <xsd:attribute name="content" type="xsd:string" use="required"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="Record" type="EM:Record"/>
+  <xsd:complexType name="ObjectifiedAssertion">
+    <xsd:complexContent>
+      <xsd:extension base="EM:FormalObject">
+        <xsd:choice maxOccurs="unbounded" minOccurs="0">
+          <xsd:element name="assertion" type="EM:FormalAssertion"/>
+        </xsd:choice>
+        <xsd:attribute name="assertion" type="xsd:string"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="ObjectifiedAssertion" type="EM:ObjectifiedAssertion"/>
+  <xsd:complexType name="IsModifiedBy">
+    <xsd:complexContent>
+      <xsd:extension base="EM:EvidenceEvent"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="IsModifiedBy" type="EM:IsModifiedBy"/>
+  <xsd:complexType name="PerformedBy">
+    <xsd:complexContent>
+      <xsd:extension base="EM:Provenance">
+        <xsd:choice maxOccurs="unbounded" minOccurs="0">
+          <xsd:element name="executor" type="EM:Stakeholder"/>
+        </xsd:choice>
+        <xsd:attribute name="executor" type="xsd:string"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="PerformedBy" type="EM:PerformedBy"/>
+  <xsd:complexType name="ContainerConsistency">
+    <xsd:complexContent>
+      <xsd:extension base="EM:ProjectProperty">
+        <xsd:attribute name="value" type="EM:ConsistencyLevel" use="required"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="ContainerConsistency" type="EM:ContainerConsistency"/>
+  <xsd:complexType name="ContainerCompleteness">
+    <xsd:complexContent>
+      <xsd:extension base="EM:ProjectProperty">
+        <xsd:attribute name="value" type="EM:CompletenessLevel" use="required"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="ContainerCompleteness" type="EM:ContainerCompleteness"/>
+  <xsd:complexType name="CompliesTo">
+    <xsd:complexContent>
+      <xsd:extension base="EM:ProjectProperty">
+        <xsd:attribute name="criteria" type="EM:StandardOfProof" use="required"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="CompliesTo" type="EM:CompliesTo"/>
+  <xsd:complexType name="ExtendedProjectProperty">
+    <xsd:complexContent>
+      <xsd:extension base="EM:ProjectProperty"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="ExtendedProjectProperty" type="EM:ExtendedProjectProperty"/>
+</xsd:schema>

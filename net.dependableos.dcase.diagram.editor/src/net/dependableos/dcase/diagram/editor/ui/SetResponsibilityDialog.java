@@ -50,10 +50,11 @@ public class SetResponsibilityDialog extends Dialog {
 	/**
 	 * the key for the label text of the Responsibility attribute.
 	 */
-	private static final String RESPDIALOG_1 = "_UI_BasicNode_userdef012_feature"; //$NON-NLS-1$
-	private static final String RESPDIALOG_2 = "_UI_BasicNode_userdef012_feature2"; //$NON-NLS-1$
-	private static final String RESPDIALOG_3 = "_UI_BasicNode_userdef012_feature3"; //$NON-NLS-1$
-	private static final String RESPDIALOG_4 = "_UI_BasicNode_userdef012_feature4"; //$NON-NLS-1$
+	private static final String RESPDIALOG_1 = "_UI_BasicNode_respName_feature"; //$NON-NLS-1$
+	private static final String RESPDIALOG_2 = "_UI_BasicNode_respAddress_feature"; //$NON-NLS-1$
+	private static final String RESPDIALOG_3 = "_UI_BasicNode_respIcon_feature"; //$NON-NLS-1$
+	private static final String RESPDIALOG_4 = "_UI_BasicNode_respIcon_label"; //$NON-NLS-1$
+	private static final String RESPDIALOG_5 = "_UI_BasicNode_respTime_feature"; //$NON-NLS-1$
 
 	/**
 	 * the format string for a label text.
@@ -66,10 +67,11 @@ public class SetResponsibilityDialog extends Dialog {
 	private Text nameText;
 	private Text addrText;
 	private Text iconText;
+	private Text timeText;
 	private String nameStr;
 	private String addrStr;
 	private String iconStr;
-	private static final String ATTR_DELIMITER_STR = ";"; //$NON-NLS-1$
+	private String timeStr;
 
 	/**
 	 * constructor.
@@ -167,6 +169,11 @@ public class SetResponsibilityDialog extends Dialog {
 			}
 		});
 
+		// Time
+		createLabel(parent, getAttributeName(RESPDIALOG_5, true));
+		timeText = createText(parent, timeStr);
+		createLabel(parent);
+
 	}
 
 	/**
@@ -200,13 +207,49 @@ public class SetResponsibilityDialog extends Dialog {
 	}
 
 	/**
-	 * Returns the responsibility value.
+	 * Sets the responsibility time.
 	 * 
-	 * @return the responsibility value.
+	 * @param name
+	 *            the responsibility time.
 	 */
-	public String getValue() {
-		return nameStr + ATTR_DELIMITER_STR + addrStr + ATTR_DELIMITER_STR
-				+ iconStr;
+	public void setTime(String value) {
+		this.timeStr = value;
+	}
+
+	/**
+	 * Returns the responsibility name.
+	 * 
+	 * @return the responsibility name.
+	 */
+	public String getName() {
+		return nameStr;
+	}
+
+	/**
+	 * Returns the responsibility address.
+	 * 
+	 * @return the responsibility address.
+	 */
+	public String getAddress() {
+		return addrStr;
+	}
+
+	/**
+	 * Returns the responsibility icon.
+	 * 
+	 * @return the responsibility icon.
+	 */
+	public String getIconPath() {
+		return iconStr;
+	}
+
+	/**
+	 * Returns the responsibility time.
+	 * 
+	 * @return the responsibility time.
+	 */
+	public String getTime() {
+		return timeStr;
 	}
 
 	/**
@@ -219,6 +262,7 @@ public class SetResponsibilityDialog extends Dialog {
 		nameStr = nameText.getText();
 		addrStr = addrText.getText();
 		iconStr = iconText.getText();
+		timeStr = timeText.getText();
 		super.okPressed();
 	}
 

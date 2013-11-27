@@ -13,11 +13,12 @@ import static net.dependableos.dcase.diagram.common.constant.SystemDefinitionCon
 import java.util.ArrayList;
 import java.util.List;
 
-
 import net.dependableos.dcase.diagram.edit.parts.custom.CustomBorderLayout;
 import net.dependableos.dcase.diagram.edit.parts.custom.CustomMultiLineFlowLayout;
 import net.dependableos.dcase.diagram.edit.parts.custom.CustomWrappingLabel;
+import net.dependableos.dcase.diagram.edit.parts.custom.DcaseLinkEditPart;
 import net.dependableos.dcase.diagram.edit.parts.custom.DcaseNodeEditPart;
+import net.dependableos.dcase.diagram.edit.parts.custom.DcaseThumbnailEx;
 import net.dependableos.dcase.diagram.edit.policies.Userdef001ItemSemanticEditPolicy;
 import net.dependableos.dcase.diagram.part.DcaseVisualIDRegistry;
 import net.dependableos.dcase.diagram.providers.DcaseElementTypes;
@@ -31,14 +32,17 @@ import org.eclipse.draw2d.MouseMotionListener;
 import org.eclipse.draw2d.Panel;
 import org.eclipse.draw2d.Shape;
 import org.eclipse.draw2d.StackLayout;
+import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editpolicies.FlowLayoutEditPolicy;
 import org.eclipse.gef.editpolicies.LayoutEditPolicy;
 import org.eclipse.gef.requests.CreateRequest;
+import org.eclipse.gmf.runtime.diagram.ui.editparts.DiagramEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.IGraphicalEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editpolicies.EditPolicyRoles;
+import org.eclipse.gmf.runtime.diagram.ui.parts.DiagramEditor;
 import org.eclipse.gmf.runtime.draw2d.ui.figures.ConstrainedToolbarLayout;
 import org.eclipse.gmf.runtime.draw2d.ui.figures.WrappingLabel;
 import org.eclipse.gmf.runtime.emf.type.core.IElementType;
@@ -46,6 +50,8 @@ import org.eclipse.gmf.runtime.gef.ui.figures.DefaultSizeNodeFigure;
 import org.eclipse.gmf.runtime.gef.ui.figures.NodeFigure;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.PlatformUI;
 
 /**
  * @generated
@@ -128,21 +134,21 @@ public class Userdef001EditPart extends DcaseNodeEditPart {
      * @generated
      */
     protected boolean addFixedChild(EditPart childEditPart) {
-        if (childEditPart instanceof Userdef001Userdef001EditPart) {
-            ((Userdef001Userdef001EditPart) childEditPart)
-                    .setLabel(getPrimaryShape()
-                            .getFigureUserdef001Userdef001Figure());
-            return true;
-        }
-        if (childEditPart instanceof Userdef001NameEditPart) {
-            ((Userdef001NameEditPart) childEditPart).setLabel(getPrimaryShape()
-                    .getFigureUserdef001NameFigure());
-            return true;
-        }
         if (childEditPart instanceof Userdef001Userdef002EditPart) {
             ((Userdef001Userdef002EditPart) childEditPart)
                     .setLabel(getPrimaryShape()
                             .getFigureUserdef001Userdef002Figure());
+            return true;
+        }
+        if (childEditPart instanceof Userdef001Userdef001EditPart) {
+            ((Userdef001Userdef001EditPart) childEditPart).setLabel(getPrimaryShape()
+                    .getFigureUserdef001Userdef001Figure());
+            return true;
+        }
+        if (childEditPart instanceof Userdef001NameEditPart) {
+            ((Userdef001NameEditPart) childEditPart)
+                    .setLabel(getPrimaryShape()
+                            .getFigureUserdef001NameFigure());
             return true;
         }
         if (childEditPart instanceof Userdef001DescEditPart) {
@@ -167,13 +173,13 @@ public class Userdef001EditPart extends DcaseNodeEditPart {
      * @generated
      */
     protected boolean removeFixedChild(EditPart childEditPart) {
+        if (childEditPart instanceof Userdef001Userdef002EditPart) {
+            return true;
+        }
         if (childEditPart instanceof Userdef001Userdef001EditPart) {
             return true;
         }
         if (childEditPart instanceof Userdef001NameEditPart) {
-            return true;
-        }
-        if (childEditPart instanceof Userdef001Userdef002EditPart) {
             return true;
         }
         if (childEditPart instanceof Userdef001DescEditPart) {
@@ -929,6 +935,13 @@ public class Userdef001EditPart extends DcaseNodeEditPart {
          * @generated NOT
          */
         private WrappingLabel fFigureUserdef001ResponsibilityFigure;
+        /**
+         * @generated NOT
+         */
+        DcaseThumbnailEx fFigureThumb;
+        DefaultSizeNodeFigure fThumbNodeFigure;
+        private String moduleName;
+        Dimension prevDimension;
 
         /**
          * @generated NOT
@@ -1002,19 +1015,30 @@ public class Userdef001EditPart extends DcaseNodeEditPart {
 
             layoutBottom.setStretchMinorAxis(false);
             layoutBottom.setMinorAlignment(FlowLayout.ALIGN_LEFTTOP);
+
             layoutBottom.setMajorAlignment(FlowLayout.ALIGN_LEFTTOP);
             layoutBottom.setMajorSpacing(NODE_MARGIN_VERTICAL);
             layoutBottom.setMinorSpacing(0);
             layoutBottom.setHorizontal(true);
+
             Panel panelBottom = new Panel();
             panelBottom.setLayoutManager(layoutBottom);
-            this.add(panelBottom, BorderLayout.BOTTOM);
-            panelBottom.add(fFigureUserdef001Userdef002Figure);
-            
+            this.add(panelBottom, BorderLayout.CENTER);
+            panelBottom.add(fFigureUserdef001DescFigure);
             fFigureUserdef001AttachmentFigure = new CustomWrappingLabel();
             fFigureUserdef001AttachmentFigure.setTextWrap(true);
             fFigureUserdef001AttachmentFigure.setText("[Undefined]");
             panelBottom.add(fFigureUserdef001AttachmentFigure);
+
+            fFigureThumb = new DcaseThumbnailEx();
+            fFigureThumb.setSource(fFigureUserdef001NameFigure); // dummy
+            fFigureThumb.setVisible(false);
+            fThumbNodeFigure = new DefaultSizeNodeFigure(0, 0);
+            fThumbNodeFigure.setLayoutManager(new StackLayout());
+            fThumbNodeFigure.add(fFigureThumb);
+            panelBottom.add(fThumbNodeFigure);
+
+            this.add(fFigureUserdef001Userdef002Figure, BorderLayout.BOTTOM);
             
             fFigureUserdef001ResponsibilityFigure = new WrappingLabel();
             fFigureUserdef001ResponsibilityFigure.setTextWrap(true);
@@ -1133,8 +1157,75 @@ public class Userdef001EditPart extends DcaseNodeEditPart {
         public void mouseMoved(MouseEvent arg0) {
         }
         
+        public String getModuleValue() {
+            return moduleName;
+     }
+     
+     public Dimension setModuleValue(String name) {
+            if(name == null || name.length() == 0) {
+                    fFigureThumb.setVisible(false);
+                    if(! prevDimension.isEmpty()) {
+                            fThumbNodeFigure.setDefaultSize(0, 0);
+                            fFigureThumb.setSize(0, 0);
+                            fFigureThumb.setSourceChildren(null);
+                            moduleName = name;
+                            return prevDimension;
+                    }
+            } else {
+                    IEditorPart editorPart =
+                            PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+                    if(editorPart instanceof DiagramEditor) {
+                            DiagramEditPart diagramEditPart = ((DiagramEditor)editorPart).getDiagramEditPart();
+                            IFigure ovFigure = diagramEditPart.getFigure();
+                            if(ovFigure != null) {
+                                    List<IFigure> figureList = new ArrayList<IFigure>();
+                                    for(Object childObj : diagramEditPart.getPrimaryEditParts()) {
+                                            if(childObj instanceof DcaseNodeEditPart) {
+                                                    figureList.add(((DcaseNodeEditPart)childObj).getFigure());
+                                            } else if(childObj instanceof DcaseLinkEditPart) {
+                                                    figureList.add(((DcaseLinkEditPart)childObj).getFigure());
+                                            }
+                                    }
+                                    Dimension ovDimension = 
+                                            DcaseThumbnailEx.getChildRectangle(figureList).getSize();
+                                    Dimension curDimension = this.getSize();
+                                    if (moduleName == null || moduleName.length() == 0) {
+                                            prevDimension = curDimension;
+                                    }
+                                    int newW = curDimension.width + ovDimension.width -
+                                            fThumbNodeFigure.getDefaultSize().width;
+                                    int newH = curDimension.height + ovDimension.height -
+                                            fThumbNodeFigure.getDefaultSize().height;
+                                    fThumbNodeFigure.setDefaultSize(ovDimension);
+                                    fFigureThumb.setSource(ovFigure);
+                                    fFigureThumb.setSourceChildren(figureList);
+                                    fFigureThumb.setVisible(true);
+                                    moduleName = name;
+                                    return new Dimension(newW, newH);
+                            }
+                    }
+            }
+            moduleName = name;
+            return new Dimension(0, 0);
+     	}
     }
 
     // AUTO_GENERATED:END
+
+    public String getModuleValue() {
+        if(primaryShape instanceof Userdef001Figure) {
+                return ((Userdef001Figure)primaryShape).getModuleValue();
+        } else {
+                return null;
+        }
+     }
+     
+     public Dimension setModuleValue(String name) {
+        if(primaryShape instanceof Userdef001Figure) {
+                return ((Userdef001Figure)primaryShape).setModuleValue(name);
+        } else {
+                return new Dimension(0, 0);
+        }
+     }
 
 }

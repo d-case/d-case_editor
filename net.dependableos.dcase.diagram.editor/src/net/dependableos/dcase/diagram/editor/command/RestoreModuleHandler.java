@@ -8,6 +8,7 @@ import net.dependableos.dcase.impl.ArgumentImpl;
 import net.dependableos.dcase.BasicNode;
 import net.dependableos.dcase.BasicLink;
 import net.dependableos.dcase.DcaseFactory;
+import net.dependableos.dcase.Userdef001;
 import net.dependableos.dcase.Userdef005;
 import net.dependableos.dcase.diagram.common.command.ChangeBasicNodePropertyTransactionCommand;
 import net.dependableos.dcase.diagram.common.exception.DcaseRuntimeException;
@@ -122,9 +123,9 @@ public class RestoreModuleHandler extends AbstractEditPartHandler {
 			return null;
 		}
 		EObject sobj = DcaseEditorUtil.getElement(selectedEditPart);
-		Userdef005 selectedElement = null;
-		if (sobj instanceof Userdef005) {
-			selectedElement = (Userdef005) sobj;
+		BasicNode selectedElement = null;
+		if (sobj instanceof Userdef005 || sobj instanceof Userdef001) {
+			selectedElement = (BasicNode) sobj;
 		} else {
 			MessageWriter.writeMessageToConsole(
 					Messages.RestoreModuleHandler_2,
@@ -272,13 +273,13 @@ public class RestoreModuleHandler extends AbstractEditPartHandler {
 		argumentEditPart.getDiagramEditDomain().getDiagramCommandStack()
 				.execute(moveCmd);
 
-		// update Userdef011 of Module
+		// update RefSource of Module
 		IFile modelFile = DcaseEditorUtil.getModelFile(argumentEditPart);
 		String refStr = ModuleUtil.createNodeReference(modelFile, moduleName);
 		String newAttrStr = ModuleUtil.removeModuleReference(
 				moduleArgumentEditPart, refStr);
 		Map<AttributeType, Object> attrNewMap = new HashMap<AttributeType, Object>();
-		attrNewMap.put(AttributeType.USERDEF011, newAttrStr);
+		attrNewMap.put(AttributeType.REFSOURCE, newAttrStr);
 		ICommand setUserdef011Command = new ChangeBasicNodePropertyTransactionCommand(
 				moduleDomain, SET_ATTRIBUTE_CMD_LABEL, null, moduleArgument,
 				attrNewMap);

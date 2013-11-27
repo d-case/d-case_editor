@@ -44,22 +44,26 @@ public final class ParameterUtil {
      */
     public static boolean processParameter(BasicNode node) {
         boolean result = true;
-        String userdef007 = node.getUserdef007();
-        String userdef009 = node.getUserdef009();
+        String userdef007 = node.getParameterVals();
+        String userdef009 = node.getParameterDefs();
             // tests whether the node is configured parameters.
         if (userdef009 != null && !"".equals(userdef009.trim())) { //$NON-NLS-1$ 
         	if (ParameterItem.isValidParameter(userdef007)) {
         		// creates a node info and initializes it.
         		NodeInfo nodeInfo = new NodeInfo(null);
-        		nodeInfo.setAttribute(AttributeType.USERDEF007, userdef007);
-        		nodeInfo.setAttribute(AttributeType.USERDEF005, node.getUserdef005());
-        		nodeInfo.setAttribute(AttributeType.USERDEF009, userdef009);
+        		nodeInfo.setAttribute(AttributeType.PARAMETERVALS, userdef007);
+        		String labelStr = node.getParameterizedDesc();
+        		if (labelStr == null || labelStr.length() == 0) {
+        			labelStr = node.getName();
+        		}
+        		nodeInfo.setAttribute(AttributeType.PARAMETERIZEDDESC, labelStr);
+        		nodeInfo.setAttribute(AttributeType.PARAMETERDEFS, userdef009);
         		ParameterDialog dialog = new ParameterDialog(
         				DcaseEditorUtil.getActiveWindowShell());
         		dialog.setNodeInfo(nodeInfo);
         		if (Dialog.OK == dialog.open()) {
         			// applies the parameters to the node.
-        			node.setUserdef007((String) nodeInfo.getAttribute(AttributeType.USERDEF007));
+        			node.setParameterVals((String) nodeInfo.getAttribute(AttributeType.PARAMETERVALS));
         		} else {
         			result = false;
                 }

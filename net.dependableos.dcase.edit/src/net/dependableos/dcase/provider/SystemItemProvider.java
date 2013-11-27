@@ -59,27 +59,27 @@ public class SystemItemProvider
         if (itemPropertyDescriptors == null) {
             super.getPropertyDescriptors(object);
 
-            addScorePropertyDescriptor(object);
-            addWeightPropertyDescriptor(object);
-            addNodeLinkPropertyDescriptor(object);
+            addSubTypePropertyDescriptor(object);
+            addLeafNodePropertyDescriptor(object);
+            addIPropertyDescriptor(object);
+            addJPropertyDescriptor(object);
         }
         return itemPropertyDescriptors;
     }
 
     /**
-     * This adds a property descriptor for the Score feature.
+     * This adds a property descriptor for the SubType feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
      */
-    protected void addScorePropertyDescriptor(Object object) {
+    protected void addSubTypePropertyDescriptor(Object object) {
         itemPropertyDescriptors.add
             (createItemPropertyDescriptor
                 (((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
                  getResourceLocator(),
-                 getString("_UI_System_score_feature"),
-                 getString("_UI_PropertyDescriptor_description", "_UI_System_score_feature", "_UI_System_type"),
-                 DcasePackage.Literals.SYSTEM__SCORE,
+                 getString("_UI_System_subType_feature"),
+                 getString("_UI_PropertyDescriptor_description", "_UI_System_subType_feature", "_UI_System_type"),
+                 DcasePackage.Literals.SYSTEM__SUBTYPE,
                  false,
                  false,
                  false,
@@ -89,41 +89,60 @@ public class SystemItemProvider
     }
 
     /**
-     * This adds a property descriptor for the Weight feature.
+     * This adds a property descriptor for the LeafNode feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
      */
-    protected void addWeightPropertyDescriptor(Object object) {
+    protected void addLeafNodePropertyDescriptor(Object object) {
         itemPropertyDescriptors.add
             (createItemPropertyDescriptor
                 (((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
                  getResourceLocator(),
-                 getString("_UI_System_weight_feature"),
-                 getString("_UI_PropertyDescriptor_description", "_UI_System_weight_feature", "_UI_System_type"),
-                 DcasePackage.Literals.SYSTEM__WEIGHT,
+                 getString("_UI_System_leafNode_feature"),
+                 getString("_UI_PropertyDescriptor_description", "_UI_System_leafNode_feature", "_UI_System_type"),
+                 DcasePackage.Literals.SYSTEM__LEAFNODE,
                  true,
                  false,
                  false,
-                 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+                 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
                  null,
                  null));
     }
 
     /**
-     * This adds a property descriptor for the Node Link feature.
+     * This adds a property descriptor for the I feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
      */
-    protected void addNodeLinkPropertyDescriptor(Object object) {
+    protected void addIPropertyDescriptor(Object object) {
         itemPropertyDescriptors.add
             (createItemPropertyDescriptor
                 (((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
                  getResourceLocator(),
-                 getString("_UI_System_nodeLink_feature"),
-                 getString("_UI_PropertyDescriptor_description", "_UI_System_nodeLink_feature", "_UI_System_type"),
-                 DcasePackage.Literals.SYSTEM__NODE_LINK,
+                 getString("_UI_System_i_feature"),
+                 getString("_UI_PropertyDescriptor_description", "_UI_System_i_feature", "_UI_System_type"),
+                 DcasePackage.Literals.SYSTEM__I,
+                 false,
+                 false,
+                 false,
+                 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+                 null,
+                 null));
+    }
+
+    /**
+     * This adds a property descriptor for the J feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     */
+    protected void addJPropertyDescriptor(Object object) {
+        itemPropertyDescriptors.add
+            (createItemPropertyDescriptor
+                (((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+                 getResourceLocator(),
+                 getString("_UI_System_j_feature"),
+                 getString("_UI_PropertyDescriptor_description", "_UI_System_j_feature", "_UI_System_type"),
+                 DcasePackage.Literals.SYSTEM__J,
                  false,
                  false,
                  false,
@@ -169,9 +188,10 @@ public class SystemItemProvider
         updateChildren(notification);
 
         switch (notification.getFeatureID(net.dependableos.dcase.System.class)) {
-            case DcasePackage.SYSTEM__SCORE:
-            case DcasePackage.SYSTEM__WEIGHT:
-            case DcasePackage.SYSTEM__NODE_LINK:
+            case DcasePackage.SYSTEM__SUBTYPE:
+            case DcasePackage.SYSTEM__LEAFNODE:
+            case DcasePackage.SYSTEM__I:
+            case DcasePackage.SYSTEM__J:
                 fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
                 return;
         }

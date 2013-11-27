@@ -14,7 +14,6 @@ import net.dependableos.dcase.Argument;
 import net.dependableos.dcase.BasicNode;
 import net.dependableos.dcase.BasicLink;
 import net.dependableos.dcase.DcaseFactory;
-import net.dependableos.dcase.System;
 import net.dependableos.dcase.diagram.common.exception.DcaseSystemException;
 import net.dependableos.dcase.diagram.common.model.NodeType;
 import net.dependableos.dcase.diagram.common.util.MessageTypeImpl;
@@ -27,7 +26,6 @@ import net.dependableos.dcase.diagram.edit.parts.custom.DcaseNodeEditPart;
 import net.dependableos.dcase.diagram.editor.common.util.DcaseEditorUtil;
 import net.dependableos.dcase.diagram.editor.common.util.MessageWriter;
 import net.dependableos.dcase.diagram.editor.common.util.ModuleUtil;
-import net.dependableos.dcase.diagram.editor.parameter.ParameterUtil;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -245,7 +243,7 @@ public class AddPatternContributionItem extends ContributionItem {
 			}
 
 			// gets the model of the selected template.
-			EObject templateModel = ModelUtil.getModel(entry);
+			EObject templateModel = ModelUtil.getModel(entry, true);
 			if (templateModel == null) {
 				MessageWriter.writeMessageToConsole(
 						Messages.TemplateModelAdditionAction_2,
@@ -264,19 +262,8 @@ public class AddPatternContributionItem extends ContributionItem {
 			// copy the model of the selected template.
 			EObject copyModel = (EObject) EcoreUtil.copy(templateModel);
 			Argument copyArgument = (Argument) copyModel;
-			BasicNode rootNode = ModuleUtil.getRootNode(copyArgument);
-			if (rootNode == null) {
+			if (! ModuleUtil.processPatterns(copyArgument)) {
 				return;
-			}
-			// process Parameter nodes.
-			for (BasicLink link : copyArgument.getRootBasicLink()) {
-				BasicNode cNode = link.getTarget();
-				if (link.getSource() != rootNode || !(cNode instanceof System)) {
-					continue;
-				}
-				if (!ParameterUtil.processParameter(cNode)) {
-					return;
-				}
 			}
 			// add link
 			if (parentEditPart != null) {

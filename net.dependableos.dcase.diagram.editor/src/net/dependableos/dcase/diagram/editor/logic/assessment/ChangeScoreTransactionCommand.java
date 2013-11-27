@@ -54,8 +54,6 @@ public class ChangeScoreTransactionCommand extends AbstractTransactionalCommand 
             BigDecimal score = changeList.get(node);
             if (node instanceof Goal) {
                 ((Goal) node).setScore(score);
-            } else if (node instanceof net.dependableos.dcase.System) {
-                ((net.dependableos.dcase.System) node).setScore(score);
             }
         }
         return CommandResult.newOKCommandResult();

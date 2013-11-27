@@ -144,14 +144,14 @@ public class ParameterDialog extends Dialog {
     public void setNodeInfo(NodeInfo nodeInfo) {
         this.nodeInfo = nodeInfo;
         userdef005Str = (String) nodeInfo
-                .getAttribute(AttributeType.USERDEF005);
+                .getAttribute(AttributeType.PARAMETERIZEDDESC);
         if (userdef005Str == null) {
             userdef005Str = ""; //$NON-NLS-1$
         }
         parameterItems = null;
         
-        String userdef009 = (String)nodeInfo.getAttribute(AttributeType.USERDEF009);
-        vf = ParameterDataItem.getDataTypeVerifierMapFromString(userdef009);
+        String parameterDefs = (String)nodeInfo.getAttribute(AttributeType.PARAMETERDEFS);
+        vf = ParameterDataItem.getDataTypeVerifierMapFromString(parameterDefs);
     }
 
     /**
@@ -163,12 +163,12 @@ public class ParameterDialog extends Dialog {
         
         if (parameterItems == null) {
             String userdef007 = (String) nodeInfo
-                    .getAttribute(AttributeType.USERDEF007);
+                    .getAttribute(AttributeType.PARAMETERVALS);
             List<ParameterItem> list = ParameterItem.getPatameterList(userdef007);
             List<ParameterItem> newList = new ArrayList<ParameterItem>();
             backupParameterValues = new ArrayList<String>();
             
-            String userdef009 = (String) nodeInfo.getAttribute(AttributeType.USERDEF009);
+            String userdef009 = (String) nodeInfo.getAttribute(AttributeType.PARAMETERDEFS);
             if(userdef009 != null) {
             	List<String> nameList = ParameterUtil.getParameterDefinitionNames(userdef009);
             	if(nameList != null && nameList.size() > 0) {
@@ -518,8 +518,8 @@ public class ParameterDialog extends Dialog {
                 parameters[i].setParameterValue(backupParameterValues.get(i));
             }
         }
-        String userdef007 = getPrameterString();
-        nodeInfo.setAttribute(AttributeType.USERDEF007, userdef007);
+        String parameterVals = getPrameterString();
+        nodeInfo.setAttribute(AttributeType.PARAMETERVALS, parameterVals);
 
         controlList.clear();
         super.okPressed();

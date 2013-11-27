@@ -35,6 +35,11 @@ public final class SystemPropertyKeyConst {
     public static final String MODEL_ARM_FILE_EXTENSION = "model.arm.file.extension";   //$NON-NLS-1$
 
     /**
+     * The key for the extension of the ARM file.
+     */
+    public static final String MODEL_SACM_FILE_EXTENSION = "model.sacm.file.extension";   //$NON-NLS-1$
+
+    /**
      * The key for the extension of the template file.
      */
     public static final String TEMPLATE_MODEL_FILE_EXTENSION = "template.model.file.extension"; //$NON-NLS-1$

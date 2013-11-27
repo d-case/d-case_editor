@@ -16,7 +16,12 @@ public class ParameterItem {
     /**
      * the format string of the parameter item.
      */
-    public static final String PARAM_ITEM_FORMAT = "\\{\\s*%1$s\\s*\\}"; //$NON-NLS-1$
+    public static final String PARAM_ITEM_REGEX_FORMAT = "\\{\\s*%1$s\\s*\\}"; //$NON-NLS-1$
+    public static final String PARAM_ITEM_FORMAT = "{%1$s}"; //$NON-NLS-1$
+    /**
+     * the format string of the parameter value.
+     */
+    public static final String PARAM_VALUE_FORMAT = "[%1$s]"; //$NON-NLS-1$
     /**
      * The character string of the new line.
      */
@@ -24,7 +29,7 @@ public class ParameterItem {
     /**
      * The key name to get value of the line feed from the system property.
      */
-    private static final String LINE_SEPRATOR = "line.separator"; //$NON-NLS-1$
+    private static final String LINE_SEPARATOR = "line.separator"; //$NON-NLS-1$
     /**
      * the separator of parameters.
      */
@@ -188,12 +193,12 @@ public class ParameterItem {
     public static String getFormattedDesc(String parameters , String formatter) {
         List<ParameterItem> list = getPatameterList(parameters);
         for (ParameterItem item : list) {
-            formatter = formatter.replaceAll(String.format(PARAM_ITEM_FORMAT, item
-                    .getParameterId()), item.getParameterValue());
+            formatter = formatter.replaceAll(
+            		String.format(PARAM_ITEM_REGEX_FORMAT, item.getParameterId()),
+            		String.format(PARAM_VALUE_FORMAT, item.getParameterValue()));
         }
         // Sets the line feed for the Desc attribute.
-        formatter = formatter.replaceAll(String.format(PARAM_ITEM_FORMAT, NEW_LINE_CHAR), 
-                System.getProperty(LINE_SEPRATOR));
+        formatter = unescapeLineSeparator(formatter);
         return formatter;
     }
     
@@ -221,7 +226,7 @@ public class ParameterItem {
      * @param parameters a new value of the parameters.
      */
     public static void setDesc(BasicNode basicNode, String parameters) {
-        String userdef005 = basicNode.getUserdef005();
+        String userdef005 = basicNode.getParameterizedDesc();
         // tests whether the formatter is valid.
         if (userdef005 != null && userdef005.trim().length() != 0) {
             basicNode.setDesc(getFormattedDesc(parameters, userdef005));
@@ -255,5 +260,31 @@ public class ParameterItem {
             }
         }
         return buf.toString();
+    }
+    
+    /**
+     * Returns the string that replaces parameterized line char with line separator.
+     * @param val the string.
+     * @return the string that replaces parameterized line char with line separator.
+     */
+    public static String unescapeLineSeparator(String val) {
+    	if (val == null) {
+    		return null;
+    	}
+    	return val.replaceAll(String.format(PARAM_ITEM_REGEX_FORMAT, NEW_LINE_CHAR), 
+                System.getProperty(LINE_SEPARATOR));
+    }
+
+    /**
+     * Returns the string that replaces line separator with parameterized line char.
+     * @param val the string.
+     * @return the string that replaces line separator with parameterized line char.
+     */
+    public static String escapeLineSeparator(String val) {
+    	if (val == null) {
+    		return null;
+    	}
+    	return val.replaceAll(System.getProperty(LINE_SEPARATOR),
+    			String.format(PARAM_ITEM_FORMAT, NEW_LINE_CHAR));
     }
 }

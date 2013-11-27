@@ -74,16 +74,11 @@ public class ModuleViewPart extends ViewPart {
 	 * the title string for each grid.
 	 */
 	private static final String[] TITLE_NAMES = {
-			"Name", "Node#", "Link#", "Reference" //$NON-NLS-1$
+		net.dependableos.dcase.diagram.editor.message.Messages.ModuleView_Label0,
+		net.dependableos.dcase.diagram.editor.message.Messages.ModuleView_Label1,
+		net.dependableos.dcase.diagram.editor.message.Messages.ModuleView_Label2,
+		net.dependableos.dcase.diagram.editor.message.Messages.ModuleView_Label3,
 	};
-
-	/**
-	 * the Action titles and tooltips.
-	 */
-	private static final String OPEN_ACTION_TITLE = "Open Module"; //$NON-NLS-1$
-	private static final String OPEN_ACTION_TOOLTIP = "open diagram for edigint module"; //$NON-NLS-1$
-	private static final String DELETE_ACTION_TITLE = "Delete Module"; //$NON-NLS-1$
-	private static final String DELETE_ACTION_TOOLTIP = "Delete module to current diagram"; //$NON-NLS-1$
 
 	private static final int NORMAL = 0;
 	private static final int CHANGED = 1;
@@ -193,7 +188,7 @@ public class ModuleViewPart extends ViewPart {
 			}
 			return input;
 		case CHANGED:
-			if (isSameDirectory(currentFile, file)) {
+			if (isSameProject(currentFile, file)) {
 				break;
 			}
 			// fall-through...
@@ -208,6 +203,7 @@ public class ModuleViewPart extends ViewPart {
 							argumentEditPart, true);
 				}
 			} catch (Exception e) {
+				e.printStackTrace();
 				MessageWriter.writeMessageToConsole(Messages.ModuleList,
 						MessageTypeImpl.MODULE_INFO_GET_FAILED);
 				return input;
@@ -225,11 +221,11 @@ public class ModuleViewPart extends ViewPart {
 		return input;
 	}
 
-	private boolean isSameDirectory(IFile file1, IFile file2) {
+	private boolean isSameProject(IFile file1, IFile file2) {
 		if (file1 == null || file2 == null) {
 			return false;
 		}
-		return (file1.getParent() == file2.getParent());
+		return (file1.getProject() == file2.getProject());
 	}
 
 	/**
@@ -275,8 +271,8 @@ public class ModuleViewPart extends ViewPart {
 		IActionBars bars = getViewSite().getActionBars();
 
 		IAction openAction = new ModuleOpenAction(this);
-		openAction.setText(OPEN_ACTION_TITLE);
-		openAction.setToolTipText(OPEN_ACTION_TOOLTIP);
+		openAction.setText(net.dependableos.dcase.diagram.editor.message.Messages.ModuleView_Title0);
+		openAction.setToolTipText(net.dependableos.dcase.diagram.editor.message.Messages.ModuleView_Tooltip0);
 		openAction.setImageDescriptor(PlatformUI.getWorkbench()
 				.getSharedImages()
 				.getImageDescriptor(ISharedImages.IMG_TOOL_FORWARD));
@@ -284,8 +280,8 @@ public class ModuleViewPart extends ViewPart {
 		bars.getMenuManager().add(openAction);
 
 		IAction deleteAction = new ModuleDeleteAction(this);
-		deleteAction.setText(DELETE_ACTION_TITLE);
-		deleteAction.setToolTipText(DELETE_ACTION_TOOLTIP);
+		deleteAction.setText(net.dependableos.dcase.diagram.editor.message.Messages.ModuleView_Title1);
+		deleteAction.setToolTipText(net.dependableos.dcase.diagram.editor.message.Messages.ModuleView_Tooltip1);
 		deleteAction.setImageDescriptor(PlatformUI.getWorkbench()
 				.getSharedImages()
 				.getImageDescriptor(ISharedImages.IMG_TOOL_DELETE));

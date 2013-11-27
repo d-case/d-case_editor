@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
+
 import net.dependableos.dcase.BasicNode;
 import net.dependableos.dcase.diagram.common.command.ChangeBasicNodePropertyTransactionCommand;
 import net.dependableos.dcase.diagram.common.model.AttributeType;
@@ -191,8 +192,16 @@ public class SelectAttachmentFromWSHandler extends AbstractEditPartHandler
     	SelectModuleContributionItem.doPostProcess(node, null);
     }
 
-    public String getResponsibility(String attachment) {
+    public String getRespName(String attachment) {
     	return null;
     }
-    
+    public String getRespAddress(String attachment) {
+    	return null;
+    }
+    public String getRespIcon(String attachment) {
+    	return null;
+    }
+    public String getRespTime(String attachment) {
+    	return null;
+    }
 }

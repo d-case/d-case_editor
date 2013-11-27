@@ -150,6 +150,14 @@ public final class Messages extends NLS {
 
     public static String XmlConversionToArmWizard_3;
 
+    public static String XmlConversionToSacmLogic_0;
+    public static String XmlConversionToSacmLogic_1;
+    public static String XmlConversionToSacmLogic_2;
+    public static String XmlConversionToSacmLogic_3;
+    public static String XmlConversionToSacmWizard_1;
+    public static String XmlConversionToSacmWizard_2;
+    public static String XmlConversionToSacmWizard_3;
+
     public static String XmlConversionToGmfLogic_00;
 
     public static String XmlConversionToGmfLogic_01;
@@ -162,6 +170,11 @@ public final class Messages extends NLS {
     public static String XmlConversionToTextLogic_1;
     public static String XmlConversionToTextLogic_2;
     public static String XmlConversionToTextLogic_3;
+    
+    public static String XmlConversionToNewGmfLogic_00;
+    public static String XmlConversionToNewGmfLogic_01;
+    public static String XmlConversionToNewGmfLogic_02;
+    public static String XmlConversionToNewGmfLogic_03;
 
     public static String CopyToEpsAction_1;
     public static String CopyToEpsAction_2;
@@ -230,6 +243,7 @@ public final class Messages extends NLS {
     public static String CreateModuleHandler_5;
     public static String CreateModuleHandler_6;
     public static String CreateModuleHandler_7;
+    public static String CreateModuleHandler_8;
 
     public static String ModuleList;
     
@@ -251,10 +265,13 @@ public final class Messages extends NLS {
     
     public static String AddPatternContributionItem_0;
     public static String AddPatternContributionItem_1;
+    public static String AddPatternContributionItem_2;
     
     public static String AdjustReference_0;
     
     public static String OpenModuleHandler_0;
+    
+    public static String ParameterDuplicated;
 
     static {
         // initialize resource bundle

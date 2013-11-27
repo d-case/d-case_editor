@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns="http://www.dependable-os.net/d-script"
+           elementFormDefault="qualified"
+           targetNamespace="http://www.dependable-os.net/d-script">
+ <xs:element name="d-script" type="d-script"/>
+ <xs:complexType name="d-script">
+   <xs:sequence>
+    <xs:element name="monitors" minOccurs="0">
+     <xs:complexType>
+      <xs:sequence>
+       <xs:element name="monitor" type="module_type"
+                   minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+     </xs:complexType>
+    </xs:element>
+    <xs:element name="actions" minOccurs="0" >
+     <xs:complexType>
+      <xs:sequence>
+       <xs:element name="action" type="module_type"
+                    minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+     </xs:complexType>
+    </xs:element>
+   </xs:sequence>
+  </xs:complexType>
+ <xs:complexType name="module_type">
+  <xs:sequence>
+   <xs:element name="name" type="xs:string"/>
+   <xs:element name="description" type="xs:string"/>
+   <xs:element name="version" type="xs:string"/>
+   <xs:element name="license" type="xs:string"/>
+   <xs:element name="author" type="xs:string"/>
+   <xs:element name="config_template" type="xs:string"/>
+   <xs:element name="config_path" type="config_path_type"/>
+   <xs:element name="explanations" type="explanations_type"/>
+   <xs:element name="parameters" type="parameters_type"/>
+  </xs:sequence>
+ </xs:complexType>
+ <xs:complexType name="config_path_type">
+  <xs:simpleContent>
+   <xs:extension base="xs:string">
+    <xs:attribute name="extension" type="xs:string" use="required"/>
+   </xs:extension>
+  </xs:simpleContent>
+ </xs:complexType>
+ <xs:complexType name="explanations_type">
+  <xs:sequence>
+   <xs:element name="explanation" maxOccurs="unbounded">
+    <xs:complexType>
+     <xs:simpleContent>
+      <xs:extension base="xs:string">
+       <xs:attribute name="lang" type="xs:string" use="required"/>
+      </xs:extension>
+     </xs:simpleContent>
+    </xs:complexType>
+   </xs:element>
+  </xs:sequence>
+ </xs:complexType>
+ <xs:complexType name="parameters_type">
+  <xs:sequence>
+   <xs:element name="parameter" minOccurs="0" maxOccurs="unbounded">
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element name="description"/>
+      <xs:element name="default"/>
+     </xs:sequence>
+     <xs:attribute name="name" type="xs:string" use="required"/>
+     <xs:attribute name="type" type="xs:string" use="required"/>
+     <xs:attribute name="min" type="xs:string" use="optional"/>
+     <xs:attribute name="max" type="xs:string" use="optional"/>
+    </xs:complexType>
+   </xs:element>
+  </xs:sequence>
+ </xs:complexType>
+</xs:schema>

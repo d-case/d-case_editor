@@ -23,9 +23,17 @@ public enum FunctionTypeImpl implements IFunctionType {
      */
     CONVERT_TO_GMF(null),
     /**
+     * Convert to New GMF XML.
+     */
+    CONVERT_TO_NEWGMF(null),
+    /**
      * Convert to ARM XML.
      */
     CONVERT_TO_ARM(null),
+    /**
+     * Convert to SACM XML.
+     */
+    CONVERT_TO_SACM(null),
     /**
      * Convert to Text XML.
      */

@@ -339,6 +339,246 @@ public class ArgumentItemProvider
      * {@inheritDoc}
      */
     @Override
+    protected void addFlagPropertyDescriptor(Object object) {
+        itemPropertyDescriptors.add
+            (createItemPropertyDescriptor
+                (((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+                 getResourceLocator(),
+                 getString("_UI_Argument_flag_feature"),
+                 getString("_UI_PropertyDescriptor_description", "_UI_Argument_flag_feature", "_UI_Argument_type"), 
+                 DcasePackage.Literals.BASIC_NODE__FLAG,
+                 true,
+                 false,
+                 false,
+                 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+                 null,
+                 null));
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void addRespNamePropertyDescriptor(Object object) {
+        itemPropertyDescriptors.add
+            (createItemPropertyDescriptor
+                (((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+                 getResourceLocator(),
+                 getString("_UI_Argument_respName_feature"),
+                 getString("_UI_PropertyDescriptor_description", "_UI_Argument_respName_feature", "_UI_Argument_type"), 
+                 DcasePackage.Literals.BASIC_NODE__RESPNAME,
+                 true,
+                 false,
+                 false,
+                 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+                 null,
+                 null));
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void addRespAddressPropertyDescriptor(Object object) {
+        itemPropertyDescriptors.add
+            (createItemPropertyDescriptor
+                (((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+                 getResourceLocator(),
+                 getString("_UI_Argument_respAddress_feature"),
+                 getString("_UI_PropertyDescriptor_description", "_UI_Argument_respAddress_feature", "_UI_Argument_type"), 
+                 DcasePackage.Literals.BASIC_NODE__RESPADDRESS,
+                 true,
+                 false,
+                 false,
+                 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+                 null,
+                 null));
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void addRespIconPropertyDescriptor(Object object) {
+        itemPropertyDescriptors.add
+            (createItemPropertyDescriptor
+                (((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+                 getResourceLocator(),
+                 getString("_UI_Argument_respIcon_feature"),
+                 getString("_UI_PropertyDescriptor_description", "_UI_Argument_respIcon_feature", "_UI_Argument_type"), 
+                 DcasePackage.Literals.BASIC_NODE__RESPICON,
+                 true,
+                 false,
+                 false,
+                 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+                 null,
+                 null));
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void addRespTimePropertyDescriptor(Object object) {
+        itemPropertyDescriptors.add
+            (createItemPropertyDescriptor
+                (((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+                 getResourceLocator(),
+                 getString("_UI_Argument_respTime_feature"),
+                 getString("_UI_PropertyDescriptor_description", "_UI_Argument_respTime_feature", "_UI_Argument_type"), 
+                 DcasePackage.Literals.BASIC_NODE__RESPTIME,
+                 true,
+                 false,
+                 false,
+                 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+                 null,
+                 null));
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void addMessagePropertyDescriptor(Object object) {
+        itemPropertyDescriptors.add
+            (createItemPropertyDescriptor
+                (((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+                 getResourceLocator(),
+                 getString("_UI_Argument_message_feature"),
+                 getString("_UI_PropertyDescriptor_description", "_UI_Argument_message_feature", "_UI_Argument_type"), 
+                 DcasePackage.Literals.BASIC_NODE__MESSAGE,
+                 true,
+                 false,
+                 false,
+                 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+                 null,
+                 null));
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void addRequirementPropertyDescriptor(Object object) {
+        itemPropertyDescriptors.add
+            (createItemPropertyDescriptor
+                (((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+                 getResourceLocator(),
+                 getString("_UI_Argument_requirement_feature"),
+                 getString("_UI_PropertyDescriptor_description", "_UI_Argument_requirement_feature", "_UI_Argument_type"), 
+                 DcasePackage.Literals.BASIC_NODE__REQUIREMENT,
+                 true,
+                 false,
+                 false,
+                 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+                 null,
+                 null));
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void addParentPropertyDescriptor(Object object) {
+        itemPropertyDescriptors.add
+            (createItemPropertyDescriptor
+                (((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+                 getResourceLocator(),
+                 getString("_UI_Argument_parent_feature"),
+                 getString("_UI_PropertyDescriptor_description", "_UI_Argument_parent_feature", "_UI_Argument_type"), 
+                 DcasePackage.Literals.BASIC_NODE__PARENT,
+                 true,
+                 false,
+                 false,
+                 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+                 null,
+                 null));
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void addRefSourcePropertyDescriptor(Object object) {
+        itemPropertyDescriptors.add
+            (createItemPropertyDescriptor
+                (((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+                 getResourceLocator(),
+                 getString("_UI_Argument_refSource_feature"),
+                 getString("_UI_PropertyDescriptor_description", "_UI_Argument_refSource_feature", "_UI_Argument_type"), 
+                 DcasePackage.Literals.BASIC_NODE__REFSOURCE,
+                 true,
+                 false,
+                 false,
+                 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+                 null,
+                 null));
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void addParameterDefsPropertyDescriptor(Object object) {
+        itemPropertyDescriptors.add
+            (createItemPropertyDescriptor
+                (((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+                 getResourceLocator(),
+                 getString("_UI_Argument_parameterDefs_feature"),
+                 getString("_UI_PropertyDescriptor_description", "_UI_Argument_parameterDefs_feature", "_UI_Argument_type"), 
+                 DcasePackage.Literals.BASIC_NODE__PARAMETERDEFS,
+                 true,
+                 false,
+                 false,
+                 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+                 null,
+                 null));
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void addParameterValsPropertyDescriptor(Object object) {
+        itemPropertyDescriptors.add
+            (createItemPropertyDescriptor
+                (((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+                 getResourceLocator(),
+                 getString("_UI_Argument_parameterVals_feature"),
+                 getString("_UI_PropertyDescriptor_description", "_UI_Argument_parameterVals_feature", "_UI_Argument_type"), 
+                 DcasePackage.Literals.BASIC_NODE__PARAMETERVALS,
+                 true,
+                 false,
+                 false,
+                 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+                 null,
+                 null));
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void addParameterizedDescPropertyDescriptor(Object object) {
+        itemPropertyDescriptors.add
+            (createItemPropertyDescriptor
+                (((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+                 getResourceLocator(),
+                 getString("_UI_Argument_parameterizedDesc_feature"),
+                 getString("_UI_PropertyDescriptor_description", "_UI_Argument_parameterizedDesc_feature", "_UI_Argument_type"), 
+                 DcasePackage.Literals.BASIC_NODE__PARAMETERIZEDDESC,
+                 true,
+                 false,
+                 false,
+                 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+                 null,
+                 null));
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     protected void addUserdef001PropertyDescriptor(Object object) {
         itemPropertyDescriptors.add
             (createItemPropertyDescriptor

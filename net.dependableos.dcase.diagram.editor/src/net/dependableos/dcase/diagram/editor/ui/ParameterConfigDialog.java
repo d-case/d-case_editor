@@ -159,12 +159,12 @@ public class ParameterConfigDialog extends Dialog implements
      */
     private ParameterItem[] createParameters() {
         List<ParameterItem> list = null;
-        // gets the userdef007.
-        String userdef007 = (String) nodeInfo
-                .getAttribute(AttributeType.USERDEF007);
-        if (userdef007 != null && userdef007.trim().length() != 0
-                && ParameterItem.isValidParameter(userdef007)) {
-            list = ParameterItem.getPatameterList(userdef007);
+        // gets the parameterVals.
+        String parameterVals = (String) nodeInfo
+                .getAttribute(AttributeType.PARAMETERVALS);
+        if (parameterVals != null && parameterVals.trim().length() != 0
+                && ParameterItem.isValidParameter(parameterVals)) {
+            list = ParameterItem.getPatameterList(parameterVals);
             // sets the parameters to use.
             for (ParameterItem item : list) {
                 item.setSelected(true);
@@ -316,7 +316,7 @@ public class ParameterConfigDialog extends Dialog implements
         descFormatStrGridData.horizontalSpan = 2;
         descFormatStrText.setLayoutData(descFormatStrGridData);
 
-        String tempStr = (String) nodeInfo.getAttribute(AttributeType.USERDEF005);
+        String tempStr = (String) nodeInfo.getAttribute(AttributeType.PARAMETERIZEDDESC);
         if (tempStr == null) {
             tempStr = ""; //$NON-NLS-1$
         }
@@ -443,7 +443,7 @@ public class ParameterConfigDialog extends Dialog implements
                         nodeType = nodeInfo.getNodeType();
                     }
                     NodeInfo info = new NodeInfo(nodeType);
-                    info.setAttribute(AttributeType.USERDEF007,
+                    info.setAttribute(AttributeType.PARAMETERVALS,
                             (parameterItems[selectedIndex]).getParamString());
                     dialog.setNodeInfo(info);
                     dialog.setRunningMode(ParameterDialog.SINGLE);
@@ -452,7 +452,7 @@ public class ParameterConfigDialog extends Dialog implements
                                 .isSelected();
                         parameterItems[selectedIndex] = new ParameterItem(
                                 (String) info
-                                        .getAttribute(AttributeType.USERDEF007));
+                                        .getAttribute(AttributeType.PARAMETERVALS));
                         parameterItems[selectedIndex]
                                 .setSelected(selectedStatus);
                         tableViewer.refresh();
@@ -530,7 +530,7 @@ public class ParameterConfigDialog extends Dialog implements
         // updates the parameters.
         updateParameters();
         // sets the description
-        nodeInfo.setAttribute(AttributeType.USERDEF005, descFormatStrText.getText());
+        nodeInfo.setAttribute(AttributeType.PARAMETERIZEDDESC, descFormatStrText.getText());
         // sets the scripts.
         nodeInfo.setAttribute(AttributeType.USERDEF006, scriptStrText.getText());
         // closes the dialog.
@@ -553,8 +553,8 @@ public class ParameterConfigDialog extends Dialog implements
         if (result.length() > 0) {
             result = result.substring(0, result.length() - 1);
         }
-        // sets the parameters to Userdef007.
-        nodeInfo.setAttribute(AttributeType.USERDEF007, result);
+        // sets the parameters to ParameterVals.
+        nodeInfo.setAttribute(AttributeType.PARAMETERVALS, result);
     }
 
     

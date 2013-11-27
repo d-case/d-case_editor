@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xsd:schema xmlns:ARM="www.omg.org/spec/SACM/20120501/Argumentation"
+            xmlns:EM="www.omg.org/spec/SACM/20120501/Evidence"
+            xmlns:SACM="www.omg.org/spec/SACM/20120501"
+            xmlns:xmi="http://www.omg.org/XMI"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            targetNamespace="www.omg.org/spec/SACM/20120501/Argumentation">
+  <xsd:import namespace="http://www.omg.org/XMI" schemaLocation="XMI.xsd"/>
+  <xsd:import namespace="www.omg.org/spec/SACM/20120501" schemaLocation="SACM.xsd"/>
+  <xsd:import namespace="www.omg.org/spec/SACM/20120501/Evidence" schemaLocation="Evidence.xsd"/>
+  <xsd:complexType name="Argumentation">
+    <xsd:complexContent>
+      <xsd:extension base="ARM:ArgumentationElement">
+        <xsd:choice maxOccurs="unbounded" minOccurs="0">
+          <xsd:element name="argumentation" type="ARM:Argumentation"/>
+          <xsd:element name="argumentElement" type="ARM:ArgumentElement"/>
+        </xsd:choice>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="Argumentation" type="ARM:Argumentation"/>
+  <xsd:complexType abstract="true" name="ArgumentElement">
+    <xsd:complexContent>
+      <xsd:extension base="ARM:ArgumentationElement"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="ArgumentElement" type="ARM:ArgumentElement"/>
+  <xsd:complexType name="CitationElement">
+    <xsd:complexContent>
+      <xsd:extension base="ARM:ArgumentElement">
+        <xsd:choice maxOccurs="unbounded" minOccurs="0">
+          <xsd:element name="argumentElementReference" type="ARM:ArgumentElement"/>
+          <xsd:element name="argumentationReference" type="ARM:Argumentation"/>
+        </xsd:choice>
+        <xsd:attribute name="argumentElementReference" type="xsd:string"/>
+        <xsd:attribute name="argumentationReference" type="xsd:string"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="CitationElement" type="ARM:CitationElement"/>
+  <xsd:complexType name="InformationElement">
+    <xsd:complexContent>
+      <xsd:extension base="ARM:ArgumentElement">
+        <xsd:choice maxOccurs="unbounded" minOccurs="0">
+          <xsd:element name="evidence" type="EM:EvidenceItem"/>
+        </xsd:choice>
+        <xsd:attribute name="url" type="xsd:string" use="required"/>
+        <xsd:attribute name="evidence" type="xsd:string"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="InformationElement" type="ARM:InformationElement"/>
+  <xsd:complexType abstract="true" name="ReasoningElement">
+    <xsd:complexContent>
+      <xsd:extension base="ARM:ArgumentElement"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="ReasoningElement" type="ARM:ReasoningElement"/>
+  <xsd:complexType abstract="true" name="Assertion">
+    <xsd:complexContent>
+      <xsd:extension base="ARM:ReasoningElement"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="Assertion" type="ARM:Assertion"/>
+  <xsd:complexType name="ArgumentReasoning">
+    <xsd:complexContent>
+      <xsd:extension base="ARM:ReasoningElement">
+        <xsd:choice maxOccurs="unbounded" minOccurs="0">
+          <xsd:element name="structure" type="ARM:Argumentation"/>
+          <xsd:element name="describedInference" type="ARM:AssertedInference"/>
+          <xsd:element name="describedChallenge" type="ARM:AssertedChallenge"/>
+        </xsd:choice>
+        <xsd:attribute name="structure" type="xsd:string"/>
+        <xsd:attribute name="describedInference" type="xsd:string"/>
+        <xsd:attribute name="describedChallenge" type="xsd:string"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="ArgumentReasoning" type="ARM:ArgumentReasoning"/>
+  <xsd:complexType abstract="true" name="AssertedRelationship">
+    <xsd:complexContent>
+      <xsd:extension base="ARM:Assertion">
+        <xsd:choice maxOccurs="unbounded" minOccurs="0">
+          <xsd:element name="source" type="ARM:ArgumentElement"/>
+          <xsd:element name="target" type="ARM:ArgumentElement"/>
+        </xsd:choice>
+        <xsd:attribute name="source" type="xsd:string"/>
+        <xsd:attribute name="target" type="xsd:string"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="AssertedRelationship" type="ARM:AssertedRelationship"/>
+  <xsd:complexType name="Claim">
+    <xsd:complexContent>
+      <xsd:extension base="ARM:Assertion">
+        <xsd:attribute name="assumed" type="xsd:string" use="required"/>
+        <xsd:attribute name="toBeSupported" type="xsd:string" use="required"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="Claim" type="ARM:Claim"/>
+  <xsd:complexType name="AssertedInference">
+    <xsd:complexContent>
+      <xsd:extension base="ARM:AssertedRelationship"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="AssertedInference" type="ARM:AssertedInference"/>
+  <xsd:complexType name="AssertedEvidence">
+    <xsd:complexContent>
+      <xsd:extension base="ARM:AssertedRelationship"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="AssertedEvidence" type="ARM:AssertedEvidence"/>
+  <xsd:complexType name="AssertedContext">
+    <xsd:complexContent>
+      <xsd:extension base="ARM:AssertedRelationship"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="AssertedContext" type="ARM:AssertedContext"/>
+  <xsd:complexType name="AssertedChallenge">
+    <xsd:complexContent>
+      <xsd:extension base="ARM:AssertedRelationship"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="AssertedChallenge" type="ARM:AssertedChallenge"/>
+  <xsd:complexType name="AssertedCounterEvidence">
+    <xsd:complexContent>
+      <xsd:extension base="ARM:AssertedRelationship"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="AssertedCounterEvidence" type="ARM:AssertedCounterEvidence"/>
+  <xsd:complexType abstract="true" name="ArgumentationElement">
+    <xsd:complexContent>
+      <xsd:extension base="SACM:ModelElement">
+        <xsd:attribute name="description" type="xsd:string" use="required"/>
+        <xsd:attribute name="content" type="xsd:string" use="required"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="ArgumentationElement" type="ARM:ArgumentationElement"/>
+</xsd:schema>

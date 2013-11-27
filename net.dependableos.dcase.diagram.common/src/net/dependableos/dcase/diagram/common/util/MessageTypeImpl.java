@@ -69,9 +69,17 @@ public enum MessageTypeImpl implements IMessageType {
      */
     CONVERT_TO_GMF_FAILED(MessageLevel.ERROR, FunctionTypeImpl.CONVERT_TO_GMF),
     /**
+     * Failed to convert to New GMF model.
+     */
+    CONVERT_TO_NEWGMF_FAILED(MessageLevel.ERROR, FunctionTypeImpl.CONVERT_TO_NEWGMF),
+    /**
      * Failed to convert to ARM.
      */
     CONVERT_TO_ARM_FAILED(MessageLevel.ERROR, FunctionTypeImpl.CONVERT_TO_ARM),
+    /**
+     * Failed to convert to SACM.
+     */
+    CONVERT_TO_SACM_FAILED(MessageLevel.ERROR, FunctionTypeImpl.CONVERT_TO_SACM),
     /**
      * Failed to convert to Text.
      */

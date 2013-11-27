@@ -329,7 +329,7 @@ Copyright (C) Yutaka Matsuno 2010-2012 All rights reserved.
 
    <extension point="org.eclipse.gmf.runtime.emf.type.core.elementTypes" id="element-types">
       <?gmfgen generated="true"?>
-      <metamodel nsURI="http://www.dependable-os.net/2010/03/dcase/">
+      <metamodel nsURI="http://www.dependable-os.net/2013/11/dcase_model/">
          <metamodelType
                id="net.dependableos.dcase.diagram.Argument_79"
                icon="/icons/obj16/Argument.gif"
@@ -340,7 +340,7 @@ Copyright (C) Yutaka Matsuno 2010-2012 All rights reserved.
             <param name="semanticHint" value="79"/>
          </metamodelType>
       </metamodel>
-      <metamodel nsURI="http://www.dependable-os.net/2010/03/dcase/">
+      <metamodel nsURI="http://www.dependable-os.net/2013/11/dcase_model/">
          <metamodelType
                id="net.dependableos.dcase.diagram.Goal_1001"
                icon="/icons/obj16/Goal.gif"
@@ -351,7 +351,7 @@ Copyright (C) Yutaka Matsuno 2010-2012 All rights reserved.
             <param name="semanticHint" value="1001"/>
          </metamodelType>
       </metamodel>
-      <metamodel nsURI="http://www.dependable-os.net/2010/03/dcase/">
+      <metamodel nsURI="http://www.dependable-os.net/2013/11/dcase_model/">
          <metamodelType
                id="net.dependableos.dcase.diagram.Strategy_1002"
                icon="/icons/obj16/Strategy.gif"
@@ -362,7 +362,7 @@ Copyright (C) Yutaka Matsuno 2010-2012 All rights reserved.
             <param name="semanticHint" value="1002"/>
          </metamodelType>
       </metamodel>
-      <metamodel nsURI="http://www.dependable-os.net/2010/03/dcase/">
+      <metamodel nsURI="http://www.dependable-os.net/2013/11/dcase_model/">
          <metamodelType
                id="net.dependableos.dcase.diagram.Evidence_1003"
                icon="/icons/obj16/Evidence.gif"
@@ -373,7 +373,7 @@ Copyright (C) Yutaka Matsuno 2010-2012 All rights reserved.
             <param name="semanticHint" value="1003"/>
          </metamodelType>
       </metamodel>
-      <metamodel nsURI="http://www.dependable-os.net/2010/03/dcase/">
+      <metamodel nsURI="http://www.dependable-os.net/2013/11/dcase_model/">
          <metamodelType
                id="net.dependableos.dcase.diagram.Monitor_1004"
                icon="/icons/obj16/Monitor.gif"
@@ -384,7 +384,7 @@ Copyright (C) Yutaka Matsuno 2010-2012 All rights reserved.
             <param name="semanticHint" value="1004"/>
          </metamodelType>
       </metamodel>
-      <metamodel nsURI="http://www.dependable-os.net/2010/03/dcase/">
+      <metamodel nsURI="http://www.dependable-os.net/2013/11/dcase_model/">
          <metamodelType
                id="net.dependableos.dcase.diagram.Undeveloped_1005"
                icon="/icons/obj16/Undeveloped.gif"
@@ -395,7 +395,7 @@ Copyright (C) Yutaka Matsuno 2010-2012 All rights reserved.
             <param name="semanticHint" value="1005"/>
          </metamodelType>
       </metamodel>
-      <metamodel nsURI="http://www.dependable-os.net/2010/03/dcase/">
+      <metamodel nsURI="http://www.dependable-os.net/2013/11/dcase_model/">
          <metamodelType
                id="net.dependableos.dcase.diagram.Context_1006"
                icon="/icons/obj16/Context.gif"
@@ -406,7 +406,7 @@ Copyright (C) Yutaka Matsuno 2010-2012 All rights reserved.
             <param name="semanticHint" value="1006"/>
          </metamodelType>
       </metamodel>
-      <metamodel nsURI="http://www.dependable-os.net/2010/03/dcase/">
+      <metamodel nsURI="http://www.dependable-os.net/2013/11/dcase_model/">
          <metamodelType
                id="net.dependableos.dcase.diagram.Justification_1007"
                icon="/icons/obj16/Justification.gif"
@@ -417,7 +417,7 @@ Copyright (C) Yutaka Matsuno 2010-2012 All rights reserved.
             <param name="semanticHint" value="1007"/>
          </metamodelType>
       </metamodel>
-      <metamodel nsURI="http://www.dependable-os.net/2010/03/dcase/">
+      <metamodel nsURI="http://www.dependable-os.net/2013/11/dcase_model/">
          <metamodelType
                id="net.dependableos.dcase.diagram.System_1008"
                icon="/icons/obj16/System.gif"
@@ -428,7 +428,7 @@ Copyright (C) Yutaka Matsuno 2010-2012 All rights reserved.
             <param name="semanticHint" value="1008"/>
          </metamodelType>
       </metamodel>
-      <metamodel nsURI="http://www.dependable-os.net/2010/03/dcase/">
+      <metamodel nsURI="http://www.dependable-os.net/2013/11/dcase_model/">
          <metamodelType
                id="net.dependableos.dcase.diagram.Policy_1009"
                icon="/icons/obj16/Policy.gif"
@@ -439,7 +439,7 @@ Copyright (C) Yutaka Matsuno 2010-2012 All rights reserved.
             <param name="semanticHint" value="1009"/>
          </metamodelType>
       </metamodel>
-      <metamodel nsURI="http://www.dependable-os.net/2010/03/dcase/">
+      <metamodel nsURI="http://www.dependable-os.net/2013/11/dcase_model/">
          <metamodelType
                id="net.dependableos.dcase.diagram.Userdef001_1010"
                icon="/icons/obj16/Userdef001.gif"
@@ -450,7 +450,7 @@ Copyright (C) Yutaka Matsuno 2010-2012 All rights reserved.
             <param name="semanticHint" value="1010"/>
          </metamodelType>
       </metamodel>
-      <metamodel nsURI="http://www.dependable-os.net/2010/03/dcase/">
+      <metamodel nsURI="http://www.dependable-os.net/2013/11/dcase_model/">
          <metamodelType
                id="net.dependableos.dcase.diagram.Userdef002_1011"
                icon="/icons/obj16/Userdef002.gif"
@@ -461,7 +461,7 @@ Copyright (C) Yutaka Matsuno 2010-2012 All rights reserved.
             <param name="semanticHint" value="1011"/>
          </metamodelType>
       </metamodel>
-      <metamodel nsURI="http://www.dependable-os.net/2010/03/dcase/">
+      <metamodel nsURI="http://www.dependable-os.net/2013/11/dcase_model/">
          <metamodelType
                id="net.dependableos.dcase.diagram.Userdef003_1012"
                icon="/icons/obj16/Userdef003.gif"
@@ -472,7 +472,7 @@ Copyright (C) Yutaka Matsuno 2010-2012 All rights reserved.
             <param name="semanticHint" value="1012"/>
          </metamodelType>
       </metamodel>
-      <metamodel nsURI="http://www.dependable-os.net/2010/03/dcase/">
+      <metamodel nsURI="http://www.dependable-os.net/2013/11/dcase_model/">
          <metamodelType
                id="net.dependableos.dcase.diagram.Userdef004_1013"
                icon="/icons/obj16/Userdef004.gif"
@@ -483,7 +483,7 @@ Copyright (C) Yutaka Matsuno 2010-2012 All rights reserved.
             <param name="semanticHint" value="1013"/>
          </metamodelType>
       </metamodel>
-      <metamodel nsURI="http://www.dependable-os.net/2010/03/dcase/">
+      <metamodel nsURI="http://www.dependable-os.net/2013/11/dcase_model/">
          <metamodelType
                id="net.dependableos.dcase.diagram.Userdef005_1014"
                icon="/icons/obj16/Userdef005.gif"
@@ -494,7 +494,7 @@ Copyright (C) Yutaka Matsuno 2010-2012 All rights reserved.
             <param name="semanticHint" value="1014"/>
          </metamodelType>
       </metamodel>
-      <metamodel nsURI="http://www.dependable-os.net/2010/03/dcase/">
+      <metamodel nsURI="http://www.dependable-os.net/2013/11/dcase_model/">
          <metamodelType
                id="net.dependableos.dcase.diagram.Userdef006_1015"
                icon="/icons/obj16/Userdef006.gif"
@@ -505,7 +505,7 @@ Copyright (C) Yutaka Matsuno 2010-2012 All rights reserved.
             <param name="semanticHint" value="1015"/>
          </metamodelType>
       </metamodel>
-      <metamodel nsURI="http://www.dependable-os.net/2010/03/dcase/">
+      <metamodel nsURI="http://www.dependable-os.net/2013/11/dcase_model/">
          <metamodelType
                id="net.dependableos.dcase.diagram.DcaseLink001_3001"
                name="%metatype.name.DcaseLink001_3001"
@@ -515,7 +515,7 @@ Copyright (C) Yutaka Matsuno 2010-2012 All rights reserved.
             <param name="semanticHint" value="3001"/>
          </metamodelType>
       </metamodel>
-      <metamodel nsURI="http://www.dependable-os.net/2010/03/dcase/">
+      <metamodel nsURI="http://www.dependable-os.net/2013/11/dcase_model/">
          <metamodelType
                id="net.dependableos.dcase.diagram.DcaseLink002_3002"
                name="%metatype.name.DcaseLink002_3002"
@@ -525,7 +525,7 @@ Copyright (C) Yutaka Matsuno 2010-2012 All rights reserved.
             <param name="semanticHint" value="3002"/>
          </metamodelType>
       </metamodel>
-      <metamodel nsURI="http://www.dependable-os.net/2010/03/dcase/">
+      <metamodel nsURI="http://www.dependable-os.net/2013/11/dcase_model/">
          <metamodelType
                id="net.dependableos.dcase.diagram.DcaseLink003_3003"
                name="%metatype.name.DcaseLink003_3003"
@@ -535,7 +535,7 @@ Copyright (C) Yutaka Matsuno 2010-2012 All rights reserved.
             <param name="semanticHint" value="3003"/>
          </metamodelType>
       </metamodel>
-      <metamodel nsURI="http://www.dependable-os.net/2010/03/dcase/">
+      <metamodel nsURI="http://www.dependable-os.net/2013/11/dcase_model/">
          <metamodelType
                id="net.dependableos.dcase.diagram.DcaseLink004_3004"
                name="%metatype.name.DcaseLink004_3004"
@@ -781,7 +781,7 @@ Copyright (C) Yutaka Matsuno 2010-2012 All rights reserved.
          <![CDATA[Constraints defined in D-Case diagram.]]>
       </category>
       <constraintProvider cache="true">
-         <package namespaceUri="http://www.dependable-os.net/2010/03/dcase/"/>
+         <package namespaceUri="http://www.dependable-os.net/2013/11/dcase_model/"/>
                <constraints categories="net.dependableos.dcase.constraints">
                   <constraint id="linkConstraint"
             lang="Java" class="net.dependableos.dcase.diagram.providers.DcaseValidationProvider$Adapter1"

@@ -28,6 +28,18 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  *   <li>{@link net.dependableos.dcase.impl.BasicNodeImpl#getDesc <em>Desc</em>}</li>
  *   <li>{@link net.dependableos.dcase.impl.BasicNodeImpl#getAttachment <em>Attachment</em>}</li>
  *   <li>{@link net.dependableos.dcase.impl.BasicNodeImpl#getStatus <em>Status</em>}</li>
+ *   <li>{@link net.dependableos.dcase.impl.BasicNodeImpl#getFlag <em>Flag</em>}</li>
+ *   <li>{@link net.dependableos.dcase.impl.BasicNodeImpl#getRespName <em>RespName</em>}</li>
+ *   <li>{@link net.dependableos.dcase.impl.BasicNodeImpl#getRespAddress <em>RespAddress</em>}</li>
+ *   <li>{@link net.dependableos.dcase.impl.BasicNodeImpl#getRespIcon <em>RespIcon</em>}</li>
+ *   <li>{@link net.dependableos.dcase.impl.BasicNodeImpl#getRespTime <em>RespTime</em>}</li>
+ *   <li>{@link net.dependableos.dcase.impl.BasicNodeImpl#getMessage <em>Message</em>}</li>
+ *   <li>{@link net.dependableos.dcase.impl.BasicNodeImpl#getRequirement <em>Requirement</em>}</li>
+ *   <li>{@link net.dependableos.dcase.impl.BasicNodeImpl#getParent <em>Parent</em>}</li>
+ *   <li>{@link net.dependableos.dcase.impl.BasicNodeImpl#getRefSource <em>RefSource</em>}</li>
+ *   <li>{@link net.dependableos.dcase.impl.BasicNodeImpl#getParameterDefs <em>ParameterDefs</em>}</li>
+ *   <li>{@link net.dependableos.dcase.impl.BasicNodeImpl#getParameterVals <em>ParameterVals</em>}</li>
+ *   <li>{@link net.dependableos.dcase.impl.BasicNodeImpl#getParameterizedDesc <em>ParameterizedDesc</em>}</li>
  *   <li>{@link net.dependableos.dcase.impl.BasicNodeImpl#getUserdef001 <em>Userdef001</em>}</li>
  *   <li>{@link net.dependableos.dcase.impl.BasicNodeImpl#getUserdef002 <em>Userdef002</em>}</li>
  *   <li>{@link net.dependableos.dcase.impl.BasicNodeImpl#getUserdef003 <em>Userdef003</em>}</li>
@@ -129,6 +141,222 @@ public abstract class BasicNodeImpl extends EObjectImpl implements BasicNode {
      * @ordered
      */
     protected String status = STATUS_EDEFAULT;
+
+    /**
+     * The default value of the '{@link #getFlag() <em>Flag</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getFlag()
+     * @ordered
+     */
+    protected static final String FLAG_EDEFAULT = null;
+
+    /**
+     * The cached value of the '{@link #getFlag() <em>Flag</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getFlag()
+     * @ordered
+     */
+    protected String flag = FLAG_EDEFAULT;
+
+    /**
+     * The default value of the '{@link #getRespName() <em>RespName</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getRespName()
+     * @ordered
+     */
+    protected static final String RESPNAME_EDEFAULT = null;
+
+    /**
+     * The cached value of the '{@link #getRespName() <em>RespName</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getRespName()
+     * @ordered
+     */
+    protected String respName = RESPNAME_EDEFAULT;
+
+    /**
+     * The default value of the '{@link #getRespAddress() <em>RespAddress</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getRespAddress()
+     * @ordered
+     */
+    protected static final String RESPADDRESS_EDEFAULT = null;
+
+    /**
+     * The cached value of the '{@link #getRespAddress() <em>RespAddress</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getRespAddress()
+     * @ordered
+     */
+    protected String respAddress = RESPADDRESS_EDEFAULT;
+
+    /**
+     * The default value of the '{@link #getRespIcon() <em>RespIcon</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getRespIcon()
+     * @ordered
+     */
+    protected static final String RESPICON_EDEFAULT = null;
+
+    /**
+     * The cached value of the '{@link #getRespIcon() <em>RespIcon</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getRespIcon()
+     * @ordered
+     */
+    protected String respIcon = RESPICON_EDEFAULT;
+
+    /**
+     * The default value of the '{@link #getRespTime() <em>RespTime</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getRespTime()
+     * @ordered
+     */
+    protected static final String RESPTIME_EDEFAULT = null;
+
+    /**
+     * The cached value of the '{@link #getRespTime() <em>RespTime</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getRespTime()
+     * @ordered
+     */
+    protected String respTime = RESPTIME_EDEFAULT;
+
+    /**
+     * The default value of the '{@link #getMessage() <em>Message</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getMessage()
+     * @ordered
+     */
+    protected static final String MESSAGE_EDEFAULT = null;
+
+    /**
+     * The cached value of the '{@link #getMessage() <em>Message</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getMessage()
+     * @ordered
+     */
+    protected String message = MESSAGE_EDEFAULT;
+
+    /**
+     * The default value of the '{@link #getRequirement() <em>Requirement</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getRequirement()
+     * @ordered
+     */
+    protected static final String REQUIREMENT_EDEFAULT = null;
+
+    /**
+     * The cached value of the '{@link #getRequirement() <em>Requirement</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getRequirement()
+     * @ordered
+     */
+    protected String requirement = REQUIREMENT_EDEFAULT;
+
+    /**
+     * The default value of the '{@link #getParent() <em>Parent</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getParent()
+     * @ordered
+     */
+    protected static final String PARENT_EDEFAULT = null;
+
+    /**
+     * The cached value of the '{@link #getParent() <em>Parent</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getParent()
+     * @ordered
+     */
+    protected String parent = PARENT_EDEFAULT;
+
+    /**
+     * The default value of the '{@link #getRefSource() <em>RefSource</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getRefSource()
+     * @ordered
+     */
+    protected static final String REFSOURCE_EDEFAULT = null;
+
+    /**
+     * The cached value of the '{@link #getRefSource() <em>RefSource</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getRefSource()
+     * @ordered
+     */
+    protected String refSource = REFSOURCE_EDEFAULT;
+
+    /**
+     * The default value of the '{@link #getParameterDefs() <em>ParameterDefs</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getParameterDefs()
+     * @ordered
+     */
+    protected static final String PARAMETERDEFS_EDEFAULT = null;
+
+    /**
+     * The cached value of the '{@link #getParameterDefs() <em>ParameterDefs</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getParameterDefs()
+     * @ordered
+     */
+    protected String parameterDefs = PARAMETERDEFS_EDEFAULT;
+
+    /**
+     * The default value of the '{@link #getParameterVals() <em>ParameterVals</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getParameterVals()
+     * @ordered
+     */
+    protected static final String PARAMETERVALS_EDEFAULT = null;
+
+    /**
+     * The cached value of the '{@link #getParameterVals() <em>ParameterVals</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getParameterVals()
+     * @ordered
+     */
+    protected String parameterVals = PARAMETERVALS_EDEFAULT;
+
+    /**
+     * The default value of the '{@link #getParameterizedDesc() <em>ParameterizedDesc</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getParameterizedDesc()
+     * @ordered
+     */
+    protected static final String PARAMETERIZEDDESC_EDEFAULT = null;
+
+    /**
+     * The cached value of the '{@link #getParameterizedDesc() <em>ParameterizedDesc</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getParameterizedDesc()
+     * @ordered
+     */
+    protected String parameterizedDesc = PARAMETERIZEDDESC_EDEFAULT;
 
     /**
      * The default value of the '{@link #getUserdef001() <em>Userdef001</em>}' attribute.
@@ -556,6 +784,234 @@ public abstract class BasicNodeImpl extends EObjectImpl implements BasicNode {
     /**
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
+     */
+    public String getFlag() {
+        return flag;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     */
+    public void setFlag(String newFlag) {
+        String oldFlag = flag;
+        flag = newFlag;
+        if (eNotificationRequired())
+            eNotify(new ENotificationImpl(this, Notification.SET, DcasePackage.BASIC_NODE__FLAG, oldFlag, flag));
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     */
+    public String getRespName() {
+        return respName;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     */
+    public void setRespName(String newValue) {
+        String oldValue = respName;
+        respName = newValue;
+        if (eNotificationRequired())
+            eNotify(new ENotificationImpl(this, Notification.SET, DcasePackage.BASIC_NODE__RESPNAME, oldValue, newValue));
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     */
+    public String getRespAddress() {
+        return respAddress;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     */
+    public void setRespAddress(String newValue) {
+        String oldValue = respAddress;
+        respAddress = newValue;
+        if (eNotificationRequired())
+            eNotify(new ENotificationImpl(this, Notification.SET, DcasePackage.BASIC_NODE__RESPADDRESS, oldValue, newValue));
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     */
+    public String getRespIcon() {
+        return respIcon;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     */
+    public void setRespIcon(String newValue) {
+        String oldValue = respIcon;
+        respIcon = newValue;
+        if (eNotificationRequired())
+            eNotify(new ENotificationImpl(this, Notification.SET, DcasePackage.BASIC_NODE__RESPICON, oldValue, newValue));
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     */
+    public String getRespTime() {
+        return respTime;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     */
+    public void setRespTime(String newValue) {
+        String oldValue = respTime;
+        respTime = newValue;
+        if (eNotificationRequired())
+            eNotify(new ENotificationImpl(this, Notification.SET, DcasePackage.BASIC_NODE__RESPTIME, oldValue, newValue));
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     */
+    public String getMessage() {
+        return message;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     */
+    public void setMessage(String newValue) {
+        String oldValue = message;
+        message = newValue;
+        if (eNotificationRequired())
+            eNotify(new ENotificationImpl(this, Notification.SET, DcasePackage.BASIC_NODE__MESSAGE, oldValue, newValue));
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     */
+    public String getRequirement() {
+        return requirement;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     */
+    public void setRequirement(String newValue) {
+        String oldValue = requirement;
+        requirement = newValue;
+        if (eNotificationRequired())
+            eNotify(new ENotificationImpl(this, Notification.SET, DcasePackage.BASIC_NODE__REQUIREMENT, oldValue, newValue));
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     */
+    public String getParent() {
+        return parent;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     */
+    public void setParent(String newValue) {
+        String oldValue = parent;
+        parent = newValue;
+        if (eNotificationRequired())
+            eNotify(new ENotificationImpl(this, Notification.SET, DcasePackage.BASIC_NODE__PARENT, oldValue, newValue));
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     */
+    public String getRefSource() {
+        return refSource;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     */
+    public void setRefSource(String newValue) {
+        String oldValue = refSource;
+        refSource = newValue;
+        if (eNotificationRequired())
+            eNotify(new ENotificationImpl(this, Notification.SET, DcasePackage.BASIC_NODE__REFSOURCE, oldValue, newValue));
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     */
+    public String getParameterDefs() {
+        return parameterDefs;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     */
+    public void setParameterDefs(String newValue) {
+        String oldValue = parameterDefs;
+        parameterDefs = newValue;
+        if (eNotificationRequired())
+            eNotify(new ENotificationImpl(this, Notification.SET, DcasePackage.BASIC_NODE__PARAMETERDEFS, oldValue, newValue));
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     */
+    public String getParameterVals() {
+        return parameterVals;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     */
+    public void setParameterVals(String newValue) {
+        String oldValue = parameterVals;
+        parameterVals = newValue;
+        if (eNotificationRequired())
+            eNotify(new ENotificationImpl(this, Notification.SET, DcasePackage.BASIC_NODE__PARAMETERVALS, oldValue, newValue));
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     */
+    public String getParameterizedDesc() {
+        return parameterizedDesc;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     */
+    public void setParameterizedDesc(String newValue) {
+        String oldValue = parameterizedDesc;
+        parameterizedDesc = newValue;
+        if (eNotificationRequired())
+            eNotify(new ENotificationImpl(this, Notification.SET, DcasePackage.BASIC_NODE__PARAMETERIZEDDESC, oldValue, newValue));
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
      * @generated
      */
     public String getUserdef001() {
@@ -905,6 +1361,30 @@ public abstract class BasicNodeImpl extends EObjectImpl implements BasicNode {
                 return getAttachment();
             case DcasePackage.BASIC_NODE__STATUS:
                 return getStatus();
+            case DcasePackage.BASIC_NODE__FLAG:
+                return getFlag();
+            case DcasePackage.BASIC_NODE__RESPNAME:
+                return getRespName();
+            case DcasePackage.BASIC_NODE__RESPADDRESS:
+                return getRespAddress();
+            case DcasePackage.BASIC_NODE__RESPICON:
+                return getRespIcon();
+            case DcasePackage.BASIC_NODE__RESPTIME:
+                return getRespTime();
+            case DcasePackage.BASIC_NODE__MESSAGE:
+                return getMessage();
+            case DcasePackage.BASIC_NODE__REQUIREMENT:
+                return getRequirement();
+            case DcasePackage.BASIC_NODE__PARENT:
+                return getParent();
+            case DcasePackage.BASIC_NODE__REFSOURCE:
+                return getRefSource();
+            case DcasePackage.BASIC_NODE__PARAMETERDEFS:
+                return getParameterDefs();
+            case DcasePackage.BASIC_NODE__PARAMETERVALS:
+                return getParameterVals();
+            case DcasePackage.BASIC_NODE__PARAMETERIZEDDESC:
+                return getParameterizedDesc();
             case DcasePackage.BASIC_NODE__USERDEF001:
                 return getUserdef001();
             case DcasePackage.BASIC_NODE__USERDEF002:
@@ -937,8 +1417,6 @@ public abstract class BasicNodeImpl extends EObjectImpl implements BasicNode {
                 return getUserdef015();
             case DcasePackage.BASIC_NODE__USERDEF016:
                 return getUserdef016();
-            case DcasePackage.SYSTEM__PARAM:
-            	return "";  // I don't know...
         }
         return super.eGet(featureID, resolve, coreType);
     }
@@ -962,6 +1440,42 @@ public abstract class BasicNodeImpl extends EObjectImpl implements BasicNode {
                 return;
             case DcasePackage.BASIC_NODE__STATUS:
                 setStatus((String)newValue);
+                return;
+            case DcasePackage.BASIC_NODE__FLAG:
+                setFlag((String)newValue);
+                return;
+            case DcasePackage.BASIC_NODE__RESPNAME:
+                setRespName((String)newValue);
+                return;
+            case DcasePackage.BASIC_NODE__RESPADDRESS:
+                setRespAddress((String)newValue);
+                return;
+            case DcasePackage.BASIC_NODE__RESPICON:
+                setRespIcon((String)newValue);
+                return;
+            case DcasePackage.BASIC_NODE__RESPTIME:
+                setRespTime((String)newValue);
+                return;
+            case DcasePackage.BASIC_NODE__MESSAGE:
+                setMessage((String)newValue);
+                return;
+            case DcasePackage.BASIC_NODE__REQUIREMENT:
+                setRequirement((String)newValue);
+                return;
+            case DcasePackage.BASIC_NODE__PARENT:
+                setParent((String)newValue);
+                return;
+            case DcasePackage.BASIC_NODE__REFSOURCE:
+                setRefSource((String)newValue);
+                return;
+            case DcasePackage.BASIC_NODE__PARAMETERDEFS:
+                setParameterDefs((String)newValue);
+                return;
+            case DcasePackage.BASIC_NODE__PARAMETERVALS:
+                setParameterVals((String)newValue);
+                return;
+            case DcasePackage.BASIC_NODE__PARAMETERIZEDDESC:
+                setParameterizedDesc((String)newValue);
                 return;
             case DcasePackage.BASIC_NODE__USERDEF001:
                 setUserdef001((String)newValue);
@@ -1035,6 +1549,42 @@ public abstract class BasicNodeImpl extends EObjectImpl implements BasicNode {
             case DcasePackage.BASIC_NODE__STATUS:
                 setStatus(STATUS_EDEFAULT);
                 return;
+            case DcasePackage.BASIC_NODE__FLAG:
+                setFlag(FLAG_EDEFAULT);
+                return;
+            case DcasePackage.BASIC_NODE__RESPNAME:
+                setRespName(RESPNAME_EDEFAULT);
+                return;
+            case DcasePackage.BASIC_NODE__RESPADDRESS:
+                setRespAddress(RESPADDRESS_EDEFAULT);
+                return;
+            case DcasePackage.BASIC_NODE__RESPICON:
+                setRespIcon(RESPICON_EDEFAULT);
+                return;
+            case DcasePackage.BASIC_NODE__RESPTIME:
+                setRespTime(RESPTIME_EDEFAULT);
+                return;
+            case DcasePackage.BASIC_NODE__MESSAGE:
+                setMessage(MESSAGE_EDEFAULT);
+                return;
+            case DcasePackage.BASIC_NODE__REQUIREMENT:
+                setRequirement(REQUIREMENT_EDEFAULT);
+                return;
+            case DcasePackage.BASIC_NODE__PARENT:
+                setParent(PARENT_EDEFAULT);
+                return;
+            case DcasePackage.BASIC_NODE__REFSOURCE:
+                setRefSource(REFSOURCE_EDEFAULT);
+                return;
+            case DcasePackage.BASIC_NODE__PARAMETERDEFS:
+                setParameterDefs(PARAMETERDEFS_EDEFAULT);
+                return;
+            case DcasePackage.BASIC_NODE__PARAMETERVALS:
+                setParameterVals(PARAMETERVALS_EDEFAULT);
+                return;
+            case DcasePackage.BASIC_NODE__PARAMETERIZEDDESC:
+                setParameterVals(PARAMETERIZEDDESC_EDEFAULT);
+                return;
             case DcasePackage.BASIC_NODE__USERDEF001:
                 setUserdef001(USERDEF001_EDEFAULT);
                 return;
@@ -1103,6 +1653,30 @@ public abstract class BasicNodeImpl extends EObjectImpl implements BasicNode {
                 return ATTACHMENT_EDEFAULT == null ? attachment != null : !ATTACHMENT_EDEFAULT.equals(attachment);
             case DcasePackage.BASIC_NODE__STATUS:
                 return STATUS_EDEFAULT == null ? status != null : !STATUS_EDEFAULT.equals(status);
+            case DcasePackage.BASIC_NODE__FLAG:
+                return FLAG_EDEFAULT == null ? flag != null : !FLAG_EDEFAULT.equals(flag);
+            case DcasePackage.BASIC_NODE__RESPNAME:
+                return RESPNAME_EDEFAULT == null ? respName != null : !RESPNAME_EDEFAULT.equals(respName);
+            case DcasePackage.BASIC_NODE__RESPADDRESS:
+                return RESPADDRESS_EDEFAULT == null ? respAddress != null : !RESPADDRESS_EDEFAULT.equals(respAddress);
+            case DcasePackage.BASIC_NODE__RESPICON:
+                return RESPICON_EDEFAULT == null ? respIcon != null : !RESPICON_EDEFAULT.equals(respIcon);
+            case DcasePackage.BASIC_NODE__RESPTIME:
+                return RESPTIME_EDEFAULT == null ? respTime != null : !RESPTIME_EDEFAULT.equals(respTime);
+            case DcasePackage.BASIC_NODE__MESSAGE:
+                return MESSAGE_EDEFAULT == null ? message != null : !MESSAGE_EDEFAULT.equals(message);
+            case DcasePackage.BASIC_NODE__REQUIREMENT:
+                return REQUIREMENT_EDEFAULT == null ? requirement != null : !REQUIREMENT_EDEFAULT.equals(requirement);
+            case DcasePackage.BASIC_NODE__PARENT:
+                return PARENT_EDEFAULT == null ? parent != null : !PARENT_EDEFAULT.equals(parent);
+            case DcasePackage.BASIC_NODE__REFSOURCE:
+                return REFSOURCE_EDEFAULT == null ? refSource != null : !REFSOURCE_EDEFAULT.equals(refSource);
+            case DcasePackage.BASIC_NODE__PARAMETERDEFS:
+                return PARAMETERDEFS_EDEFAULT == null ? parameterDefs != null : !PARAMETERDEFS_EDEFAULT.equals(parameterDefs);
+            case DcasePackage.BASIC_NODE__PARAMETERVALS:
+                return PARAMETERVALS_EDEFAULT == null ? parameterVals != null : !PARAMETERVALS_EDEFAULT.equals(parameterVals);
+            case DcasePackage.BASIC_NODE__PARAMETERIZEDDESC:
+                return PARAMETERIZEDDESC_EDEFAULT == null ? parameterizedDesc != null : !PARAMETERIZEDDESC_EDEFAULT.equals(parameterizedDesc);
             case DcasePackage.BASIC_NODE__USERDEF001:
                 return USERDEF001_EDEFAULT == null ? userdef001 != null : !USERDEF001_EDEFAULT.equals(userdef001);
             case DcasePackage.BASIC_NODE__USERDEF002:
@@ -1153,10 +1727,34 @@ public abstract class BasicNodeImpl extends EObjectImpl implements BasicNode {
         result.append(name);
         result.append(", desc: ");
         result.append(desc);
+        result.append(", parameterizedDesc: ");
+        result.append(parameterizedDesc);
         result.append(", attachment: ");
         result.append(attachment);
         result.append(", status: ");
         result.append(status);
+        result.append(", message: ");
+        result.append(message);
+        result.append(", requirement: ");
+        result.append(requirement);
+        result.append(", parent: ");
+        result.append(parent);
+        result.append(", refSource: ");
+        result.append(refSource);
+        result.append(", flag: ");
+        result.append(flag);
+        result.append(", parameterDefs: ");
+        result.append(parameterDefs);
+        result.append(", parameterVals: ");
+        result.append(parameterVals);
+        result.append(", respName: ");
+        result.append(respName);
+        result.append(", respAddress: ");
+        result.append(respAddress);
+        result.append(", respIcon: ");
+        result.append(respIcon);
+        result.append(", respTime: ");
+        result.append(respTime);
         result.append(", userdef001: ");
         result.append(userdef001);
         result.append(", userdef002: ");
@@ -1208,11 +1806,11 @@ public abstract class BasicNodeImpl extends EObjectImpl implements BasicNode {
      */
     public String getParameters(){
     	String ret = getParentParameters();
-		if(userdef007 != null && userdef007.length() > 0) {
+		if(parameterVals != null && parameterVals.length() > 0) {
 			if(ret != null && ret.length() > 0) {
-    			ret = userdef007 + ParameterItem.SEPARATOR + ret;
+    			ret = parameterVals + ParameterItem.SEPARATOR + ret;
     		} else {
-    			ret = userdef007;
+    			ret = parameterVals;
     		}
     	}
     	return ret;
@@ -1225,7 +1823,7 @@ public abstract class BasicNodeImpl extends EObjectImpl implements BasicNode {
     public String getParentParameters() {
     	String ret = getParentParameters(null, new ArrayList<BasicNodeImpl>());
     	Argument argument = (Argument)eContainer();
-    	String argumentParameter = argument.getUserdef007();
+    	String argumentParameter = argument.getParameterVals();
     	if(argumentParameter != null && argumentParameter.length() > 0) {
     		if(ret != null && ret.length() > 0) {
     			return ret + ParameterItem.SEPARATOR + argumentParameter;
@@ -1251,7 +1849,7 @@ public abstract class BasicNodeImpl extends EObjectImpl implements BasicNode {
     	for(BasicLink link : argument.getRootBasicLink()) {
     		if(link.getTarget() == this) {
     			BasicNodeImpl parentNode = (BasicNodeImpl)link.getSource();
-    			String parentParameter = parentNode.getUserdef007();
+    			String parentParameter = parentNode.getParameterVals();
     			if(parentParameter != null && parentParameter.length() > 0) {
     				if(parameter != null && parameter.length() > 0) {
     					parameter = parameter + ParameterItem.SEPARATOR + parentParameter;

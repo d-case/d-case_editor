@@ -10,6 +10,7 @@ import java.util.List;
 import net.dependableos.dcase.diagram.edit.parts.custom.DcaseNodeDescEditPart;
 import net.dependableos.dcase.diagram.edit.policies.DcaseTextSelectionEditPolicy;
 import net.dependableos.dcase.diagram.part.DcaseVisualIDRegistry;
+import net.dependableos.dcase.diagram.part.PatternUtil;
 import net.dependableos.dcase.diagram.providers.DcaseElementTypes;
 import net.dependableos.dcase.diagram.providers.DcaseParserProvider;
 
@@ -217,7 +218,7 @@ public class GoalAttachmentEditPart extends DcaseNodeDescEditPart implements
 					getParserOptions().intValue());
 		}
 		// show module name only...
-		if (!GoalEditPart.isModuleName(text)) {
+		if (! PatternUtil.isModuleReference(text)) {
 			text = defaultText;
 		}
 		if (text == null || text.length() == 0) {

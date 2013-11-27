@@ -96,11 +96,11 @@ public class DescReplaceManager {
 
         this.basicNode = basicNode;
         desc = this.basicNode.getDesc();
-        descFormatString = this.basicNode.getUserdef005();
+        descFormatString = this.basicNode.getParameterizedDesc();
         
         if (descFormatString != null && descFormatString.trim().length() > 0) {
             // creates the hash map of parameters.
-            parameterItemMap = createParameterItemMap(this.basicNode.getUserdef007());
+            parameterItemMap = createParameterItemMap(this.basicNode.getParameterVals());
             for (String paramName : globalParameterItemMap.keySet()) {
                 parameterItemMap.put(paramName, globalParameterItemMap.get(paramName));
             }
@@ -124,7 +124,7 @@ public class DescReplaceManager {
     public boolean replace(int startIndex, int endIndex, String replaceWith) {
         
         boolean result = false;
-        AttributeType attributeType = AttributeType.USERDEF005;
+        AttributeType attributeType = AttributeType.PARAMETERIZEDDESC;
         String replaceString = ""; //$NON-NLS-1$
         
         if (basicNode != null && (desc != null && desc.trim().length() > 0)) {
@@ -157,7 +157,7 @@ public class DescReplaceManager {
                 StringBuilder sb = new StringBuilder(descFormatString);
                 sb.replace(dfsStartIndex, dfsEndIndex, replaceWith);
                 replaceString = sb.toString();
-                attributeType = AttributeType.USERDEF005;
+                attributeType = AttributeType.PARAMETERIZEDDESC;
             } else {
                 // executes replace of 'Desc'
                 StringBuilder sb = new StringBuilder(desc);

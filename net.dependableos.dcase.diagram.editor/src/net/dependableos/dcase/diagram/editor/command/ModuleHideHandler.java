@@ -5,6 +5,7 @@ package net.dependableos.dcase.diagram.editor.command;
 
 import net.dependableos.dcase.diagram.edit.parts.ArgumentEditPart;
 import net.dependableos.dcase.diagram.edit.parts.GoalEditPart;
+import net.dependableos.dcase.diagram.edit.parts.Userdef001EditPart;
 import net.dependableos.dcase.diagram.edit.parts.Userdef005EditPart;
 import net.dependableos.dcase.diagram.edit.parts.custom.DcaseLinkEditPart;
 import net.dependableos.dcase.diagram.edit.parts.custom.DcaseNodeEditPart;
@@ -51,6 +52,8 @@ public class ModuleHideHandler extends AbstractEditPartHandler {
 			dimension = ((GoalEditPart) editPart).setModuleValue("", null); //$NON-NLS-1$
 		} else if (editPart instanceof Userdef005EditPart) {
 			dimension = ((Userdef005EditPart) editPart).setModuleValue(""); //$NON-NLS-1$
+		} else if (editPart instanceof Userdef001EditPart) {
+			dimension = ((Userdef001EditPart) editPart).setModuleValue(""); //$NON-NLS-1$
 		}
 		if (dimension != null && !dimension.isEmpty()) {
 			TransactionalEditingDomain currentDomain = GMFEditingDomainFactory.INSTANCE

@@ -69,6 +69,8 @@ public class BasicLinkItemProvider
             addDescPropertyDescriptor(object);
             addAttachmentPropertyDescriptor(object);
             addStatusPropertyDescriptor(object);
+            addSiblingOrderPropertyDescriptor(object);
+            addMessagePropertyDescriptor(object);
             addUserdef001PropertyDescriptor(object);
             addUserdef002PropertyDescriptor(object);
             addUserdef003PropertyDescriptor(object);
@@ -213,6 +215,50 @@ public class BasicLinkItemProvider
                  getString("_UI_BasicLink_status_feature"),
                  getString("_UI_PropertyDescriptor_description", "_UI_BasicLink_status_feature", ((BasicLink)object).getTypeName()),
                  DcasePackage.Literals.BASIC_LINK__STATUS,
+                 true,
+                 false,
+                 false,
+                 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+                 null,
+                 null));
+    }
+
+    /**
+     * This adds a property descriptor for the SiblingOrder feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated NOT
+     */
+    protected void addSiblingOrderPropertyDescriptor(Object object) {
+        itemPropertyDescriptors.add
+            (createItemPropertyDescriptor
+                (((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+                 getResourceLocator(),
+                 getString("_UI_BasicLink_siblingOrder_feature"),
+                 getString("_UI_PropertyDescriptor_description", "_UI_BasicLink_siblingOrder_feature", ((BasicLink)object).getTypeName()),
+                 DcasePackage.Literals.BASIC_LINK__SLIBINGORDER,
+                 true,
+                 false,
+                 false,
+                 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+                 null,
+                 null));
+    }
+
+    /**
+     * This adds a property descriptor for the Message feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated NOT
+     */
+    protected void addMessagePropertyDescriptor(Object object) {
+        itemPropertyDescriptors.add
+            (createItemPropertyDescriptor
+                (((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+                 getResourceLocator(),
+                 getString("_UI_BasicLink_message_feature"),
+                 getString("_UI_PropertyDescriptor_description", "_UI_BasicLink_message_feature", ((BasicLink)object).getTypeName()),
+                 DcasePackage.Literals.BASIC_LINK__MESSAGE,
                  true,
                  false,
                  false,
@@ -603,6 +649,8 @@ public class BasicLinkItemProvider
             case DcasePackage.BASIC_LINK__DESC:
             case DcasePackage.BASIC_LINK__ATTACHMENT:
             case DcasePackage.BASIC_LINK__STATUS:
+            case DcasePackage.BASIC_LINK__SIBLINGORDER:
+            case DcasePackage.BASIC_LINK__MESSAGE:
             case DcasePackage.BASIC_LINK__USERDEF001:
             case DcasePackage.BASIC_LINK__USERDEF002:
             case DcasePackage.BASIC_LINK__USERDEF003:

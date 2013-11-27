@@ -17,6 +17,7 @@ import net.dependableos.dcase.diagram.common.util.Messages;
 import net.dependableos.dcase.diagram.common.util.MessageTypeImpl;
 import net.dependableos.dcase.diagram.edit.parts.ArgumentEditPart;
 import net.dependableos.dcase.diagram.part.DcaseDiagramEditorUtil;
+import net.dependableos.dcase.diagram.part.PatternUtil;
 import net.dependableos.dcase.diagram.editor.common.util.DcaseEditorUtil;
 import net.dependableos.dcase.diagram.editor.common.util.MessageWriter;
 import net.dependableos.dcase.diagram.editor.common.util.ModuleUtil;
@@ -34,9 +35,12 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.operations.OperationHistoryFactory;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.draw2d.geometry.Point;
@@ -157,6 +161,7 @@ public class CreateModuleHandler extends AbstractEditPartHandler {
 		IFile newDiagramFile = null;
 		IFile newModelFile = null;
 		String moduleName = null;
+		String modulePath = null;
 		do {
 			NewModuleInputDialog dialog = new NewModuleInputDialog(
 					DcaseEditorUtil.getActiveWindowShell(),
@@ -166,13 +171,15 @@ public class CreateModuleHandler extends AbstractEditPartHandler {
 				return null;
 			}
 			moduleName = dialog.getInputedFilename();
+			IPath iPath = modelFile.getFullPath().removeFileExtension().addTrailingSeparator().append(moduleName);
+			modulePath = PatternUtil.getModuleName(iPath);
 			newDiagramFile = ResourcesPlugin.getWorkspace().getRoot()
-					.getFile(ModuleUtil.getDiagramPath(moduleName));
+					.getFile(ModuleUtil.getDiagramPath(modulePath));
 			newModelFile = ResourcesPlugin.getWorkspace().getRoot()
-					.getFile(ModuleUtil.getModelPath(moduleName));
+					.getFile(ModuleUtil.getModelPath(modulePath));
 		} while (newDiagramFile.exists() || newModelFile.exists());
 		final IPath newDiagramPath = newDiagramFile.getFullPath();
-		final IPath newModelPath = newModelFile.getFullPath();
+		final IFile newModelFileFixed = newModelFile;
 
 		// *** Create new Module diagram ***
 		// create diagram and model file
@@ -181,10 +188,22 @@ public class CreateModuleHandler extends AbstractEditPartHandler {
 			protected CommandResult doExecuteWithResult(
 					IProgressMonitor monitor, IAdaptable info)
 					throws ExecutionException {
+				// create child's folder
+				IFolder newFolder = (IFolder)newModelFileFixed.getParent();
+				if (! newFolder.exists()) {
+					try {
+						newFolder.create(true, true, null);
+					} catch (CoreException e) {
+						MessageWriter.writeMessageToConsole(
+								Messages.CreateModuleHandler_8,
+								MessageTypeImpl.MODULE_FILE_CREATE_FAILED);
+						return CommandResult.newErrorCommandResult(e.getMessage());
+					}
+				}
 				URI diagramURI = URI.createPlatformResourceURI(
 						newDiagramPath.toOSString(), false);
 				URI modelURI = URI.createPlatformResourceURI(
-						newModelPath.toOSString(), false);
+						newModelFileFixed.getFullPath().toOSString(), false);
 				Resource diagram = DcaseDiagramEditorUtil.createDiagram(
 						diagramURI, modelURI, monitor);
 				try {
@@ -200,8 +219,11 @@ public class CreateModuleHandler extends AbstractEditPartHandler {
 				return CommandResult.newOKCommandResult();
 			}
 		};
-		OperationHistoryFactory.getOperationHistory().execute(createCmd,
+		IStatus status = OperationHistoryFactory.getOperationHistory().execute(createCmd,
 				new NullProgressMonitor(), null);
+		if (! status.isOK()) {
+			return null;
+		}
 
 		// *** Add sub-tree to Module diagram ***
 		ArgumentEditPart newArgumentEditPart = DcaseEditorUtil
@@ -259,7 +281,7 @@ public class CreateModuleHandler extends AbstractEditPartHandler {
 				}
 				if (isRef) {
 					// set public flag.
-					String flag = ((BasicNode) cpModel).getUserdef015();
+					String flag = ((BasicNode) cpModel).getFlag();
 					String publicFlag = ModuleUtil.getPublicFlagString();
 					if (flag == null || flag.length() == 0) {
 						flag = publicFlag;
@@ -267,11 +289,11 @@ public class CreateModuleHandler extends AbstractEditPartHandler {
 						flag += publicFlag;
 					}
 					// append reference.
-					((BasicNode) cpModel).setUserdef015(flag);
+					((BasicNode) cpModel).setFlag(flag);
 					String refStr = ModuleUtil.createNodeReference(modelFile,
 							((BasicNode) cpModel).getName());
 					refStr = ModuleUtil.appendModuleReference(node, refStr);
-					((BasicNode) cpModel).setUserdef011(refStr);
+					((BasicNode) cpModel).setRefSource(refStr);
 				}
 			}
 		}
@@ -280,13 +302,13 @@ public class CreateModuleHandler extends AbstractEditPartHandler {
 				ADD_SUBTREE_CMD_LABEL, null, addedArgument, newArgument, false);
 		addCmd.add(new ICommandProxy(additionCommand));
 		Set<String> idSet = new HashSet<String>();
-		// set UserDef011 command
+		// set RefSource command
 		Map<AttributeType, Object> attrNewMap = new HashMap<AttributeType, Object>();
-		attrNewMap.put(AttributeType.USERDEF011,
+		attrNewMap.put(AttributeType.REFSOURCE,
 				ModuleUtil.createNodeReference(modelFile, moduleName));
 		// set Name
 		attrNewMap.put(AttributeType.NAME, moduleName);
-		// set Userdef012
+		// set Responsibilities
 		Argument curArgument = null;
 		naobj = DcaseEditorUtil.getElement(argumentEditPart);
 		if (naobj instanceof Argument) {
@@ -296,9 +318,12 @@ public class CreateModuleHandler extends AbstractEditPartHandler {
 					MessageTypeImpl.MODULE_FILE_CREATE_FAILED);
 			return null;
 		}
-		attrNewMap.put(AttributeType.USERDEF012, curArgument.getUserdef012());
-		// set Userdef013
-		attrNewMap.put(AttributeType.USERDEF013, myName);
+		attrNewMap.put(AttributeType.RESPNAME, curArgument.getRespName());
+		attrNewMap.put(AttributeType.RESPADDRESS, curArgument.getRespAddress());
+		attrNewMap.put(AttributeType.RESPICON, curArgument.getRespIcon());
+		attrNewMap.put(AttributeType.RESPTIME, curArgument.getRespTime());
+		// set Parent
+		attrNewMap.put(AttributeType.PARENT, myName);
 		ICommand setUserdef011Command = new ChangeBasicNodePropertyTransactionCommand(
 				newDomain, SET_USERDEF011_CMD_LABEL, null, newArgument,
 				attrNewMap);
@@ -340,7 +365,7 @@ public class CreateModuleHandler extends AbstractEditPartHandler {
 				String nodeName = ((BasicNode) nodeObj).getName();
 				lattrMap.put(AttributeType.NAME, nodeName);
 				lattrMap.put(AttributeType.ATTACHMENT,
-						ModuleUtil.createNodeReference(moduleName, nodeName));
+						ModuleUtil.createNodeReference(modulePath, nodeName));
 				ICommand lAttachmentCommand = new ChangeBasicNodePropertyTransactionCommand(
 						currentDomain, SET_ATTACHMENT_CMD_LABEL + awayNr, null,
 						(BasicNode) nodeObj, lattrMap);
@@ -364,7 +389,7 @@ public class CreateModuleHandler extends AbstractEditPartHandler {
 		BasicNode selectedNode = (BasicNode) DcaseEditorUtil
 				.getElement(selectedEditPart);
 		Map<AttributeType, Object> attrMap = new HashMap<AttributeType, Object>();
-		attrMap.put(AttributeType.ATTACHMENT, moduleName);
+		attrMap.put(AttributeType.ATTACHMENT, modulePath);
 		ICommand setAttachmentCommand = new ChangeBasicNodePropertyTransactionCommand(
 				currentDomain, SET_ATTACHMENT_CMD_LABEL, null, selectedNode,
 				attrMap);
@@ -379,7 +404,7 @@ public class CreateModuleHandler extends AbstractEditPartHandler {
 				.execute(moduleCmd);
 
 		// *** save module file
-		ModuleUtil.saveModuleEditor(moduleName);
+		ModuleUtil.saveModuleEditor(modulePath);
 
 		// *** change diagram
 		Resource diagramResource = currentDiagram.eResource();

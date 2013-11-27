@@ -70,7 +70,7 @@ public class SetSiblingOrderHandler extends AbstractHandler {
 
                     // sets the sibling order.
                     Map<AttributeType, Object> attrMap = new HashMap<AttributeType, Object>();
-                    attrMap.put(AttributeType.USERDEF001, Integer
+                    attrMap.put(AttributeType.SIBLINGORDER, Integer
                             .toString(order++));
 
                     ICommand changeCommand = new ChangeBasicLinkPropertyTransactionCommand(

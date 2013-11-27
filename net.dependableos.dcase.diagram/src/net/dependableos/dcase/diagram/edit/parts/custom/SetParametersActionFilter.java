@@ -18,7 +18,7 @@ public class SetParametersActionFilter implements IActionFilter {
     /**
      * the attribute name.
      */
-    public static final String NAME = "Userdef007"; //$NON-NLS-1$
+    public static final String NAME = "ParameterVals"; //$NON-NLS-1$
     /**
      * the attribute value to set parameters.
      */
@@ -59,7 +59,7 @@ public class SetParametersActionFilter implements IActionFilter {
             GraphicalEditPart graphicalEditPart = (GraphicalEditPart) target;
             View view = (View) graphicalEditPart.getModel();
             BasicNode node = (BasicNode) view.getElement();
-            String userdef007 = (String) node.getUserdef007();
+            String userdef007 = (String) node.getParameterVals();
             if (userdef007 != null && userdef007.trim().length() != 0
                     && ParameterItem.isValidParameter(userdef007)) {
                 result = true;

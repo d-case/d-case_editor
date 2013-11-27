@@ -48,6 +48,8 @@ public enum LinkType {
             initValueMap.put(AttributeType.TARGET, null);
             initValueMap.put(AttributeType.NAME, STRING_EMPTY);
             initValueMap.put(AttributeType.STATUS, STRING_EMPTY);
+            initValueMap.put(AttributeType.SIBLINGORDER, STRING_EMPTY);
+            initValueMap.put(AttributeType.MESSAGE, STRING_EMPTY);
             initValueMap.put(AttributeType.USERDEF001, STRING_EMPTY);
             initValueMap.put(AttributeType.USERDEF002, STRING_EMPTY);
             initValueMap.put(AttributeType.USERDEF003, STRING_EMPTY);

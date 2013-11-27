@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xsd:schema xmlns:ARM="www.omg.org/spec/SACM/20120501/Argumentation"
+            xmlns:EM="www.omg.org/spec/SACM/20120501/Evidence"
+            xmlns:SACM="www.omg.org/spec/SACM/20120501"
+            xmlns:xmi="http://www.omg.org/XMI"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            targetNamespace="www.omg.org/spec/SACM/20120501">
+  <xsd:import namespace="http://www.omg.org/XMI" schemaLocation="XMI.xsd"/>
+  <xsd:import namespace="www.omg.org/spec/SACM/20120501/Evidence" schemaLocation="Evidence.xsd"/>
+  <xsd:import namespace="www.omg.org/spec/SACM/20120501/Argumentation" schemaLocation="Argumentation.xsd"/>
+  <xsd:complexType name="Annotation">
+    <xsd:complexContent>
+      <xsd:extension base="SACM:UtilityElement">
+        <xsd:attribute name="content" type="xsd:string" use="required"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="Annotation" type="SACM:Annotation"/>
+  <xsd:complexType name="AssuranceCase">
+    <xsd:complexContent>
+      <xsd:extension base="SACM:ModelElement">
+        <xsd:choice maxOccurs="unbounded" minOccurs="0">
+          <xsd:element name="argument" type="ARM:Argumentation"/>
+          <xsd:element name="evidence" type="EM:EvidenceContainer"/>
+        </xsd:choice>
+        <xsd:attribute name="name" type="xsd:string" use="required"/>
+        <xsd:attribute name="gid" type="xsd:string" use="required"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="AssuranceCase" type="SACM:AssuranceCase"/>
+  <xsd:complexType name="Datetime">
+    <xsd:choice maxOccurs="unbounded" minOccurs="0">
+      <xsd:element ref="xmi:Extension"/>
+    </xsd:choice>
+    <xsd:attribute ref="xmi:id"/>
+    <xsd:attributeGroup ref="xmi:ObjectAttribs"/>
+    <xsd:attribute name="datetime" type="xsd:string" use="required"/>
+  </xsd:complexType>
+  <xsd:element name="Datetime" type="SACM:Datetime"/>
+  <xsd:complexType abstract="true" name="ModelElement">
+    <xsd:complexContent>
+      <xsd:extension base="SACM:SACMElement">
+        <xsd:choice maxOccurs="unbounded" minOccurs="0">
+          <xsd:element name="taggedValue" type="SACM:TaggedValue"/>
+          <xsd:element name="annotation" type="SACM:Annotation"/>
+        </xsd:choice>
+        <xsd:attribute name="id" type="xsd:string" use="required"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="ModelElement" type="SACM:ModelElement"/>
+  <xsd:complexType abstract="true" name="SACMElement">
+    <xsd:choice maxOccurs="unbounded" minOccurs="0">
+      <xsd:element ref="xmi:Extension"/>
+    </xsd:choice>
+    <xsd:attribute ref="xmi:id"/>
+    <xsd:attributeGroup ref="xmi:ObjectAttribs"/>
+  </xsd:complexType>
+  <xsd:element name="SACMElement" type="SACM:SACMElement"/>
+  <xsd:complexType name="TaggedValue">
+    <xsd:complexContent>
+      <xsd:extension base="SACM:UtilityElement">
+        <xsd:attribute name="key" type="xsd:string" use="required"/>
+        <xsd:attribute name="value" type="xsd:string" use="required"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="TaggedValue" type="SACM:TaggedValue"/>
+  <xsd:complexType abstract="true" name="UtilityElement">
+    <xsd:complexContent>
+      <xsd:extension base="SACM:SACMElement"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:element name="UtilityElement" type="SACM:UtilityElement"/>
+</xsd:schema>

@@ -30,7 +30,7 @@ public class DcaseNodeDescEditPart extends CompartmentEditPart {
             View view = (View) getModel();
             if (view != null) {
                 BasicNode basicNode = (BasicNode) view.getElement();
-                if (basicNode.getUserdef005() != null && basicNode.getUserdef005().trim().length() > 0) {
+                if (basicNode.getParameterizedDesc() != null && basicNode.getParameterizedDesc().trim().length() > 0) {
                     return false;
                 }
             }

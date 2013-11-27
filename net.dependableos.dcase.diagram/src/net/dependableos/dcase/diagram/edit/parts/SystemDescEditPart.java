@@ -6,7 +6,10 @@ package net.dependableos.dcase.diagram.edit.parts;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+
+
 
 
 import net.dependableos.dcase.diagram.edit.parts.custom.DcaseNodeDescEditPart;
@@ -14,6 +17,8 @@ import net.dependableos.dcase.diagram.edit.policies.DcaseTextSelectionEditPolicy
 import net.dependableos.dcase.diagram.part.DcaseVisualIDRegistry;
 import net.dependableos.dcase.diagram.providers.DcaseElementTypes;
 import net.dependableos.dcase.diagram.providers.DcaseParserProvider;
+import net.dependableos.dcase.impl.ParameterItem;
+import net.dependableos.dcase.provider.DcaseEditPlugin;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
@@ -87,11 +92,33 @@ public class SystemDescEditPart extends DcaseNodeDescEditPart implements
      */
     private String defaultText;
 
+	/**
+	 * The text of the Pattern SubType.
+	 */
+	private static final String PATTERN_SUBTYPE[] = {
+        "_UI_System_subType_param", //$NON-NLS-1$
+        "_UI_System_subType_loop", //$NON-NLS-1$
+        "_UI_System_subType_choice", //$NON-NLS-1$
+        "_UI_System_subType_multi", //$NON-NLS-1$
+    };
+	private String[] subTypes;
+	
+	/**
+	 * The format string for the Desc.
+	 */
+	private static final String FORMAT_PARAM = "%s:%s=%s"; //$NON-NLS-1$
+	private static final String FORMAT_LOOP = "leafNode=%s"; //$NON-NLS-1$
+	private static final String FORMAT_I_J = "i=%s,j=%s"; //$NON-NLS-1$
+	
     /**
      * @generated
      */
     public SystemDescEditPart(View view) {
         super(view);
+        subTypes = new String[PATTERN_SUBTYPE.length];
+        for (int i = 0; i < PATTERN_SUBTYPE.length; i++) {
+        	subTypes[i] = DcaseEditPlugin.getPlugin().getString(PATTERN_SUBTYPE[i]);
+        }
     }
 
     /**
@@ -208,7 +235,7 @@ public class SystemDescEditPart extends DcaseNodeDescEditPart implements
     }
 
     /**
-     * @generated
+     * @generated NOT
      */
     protected String getLabelText() {
         String text = null;
@@ -218,10 +245,84 @@ public class SystemDescEditPart extends DcaseNodeDescEditPart implements
                     new EObjectAdapter(parserElement),
                     getParserOptions().intValue());
         }
-        if (text == null || text.length() == 0) {
-            text = defaultText;
-        }
-        return text;
+       if (text == null || text.length() == 0) {
+            return defaultText;
+       }
+       
+       // parse "subType;leafNode;i;j;parameterVals;parameterDefs"
+       String textArray[] = text.split(";", 6); //$NON-NLS-1$
+       if (textArray.length != 6) {
+    	   return defaultText;
+       }
+       // Parameter
+       if (subTypes[0].equals(textArray[0])) {
+    	   return getParametersText(textArray[4], textArray[5]);
+       }
+       // Loop
+       if (subTypes[1].equals(textArray[0])) {
+    	   return String.format(FORMAT_LOOP, textArray[1]);
+       }
+       // Choice or Multiplicity
+       if (subTypes[2].equals(textArray[0]) || subTypes[3].equals(textArray[0])) {
+    	   return String.format(FORMAT_I_J, textArray[2], textArray[3]);
+       }
+	   return defaultText;
+    }
+    
+    /**
+     * Returns the parameter information.
+     * @param parameterVals the text of parameter values.
+     * @param parameterDefs the text of parameter definitions.
+     * @return the parameter information.
+     */
+    private String getParametersText(String parameterVals, String parameterDefs) {
+    	StringBuffer paramBuffer = new StringBuffer();
+    	if (parameterVals == null || parameterVals.length() == 0 ||
+    			parameterDefs == null || parameterDefs.length() == 0) {
+    		return defaultText;
+    	}
+    	// parse parameterVals and parameterDefs
+    	List<ParameterItem> paramList = ParameterItem.getPatameterList(parameterVals);
+    	HashMap<String,String> typeMap = new HashMap<String,String>();
+    	String[] paramDefs = parameterDefs.split(";"); //$NON-NLS-1$
+    	// paramDefs[0] is the list of parameter names, so ignore.
+    	for (int i=1; i<paramDefs.length; i++) {
+    		String pname = null;
+    		String ptype = null;
+    		// trim after type...
+    		int index1 = paramDefs[i].indexOf(ParameterItem.SEPARATOR);
+    		int index2 = paramDefs[i].indexOf(ParameterItem.SEPARATOR, index1+1);
+    		String paramDef = paramDefs[i].substring(0, (index2 < 0) ? paramDefs[i].length():index2);
+    		for (ParameterItem item : ParameterItem.getPatameterList(paramDef)) {
+    			if (item.getParameterId().equals("name")) { //$NON-NLS-1$
+    				pname = item.getParameterValue();
+    			} else if (item.getParameterId().equals("type")) { //$NON-NLS-1$
+    				ptype = item.getParameterValue();
+    			}
+    			if (pname != null && ptype != null) {
+    				typeMap.put(pname, ptype);
+    				break;
+    			}
+    		}
+    	}
+    	// create text.
+    	boolean pfirst = true;
+    	for (ParameterItem item : paramList) {
+    		String pname = item.getParameterId();
+    		String pvalue = item.getParameterValue();
+    		String ptype = typeMap.get(pname);
+    		if (ptype == null || ptype.length() == 0) {
+    			ptype = "?"; //$NON-NLS-1$
+    		}
+    		if (! pfirst) {
+    			paramBuffer.append(System.getProperty("line.separator")); //$NON-NLS-3$
+    		} else {
+    			pfirst = false;
+    		}
+    		paramBuffer.append(String.format(FORMAT_PARAM, pname, ptype, pvalue));
+    	}
+        	
+    	return paramBuffer.toString();
     }
 
     /**

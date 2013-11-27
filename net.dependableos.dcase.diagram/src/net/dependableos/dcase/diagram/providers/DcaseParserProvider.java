@@ -188,9 +188,9 @@ public class DcaseParserProvider extends AbstractProvider implements
     private IParser getGoalUserdef002_4004Parser() {
         if (goalUserdef002_4004Parser == null) {
             EAttribute[] features = new EAttribute[] { DcasePackage.eINSTANCE
-                    .getBasicNode_Userdef002() };
+                    .getBasicNode_Message() };
             EAttribute[] editableFeatures = new EAttribute[] { DcasePackage.eINSTANCE
-                    .getBasicNode_Userdef002() };
+                    .getBasicNode_Message() };
             MessageFormatParser parser = new MessageFormatParser(features,
                     editableFeatures);
             goalUserdef002_4004Parser = parser;
@@ -229,12 +229,18 @@ public class DcaseParserProvider extends AbstractProvider implements
      */
     private IParser getGoalResponsibility_4071Parser() {
         if (goalResponsibility_4071Parser == null) {
-            EAttribute[] features = new EAttribute[] { DcasePackage.eINSTANCE
-                    .getBasicNode_Userdef012() };
-            EAttribute[] editableFeatures = new EAttribute[] { DcasePackage.eINSTANCE
-                    .getBasicNode_Userdef012() };
+            EAttribute[] features = new EAttribute[] {
+            		DcasePackage.eINSTANCE.getBasicNode_RespName(),
+            		DcasePackage.eINSTANCE.getBasicNode_RespIcon(),
+            		};
+            EAttribute[] editableFeatures = new EAttribute[] {
+            		DcasePackage.eINSTANCE.getBasicNode_RespName(),
+            		DcasePackage.eINSTANCE.getBasicNode_RespIcon(),
+            		};
             MessageFormatParser parser = new MessageFormatParser(features,
                     editableFeatures);
+            parser.setViewPattern("{0};{1}"); //$NON-NLS-1$
+            parser.setEditorPattern("{0};{1}"); //$NON-NLS-1$
             goalResponsibility_4071Parser = parser;
         }
         return goalResponsibility_4071Parser;
@@ -317,9 +323,9 @@ public class DcaseParserProvider extends AbstractProvider implements
     private IParser getStrategyUserdef002_4008Parser() {
         if (strategyUserdef002_4008Parser == null) {
             EAttribute[] features = new EAttribute[] { DcasePackage.eINSTANCE
-                    .getBasicNode_Userdef002() };
+                    .getBasicNode_Message() };
             EAttribute[] editableFeatures = new EAttribute[] { DcasePackage.eINSTANCE
-                    .getBasicNode_Userdef002() };
+                    .getBasicNode_Message() };
             MessageFormatParser parser = new MessageFormatParser(features,
                     editableFeatures);
             strategyUserdef002_4008Parser = parser;
@@ -337,12 +343,18 @@ public class DcaseParserProvider extends AbstractProvider implements
      */
     private IParser getStrategyResponsibility_4075Parser() {
         if (strategyResponsibility_4075Parser == null) {
-            EAttribute[] features = new EAttribute[] { DcasePackage.eINSTANCE
-                    .getBasicNode_Userdef012() };
-            EAttribute[] editableFeatures = new EAttribute[] { DcasePackage.eINSTANCE
-                    .getBasicNode_Userdef012() };
+            EAttribute[] features = new EAttribute[] {
+            		DcasePackage.eINSTANCE.getBasicNode_RespName(),
+            		DcasePackage.eINSTANCE.getBasicNode_RespIcon(),
+            		};
+            EAttribute[] editableFeatures = new EAttribute[] {
+            		DcasePackage.eINSTANCE.getBasicNode_RespName(),
+            		DcasePackage.eINSTANCE.getBasicNode_RespIcon(),
+            		};
             MessageFormatParser parser = new MessageFormatParser(features,
                     editableFeatures);
+            parser.setViewPattern("{0};{1}"); //$NON-NLS-1$
+            parser.setEditorPattern("{0};{1}"); //$NON-NLS-1$
             strategyResponsibility_4075Parser = parser;
         }
         return strategyResponsibility_4075Parser;
@@ -425,9 +437,9 @@ public class DcaseParserProvider extends AbstractProvider implements
     private IParser getEvidenceUserdef002_4012Parser() {
         if (evidenceUserdef002_4012Parser == null) {
             EAttribute[] features = new EAttribute[] { DcasePackage.eINSTANCE
-                    .getBasicNode_Userdef002() };
+                    .getBasicNode_Message() };
             EAttribute[] editableFeatures = new EAttribute[] { DcasePackage.eINSTANCE
-                    .getBasicNode_Userdef002() };
+                    .getBasicNode_Message() };
             MessageFormatParser parser = new MessageFormatParser(features,
                     editableFeatures);
             evidenceUserdef002_4012Parser = parser;
@@ -445,12 +457,18 @@ public class DcaseParserProvider extends AbstractProvider implements
      */
     private IParser getEvidenceResponsibility_4070Parser() {
         if (evidenceResponsibility_4070Parser == null) {
-            EAttribute[] features = new EAttribute[] { DcasePackage.eINSTANCE
-                    .getBasicNode_Userdef012() };
-            EAttribute[] editableFeatures = new EAttribute[] { DcasePackage.eINSTANCE
-                    .getBasicNode_Userdef012() };
+            EAttribute[] features = new EAttribute[] {
+            		DcasePackage.eINSTANCE.getBasicNode_RespName(),
+            		DcasePackage.eINSTANCE.getBasicNode_RespIcon(),
+            		};
+            EAttribute[] editableFeatures = new EAttribute[] {
+            		DcasePackage.eINSTANCE.getBasicNode_RespName(),
+            		DcasePackage.eINSTANCE.getBasicNode_RespIcon(),
+            		};
             MessageFormatParser parser = new MessageFormatParser(features,
                     editableFeatures);
+            parser.setViewPattern("{0};{1}"); //$NON-NLS-1$
+            parser.setEditorPattern("{0};{1}"); //$NON-NLS-1$
             evidenceResponsibility_4070Parser = parser;
         }
         return evidenceResponsibility_4070Parser;
@@ -533,9 +551,9 @@ public class DcaseParserProvider extends AbstractProvider implements
     private IParser getMonitorUserdef002_4016Parser() {
         if (monitorUserdef002_4016Parser == null) {
             EAttribute[] features = new EAttribute[] { DcasePackage.eINSTANCE
-                    .getBasicNode_Userdef002() };
+                    .getBasicNode_Message() };
             EAttribute[] editableFeatures = new EAttribute[] { DcasePackage.eINSTANCE
-                    .getBasicNode_Userdef002() };
+                    .getBasicNode_Message() };
             MessageFormatParser parser = new MessageFormatParser(features,
                     editableFeatures);
             monitorUserdef002_4016Parser = parser;
@@ -553,12 +571,18 @@ public class DcaseParserProvider extends AbstractProvider implements
      */
     private IParser getMonitorResponsibility_4073Parser() {
         if (monitorResponsibility_4073Parser == null) {
-            EAttribute[] features = new EAttribute[] { DcasePackage.eINSTANCE
-                    .getBasicNode_Userdef012() };
-            EAttribute[] editableFeatures = new EAttribute[] { DcasePackage.eINSTANCE
-                    .getBasicNode_Userdef012() };
+            EAttribute[] features = new EAttribute[] {
+            		DcasePackage.eINSTANCE.getBasicNode_RespName(),
+            		DcasePackage.eINSTANCE.getBasicNode_RespIcon(),
+            		};
+            EAttribute[] editableFeatures = new EAttribute[] {
+            		DcasePackage.eINSTANCE.getBasicNode_RespName(),
+            		DcasePackage.eINSTANCE.getBasicNode_RespIcon(),
+            		};
             MessageFormatParser parser = new MessageFormatParser(features,
                     editableFeatures);
+            parser.setViewPattern("{0};{1}"); //$NON-NLS-1$
+            parser.setEditorPattern("{0};{1}"); //$NON-NLS-1$
             monitorResponsibility_4073Parser = parser;
         }
         return monitorResponsibility_4073Parser;
@@ -641,9 +665,9 @@ public class DcaseParserProvider extends AbstractProvider implements
     private IParser getUndevelopedUserdef002_4020Parser() {
         if (undevelopedUserdef002_4020Parser == null) {
             EAttribute[] features = new EAttribute[] { DcasePackage.eINSTANCE
-                    .getBasicNode_Userdef002() };
+                    .getBasicNode_Message() };
             EAttribute[] editableFeatures = new EAttribute[] { DcasePackage.eINSTANCE
-                    .getBasicNode_Userdef002() };
+                    .getBasicNode_Message() };
             MessageFormatParser parser = new MessageFormatParser(features,
                     editableFeatures);
             undevelopedUserdef002_4020Parser = parser;
@@ -661,12 +685,18 @@ public class DcaseParserProvider extends AbstractProvider implements
      */
     private IParser getUndevelopedResponsibility_4077Parser() {
         if (undevelopedResponsibility_4077Parser == null) {
-            EAttribute[] features = new EAttribute[] { DcasePackage.eINSTANCE
-                    .getBasicNode_Userdef012() };
-            EAttribute[] editableFeatures = new EAttribute[] { DcasePackage.eINSTANCE
-                    .getBasicNode_Userdef012() };
+            EAttribute[] features = new EAttribute[] {
+            		DcasePackage.eINSTANCE.getBasicNode_RespName(),
+            		DcasePackage.eINSTANCE.getBasicNode_RespIcon(),
+            		};
+            EAttribute[] editableFeatures = new EAttribute[] {
+            		DcasePackage.eINSTANCE.getBasicNode_RespName(),
+            		DcasePackage.eINSTANCE.getBasicNode_RespIcon(),
+            		};
             MessageFormatParser parser = new MessageFormatParser(features,
                     editableFeatures);
+            parser.setViewPattern("{0};{1}"); //$NON-NLS-1$
+            parser.setEditorPattern("{0};{1}"); //$NON-NLS-1$
             undevelopedResponsibility_4077Parser = parser;
         }
         return undevelopedResponsibility_4077Parser;
@@ -749,9 +779,9 @@ public class DcaseParserProvider extends AbstractProvider implements
     private IParser getContextUserdef002_4024Parser() {
         if (contextUserdef002_4024Parser == null) {
             EAttribute[] features = new EAttribute[] { DcasePackage.eINSTANCE
-                    .getBasicNode_Userdef002() };
+                    .getBasicNode_Message() };
             EAttribute[] editableFeatures = new EAttribute[] { DcasePackage.eINSTANCE
-                    .getBasicNode_Userdef002() };
+                    .getBasicNode_Message() };
             MessageFormatParser parser = new MessageFormatParser(features,
                     editableFeatures);
             contextUserdef002_4024Parser = parser;
@@ -769,12 +799,18 @@ public class DcaseParserProvider extends AbstractProvider implements
      */
     private IParser getContextResponsibility_4069Parser() {
         if (contextResponsibility_4069Parser == null) {
-            EAttribute[] features = new EAttribute[] { DcasePackage.eINSTANCE
-                    .getBasicNode_Userdef012() };
-            EAttribute[] editableFeatures = new EAttribute[] { DcasePackage.eINSTANCE
-                    .getBasicNode_Userdef012() };
+            EAttribute[] features = new EAttribute[] {
+            		DcasePackage.eINSTANCE.getBasicNode_RespName(),
+            		DcasePackage.eINSTANCE.getBasicNode_RespIcon(),
+            		};
+            EAttribute[] editableFeatures = new EAttribute[] {
+            		DcasePackage.eINSTANCE.getBasicNode_RespName(),
+            		DcasePackage.eINSTANCE.getBasicNode_RespIcon(),
+            		};
             MessageFormatParser parser = new MessageFormatParser(features,
                     editableFeatures);
+            parser.setViewPattern("{0};{1}"); //$NON-NLS-1$
+            parser.setEditorPattern("{0};{1}"); //$NON-NLS-1$
             contextResponsibility_4069Parser = parser;
         }
         return contextResponsibility_4069Parser;
@@ -857,9 +893,9 @@ public class DcaseParserProvider extends AbstractProvider implements
     private IParser getJustificationUserdef002_4028Parser() {
         if (justificationUserdef002_4028Parser == null) {
             EAttribute[] features = new EAttribute[] { DcasePackage.eINSTANCE
-                    .getBasicNode_Userdef002() };
+                    .getBasicNode_Message() };
             EAttribute[] editableFeatures = new EAttribute[] { DcasePackage.eINSTANCE
-                    .getBasicNode_Userdef002() };
+                    .getBasicNode_Message() };
             MessageFormatParser parser = new MessageFormatParser(features,
                     editableFeatures);
             justificationUserdef002_4028Parser = parser;
@@ -877,12 +913,18 @@ public class DcaseParserProvider extends AbstractProvider implements
      */
     private IParser getJustificationResponsibility_4072Parser() {
         if (justificationResponsibility_4072Parser == null) {
-            EAttribute[] features = new EAttribute[] { DcasePackage.eINSTANCE
-                    .getBasicNode_Userdef012() };
-            EAttribute[] editableFeatures = new EAttribute[] { DcasePackage.eINSTANCE
-                    .getBasicNode_Userdef012() };
+            EAttribute[] features = new EAttribute[] {
+            		DcasePackage.eINSTANCE.getBasicNode_RespName(),
+            		DcasePackage.eINSTANCE.getBasicNode_RespIcon(),
+            		};
+            EAttribute[] editableFeatures = new EAttribute[] {
+            		DcasePackage.eINSTANCE.getBasicNode_RespName(),
+            		DcasePackage.eINSTANCE.getBasicNode_RespIcon(),
+            		};
             MessageFormatParser parser = new MessageFormatParser(features,
                     editableFeatures);
+            parser.setViewPattern("{0};{1}"); //$NON-NLS-1$
+            parser.setEditorPattern("{0};{1}"); //$NON-NLS-1$
             justificationResponsibility_4072Parser = parser;
         }
         return justificationResponsibility_4072Parser;
@@ -894,18 +936,22 @@ public class DcaseParserProvider extends AbstractProvider implements
     private IParser systemName_4029Parser;
 
     /**
-     * @generated
+     * @generated NOT
      */
     private IParser getSystemName_4029Parser() {
         if (systemName_4029Parser == null) {
             EAttribute[] features = new EAttribute[] {
-            		DcasePackage.eINSTANCE.getBasicNode_Name() };
+            		DcasePackage.eINSTANCE.getSystem_SubType(),
+            		DcasePackage.eINSTANCE.getBasicNode_Name(),
+            		};
             EAttribute[] editableFeatures = new EAttribute[] {
-            		DcasePackage.eINSTANCE.getBasicNode_Name() };
+            		DcasePackage.eINSTANCE.getSystem_SubType(),
+            		DcasePackage.eINSTANCE.getBasicNode_Name(),
+            		};
             MessageFormatParser parser = new MessageFormatParser(features,
                     editableFeatures);
-            parser.setViewPattern(Messages.System8CreationTool_title + ":{0}"); //$NON-NLS-1$
-            parser.setEditorPattern(Messages.System8CreationTool_title + ":{0}"); //$NON-NLS-1$
+            parser.setViewPattern(Messages.System8CreationTool_title + "({0}):{1}"); //$NON-NLS-1$
+            parser.setEditorPattern(Messages.System8CreationTool_title + "({0}):{1}"); //$NON-NLS-1$
             parser.setEditPattern("System:{0}"); //$NON-NLS-1$
             systemName_4029Parser = parser;
         }
@@ -939,16 +985,30 @@ public class DcaseParserProvider extends AbstractProvider implements
     private IParser systemDesc_4031Parser;
 
     /**
-     * @generated
+     * @generated NOT
      */
     private IParser getSystemDesc_4031Parser() {
         if (systemDesc_4031Parser == null) {
-            EAttribute[] features = new EAttribute[] { DcasePackage.eINSTANCE
-                    .getSystem_Param() };
-            EAttribute[] editableFeatures = new EAttribute[] { DcasePackage.eINSTANCE
-                    .getSystem_Param() };
+            EAttribute[] features = new EAttribute[] {
+            		DcasePackage.eINSTANCE.getSystem_SubType(),
+            		DcasePackage.eINSTANCE.getSystem_LeafNode(),
+            		DcasePackage.eINSTANCE.getSystem_I(),
+            		DcasePackage.eINSTANCE.getSystem_J(),
+            		DcasePackage.eINSTANCE.getBasicNode_ParameterVals(),
+            		DcasePackage.eINSTANCE.getBasicNode_ParameterDefs(),
+            		};
+            EAttribute[] editableFeatures = new EAttribute[] {
+            		DcasePackage.eINSTANCE.getSystem_SubType(),
+            		DcasePackage.eINSTANCE.getSystem_LeafNode(),
+            		DcasePackage.eINSTANCE.getSystem_I(),
+            		DcasePackage.eINSTANCE.getSystem_J(),
+            		DcasePackage.eINSTANCE.getBasicNode_ParameterVals(),
+            		DcasePackage.eINSTANCE.getBasicNode_ParameterDefs(),
+            		};
             MessageFormatParser parser = new MessageFormatParser(features,
                     editableFeatures);
+            parser.setViewPattern("{0};{1};{2};{3};{4};{5}"); //$NON-NLS-1$
+            parser.setEditorPattern("{0};{1};{2};{3};{4};{5}"); //$NON-NLS-1$
             systemDesc_4031Parser = parser;
         }
         return systemDesc_4031Parser;
@@ -965,9 +1025,9 @@ public class DcaseParserProvider extends AbstractProvider implements
     private IParser getSystemUserdef002_4032Parser() {
         if (systemUserdef002_4032Parser == null) {
             EAttribute[] features = new EAttribute[] { DcasePackage.eINSTANCE
-                    .getBasicNode_Userdef002() };
+                    .getBasicNode_Message() };
             EAttribute[] editableFeatures = new EAttribute[] { DcasePackage.eINSTANCE
-                    .getBasicNode_Userdef002() };
+                    .getBasicNode_Message() };
             MessageFormatParser parser = new MessageFormatParser(features,
                     editableFeatures);
             systemUserdef002_4032Parser = parser;
@@ -985,12 +1045,18 @@ public class DcaseParserProvider extends AbstractProvider implements
      */
     private IParser getSystemResponsibility_4076Parser() {
         if (systemResponsibility_4076Parser == null) {
-            EAttribute[] features = new EAttribute[] { DcasePackage.eINSTANCE
-                    .getBasicNode_Userdef012() };
-            EAttribute[] editableFeatures = new EAttribute[] { DcasePackage.eINSTANCE
-                    .getBasicNode_Userdef012() };
+            EAttribute[] features = new EAttribute[] {
+            		DcasePackage.eINSTANCE.getBasicNode_RespName(),
+            		DcasePackage.eINSTANCE.getBasicNode_RespIcon(),
+            		};
+            EAttribute[] editableFeatures = new EAttribute[] {
+            		DcasePackage.eINSTANCE.getBasicNode_RespName(),
+            		DcasePackage.eINSTANCE.getBasicNode_RespIcon(),
+            		};
             MessageFormatParser parser = new MessageFormatParser(features,
                     editableFeatures);
+            parser.setViewPattern("{0};{1}"); //$NON-NLS-1$
+            parser.setEditorPattern("{0};{1}"); //$NON-NLS-1$
             systemResponsibility_4076Parser = parser;
         }
         return systemResponsibility_4076Parser;
@@ -1073,9 +1139,9 @@ public class DcaseParserProvider extends AbstractProvider implements
     private IParser getPolicyUserdef002_4036Parser() {
         if (policyUserdef002_4036Parser == null) {
             EAttribute[] features = new EAttribute[] { DcasePackage.eINSTANCE
-                    .getBasicNode_Userdef002() };
+                    .getBasicNode_Message() };
             EAttribute[] editableFeatures = new EAttribute[] { DcasePackage.eINSTANCE
-                    .getBasicNode_Userdef002() };
+                    .getBasicNode_Message() };
             MessageFormatParser parser = new MessageFormatParser(features,
                     editableFeatures);
             policyUserdef002_4036Parser = parser;
@@ -1093,12 +1159,18 @@ public class DcaseParserProvider extends AbstractProvider implements
      */
     private IParser getPolicyResponsibility_4074Parser() {
         if (policyResponsibility_4074Parser == null) {
-            EAttribute[] features = new EAttribute[] { DcasePackage.eINSTANCE
-                    .getBasicNode_Userdef012() };
-            EAttribute[] editableFeatures = new EAttribute[] { DcasePackage.eINSTANCE
-                    .getBasicNode_Userdef012() };
+            EAttribute[] features = new EAttribute[] {
+            		DcasePackage.eINSTANCE.getBasicNode_RespName(),
+            		DcasePackage.eINSTANCE.getBasicNode_RespIcon(),
+            		};
+            EAttribute[] editableFeatures = new EAttribute[] {
+            		DcasePackage.eINSTANCE.getBasicNode_RespName(),
+            		DcasePackage.eINSTANCE.getBasicNode_RespIcon(),
+            		};
             MessageFormatParser parser = new MessageFormatParser(features,
                     editableFeatures);
+            parser.setViewPattern("{0};{1}"); //$NON-NLS-1$
+            parser.setEditorPattern("{0};{1}"); //$NON-NLS-1$
             policyResponsibility_4074Parser = parser;
         }
         return policyResponsibility_4074Parser;
@@ -1201,12 +1273,18 @@ public class DcaseParserProvider extends AbstractProvider implements
      */
     private IParser getUserdef001Responsibility_4078Parser() {
         if (userdef001Responsibility_4078Parser == null) {
-            EAttribute[] features = new EAttribute[] { DcasePackage.eINSTANCE
-                    .getBasicNode_Userdef012() };
-            EAttribute[] editableFeatures = new EAttribute[] { DcasePackage.eINSTANCE
-                    .getBasicNode_Userdef012() };
+            EAttribute[] features = new EAttribute[] {
+            		DcasePackage.eINSTANCE.getBasicNode_RespName(),
+            		DcasePackage.eINSTANCE.getBasicNode_RespIcon(),
+            		};
+            EAttribute[] editableFeatures = new EAttribute[] {
+            		DcasePackage.eINSTANCE.getBasicNode_RespName(),
+            		DcasePackage.eINSTANCE.getBasicNode_RespIcon(),
+            		};
             MessageFormatParser parser = new MessageFormatParser(features,
                     editableFeatures);
+            parser.setViewPattern("{0};{1}"); //$NON-NLS-1$
+            parser.setEditorPattern("{0};{1}"); //$NON-NLS-1$
             userdef001Responsibility_4078Parser = parser;
         }
         return userdef001Responsibility_4078Parser;
@@ -1223,9 +1301,9 @@ public class DcaseParserProvider extends AbstractProvider implements
     private IParser getUserdef001Userdef002_4040Parser() {
         if (userdef001Userdef002_4040Parser == null) {
             EAttribute[] features = new EAttribute[] { DcasePackage.eINSTANCE
-                    .getBasicNode_Userdef002() };
+                    .getBasicNode_Message() };
             EAttribute[] editableFeatures = new EAttribute[] { DcasePackage.eINSTANCE
-                    .getBasicNode_Userdef002() };
+                    .getBasicNode_Message() };
             MessageFormatParser parser = new MessageFormatParser(features,
                     editableFeatures);
             userdef001Userdef002_4040Parser = parser;
@@ -1310,9 +1388,9 @@ public class DcaseParserProvider extends AbstractProvider implements
     private IParser getUserdef002Userdef002_4044Parser() {
         if (userdef002Userdef002_4044Parser == null) {
             EAttribute[] features = new EAttribute[] { DcasePackage.eINSTANCE
-                    .getBasicNode_Userdef002() };
+                    .getBasicNode_Message() };
             EAttribute[] editableFeatures = new EAttribute[] { DcasePackage.eINSTANCE
-                    .getBasicNode_Userdef002() };
+                    .getBasicNode_Message() };
             MessageFormatParser parser = new MessageFormatParser(features,
                     editableFeatures);
             userdef002Userdef002_4044Parser = parser;
@@ -1330,12 +1408,18 @@ public class DcaseParserProvider extends AbstractProvider implements
      */
     private IParser getUserdef002Responsibility_4079Parser() {
         if (userdef002Responsibility_4079Parser == null) {
-            EAttribute[] features = new EAttribute[] { DcasePackage.eINSTANCE
-                    .getBasicNode_Userdef012() };
-            EAttribute[] editableFeatures = new EAttribute[] { DcasePackage.eINSTANCE
-                    .getBasicNode_Userdef012() };
+            EAttribute[] features = new EAttribute[] {
+            		DcasePackage.eINSTANCE.getBasicNode_RespName(),
+            		DcasePackage.eINSTANCE.getBasicNode_RespIcon(),
+            		};
+            EAttribute[] editableFeatures = new EAttribute[] {
+            		DcasePackage.eINSTANCE.getBasicNode_RespName(),
+            		DcasePackage.eINSTANCE.getBasicNode_RespIcon(),
+            		};
             MessageFormatParser parser = new MessageFormatParser(features,
                     editableFeatures);
+            parser.setViewPattern("{0};{1}"); //$NON-NLS-1$
+            parser.setEditorPattern("{0};{1}"); //$NON-NLS-1$
             userdef002Responsibility_4079Parser = parser;
         }
         return userdef002Responsibility_4079Parser;
@@ -1418,9 +1502,9 @@ public class DcaseParserProvider extends AbstractProvider implements
     private IParser getUserdef003Userdef002_4048Parser() {
         if (userdef003Userdef002_4048Parser == null) {
             EAttribute[] features = new EAttribute[] { DcasePackage.eINSTANCE
-                    .getBasicNode_Userdef002() };
+                    .getBasicNode_Message() };
             EAttribute[] editableFeatures = new EAttribute[] { DcasePackage.eINSTANCE
-                    .getBasicNode_Userdef002() };
+                    .getBasicNode_Message() };
             MessageFormatParser parser = new MessageFormatParser(features,
                     editableFeatures);
             userdef003Userdef002_4048Parser = parser;
@@ -1438,12 +1522,18 @@ public class DcaseParserProvider extends AbstractProvider implements
      */
     private IParser getUserdef003Responsibility_4080Parser() {
         if (userdef003Responsibility_4080Parser == null) {
-            EAttribute[] features = new EAttribute[] { DcasePackage.eINSTANCE
-                    .getBasicNode_Userdef012() };
-            EAttribute[] editableFeatures = new EAttribute[] { DcasePackage.eINSTANCE
-                    .getBasicNode_Userdef012() };
+            EAttribute[] features = new EAttribute[] {
+            		DcasePackage.eINSTANCE.getBasicNode_RespName(),
+            		DcasePackage.eINSTANCE.getBasicNode_RespIcon(),
+            		};
+            EAttribute[] editableFeatures = new EAttribute[] {
+            		DcasePackage.eINSTANCE.getBasicNode_RespName(),
+            		DcasePackage.eINSTANCE.getBasicNode_RespIcon(),
+            		};
             MessageFormatParser parser = new MessageFormatParser(features,
                     editableFeatures);
+            parser.setViewPattern("{0};{1}"); //$NON-NLS-1$
+            parser.setEditorPattern("{0};{1}"); //$NON-NLS-1$
             userdef003Responsibility_4080Parser = parser;
         }
         return userdef003Responsibility_4080Parser;
@@ -1526,9 +1616,9 @@ public class DcaseParserProvider extends AbstractProvider implements
     private IParser getUserdef004Userdef002_4052Parser() {
         if (userdef004Userdef002_4052Parser == null) {
             EAttribute[] features = new EAttribute[] { DcasePackage.eINSTANCE
-                    .getBasicNode_Userdef002() };
+                    .getBasicNode_Message() };
             EAttribute[] editableFeatures = new EAttribute[] { DcasePackage.eINSTANCE
-                    .getBasicNode_Userdef002() };
+                    .getBasicNode_Message() };
             MessageFormatParser parser = new MessageFormatParser(features,
                     editableFeatures);
             userdef004Userdef002_4052Parser = parser;
@@ -1546,12 +1636,18 @@ public class DcaseParserProvider extends AbstractProvider implements
      */
     private IParser getUserdef004Responsibility_4081Parser() {
         if (userdef004Responsibility_4081Parser == null) {
-            EAttribute[] features = new EAttribute[] { DcasePackage.eINSTANCE
-                    .getBasicNode_Userdef012() };
-            EAttribute[] editableFeatures = new EAttribute[] { DcasePackage.eINSTANCE
-                    .getBasicNode_Userdef012() };
+            EAttribute[] features = new EAttribute[] {
+            		DcasePackage.eINSTANCE.getBasicNode_RespName(),
+            		DcasePackage.eINSTANCE.getBasicNode_RespIcon(),
+            		};
+            EAttribute[] editableFeatures = new EAttribute[] {
+            		DcasePackage.eINSTANCE.getBasicNode_RespName(),
+            		DcasePackage.eINSTANCE.getBasicNode_RespIcon(),
+            		};
             MessageFormatParser parser = new MessageFormatParser(features,
                     editableFeatures);
+            parser.setViewPattern("{0};{1}"); //$NON-NLS-1$
+            parser.setEditorPattern("{0};{1}"); //$NON-NLS-1$
             userdef004Responsibility_4081Parser = parser;
         }
         return userdef004Responsibility_4081Parser;
@@ -1634,9 +1730,9 @@ public class DcaseParserProvider extends AbstractProvider implements
     private IParser getUserdef005Userdef002_4056Parser() {
         if (userdef005Userdef002_4056Parser == null) {
             EAttribute[] features = new EAttribute[] { DcasePackage.eINSTANCE
-                    .getBasicNode_Userdef002() };
+                    .getBasicNode_Message() };
             EAttribute[] editableFeatures = new EAttribute[] { DcasePackage.eINSTANCE
-                    .getBasicNode_Userdef002() };
+                    .getBasicNode_Message() };
             MessageFormatParser parser = new MessageFormatParser(features,
                     editableFeatures);
             userdef005Userdef002_4056Parser = parser;
@@ -1675,12 +1771,18 @@ public class DcaseParserProvider extends AbstractProvider implements
      */
     private IParser getUserdef005Responsibility_4068Parser() {
         if (userdef005Responsibility_4068Parser == null) {
-            EAttribute[] features = new EAttribute[] { DcasePackage.eINSTANCE
-                    .getBasicNode_Userdef012() };
-            EAttribute[] editableFeatures = new EAttribute[] { DcasePackage.eINSTANCE
-                    .getBasicNode_Userdef012() };
+            EAttribute[] features = new EAttribute[] {
+            		DcasePackage.eINSTANCE.getBasicNode_RespName(),
+            		DcasePackage.eINSTANCE.getBasicNode_RespIcon(),
+            		};
+            EAttribute[] editableFeatures = new EAttribute[] {
+            		DcasePackage.eINSTANCE.getBasicNode_RespName(),
+            		DcasePackage.eINSTANCE.getBasicNode_RespIcon(),
+            		};
             MessageFormatParser parser = new MessageFormatParser(features,
                     editableFeatures);
+            parser.setViewPattern("{0};{1}"); //$NON-NLS-1$
+            parser.setEditorPattern("{0};{1}"); //$NON-NLS-1$
             userdef005Responsibility_4068Parser = parser;
         }
         return userdef005Responsibility_4068Parser;
@@ -1763,9 +1865,9 @@ public class DcaseParserProvider extends AbstractProvider implements
     private IParser getUserdef006Userdef002_4060Parser() {
         if (userdef006Userdef002_4060Parser == null) {
             EAttribute[] features = new EAttribute[] { DcasePackage.eINSTANCE
-                    .getBasicNode_Userdef002() };
+                    .getBasicNode_Message() };
             EAttribute[] editableFeatures = new EAttribute[] { DcasePackage.eINSTANCE
-                    .getBasicNode_Userdef002() };
+                    .getBasicNode_Message() };
             MessageFormatParser parser = new MessageFormatParser(features,
                     editableFeatures);
             userdef006Userdef002_4060Parser = parser;
@@ -1783,12 +1885,18 @@ public class DcaseParserProvider extends AbstractProvider implements
      */
     private IParser getUserdef006Responsibility_4082Parser() {
         if (userdef006Responsibility_4082Parser == null) {
-            EAttribute[] features = new EAttribute[] { DcasePackage.eINSTANCE
-                    .getBasicNode_Userdef012() };
-            EAttribute[] editableFeatures = new EAttribute[] { DcasePackage.eINSTANCE
-                    .getBasicNode_Userdef012() };
+            EAttribute[] features = new EAttribute[] {
+            		DcasePackage.eINSTANCE.getBasicNode_RespName(),
+            		DcasePackage.eINSTANCE.getBasicNode_RespIcon(),
+            		};
+            EAttribute[] editableFeatures = new EAttribute[] {
+            		DcasePackage.eINSTANCE.getBasicNode_RespName(),
+            		DcasePackage.eINSTANCE.getBasicNode_RespIcon(),
+            		};
             MessageFormatParser parser = new MessageFormatParser(features,
                     editableFeatures);
+            parser.setViewPattern("{0};{1}"); //$NON-NLS-1$
+            parser.setEditorPattern("{0};{1}"); //$NON-NLS-1$
             userdef006Responsibility_4082Parser = parser;
         }
         return userdef006Responsibility_4082Parser;
@@ -1805,13 +1913,13 @@ public class DcaseParserProvider extends AbstractProvider implements
     private IParser getDcaseLink001Userdef001DescUserdef002_4061Parser() {
         if (dcaseLink001Userdef001DescUserdef002_4061Parser == null) {
             EAttribute[] features = new EAttribute[] {
-                    DcasePackage.eINSTANCE.getBasicLink_Userdef001(),
+                    DcasePackage.eINSTANCE.getBasicLink_SiblingOrder(),
                     DcasePackage.eINSTANCE.getBasicLink_Desc(),
-                    DcasePackage.eINSTANCE.getBasicLink_Userdef002() };
+                    DcasePackage.eINSTANCE.getBasicLink_Message() };
             EAttribute[] editableFeatures = new EAttribute[] {
-                    DcasePackage.eINSTANCE.getBasicLink_Userdef001(),
+                    DcasePackage.eINSTANCE.getBasicLink_SiblingOrder(),
                     DcasePackage.eINSTANCE.getBasicLink_Desc(),
-                    DcasePackage.eINSTANCE.getBasicLink_Userdef002() };
+                    DcasePackage.eINSTANCE.getBasicLink_Message() };
             MessageFormatParser parser = new MessageFormatParser(features,
                     editableFeatures);
             parser.setViewPattern("{0}\r\n\r\n{1}\r\n\r\n{2}"); //$NON-NLS-1$
@@ -1833,13 +1941,13 @@ public class DcaseParserProvider extends AbstractProvider implements
     private IParser getDcaseLink002Userdef001DescUserdef002_4062Parser() {
         if (dcaseLink002Userdef001DescUserdef002_4062Parser == null) {
             EAttribute[] features = new EAttribute[] {
-                    DcasePackage.eINSTANCE.getBasicLink_Userdef001(),
+                    DcasePackage.eINSTANCE.getBasicLink_SiblingOrder(),
                     DcasePackage.eINSTANCE.getBasicLink_Desc(),
-                    DcasePackage.eINSTANCE.getBasicLink_Userdef002() };
+                    DcasePackage.eINSTANCE.getBasicLink_Message() };
             EAttribute[] editableFeatures = new EAttribute[] {
-                    DcasePackage.eINSTANCE.getBasicLink_Userdef001(),
+                    DcasePackage.eINSTANCE.getBasicLink_SiblingOrder(),
                     DcasePackage.eINSTANCE.getBasicLink_Desc(),
-                    DcasePackage.eINSTANCE.getBasicLink_Userdef002() };
+                    DcasePackage.eINSTANCE.getBasicLink_Message() };
             MessageFormatParser parser = new MessageFormatParser(features,
                     editableFeatures);
             parser.setViewPattern("{0}\r\n\r\n{1}\r\n\r\n{2}"); //$NON-NLS-1$
@@ -1882,13 +1990,13 @@ public class DcaseParserProvider extends AbstractProvider implements
     private IParser getDcaseLink004Userdef001DescUserdef002_4064Parser() {
         if (dcaseLink004Userdef001DescUserdef002_4064Parser == null) {
             EAttribute[] features = new EAttribute[] {
-                    DcasePackage.eINSTANCE.getBasicLink_Userdef001(),
+                    DcasePackage.eINSTANCE.getBasicLink_SiblingOrder(),
                     DcasePackage.eINSTANCE.getBasicLink_Desc(),
-                    DcasePackage.eINSTANCE.getBasicLink_Userdef002() };
+                    DcasePackage.eINSTANCE.getBasicLink_Message() };
             EAttribute[] editableFeatures = new EAttribute[] {
-                    DcasePackage.eINSTANCE.getBasicLink_Userdef001(),
+                    DcasePackage.eINSTANCE.getBasicLink_SiblingOrder(),
                     DcasePackage.eINSTANCE.getBasicLink_Desc(),
-                    DcasePackage.eINSTANCE.getBasicLink_Userdef002() };
+                    DcasePackage.eINSTANCE.getBasicLink_Message() };
             MessageFormatParser parser = new MessageFormatParser(features,
                     editableFeatures);
             parser.setViewPattern("{0}\r\n\r\n{1}\r\n\r\n{2}"); //$NON-NLS-1$

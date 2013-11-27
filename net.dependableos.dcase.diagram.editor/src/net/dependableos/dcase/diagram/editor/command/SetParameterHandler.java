@@ -51,7 +51,7 @@ public class SetParameterHandler extends SetAttributeHandler {
         dialog = getDialog(event);
         
         if (dialog.getParameters().length == 0) {
-            String userdef009 = (String) nodeInfo.getAttribute(AttributeType.USERDEF009);
+            String userdef009 = (String) nodeInfo.getAttribute(AttributeType.PARAMETERDEFS);
             String attributeName = ""; //$NON-NLS-1$
             if (basicNode instanceof Argument) {
                 attributeName = "Global Parameters"; //$NON-NLS-1$
@@ -86,9 +86,9 @@ public class SetParameterHandler extends SetAttributeHandler {
             nodeInfo = (ModelUtil.createNodeInfo(basicNode));
         }
         AttributeDialog attributeDialog = getAttributeDialog(event);
-        nodeInfo.setAttribute(AttributeType.USERDEF005, attributeDialog.getDescFormatText());
-        nodeInfo.setAttribute(AttributeType.USERDEF007, attributeDialog.getParameters());
-        nodeInfo.setAttribute(AttributeType.USERDEF009, attributeDialog.getParameterDefinitions());
+        nodeInfo.setAttribute(AttributeType.PARAMETERIZEDDESC, attributeDialog.getDescFormatText());
+        nodeInfo.setAttribute(AttributeType.PARAMETERVALS, attributeDialog.getParameters());
+        nodeInfo.setAttribute(AttributeType.PARAMETERDEFS, attributeDialog.getParameterDefinitions());
         dialog.setNodeInfo(nodeInfo);
         return dialog;
     }
@@ -101,7 +101,7 @@ public class SetParameterHandler extends SetAttributeHandler {
         // gets the attribute dialog.
         AttributeDialog attributeDialog = getAttributeDialog(event);
         attributeDialog.setParameters(
-                (String) nodeInfo.getAttribute(AttributeType.USERDEF007));
+                (String) nodeInfo.getAttribute(AttributeType.PARAMETERVALS));
         return null;
     }
 

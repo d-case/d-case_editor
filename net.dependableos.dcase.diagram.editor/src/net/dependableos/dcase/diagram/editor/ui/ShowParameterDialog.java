@@ -222,8 +222,8 @@ public class ShowParameterDialog extends Dialog {
 		uuidSet.add(uuid);
 
 		// add current node parameters
-		String userdef007 = node.getUserdef007();
-		String userdef009 = node.getUserdef009();
+		String userdef007 = node.getParameterVals();
+		String userdef009 = node.getParameterDefs();
 		String nodeName = node.getName();
 		String refName;
 		if (node instanceof Argument) {
@@ -252,11 +252,11 @@ public class ShowParameterDialog extends Dialog {
 
 		if (node instanceof Argument) {
 			// check parent module
-			String userdef011 = node.getUserdef011();
-			if (userdef011 == null || userdef011.length() == 0) {
+			String refSource = node.getRefSource();
+			if (refSource == null || refSource.length() == 0) {
 				return;
 			}
-			for (String anotherName : userdef011.split(ModuleUtil
+			for (String anotherName : refSource.split(ModuleUtil
 					.getReferenceSeparator())) {
 				String names[] = anotherName.split(ModuleUtil
 						.getModuleSeparator());

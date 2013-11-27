@@ -19,6 +19,7 @@ import net.dependableos.dcase.diagram.editor.common.util.ModuleUtil;
 import net.dependableos.dcase.diagram.editor.message.Menus;
 import net.dependableos.dcase.diagram.editor.ui.ParameterDefineDialog;
 import net.dependableos.dcase.diagram.part.DcaseDiagramEditor;
+import net.dependableos.dcase.provider.DcaseEditPlugin;
 
 import org.eclipse.gmf.runtime.common.core.command.ICommand;
 import org.eclipse.gmf.runtime.diagram.ui.commands.ICommandProxy;
@@ -37,6 +38,11 @@ import org.eclipse.ui.PlatformUI;
  */
 public class DefineParameterAction implements IObjectActionDelegate {
 
+	/**
+	 * the key of Parameter subtype.
+	 */
+	private static final String SUBTYPE_PARAMETER = "_UI_System_subType_param"; //$NON-NLS-1$
+	
 	/**
 	 * the workbench.
 	 */
@@ -106,12 +112,14 @@ public class DefineParameterAction implements IObjectActionDelegate {
 				Map<AttributeType, Object> attributeMap = new HashMap<AttributeType, Object>();
 				// sets values to the map.
 				String userdef009 = (String) nodeInfo
-						.getAttribute(AttributeType.USERDEF009);
-				attributeMap.put(AttributeType.USERDEF009, userdef009);
+						.getAttribute(AttributeType.PARAMETERDEFS);
+				attributeMap.put(AttributeType.PARAMETERDEFS, userdef009);
 				String userdef007 = (String) nodeInfo
-						.getAttribute(AttributeType.USERDEF007);
-				attributeMap.put(AttributeType.USERDEF007,
+						.getAttribute(AttributeType.PARAMETERVALS);
+				attributeMap.put(AttributeType.PARAMETERVALS,
 						ParameterUtil.updateParameters(userdef007, userdef009));
+				attributeMap.put(AttributeType.SUBTYPE,
+						DcaseEditPlugin.getPlugin().getString(SUBTYPE_PARAMETER));
 
 				// creates a command.
 				ICommand changeCommand = new ChangeBasicNodePropertyTransactionCommand(

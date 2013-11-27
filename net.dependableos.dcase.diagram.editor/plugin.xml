@@ -21,6 +21,16 @@ Copyright (C) Yutaka Matsuno 2010-2012 All rights reserved.
 			id="net.dependableos.dcase.diagram.editor.command.xmlconversiontogmfwizard">
 		</command>
 		<command
+			name="XML Convert to New GMF Format Command"
+			categoryId="net.dependableos.dcase.diagram.editor.category"
+			id="net.dependableos.dcase.diagram.editor.command.xmlconversiontonewgmfwizard">
+		</command>
+		<command
+		    name="XML Convert to SACM Format Command"
+		    categoryId="net.dependableos.dcase.diagram.editor.category"
+		    id="net.dependableos.dcase.diagram.editor.command.xmlconversiontosacmwizard">
+		</command>
+		<command
 		    name="XML Convert to ARM Format Command"
 		    categoryId="net.dependableos.dcase.diagram.editor.category"
 		    id="net.dependableos.dcase.diagram.editor.command.xmlconversiontoarmwizard">
@@ -207,10 +217,18 @@ Copyright (C) Yutaka Matsuno 2010-2012 All rights reserved.
 			commandId="net.dependableos.dcase.diagram.editor.command.xmlconversiontogmfwizard"
 			class="net.dependableos.dcase.diagram.editor.command.XmlConversionToGmfWizardHandler">
 		</handler>
-        <handler
-            commandId="net.dependableos.dcase.diagram.editor.command.xmlconversiontoarmwizard"
-            class="net.dependableos.dcase.diagram.editor.command.XmlConversionToArmWizardHandler">
-        </handler>
+		<handler
+			commandId="net.dependableos.dcase.diagram.editor.command.xmlconversiontonewgmfwizard"
+			class="net.dependableos.dcase.diagram.editor.command.XmlConversionToNewGmfWizardHandler">
+		</handler>
+		<handler
+			commandId="net.dependableos.dcase.diagram.editor.command.xmlconversiontosacmwizard"
+			class="net.dependableos.dcase.diagram.editor.command.XmlConversionToSacmWizardHandler">
+		</handler>
+		<handler
+			commandId="net.dependableos.dcase.diagram.editor.command.xmlconversiontoarmwizard"
+			class="net.dependableos.dcase.diagram.editor.command.XmlConversionToArmWizardHandler">
+		</handler>
 		<handler
 			commandId="net.dependableos.dcase.diagram.editor.command.xmlconversiontotextwizard"
 			class="net.dependableos.dcase.diagram.editor.command.XmlConversionToTextWizardHandler">
@@ -226,14 +244,6 @@ Copyright (C) Yutaka Matsuno 2010-2012 All rights reserved.
         <handler
             commandId="net.dependableos.dcase.diagram.editor.command.OpenUrlHandler"
             class="net.dependableos.dcase.diagram.editor.command.OpenUrlHandler">
-        </handler>
-        <handler
-            commandId="net.dependableos.dcase.diagram.editor.systemnode.command.selectdiagram"
-            class="net.dependableos.dcase.diagram.editor.systemnode.SelectLinkedDiagramHandler">
-        </handler>
-        <handler
-            commandId="net.dependableos.dcase.diagram.editor.systemnode.command.opendiagram"
-            class="net.dependableos.dcase.diagram.editor.systemnode.OpenLinkedDiagramHandler">
         </handler>
         <handler
             commandId="net.dependableos.dcase.diagram.editor.command.selectattachmentfromws"
@@ -390,6 +400,16 @@ Copyright (C) Yutaka Matsuno 2010-2012 All rights reserved.
                     commandId="net.dependableos.dcase.diagram.editor.command.xmlconversiontogmfwizard"
                     id="net.dependableos.dcase.diagram.editor.menu.xmlconversiontogmfwizard"
                     label="%net.dependableos.dcase.diagram.editor.menu.xmlconversiontogmfwizard.label">
+                </command>
+                <command
+                    commandId="net.dependableos.dcase.diagram.editor.command.xmlconversiontonewgmfwizard"
+                    id="net.dependableos.dcase.diagram.editor.menu.xmlconversiontonewgmfwizard"
+                    label="%net.dependableos.dcase.diagram.editor.menu.xmlconversiontonewgmfwizard.label">
+                </command>
+                <command
+                   commandId="net.dependableos.dcase.diagram.editor.command.xmlconversiontosacmwizard"
+                   id="net.dependableos.dcase.diagram.editor.menu.xmlconversiontosacmwizard"
+                   label="%net.dependableos.dcase.diagram.editor.menu.xmlconversiontosacmwizard.label">
                 </command>
                 <command
                    commandId="net.dependableos.dcase.diagram.editor.command.xmlconversiontoarmwizard"
@@ -934,7 +954,7 @@ Copyright (C) Yutaka Matsuno 2010-2012 All rights reserved.
           point="org.eclipse.gmf.runtime.emf.clipboard.core.clipboardSupport">
        <factory
              class="net.dependableos.dcase.diagram.editor.clipboard.DcaseClipboardSupportFactory"
-             nsURI="http://www.dependable-os.net/2010/03/dcase/"
+             nsURI="http://www.dependable-os.net/2013/11/dcase_model/"
              >
        </factory>
     </extension>
@@ -997,7 +1017,7 @@ Copyright (C) Yutaka Matsuno 2010-2012 All rights reserved.
                        <adapt type="net.dependableos.dcase.diagram.edit.parts.PolicyEditPart" />
                        <adapt type="net.dependableos.dcase.diagram.edit.parts.SystemEditPart" />
                        <adapt type="net.dependableos.dcase.diagram.edit.parts.JustificationEditPart" />
-                       <adapt type="net.dependableos.dcase.diagram.edit.parts.Userdef001EditPart" />
+                       <!-- except External(Userdef001) Node -->
                        <adapt type="net.dependableos.dcase.diagram.edit.parts.Userdef002EditPart" />
                        <adapt type="net.dependableos.dcase.diagram.edit.parts.Userdef003EditPart" />
                        <adapt type="net.dependableos.dcase.diagram.edit.parts.Userdef004EditPart" />
@@ -1014,9 +1034,10 @@ Copyright (C) Yutaka Matsuno 2010-2012 All rights reserved.
            <with variable="selection">
                <and>
                    <count value="1" />
-                   <iterate>
+                   <iterate><or>
+	                   <adapt type="net.dependableos.dcase.diagram.edit.parts.Userdef001EditPart" />
 	                   <adapt type="net.dependableos.dcase.diagram.edit.parts.Userdef005EditPart" />
-	               </iterate>
+	               </or></iterate>
               </and>
           </with>
       </definition>
@@ -1028,7 +1049,8 @@ Copyright (C) Yutaka Matsuno 2010-2012 All rights reserved.
                <and>
                    <count value="1" />
                    <iterate><or>
-                       <adapt type="net.dependableos.dcase.diagram.edit.parts.GoalEditPart" />
+                          <adapt type="net.dependableos.dcase.diagram.edit.parts.GoalEditPart" />
+	                   <adapt type="net.dependableos.dcase.diagram.edit.parts.Userdef001EditPart" />
 	                   <adapt type="net.dependableos.dcase.diagram.edit.parts.Userdef005EditPart" />
 	               </or></iterate>
               </and>
@@ -1055,7 +1077,8 @@ Copyright (C) Yutaka Matsuno 2010-2012 All rights reserved.
                <and>
                    <count value="1" />
                    <iterate><or>
-                       <adapt type="net.dependableos.dcase.diagram.edit.parts.GoalEditPart" />
+                          <adapt type="net.dependableos.dcase.diagram.edit.parts.GoalEditPart" />
+	                   <adapt type="net.dependableos.dcase.diagram.edit.parts.Userdef001EditPart" />
 	                   <adapt type="net.dependableos.dcase.diagram.edit.parts.Userdef005EditPart" />
 	                   <!--<adapt type="net.dependableos.dcase.diagram.edit.parts.DcaseLink003EditPart" />-->
 	               </or></iterate>

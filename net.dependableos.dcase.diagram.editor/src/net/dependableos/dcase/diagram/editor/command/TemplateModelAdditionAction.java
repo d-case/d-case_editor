@@ -7,9 +7,7 @@ import java.util.Set;
 
 
 import net.dependableos.dcase.Argument;
-import net.dependableos.dcase.BasicLink;
 import net.dependableos.dcase.BasicNode;
-import net.dependableos.dcase.System;
 import net.dependableos.dcase.diagram.common.exception.DcaseRuntimeException;
 import net.dependableos.dcase.diagram.common.exception.DcaseSystemException;
 import net.dependableos.dcase.diagram.common.util.Menus;
@@ -20,7 +18,6 @@ import net.dependableos.dcase.diagram.edit.parts.ArgumentEditPart;
 import net.dependableos.dcase.diagram.editor.common.util.DcaseEditorUtil;
 import net.dependableos.dcase.diagram.editor.common.util.MessageWriter;
 import net.dependableos.dcase.diagram.editor.common.util.ModuleUtil;
-import net.dependableos.dcase.diagram.editor.parameter.ParameterUtil;
 import net.dependableos.dcase.diagram.editor.template.TemplateViewPart;
 
 import org.eclipse.core.resources.IFile;
@@ -129,16 +126,9 @@ public class TemplateModelAdditionAction extends Action {
                 // shows the dialog to set parameters.
                 BasicNode rootNode = ModuleUtil.getRootNode(copyArgument);
                 if (rootNode != null) {
-                	// process Parameter nodes.
-                    for (BasicLink link : copyArgument.getRootBasicLink()) {
-                    	BasicNode cNode = link.getTarget();
-                    	if (link.getSource() != rootNode || ! (cNode instanceof System)) {
-                    		continue;
-                    	}
-                    	if (! ParameterUtil.processParameter(cNode)) {
-                    		return;
-                    	}
-                    }
+                    // processes all Pattern nodes.
+                    ModuleUtil.processPatterns(copyArgument);
+
                     // gets the set of node IDs from the editing argument edit part.
                     Set<String> idSet = DcaseEditorUtil.getChildUUIDs(currentArgumentEditPart);
 
@@ -180,7 +170,7 @@ public class TemplateModelAdditionAction extends Action {
      * @return the EObject
      */
     private EObject getModel(IFile modelFile) {
-        return ModelUtil.getModel(modelFile);
+        return ModelUtil.getModel(modelFile, true);
     }
 
     /**

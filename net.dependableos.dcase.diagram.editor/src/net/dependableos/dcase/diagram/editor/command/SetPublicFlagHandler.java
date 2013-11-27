@@ -47,7 +47,7 @@ public class SetPublicFlagHandler extends AbstractEditPartHandler {
 				// get flag info
 				NodeInfo nodeInfo = ModelUtil.createNodeInfo(basicNode);
 				String flags = (String) nodeInfo
-						.getAttribute(AttributeType.USERDEF015);
+						.getAttribute(AttributeType.FLAG);
 				String publicFlag = ModuleUtil.getPublicFlagString();
 				if (flags == null || flags.length() == 0) {
 					flags = publicFlag;
@@ -59,7 +59,7 @@ public class SetPublicFlagHandler extends AbstractEditPartHandler {
 
 				// set flag info
 				Map<AttributeType, Object> attrMap = new HashMap<AttributeType, Object>();
-				attrMap.put(AttributeType.USERDEF015, flags);
+				attrMap.put(AttributeType.FLAG, flags);
 				TransactionalEditingDomain currentDomain = DcaseEditorUtil
 						.getCurrentArgumentEditPart().getEditingDomain();
 				ICommand changeCommand = new ChangeBasicNodePropertyTransactionCommand(

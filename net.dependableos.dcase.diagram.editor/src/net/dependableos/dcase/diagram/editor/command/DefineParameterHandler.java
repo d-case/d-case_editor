@@ -52,9 +52,9 @@ public class DefineParameterHandler extends SetAttributeHandler {
 		}
 		// gets the attribute dialog.
 		AttributeDialog attributeDialog = getAttributeDialog(event);
-		nodeInfo.setAttribute(AttributeType.USERDEF007,
+		nodeInfo.setAttribute(AttributeType.PARAMETERVALS,
 				attributeDialog.getParameters());
-		nodeInfo.setAttribute(AttributeType.USERDEF009,
+		nodeInfo.setAttribute(AttributeType.PARAMETERDEFS,
 				attributeDialog.getParameterDefinitions());
 		dialog.setNodeInfo(nodeInfo);
 		return dialog;
@@ -68,9 +68,9 @@ public class DefineParameterHandler extends SetAttributeHandler {
 		// gets the attribute dialog.
 		AttributeDialog attributeDialog = getAttributeDialog(event);
 		String userdef009 = (String) nodeInfo
-				.getAttribute(AttributeType.USERDEF009);
+				.getAttribute(AttributeType.PARAMETERDEFS);
 		String userdef007 = (String) nodeInfo
-				.getAttribute(AttributeType.USERDEF007);
+				.getAttribute(AttributeType.PARAMETERVALS);
 		attributeDialog.setParameterDefinitions(userdef009);
 		attributeDialog.setParameters(ParameterUtil.updateParameters(
 				userdef007, userdef009));

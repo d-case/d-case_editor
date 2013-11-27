@@ -7,7 +7,7 @@
 <!-- The XLS file that converts the GMF model file to ARM model file. -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                xmlns:dcase_gmf="http://www.dependable-os.net/2010/03/dcase/"
+                xmlns:dcase_gmf="http://www.dependable-os.net/2013/11/dcase_model/"
                 xmlns:ARM="ARM"
                 xmlns:xmi="http://www.omg.org/XMI"
                 extension-element-prefixes="dcase_gmf"
@@ -55,7 +55,7 @@
              </xsl:call-template>
            </xsl:element>
         </xsl:when>
-        <xsl:when test="(@xsi:type='dcase:System') or (@xsi:type='dcase:Evidence') or (@xsi:type='dcase:Monitor') or (@xsi:type='dcase:Justification') or (@xsi:type='dcase:Context')">
+        <xsl:when test="(@xsi:type='dcase:Evidence') or (@xsi:type='dcase:Monitor') or (@xsi:type='dcase:Justification') or (@xsi:type='dcase:Context') or (@xsi:type='dcase:Assumption') or (@xsi:type='dcase:Module') or (@xsi:type='dcase:Contract') or (@xsi:type='dcase:Pattern') or (@xsi:type='dcase:Action') or (@xsi:type='dcase:External')">
            <xsl:element name="containsArgumentElement">
              <xsl:call-template name="NodeType" />
              <xsl:call-template name="NodeElementAttribute" />
@@ -76,17 +76,17 @@
         <xsl:value-of select="/dcase_gmf:Argument/rootBasicNode[@id=$linkTarget]/@xsi:type" />
     </xsl:variable>
     <!-- checks the name of node type -->
-    <xsl:if test="contains($sourceNodeType, 'dcase:Goal') or contains($sourceNodeType, 'dcase:Strategy') or contains($sourceNodeType, 'dcase:Evidence') or contains($sourceNodeType, 'dcase:Monitor') or contains($sourceNodeType, 'dcase:Justification') or contains($sourceNodeType, 'dcase:System') or contains($sourceNodeType, 'dcase:Context')">
-      <xsl:if test="contains($targetNodeType, 'dcase:Goal') or contains($targetNodeType, 'dcase:Strategy') or contains($targetNodeType, 'dcase:Evidence') or contains($targetNodeType, 'dcase:Monitor') or contains($targetNodeType, 'dcase:Justification') or contains($targetNodeType, 'dcase:System') or contains($targetNodeType, 'dcase:Context')">
+    <xsl:if test="contains($sourceNodeType, 'dcase:Goal') or contains($sourceNodeType, 'dcase:Strategy') or contains($sourceNodeType, 'dcase:Evidence') or contains($sourceNodeType, 'dcase:Monitor') or contains($sourceNodeType, 'dcase:Justification') or contains($sourceNodeType, 'dcase:Context') or contains($sourceNodeType, 'dcase:Assumption') or contains($sourceNodeType, 'dcase:Module') or contains($sourceNodeType, 'dcase:Contract') or contains($sourceNodeType, 'dcase:Pattern') or contains($sourceNodeType, 'dcase:Action') or contains($sourceNodeType, 'dcase:External')">
+      <xsl:if test="contains($targetNodeType, 'dcase:Goal') or contains($targetNodeType, 'dcase:Strategy') or contains($targetNodeType, 'dcase:Evidence') or contains($targetNodeType, 'dcase:Monitor') or contains($targetNodeType, 'dcase:Justification') or contains($targetNodeType, 'dcase:Context') or contains($targetNodeType, 'dcase:Assumption') or contains($targetNodeType, 'dcase:Module') or contains($targetNodeType, 'dcase:Contract') or contains($targetNodeType, 'dcase:Pattern') or contains($targetNodeType, 'dcase:Action') or contains($targetNodeType, 'dcase:External')">
         <xsl:choose>
             <!-- outputs to the ARM file -->
-            <xsl:when test="(@xsi:type='dcase:DcaseLink001') or (@xsi:type='dcase:DcaseLink003') or (@xsi:type='dcase:DcaseLink004')">
+            <xsl:when test="(@xsi:type='dcase:SupportedBy') or (@xsi:type='dcase:Responsibility') or (@xsi:type='dcase:DcaseLink004')">
                 <xsl:element name="containsArgumentLink">
                   <xsl:call-template name="LinkType" />
                   <xsl:call-template name="LinkElementAttribute" />
                 </xsl:element>
             </xsl:when>
-            <xsl:when test="@xsi:type='dcase:DcaseLink002'">
+            <xsl:when test="@xsi:type='dcase:InContextOf'">
                 <xsl:element name="containsArgumentLink">
                   <xsl:call-template name="LinkType" />
                   <xsl:call-template name="LinkElementAttribute" />
@@ -102,9 +102,9 @@
     <xsl:attribute name="type" namespace="http://www.w3.org/2001/XMLSchema-instance">
       <!-- checks the name of link type -->
       <xsl:choose>
-        <xsl:when test="(@xsi:type='dcase:Goal') or (@xsi:type='dcase:System')">ARM:Claim</xsl:when>
+        <xsl:when test="(@xsi:type='dcase:Goal') or (@xsi:type='dcase:Module') or (@xsi:type='dcase:External')">ARM:Claim</xsl:when>
         <xsl:when test="@xsi:type='dcase:Strategy'">ARM:ArgumentReasoning</xsl:when>
-        <xsl:when test="(@xsi:type='dcase:Context') or (@xsi:type='dcase:Justification') or (@xsi:type='dcase:Evidence') or (@xsi:type='dcase:Monitor')">ARM:InformationElement</xsl:when>
+        <xsl:when test="(@xsi:type='dcase:Context') or (@xsi:type='dcase:Justification') or (@xsi:type='dcase:Evidence') or (@xsi:type='dcase:Monitor') or (@xsi:type='dcase:Assumption') or (@xsi:type='dcase:Pattern') or (@xsi:type='dcase:Action')">ARM:InformationElement</xsl:when>
       </xsl:choose>
     </xsl:attribute>
   </xsl:template>
@@ -113,13 +113,13 @@
   <xsl:template name="LinkType">
     <xsl:attribute name="type" namespace="http://www.w3.org/2001/XMLSchema-instance">
       <xsl:choose>
-        <xsl:when test="@xsi:type='dcase:DcaseLink002'">ARM:AssertedContext</xsl:when>
-        <xsl:when test="(@xsi:type='dcase:DcaseLink001') or (@xsi:type='dcase:DcaseLink003') or (@xsi:type='dcase:DcaseLink004')">
+        <xsl:when test="@xsi:type='dcase:InContextOf'">ARM:AssertedContext</xsl:when>
+        <xsl:when test="(@xsi:type='dcase:SupportedBy') or (@xsi:type='dcase:Responsibility') or (@xsi:type='dcase:DcaseLink004')">
           <xsl:variable name="linkSource"><xsl:value-of select="substring-after(@source,'#')" /></xsl:variable>
           <xsl:variable name="linkTarget"><xsl:value-of select="substring-after(@target,'#')" /></xsl:variable>
           <xsl:choose>
-            <xsl:when test="/dcase_gmf:Argument/rootBasicNode[(@id=$linkSource) and ((@xsi:type='dcase:Evidence') or (@xsi:type='dcase:Monitor'))]">ARM:AssertedEvidence</xsl:when>
-            <xsl:when test="/dcase_gmf:Argument/rootBasicNode[(@id=$linkTarget) and ((@xsi:type='dcase:Evidence') or (@xsi:type='dcase:Monitor'))]">ARM:AssertedEvidence</xsl:when>
+            <xsl:when test="/dcase_gmf:Argument/rootBasicNode[(@id=$linkSource) and ((@xsi:type='dcase:Evidence') or (@xsi:type='dcase:Monitor') or (@xsi:type='dcase:Action'))]">ARM:AssertedEvidence</xsl:when>
+            <xsl:when test="/dcase_gmf:Argument/rootBasicNode[(@id=$linkTarget) and ((@xsi:type='dcase:Evidence') or (@xsi:type='dcase:Monitor') or (@xsi:type='dcase:Action'))]">ARM:AssertedEvidence</xsl:when>
             <xsl:otherwise>ARM:AssertedInference</xsl:otherwise>
           </xsl:choose>
         </xsl:when>

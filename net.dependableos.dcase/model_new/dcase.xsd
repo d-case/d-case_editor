@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema targetNamespace="http://www.dependable-os.net/2013/11/dcase" elementFormDefault="qualified" xmlns="http://www.dependable-os.net/2013/11/dcase" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import namespace="http://www.dependable-os.net/dre" schemaLocation="dre.xsd"/>
+  <xs:element name="dcase">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="description" type="xs:string" maxOccurs="1" minOccurs="1" />
+        <xs:element name="properties" type="PropertiesType" />
+        <xs:element name="parameters" type="ParametersType" maxOccurs="1" minOccurs="0"/>
+        <xs:element name="responsibility" type="ResponsibilityType" maxOccurs="1" minOccurs="0"/>
+        <xs:element name="nodes" maxOccurs="1" minOccurs="1">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="node" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="description" type="xs:string" maxOccurs="1" minOccurs="1" />
+                    <xs:element name="properties" minOccurs="1" maxOccurs="1" type="PropertiesType"/>
+                    <xs:element name="parameters" type="ParametersType" maxOccurs="1" minOccurs="0"/>
+                    <xs:element name="responsibility" type="ResponsibilityType" maxOccurs="1" minOccurs="0"/>
+                    <xs:element name="d-script" minOccurs="0" maxOccurs="1"/>
+                  </xs:sequence>
+                  <xs:attribute name="name" type="xs:string" use="optional" />
+                  <xs:attribute name="type" use="required">
+                    <xs:simpleType>
+                      <xs:restriction base="xs:string">
+                        <xs:enumeration value="Goal" />
+                        <xs:enumeration value="Strategy" />
+                        <xs:enumeration value="Evidence" />
+                        <xs:enumeration value="Undeveloped" />
+                        <xs:enumeration value="Context" />
+                        <xs:enumeration value="Monitor" />
+                        <xs:enumeration value="Justification" />
+                        <xs:enumeration value="Assumption" />
+                        <xs:enumeration value="Module" />
+                        <xs:enumeration value="Contract" />
+                        <xs:enumeration value="Action" />
+                        <xs:enumeration value="External" />
+                        <xs:enumeration value="Pattern" />
+                        <xs:enumeration value="Userdef002" />
+                        <xs:enumeration value="Userdef003" />
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:attribute>
+                  <xs:attribute name="subtype" use="optional">
+                    <xs:simpleType>
+                      <xs:restriction base="xs:string">
+                        <xs:enumeration value="Parameter" />
+                        <xs:enumeration value="Loop" />
+                        <xs:enumeration value="Choice" />
+                        <xs:enumeration value="Multiplicity" />
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:attribute>
+                  <xs:attribute name="id" use="required" type="UUID">
+                  </xs:attribute>
+                  <xs:attribute name="status" type="xs:string" use="optional" />
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="links" maxOccurs="1" minOccurs="1">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="link" maxOccurs="unbounded" minOccurs="0">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="description" type="xs:string" />
+                    <xs:element name="properties" type="PropertiesType" />
+                  </xs:sequence>
+                  <xs:attribute name="source" type="xs:string" use="required" />
+                  <xs:attribute name="target" type="xs:string" use="required" />
+                  <xs:attribute name="id" type="UUID" use="required" />
+                  <xs:attribute name="name" type="xs:string" />
+                  <xs:attribute name="status" type="xs:string" use="optional" />
+                  <xs:attribute name="type" use="optional" default="SupportedBy">
+                    <xs:simpleType>
+                      <xs:restriction base="xs:string">
+                        <xs:enumeration value="SupportedBy" />
+                        <xs:enumeration value="InContextOf" />
+                        <xs:enumeration value="Responsibility" />
+                        <xs:enumeration value="Link004" />
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:attribute>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute name="id" type="UUID" use="required" />
+      <xs:attribute name="name" type="xs:string" use="optional" />
+      <xs:attribute name="status" type="xs:string" use="optional" />
+    </xs:complexType>
+  </xs:element>
+  <xs:simpleType name="UUID">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="PropertiesType">
+    <xs:sequence>
+      <xs:element name="property" minOccurs="0" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:sequence>
+          </xs:sequence>
+          <xs:attribute name="name" use="required">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:enumeration value="Userdef001" />
+                <xs:enumeration value="Userdef002" />
+                <xs:enumeration value="Userdef003" />
+                <xs:enumeration value="Userdef004" />
+                <xs:enumeration value="Userdef005" />
+                <xs:enumeration value="Userdef006" />
+                <xs:enumeration value="Userdef007" />
+                <xs:enumeration value="Userdef008" />
+                <xs:enumeration value="Userdef009" />
+                <xs:enumeration value="Userdef010" />
+                <xs:enumeration value="Userdef011" />
+                <xs:enumeration value="Userdef012" />
+                <xs:enumeration value="Userdef013" />
+                <xs:enumeration value="Userdef014" />
+                <xs:enumeration value="Userdef015" />
+                <xs:enumeration value="Userdef016" />
+                <xs:enumeration value="Attachment" />
+                <xs:enumeration value="Message" />
+                <xs:enumeration value="Requirement" />
+                <xs:enumeration value="ParameterizedDesc" />
+                <xs:enumeration value="Parent" />
+                <xs:enumeration value="RefSource" />
+                <xs:enumeration value="Flag" />
+                <xs:enumeration value="Score" />
+                <xs:enumeration value="Weight" />
+                <xs:enumeration value="Stakeholder" />
+                <xs:enumeration value="RiskAnalysis" />
+                <xs:enumeration value="IsNormal" />
+                <xs:enumeration value="LeafNode" />
+                <xs:enumeration value="I" />
+                <xs:enumeration value="J" />
+                <xs:enumeration value="SiblingOrder" />
+                <xs:enumeration value="ValidUntil" />
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+          <xs:attribute name="value" type="xs:string" use="required" />
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ParametersType">
+    <xs:sequence>
+      <xs:element name="parameter" maxOccurs="unbounded" minOccurs="1">
+        <xs:complexType>
+          <xs:attribute name="name" type="xs:string" />
+          <xs:attribute name="type" use="required">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:enumeration value="string" />
+                <xs:enumeration value="int" />
+                <xs:enumeration value="double" />
+                <xs:enumeration value="enum" />
+                <xs:enumeration value="raw" />
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+          <xs:attribute name="min" type="xs:string" />
+          <xs:attribute name="max" type="xs:string" />
+          <xs:attribute name="digit" type="xs:string" />
+          <xs:attribute name="inc" type="xs:string" />
+          <xs:attribute name="items" type="xs:string" />
+          <xs:attribute name="value" type="xs:string" />
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ResponsibilityType">
+    <xs:attribute name="name" type="xs:string" />
+    <xs:attribute name="address" type="xs:string" />
+    <xs:attribute name="icon" type="xs:string" />
+  </xs:complexType>
+</xs:schema>

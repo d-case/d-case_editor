@@ -171,26 +171,28 @@ public enum NodeType {
                 break;
             case EVIDENCE:
             case MONITOR:
+            case POLICY: // Action
                 nodeValidatorRule = createEvidenceValidatorRule();
                 break;
             case UNDEVELOPED:
                 nodeValidatorRule = createUndevelopedValidatorRule();
                 break;
             case CONTEXT:
-            case SYSTEM: // Parameter
+            case SYSTEM: // Pattern
                 nodeValidatorRule = createContextValidatorRule();
                 break;
             case JUSTIFICATION:
                 nodeValidatorRule = createJustificationValidatorRule();
                 break;
-            case POLICY:
-            case USERDEF001:
+            case USERDEF001: // External
+            case USERDEF005: // Module
+                nodeValidatorRule = createModuleValidatorRule();
+                break;
             case USERDEF002:
             case USERDEF003:
             case USERDEF004:
-            case USERDEF005:
             case USERDEF006:
-                nodeValidatorRule = createUnlimimtedValidatorRule();
+                nodeValidatorRule = createUnlimitedValidatorRule();
                 break;
             case ARGUMENT:
             default:
@@ -220,7 +222,10 @@ public enum NodeType {
         childMultiplicity.put(NodeType.CONTEXT, NodeMultiplicity.ZERO_OR_MORE);
         childMultiplicity.put(NodeType.JUSTIFICATION,
                 NodeMultiplicity.ZERO_OR_MORE);
-        childMultiplicity.put(NodeType.SYSTEM, NodeMultiplicity.ZERO_OR_MORE); // Parameter
+        childMultiplicity.put(NodeType.SYSTEM, NodeMultiplicity.ZERO_OR_MORE); // Pattern
+        childMultiplicity.put(NodeType.POLICY, NodeMultiplicity.ZERO_OR_ONE); // Action
+        childMultiplicity.put(NodeType.USERDEF005, NodeMultiplicity.ZERO_OR_MORE); // Module
+        childMultiplicity.put(NodeType.USERDEF001, NodeMultiplicity.ZERO_OR_MORE); // External
         childMultiplicity = addUnlimitedNodeMultiplicity(childMultiplicity);
         nodeValidatorRule.setChildMultiplicity(childMultiplicity);
 
@@ -234,7 +239,10 @@ public enum NodeType {
         parentMultiplicity.put(NodeType.CONTEXT, NodeMultiplicity.ZERO);
         parentMultiplicity.put(NodeType.MONITOR, NodeMultiplicity.ZERO);
         parentMultiplicity.put(NodeType.JUSTIFICATION, NodeMultiplicity.ZERO);
-        parentMultiplicity.put(NodeType.SYSTEM, NodeMultiplicity.ZERO);
+        parentMultiplicity.put(NodeType.SYSTEM, NodeMultiplicity.ZERO); // Pattern
+        parentMultiplicity.put(NodeType.POLICY, NodeMultiplicity.ZERO); // Action
+        parentMultiplicity.put(NodeType.USERDEF005, NodeMultiplicity.ZERO); // Module
+        parentMultiplicity.put(NodeType.USERDEF001, NodeMultiplicity.ZERO); // External
         parentMultiplicity = addUnlimitedNodeMultiplicity(parentMultiplicity);
         nodeValidatorRule.setParentMultiplicity(parentMultiplicity);
 
@@ -246,6 +254,7 @@ public enum NodeType {
         nodeList1.add(NodeType.EVIDENCE);
         nodeList1.add(NodeType.UNDEVELOPED);
         nodeList1.add(NodeType.MONITOR);
+        nodeList1.add(NodeType.POLICY); // Action
         NodeConnectionRule rule1 = new NodeConnectionRule(RuleOperator.NAND,
                 nodeList1);
         childRuleList.add(rule1);
@@ -287,7 +296,10 @@ public enum NodeType {
         childMultiplicity.put(NodeType.UNDEVELOPED, NodeMultiplicity.ZERO);
         childMultiplicity.put(NodeType.CONTEXT, NodeMultiplicity.ZERO_OR_MORE);
         childMultiplicity.put(NodeType.JUSTIFICATION, NodeMultiplicity.ZERO);
-        childMultiplicity.put(NodeType.SYSTEM, NodeMultiplicity.ZERO_OR_MORE);
+        childMultiplicity.put(NodeType.SYSTEM, NodeMultiplicity.ZERO_OR_MORE); // Pattern
+        childMultiplicity.put(NodeType.POLICY, NodeMultiplicity.ZERO); // Action
+        childMultiplicity.put(NodeType.USERDEF005, NodeMultiplicity.ZERO_OR_MORE); // Module
+        childMultiplicity.put(NodeType.USERDEF001, NodeMultiplicity.ZERO_OR_MORE); // External
         childMultiplicity = addUnlimitedNodeMultiplicity(childMultiplicity);
         nodeValidatorRule.setChildMultiplicity(childMultiplicity);
 
@@ -300,7 +312,10 @@ public enum NodeType {
         parentMultiplicity.put(NodeType.CONTEXT, NodeMultiplicity.ZERO);
         parentMultiplicity.put(NodeType.MONITOR, NodeMultiplicity.ZERO);
         parentMultiplicity.put(NodeType.JUSTIFICATION, NodeMultiplicity.ZERO);
-        parentMultiplicity.put(NodeType.SYSTEM, NodeMultiplicity.ZERO); // Parameter
+        parentMultiplicity.put(NodeType.SYSTEM, NodeMultiplicity.ZERO); // Pattern
+        parentMultiplicity.put(NodeType.POLICY, NodeMultiplicity.ZERO); // Action
+        parentMultiplicity.put(NodeType.USERDEF005, NodeMultiplicity.ZERO); // Module
+        parentMultiplicity.put(NodeType.USERDEF001, NodeMultiplicity.ZERO); // External
         parentMultiplicity = addUnlimitedNodeMultiplicity(parentMultiplicity);
         nodeValidatorRule.setParentMultiplicity(parentMultiplicity);
 
@@ -325,7 +340,10 @@ public enum NodeType {
         childMultiplicity.put(NodeType.UNDEVELOPED, NodeMultiplicity.ZERO);
         childMultiplicity.put(NodeType.CONTEXT, NodeMultiplicity.ZERO_OR_MORE);
         childMultiplicity.put(NodeType.JUSTIFICATION, NodeMultiplicity.ZERO);
-        childMultiplicity.put(NodeType.SYSTEM, NodeMultiplicity.ZERO_OR_MORE); // Parameter
+        childMultiplicity.put(NodeType.SYSTEM, NodeMultiplicity.ZERO_OR_MORE); // Pattern
+        childMultiplicity.put(NodeType.POLICY, NodeMultiplicity.ZERO); // Action
+        childMultiplicity.put(NodeType.USERDEF005, NodeMultiplicity.ZERO_OR_MORE); // Module
+        childMultiplicity.put(NodeType.USERDEF001, NodeMultiplicity.ZERO_OR_MORE); // External
         childMultiplicity = addUnlimitedNodeMultiplicity(childMultiplicity);
         nodeValidatorRule.setChildMultiplicity(childMultiplicity);
 
@@ -338,7 +356,10 @@ public enum NodeType {
         parentMultiplicity.put(NodeType.CONTEXT, NodeMultiplicity.ZERO);
         parentMultiplicity.put(NodeType.MONITOR, NodeMultiplicity.ZERO);
         parentMultiplicity.put(NodeType.JUSTIFICATION, NodeMultiplicity.ZERO);
-        parentMultiplicity.put(NodeType.SYSTEM, NodeMultiplicity.ZERO); // Parameter
+        parentMultiplicity.put(NodeType.SYSTEM, NodeMultiplicity.ZERO); // Pattern
+        parentMultiplicity.put(NodeType.POLICY, NodeMultiplicity.ZERO); // Action
+        parentMultiplicity.put(NodeType.USERDEF005, NodeMultiplicity.ZERO); // Module
+        parentMultiplicity.put(NodeType.USERDEF001, NodeMultiplicity.ZERO); // External
         parentMultiplicity = addUnlimitedNodeMultiplicity(parentMultiplicity);
         nodeValidatorRule.setParentMultiplicity(parentMultiplicity);
 
@@ -363,7 +384,10 @@ public enum NodeType {
         childMultiplicity.put(NodeType.UNDEVELOPED, NodeMultiplicity.ZERO);
         childMultiplicity.put(NodeType.CONTEXT, NodeMultiplicity.ZERO);
         childMultiplicity.put(NodeType.JUSTIFICATION, NodeMultiplicity.ZERO);
-        childMultiplicity.put(NodeType.SYSTEM, NodeMultiplicity.ZERO);
+        childMultiplicity.put(NodeType.SYSTEM, NodeMultiplicity.ZERO); // Pattern
+        childMultiplicity.put(NodeType.POLICY, NodeMultiplicity.ZERO); // Action
+        childMultiplicity.put(NodeType.USERDEF005, NodeMultiplicity.ZERO_OR_MORE); // Module
+        childMultiplicity.put(NodeType.USERDEF001, NodeMultiplicity.ZERO_OR_MORE); // External
         childMultiplicity = addUnlimitedNodeMultiplicity(childMultiplicity);
         nodeValidatorRule.setChildMultiplicity(childMultiplicity);
 
@@ -376,7 +400,10 @@ public enum NodeType {
         parentMultiplicity.put(NodeType.CONTEXT, NodeMultiplicity.ZERO);
         parentMultiplicity.put(NodeType.MONITOR, NodeMultiplicity.ZERO);
         parentMultiplicity.put(NodeType.JUSTIFICATION, NodeMultiplicity.ZERO);
-        parentMultiplicity.put(NodeType.SYSTEM, NodeMultiplicity.ZERO); // Parameter
+        parentMultiplicity.put(NodeType.SYSTEM, NodeMultiplicity.ZERO); // Pattern
+        parentMultiplicity.put(NodeType.POLICY, NodeMultiplicity.ZERO); // Action
+        parentMultiplicity.put(NodeType.USERDEF005, NodeMultiplicity.ZERO); // Module
+        parentMultiplicity.put(NodeType.USERDEF001, NodeMultiplicity.ZERO); // External
         parentMultiplicity = addUnlimitedNodeMultiplicity(parentMultiplicity);
         nodeValidatorRule.setParentMultiplicity(parentMultiplicity);
 
@@ -401,7 +428,10 @@ public enum NodeType {
         childMultiplicity.put(NodeType.UNDEVELOPED, NodeMultiplicity.ZERO);
         childMultiplicity.put(NodeType.CONTEXT, NodeMultiplicity.ZERO);
         childMultiplicity.put(NodeType.JUSTIFICATION, NodeMultiplicity.ZERO);
-        childMultiplicity.put(NodeType.SYSTEM, NodeMultiplicity.ZERO);
+        childMultiplicity.put(NodeType.SYSTEM, NodeMultiplicity.ZERO); // Pattern
+        childMultiplicity.put(NodeType.POLICY, NodeMultiplicity.ZERO); // Action
+        childMultiplicity.put(NodeType.USERDEF005, NodeMultiplicity.ZERO); // Module
+        childMultiplicity.put(NodeType.USERDEF001, NodeMultiplicity.ZERO); // External
         childMultiplicity = addUnlimitedNodeMultiplicity(childMultiplicity);
         nodeValidatorRule.setChildMultiplicity(childMultiplicity);
 
@@ -414,7 +444,10 @@ public enum NodeType {
         parentMultiplicity.put(NodeType.CONTEXT, NodeMultiplicity.ZERO);
         parentMultiplicity.put(NodeType.MONITOR, NodeMultiplicity.ZERO_OR_ONE);
         parentMultiplicity.put(NodeType.JUSTIFICATION, NodeMultiplicity.ZERO);
-        parentMultiplicity.put(NodeType.SYSTEM, NodeMultiplicity.ZERO); // Parameter
+        parentMultiplicity.put(NodeType.SYSTEM, NodeMultiplicity.ZERO); // Pattern
+        parentMultiplicity.put(NodeType.POLICY, NodeMultiplicity.ZERO); // Action
+        parentMultiplicity.put(NodeType.USERDEF005, NodeMultiplicity.ZERO_OR_ONE); // Module
+        parentMultiplicity.put(NodeType.USERDEF001, NodeMultiplicity.ZERO_OR_ONE); // External
         parentMultiplicity = addUnlimitedNodeMultiplicity(parentMultiplicity);
         nodeValidatorRule.setParentMultiplicity(parentMultiplicity);
 
@@ -453,7 +486,10 @@ public enum NodeType {
         childMultiplicity.put(NodeType.UNDEVELOPED, NodeMultiplicity.ZERO);
         childMultiplicity.put(NodeType.CONTEXT, NodeMultiplicity.ZERO);
         childMultiplicity.put(NodeType.JUSTIFICATION, NodeMultiplicity.ZERO);
-        childMultiplicity.put(NodeType.SYSTEM, NodeMultiplicity.ZERO);
+        childMultiplicity.put(NodeType.SYSTEM, NodeMultiplicity.ZERO); // Pattern
+        childMultiplicity.put(NodeType.POLICY, NodeMultiplicity.ZERO); // Action
+        childMultiplicity.put(NodeType.USERDEF005, NodeMultiplicity.ZERO); // Module
+        childMultiplicity.put(NodeType.USERDEF001, NodeMultiplicity.ZERO); // External
         childMultiplicity = addUnlimitedNodeMultiplicity(childMultiplicity);
         nodeValidatorRule.setChildMultiplicity(childMultiplicity);
 
@@ -466,7 +502,10 @@ public enum NodeType {
         parentMultiplicity.put(NodeType.CONTEXT, NodeMultiplicity.ZERO);
         parentMultiplicity.put(NodeType.MONITOR, NodeMultiplicity.ZERO);
         parentMultiplicity.put(NodeType.JUSTIFICATION, NodeMultiplicity.ZERO);
-        parentMultiplicity.put(NodeType.SYSTEM, NodeMultiplicity.ZERO); // Parameter
+        parentMultiplicity.put(NodeType.SYSTEM, NodeMultiplicity.ZERO); // Pattern
+        parentMultiplicity.put(NodeType.POLICY, NodeMultiplicity.ZERO); // Action
+        parentMultiplicity.put(NodeType.USERDEF005, NodeMultiplicity.ZERO); // Module
+        parentMultiplicity.put(NodeType.USERDEF001, NodeMultiplicity.ZERO); // External
         parentMultiplicity = addUnlimitedNodeMultiplicity(parentMultiplicity);
         nodeValidatorRule.setParentMultiplicity(parentMultiplicity);
 
@@ -485,26 +524,27 @@ public enum NodeType {
     }
 
     /**
-     * Creates an unrestricted connection rule.
+     * Creates the connection rules for the Module/External node.
      * 
-     * @return an unrestricted connection rule.
+     * @return the connection rules for the Module/External node.
      */
-    private static NodeValidatorRule createUnlimimtedValidatorRule() {
+    private static NodeValidatorRule createModuleValidatorRule() {
 
         NodeValidatorRule nodeValidatorRule = new NodeValidatorRule();
 
         // creates the multiplicity for children. 
         Map<NodeType, NodeMultiplicity> childMultiplicity = new TreeMap<NodeType, NodeMultiplicity>();
-        childMultiplicity.put(NodeType.GOAL, NodeMultiplicity.ZERO_OR_MORE);
-        childMultiplicity.put(NodeType.STRATEGY, NodeMultiplicity.ZERO_OR_MORE);
-        childMultiplicity.put(NodeType.EVIDENCE, NodeMultiplicity.ZERO_OR_MORE);
-        childMultiplicity.put(NodeType.MONITOR, NodeMultiplicity.ZERO_OR_MORE);
-        childMultiplicity.put(NodeType.UNDEVELOPED,
-                NodeMultiplicity.ZERO_OR_MORE);
+        childMultiplicity.put(NodeType.GOAL, NodeMultiplicity.ZERO);
+        childMultiplicity.put(NodeType.STRATEGY, NodeMultiplicity.ZERO);
+        childMultiplicity.put(NodeType.EVIDENCE, NodeMultiplicity.ZERO);
+        childMultiplicity.put(NodeType.MONITOR, NodeMultiplicity.ZERO);
+        childMultiplicity.put(NodeType.UNDEVELOPED, NodeMultiplicity.ZERO);
         childMultiplicity.put(NodeType.CONTEXT, NodeMultiplicity.ZERO_OR_MORE);
-        childMultiplicity.put(NodeType.JUSTIFICATION,
-                NodeMultiplicity.ZERO_OR_MORE);
-        childMultiplicity.put(NodeType.SYSTEM, NodeMultiplicity.ZERO_OR_MORE);
+        childMultiplicity.put(NodeType.JUSTIFICATION, NodeMultiplicity.ZERO);
+        childMultiplicity.put(NodeType.SYSTEM, NodeMultiplicity.ZERO_OR_MORE); // Pattern
+        childMultiplicity.put(NodeType.POLICY, NodeMultiplicity.ZERO); // Action
+        childMultiplicity.put(NodeType.USERDEF005, NodeMultiplicity.ZERO); // Module
+        childMultiplicity.put(NodeType.USERDEF001, NodeMultiplicity.ZERO); // External
         childMultiplicity = addUnlimitedNodeMultiplicity(childMultiplicity);
         nodeValidatorRule.setChildMultiplicity(childMultiplicity);
 
@@ -521,7 +561,60 @@ public enum NodeType {
         parentMultiplicity.put(NodeType.MONITOR, NodeMultiplicity.ZERO_OR_MORE);
         parentMultiplicity.put(NodeType.JUSTIFICATION,
                 NodeMultiplicity.ZERO_OR_MORE);
-        parentMultiplicity.put(NodeType.SYSTEM, NodeMultiplicity.ZERO_OR_MORE);
+        parentMultiplicity.put(NodeType.SYSTEM, NodeMultiplicity.ZERO_OR_MORE); // Pattern
+        parentMultiplicity.put(NodeType.POLICY, NodeMultiplicity.ZERO_OR_MORE); // Action
+        parentMultiplicity.put(NodeType.USERDEF005, NodeMultiplicity.ZERO); // Module
+        parentMultiplicity.put(NodeType.USERDEF001, NodeMultiplicity.ZERO); // External
+        parentMultiplicity = addUnlimitedNodeMultiplicity(parentMultiplicity);
+        nodeValidatorRule.setParentMultiplicity(parentMultiplicity);
+
+        return nodeValidatorRule;
+    }
+
+    /**
+     * Creates an unrestricted connection rule.
+     * 
+     * @return an unrestricted connection rule.
+     */
+    private static NodeValidatorRule createUnlimitedValidatorRule() {
+
+        NodeValidatorRule nodeValidatorRule = new NodeValidatorRule();
+
+        // creates the multiplicity for children. 
+        Map<NodeType, NodeMultiplicity> childMultiplicity = new TreeMap<NodeType, NodeMultiplicity>();
+        childMultiplicity.put(NodeType.GOAL, NodeMultiplicity.ZERO_OR_MORE);
+        childMultiplicity.put(NodeType.STRATEGY, NodeMultiplicity.ZERO_OR_MORE);
+        childMultiplicity.put(NodeType.EVIDENCE, NodeMultiplicity.ZERO_OR_MORE);
+        childMultiplicity.put(NodeType.MONITOR, NodeMultiplicity.ZERO_OR_MORE);
+        childMultiplicity.put(NodeType.UNDEVELOPED,
+                NodeMultiplicity.ZERO_OR_MORE);
+        childMultiplicity.put(NodeType.CONTEXT, NodeMultiplicity.ZERO_OR_MORE);
+        childMultiplicity.put(NodeType.JUSTIFICATION,
+                NodeMultiplicity.ZERO_OR_MORE);
+        childMultiplicity.put(NodeType.SYSTEM, NodeMultiplicity.ZERO_OR_MORE); // Pattern
+        childMultiplicity.put(NodeType.POLICY, NodeMultiplicity.ZERO_OR_MORE); // Action
+        childMultiplicity.put(NodeType.USERDEF005, NodeMultiplicity.ZERO_OR_MORE); // Module
+        childMultiplicity.put(NodeType.USERDEF001, NodeMultiplicity.ZERO_OR_MORE); // External
+        childMultiplicity = addUnlimitedNodeMultiplicity(childMultiplicity);
+        nodeValidatorRule.setChildMultiplicity(childMultiplicity);
+
+        // creates the multiplicity for parents. 
+        Map<NodeType, NodeMultiplicity> parentMultiplicity = new HashMap<NodeType, NodeMultiplicity>();
+        parentMultiplicity.put(NodeType.GOAL, NodeMultiplicity.ZERO_OR_MORE);
+        parentMultiplicity
+                .put(NodeType.STRATEGY, NodeMultiplicity.ZERO_OR_MORE);
+        parentMultiplicity
+                .put(NodeType.EVIDENCE, NodeMultiplicity.ZERO_OR_MORE);
+        parentMultiplicity.put(NodeType.UNDEVELOPED,
+                NodeMultiplicity.ZERO_OR_MORE);
+        parentMultiplicity.put(NodeType.CONTEXT, NodeMultiplicity.ZERO_OR_MORE);
+        parentMultiplicity.put(NodeType.MONITOR, NodeMultiplicity.ZERO_OR_MORE);
+        parentMultiplicity.put(NodeType.JUSTIFICATION,
+                NodeMultiplicity.ZERO_OR_MORE);
+        parentMultiplicity.put(NodeType.SYSTEM, NodeMultiplicity.ZERO_OR_MORE); // Pattern
+        parentMultiplicity.put(NodeType.POLICY, NodeMultiplicity.ZERO_OR_MORE); // Action
+        parentMultiplicity.put(NodeType.USERDEF005, NodeMultiplicity.ZERO); // Module
+        parentMultiplicity.put(NodeType.USERDEF001, NodeMultiplicity.ZERO); // External
         parentMultiplicity = addUnlimitedNodeMultiplicity(parentMultiplicity);
         nodeValidatorRule.setParentMultiplicity(parentMultiplicity);
 
@@ -537,12 +630,9 @@ public enum NodeType {
     private static Map<NodeType, NodeMultiplicity> addUnlimitedNodeMultiplicity(
             Map<NodeType, NodeMultiplicity> multipilictyMap) {
 
-        multipilictyMap.put(NodeType.POLICY, NodeMultiplicity.ZERO_OR_MORE);
-        multipilictyMap.put(NodeType.USERDEF001, NodeMultiplicity.ZERO_OR_MORE);
         multipilictyMap.put(NodeType.USERDEF002, NodeMultiplicity.ZERO_OR_MORE);
         multipilictyMap.put(NodeType.USERDEF003, NodeMultiplicity.ZERO_OR_MORE);
         multipilictyMap.put(NodeType.USERDEF004, NodeMultiplicity.ZERO_OR_MORE);
-        multipilictyMap.put(NodeType.USERDEF005, NodeMultiplicity.ZERO_OR_MORE);
         multipilictyMap.put(NodeType.USERDEF006, NodeMultiplicity.ZERO_OR_MORE);
 
         return multipilictyMap;
@@ -571,7 +661,12 @@ public enum NodeType {
                 initValueMap.put(AttributeType.STAKEHOLDER, STRING_EMPTY);
                 initValueMap.put(AttributeType.RISK_ANALYSIS, STRING_EMPTY);
                 break;
-            case SYSTEM:
+            case SYSTEM: // Pattern
+                initValueMap.put(AttributeType.SUBTYPE, STRING_EMPTY);
+                initValueMap.put(AttributeType.LEAFNODE, STRING_EMPTY);
+                initValueMap.put(AttributeType.I, STRING_EMPTY);
+                initValueMap.put(AttributeType.J, STRING_EMPTY);
+                break;
             case STRATEGY:
             case EVIDENCE:
             case UNDEVELOPED:
@@ -605,6 +700,18 @@ public enum NodeType {
         commonInitValueMap.put(AttributeType.DESC, STRING_EMPTY);
         commonInitValueMap.put(AttributeType.ATTACHMENT, STRING_EMPTY);
         commonInitValueMap.put(AttributeType.STATUS, STRING_EMPTY);
+        commonInitValueMap.put(AttributeType.FLAG, STRING_EMPTY);
+        commonInitValueMap.put(AttributeType.RESPNAME, STRING_EMPTY);
+        commonInitValueMap.put(AttributeType.RESPADDRESS, STRING_EMPTY);
+        commonInitValueMap.put(AttributeType.RESPICON, STRING_EMPTY);
+        commonInitValueMap.put(AttributeType.RESPTIME, STRING_EMPTY);
+        commonInitValueMap.put(AttributeType.MESSAGE, STRING_EMPTY);
+        commonInitValueMap.put(AttributeType.REQUIREMENT, STRING_EMPTY);
+        commonInitValueMap.put(AttributeType.PARENT, STRING_EMPTY);
+        commonInitValueMap.put(AttributeType.REFSOURCE, STRING_EMPTY);
+        commonInitValueMap.put(AttributeType.PARAMETERDEFS, STRING_EMPTY);
+        commonInitValueMap.put(AttributeType.PARAMETERVALS, STRING_EMPTY);
+        commonInitValueMap.put(AttributeType.PARAMETERIZEDDESC, STRING_EMPTY);
         commonInitValueMap.put(AttributeType.USERDEF001, STRING_EMPTY);
         commonInitValueMap.put(AttributeType.USERDEF002, STRING_EMPTY);
         commonInitValueMap.put(AttributeType.USERDEF003, STRING_EMPTY);

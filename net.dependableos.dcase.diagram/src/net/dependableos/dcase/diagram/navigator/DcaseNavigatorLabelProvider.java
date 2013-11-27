@@ -129,64 +129,64 @@ public class DcaseNavigatorLabelProvider extends LabelProvider implements
         switch (DcaseVisualIDRegistry.getVisualID(view)) {
             case ArgumentEditPart.VISUAL_ID:
                 return getImage(
-                        "Navigator?Diagram?http://www.dependable-os.net/2010/03/dcase/?Argument", DcaseElementTypes.Argument_79); //$NON-NLS-1$
+                        "Navigator?Diagram?http://www.dependable-os.net/2013/11/dcase_model/?Argument", DcaseElementTypes.Argument_79); //$NON-NLS-1$
             case GoalEditPart.VISUAL_ID:
                 return getImage(
-                        "Navigator?TopLevelNode?http://www.dependable-os.net/2010/03/dcase/?Goal", DcaseElementTypes.Goal_1001); //$NON-NLS-1$
+                        "Navigator?TopLevelNode?http://www.dependable-os.net/2013/11/dcase_model/?Goal", DcaseElementTypes.Goal_1001); //$NON-NLS-1$
             case StrategyEditPart.VISUAL_ID:
                 return getImage(
-                        "Navigator?TopLevelNode?http://www.dependable-os.net/2010/03/dcase/?Strategy", DcaseElementTypes.Strategy_1002); //$NON-NLS-1$
+                        "Navigator?TopLevelNode?http://www.dependable-os.net/2013/11/dcase_model/?Strategy", DcaseElementTypes.Strategy_1002); //$NON-NLS-1$
             case EvidenceEditPart.VISUAL_ID:
                 return getImage(
-                        "Navigator?TopLevelNode?http://www.dependable-os.net/2010/03/dcase/?Evidence", DcaseElementTypes.Evidence_1003); //$NON-NLS-1$
+                        "Navigator?TopLevelNode?http://www.dependable-os.net/2013/11/dcase_model/?Evidence", DcaseElementTypes.Evidence_1003); //$NON-NLS-1$
             case MonitorEditPart.VISUAL_ID:
                 return getImage(
-                        "Navigator?TopLevelNode?http://www.dependable-os.net/2010/03/dcase/?Monitor", DcaseElementTypes.Monitor_1004); //$NON-NLS-1$
+                        "Navigator?TopLevelNode?http://www.dependable-os.net/2013/11/dcase_model/?Monitor", DcaseElementTypes.Monitor_1004); //$NON-NLS-1$
             case UndevelopedEditPart.VISUAL_ID:
                 return getImage(
-                        "Navigator?TopLevelNode?http://www.dependable-os.net/2010/03/dcase/?Undeveloped", DcaseElementTypes.Undeveloped_1005); //$NON-NLS-1$
+                        "Navigator?TopLevelNode?http://www.dependable-os.net/2013/11/dcase_model/?Undeveloped", DcaseElementTypes.Undeveloped_1005); //$NON-NLS-1$
             case ContextEditPart.VISUAL_ID:
                 return getImage(
-                        "Navigator?TopLevelNode?http://www.dependable-os.net/2010/03/dcase/?Context", DcaseElementTypes.Context_1006); //$NON-NLS-1$
+                        "Navigator?TopLevelNode?http://www.dependable-os.net/2013/11/dcase_model/?Context", DcaseElementTypes.Context_1006); //$NON-NLS-1$
             case JustificationEditPart.VISUAL_ID:
                 return getImage(
-                        "Navigator?TopLevelNode?http://www.dependable-os.net/2010/03/dcase/?Justification", DcaseElementTypes.Justification_1007); //$NON-NLS-1$
+                        "Navigator?TopLevelNode?http://www.dependable-os.net/2013/11/dcase_model/?Justification", DcaseElementTypes.Justification_1007); //$NON-NLS-1$
             case SystemEditPart.VISUAL_ID:
                 return getImage(
-                        "Navigator?TopLevelNode?http://www.dependable-os.net/2010/03/dcase/?System", DcaseElementTypes.System_1008); //$NON-NLS-1$
+                        "Navigator?TopLevelNode?http://www.dependable-os.net/2013/11/dcase_model/?Pattern", DcaseElementTypes.System_1008); //$NON-NLS-1$
             case PolicyEditPart.VISUAL_ID:
                 return getImage(
-                        "Navigator?TopLevelNode?http://www.dependable-os.net/2010/03/dcase/?Policy", DcaseElementTypes.Policy_1009); //$NON-NLS-1$
+                        "Navigator?TopLevelNode?http://www.dependable-os.net/2013/11/dcase_model/?Action", DcaseElementTypes.Policy_1009); //$NON-NLS-1$
             case Userdef001EditPart.VISUAL_ID:
                 return getImage(
-                        "Navigator?TopLevelNode?http://www.dependable-os.net/2010/03/dcase/?Userdef001", DcaseElementTypes.Userdef001_1010); //$NON-NLS-1$
+                        "Navigator?TopLevelNode?http://www.dependable-os.net/2013/11/dcase_model/?External", DcaseElementTypes.Userdef001_1010); //$NON-NLS-1$
             case Userdef002EditPart.VISUAL_ID:
                 return getImage(
-                        "Navigator?TopLevelNode?http://www.dependable-os.net/2010/03/dcase/?Userdef002", DcaseElementTypes.Userdef002_1011); //$NON-NLS-1$
+                        "Navigator?TopLevelNode?http://www.dependable-os.net/2013/11/dcase_model/?Userdef002", DcaseElementTypes.Userdef002_1011); //$NON-NLS-1$
             case Userdef003EditPart.VISUAL_ID:
                 return getImage(
-                        "Navigator?TopLevelNode?http://www.dependable-os.net/2010/03/dcase/?Userdef003", DcaseElementTypes.Userdef003_1012); //$NON-NLS-1$
+                        "Navigator?TopLevelNode?http://www.dependable-os.net/2013/11/dcase_model/?Userdef003", DcaseElementTypes.Userdef003_1012); //$NON-NLS-1$
             case Userdef004EditPart.VISUAL_ID:
                 return getImage(
-                        "Navigator?TopLevelNode?http://www.dependable-os.net/2010/03/dcase/?Userdef004", DcaseElementTypes.Userdef004_1013); //$NON-NLS-1$
+                        "Navigator?TopLevelNode?http://www.dependable-os.net/2013/11/dcase_model/?Assumption", DcaseElementTypes.Userdef004_1013); //$NON-NLS-1$
             case Userdef005EditPart.VISUAL_ID:
                 return getImage(
-                        "Navigator?TopLevelNode?http://www.dependable-os.net/2010/03/dcase/?Userdef005", DcaseElementTypes.Userdef005_1014); //$NON-NLS-1$
+                        "Navigator?TopLevelNode?http://www.dependable-os.net/2013/11/dcase_model/?Module", DcaseElementTypes.Userdef005_1014); //$NON-NLS-1$
             case Userdef006EditPart.VISUAL_ID:
                 return getImage(
-                        "Navigator?TopLevelNode?http://www.dependable-os.net/2010/03/dcase/?Userdef006", DcaseElementTypes.Userdef006_1015); //$NON-NLS-1$
+                        "Navigator?TopLevelNode?http://www.dependable-os.net/2013/11/dcase_model/?Contract", DcaseElementTypes.Userdef006_1015); //$NON-NLS-1$
             case DcaseLink001EditPart.VISUAL_ID:
                 return getImage(
-                        "Navigator?Link?http://www.dependable-os.net/2010/03/dcase/?DcaseLink001", DcaseElementTypes.DcaseLink001_3001); //$NON-NLS-1$
+                        "Navigator?Link?http://www.dependable-os.net/2013/11/dcase_model/?SupportedBy", DcaseElementTypes.DcaseLink001_3001); //$NON-NLS-1$
             case DcaseLink002EditPart.VISUAL_ID:
                 return getImage(
-                        "Navigator?Link?http://www.dependable-os.net/2010/03/dcase/?DcaseLink002", DcaseElementTypes.DcaseLink002_3002); //$NON-NLS-1$
+                        "Navigator?Link?http://www.dependable-os.net/2013/11/dcase_model/?InContextOf", DcaseElementTypes.DcaseLink002_3002); //$NON-NLS-1$
             case DcaseLink003EditPart.VISUAL_ID:
                 return getImage(
-                        "Navigator?Link?http://www.dependable-os.net/2010/03/dcase/?DcaseLink003", DcaseElementTypes.DcaseLink003_3003); //$NON-NLS-1$
+                        "Navigator?Link?http://www.dependable-os.net/2013/11/dcase_model/?Responsibility", DcaseElementTypes.DcaseLink003_3003); //$NON-NLS-1$
             case DcaseLink004EditPart.VISUAL_ID:
                 return getImage(
-                        "Navigator?Link?http://www.dependable-os.net/2010/03/dcase/?DcaseLink004", DcaseElementTypes.DcaseLink004_3004); //$NON-NLS-1$
+                        "Navigator?Link?http://www.dependable-os.net/2013/11/dcase_model/?DcaseLink004", DcaseElementTypes.DcaseLink004_3004); //$NON-NLS-1$
         }
         return getImage("Navigator?UnknownElement", null); //$NON-NLS-1$
     }

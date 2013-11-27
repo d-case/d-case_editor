@@ -49,10 +49,10 @@ public class DcaseEditPartLayoutComparator implements Comparator<Edge>,
     public int compare(Edge object1, Edge object2) {
 
         // gets the sibling order of the first edge.
-        int first001Value = getValueUserdef001(object1);
+        int first001Value = getValueSiblingOrder(object1);
 
         // gets the sibling order of the second edge.
-        int second001Value = getValueUserdef001(object2);
+        int second001Value = getValueSiblingOrder(object2);
 
         int n = compareValue(first001Value, second001Value);
         if (n == 0) {
@@ -161,23 +161,23 @@ public class DcaseEditPartLayoutComparator implements Comparator<Edge>,
      * @param edge the edge.
      * @return the value of the sibling order.
      */
-    private int getValueUserdef001(Edge edge) {
-        int udef001Value = 0;
+    private int getValueSiblingOrder(Edge edge) {
+        int siblingOrder = 0;
         ConnectionEditPart linkEditPart = (ConnectionEditPart) edge.data;
         ConnectorImpl connectLink = (ConnectorImpl) linkEditPart.getModel();
 
-        String userdef001Value = null;
+        String strValue = null;
         if (connectLink.getElement() != null) {
-            userdef001Value = ((BasicLink) connectLink.getElement())
-                    .getUserdef001();
+            strValue = ((BasicLink) connectLink.getElement())
+                    .getSiblingOrder();
         }
-        if (userdef001Value == null) {
-            udef001Value = NON_NUMBER;
+        if (strValue == null) {
+            siblingOrder = NON_NUMBER;
         } else {
-            udef001Value = NumberUtil.parseIntWithDefault(userdef001Value,
+            siblingOrder = NumberUtil.parseIntWithDefault(strValue,
                     NON_NUMBER);
         }
-        return udef001Value;
+        return siblingOrder;
     }
 
     /**

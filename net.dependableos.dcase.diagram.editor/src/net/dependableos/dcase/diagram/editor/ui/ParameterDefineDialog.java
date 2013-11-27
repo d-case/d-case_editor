@@ -116,7 +116,7 @@ public class ParameterDefineDialog extends Dialog implements
 	public void setNodeInfo(NodeInfo nodeInfo) {
 		this.nodeInfo = nodeInfo;
 		String userdef009 = (String) nodeInfo
-				.getAttribute(AttributeType.USERDEF009);
+				.getAttribute(AttributeType.PARAMETERDEFS);
 		parameterDataItems = ParameterDataItem
 				.getParamDatatypeListFromString(userdef009);
 	}
@@ -279,7 +279,7 @@ public class ParameterDefineDialog extends Dialog implements
 	@Override
 	protected void okPressed() {
 		String dataStr = ParameterDataItem.getSavedString(parameterDataItems);
-		nodeInfo.setAttribute(AttributeType.USERDEF009, dataStr);
+		nodeInfo.setAttribute(AttributeType.PARAMETERDEFS, dataStr);
 		super.okPressed();
 		parameterDataList = null;
 	}

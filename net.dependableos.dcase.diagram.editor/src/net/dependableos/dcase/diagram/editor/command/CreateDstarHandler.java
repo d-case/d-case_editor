@@ -13,6 +13,7 @@ import net.dependableos.dcase.diagram.common.util.Messages;
 import net.dependableos.dcase.diagram.common.util.MessageTypeImpl;
 import net.dependableos.dcase.diagram.common.util.ModelUtil;
 import net.dependableos.dcase.diagram.part.DcaseDiagramEditorUtil;
+import net.dependableos.dcase.diagram.part.PatternUtil;
 import net.dependableos.dcase.diagram.edit.parts.ArgumentEditPart;
 import net.dependableos.dcase.diagram.edit.parts.custom.DcaseNodeEditPart;
 import net.dependableos.dcase.diagram.editor.common.util.DcaseEditorUtil;
@@ -33,7 +34,6 @@ import org.eclipse.core.commands.operations.OperationHistoryFactory;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -81,18 +81,16 @@ public class CreateDstarHandler extends AbstractEditPartHandler {
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		ArgumentEditPart argumentEditPart = DcaseEditorUtil
 				.getCurrentArgumentEditPart();
+		IFile currentFile = DcaseEditorUtil.getModelFile(argumentEditPart);
 		Diagram currentDiagram = DcaseEditorUtil.getCurrentDiagram();
 		TransactionalEditingDomain currentDomain = GMFEditingDomainFactory.INSTANCE
 				.getEditingDomain(currentDiagram.eResource().getResourceSet());
 
 		// *** Get d* file names ***
-		String moduleName = ModuleUtil.getMainModuleName();
-		IFile newDiagramFile = ResourcesPlugin.getWorkspace().getRoot()
-				.getFile(ModuleUtil.getDstarPath(moduleName));
-		IFile newModelFile = ResourcesPlugin.getWorkspace().getRoot()
-				.getFile(ModuleUtil.getDstarModelPath(moduleName));
-		final IPath newDiagramPath = newDiagramFile.getFullPath();
-		final IPath newModelPath = newModelFile.getFullPath();
+		final IFile newDiagramFile = ResourcesPlugin.getWorkspace().getRoot()
+				.getFile(PatternUtil.getDstarPath(currentFile));
+		final IFile newModelFile = ResourcesPlugin.getWorkspace().getRoot()
+				.getFile(PatternUtil.getDstarModelPath(currentFile));
 
 		// *** Create new Module diagram ***
 		// create diagram and model file
@@ -101,21 +99,25 @@ public class CreateDstarHandler extends AbstractEditPartHandler {
 			protected CommandResult doExecuteWithResult(
 					IProgressMonitor monitor, IAdaptable info)
 					throws ExecutionException {
-				URI diagramURI = URI.createPlatformResourceURI(
-						newDiagramPath.toOSString(), false);
-				URI modelURI = URI.createPlatformResourceURI(
-						newModelPath.toOSString(), false);
-				Resource diagram = DcaseDiagramEditorUtil.createDiagram(
-						diagramURI, modelURI, monitor);
-				try {
-					DcaseDiagramEditorUtil.openDiagram(diagram);
-				} catch (Exception e) {
-					MessageWriter.writeMessageToConsole(
-							Messages.CreateModuleHandler_2,
-							MessageTypeImpl.MODULE_FILE_CREATE_FAILED);
-					throw new DcaseRuntimeException(
-							Messages.CreateModuleHandler_2, null, null, 0,
-							MessageTypeImpl.MODULE_FILE_CREATE_FAILED);
+				if (newDiagramFile.exists()) {
+					PatternUtil.openModuleEditor(newDiagramFile);
+				} else {
+                    URI diagramURI = URI.createPlatformResourceURI(
+                    		newDiagramFile.getFullPath().toOSString(), false);
+                    URI modelURI = URI.createPlatformResourceURI(
+                    		newModelFile.getFullPath().toOSString(), false);
+                    Resource diagram = DcaseDiagramEditorUtil.createDiagram(
+                    		diagramURI, modelURI, monitor);
+                    try {
+                    	DcaseDiagramEditorUtil.openDiagram(diagram);
+                    } catch (Exception e) {
+                    	MessageWriter.writeMessageToConsole(
+                    			Messages.CreateModuleHandler_2,
+                    			MessageTypeImpl.MODULE_FILE_CREATE_FAILED);
+                    	throw new DcaseRuntimeException(
+                    			Messages.CreateModuleHandler_2, null, null, 0,
+                    			MessageTypeImpl.MODULE_FILE_CREATE_FAILED);
+                    }
 				}
 				return CommandResult.newOKCommandResult();
 			}
@@ -155,7 +157,7 @@ public class CreateDstarHandler extends AbstractEditPartHandler {
 			if (attachmentStr != null && attachmentStr.length() > 0) {
 				oldLinkMap.put(linkName, attachmentStr);
 			}
-			// save the link
+			// save the link (if link is added automatically, userdef012 is not empty...
 			if (link.getUserdef012() == null
 					|| link.getUserdef012().length() == 0) {
 				handLinkSet.add(linkName);
@@ -179,9 +181,12 @@ public class CreateDstarHandler extends AbstractEditPartHandler {
 				Userdef005 newNode = DcaseFactory.eINSTANCE.createUserdef005();
 				IFile moduleModelFile = ResourcesPlugin.getWorkspace()
 						.getRoot().getFile(ModuleUtil.getModelPath(name));
-				EObject aobj = ModelUtil.getModel(moduleModelFile);
+				EObject aobj = ModelUtil.getModel(moduleModelFile, true);
 				if (aobj instanceof Argument) {
-					newNode.setUserdef012(((Argument) aobj).getUserdef012());
+					newNode.setRespName(((Argument) aobj).getRespName());
+					newNode.setRespAddress(((Argument) aobj).getRespAddress());
+					newNode.setRespIcon(((Argument) aobj).getRespIcon());
+					newNode.setRespTime(((Argument) aobj).getRespTime());
 					newNode.setDesc(ModuleUtil
 							.getResponsibilityName((Argument) aobj));
 				}
@@ -278,7 +283,8 @@ public class CreateDstarHandler extends AbstractEditPartHandler {
 				.execute(addCmd);
 
 		// *** save diagram
-		ModuleUtil.saveModuleEditor(moduleName, false);
+		ModuleUtil.saveModuleEditor(DcaseEditorUtil.getDiagramFile(newDiagram));
+		//ModuleUtil.saveModuleEditor(ModuleUtil.getMainModuleName(), false);
 
 		return null;
 	}

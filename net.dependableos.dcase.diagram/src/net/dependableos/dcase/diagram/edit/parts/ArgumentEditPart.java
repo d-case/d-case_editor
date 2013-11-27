@@ -165,7 +165,7 @@ public class ArgumentEditPart extends DiagramEditPart {
     			EAttribute attr = (EAttribute)feature;
             	Object nobj = event.getNotifier();
             	if(nobj instanceof Argument) {
-            		if(attr.getName().equals("userdef007")) {
+            		if(attr.getName().equals("parameterVals")) { //$NON-NLS-1$
             			notifyRootNodes();
             		}
             	}

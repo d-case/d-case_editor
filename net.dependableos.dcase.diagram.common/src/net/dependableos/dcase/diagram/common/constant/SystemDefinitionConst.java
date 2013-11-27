@@ -75,19 +75,19 @@ public final class SystemDefinitionConst {
     public static final String JUSTIFICATION_NAME = "Justification"; //$NON-NLS-1$
 
     /**
-     * The string that represents the type name of the System node.
+     * The string that represents the type name of the Pattern node.
      */
-    public static final String SYSTEM_NAME = "System"; //$NON-NLS-1$
+    public static final String SYSTEM_NAME = "Pattern"; //$NON-NLS-1$
 
     /**
-     * The string that represents the type name of the Policy node.
+     * The string that represents the type name of the Action node.
      */
-    public static final String POLICY_NAME = "Policy"; //$NON-NLS-1$
+    public static final String POLICY_NAME = "Action"; //$NON-NLS-1$
 
     /**
-     * The string that represents the type name of the Userdef001 node.
+     * The string that represents the type name of the External node.
      */
-    public static final String USERDEF001_NAME = "Userdef001"; //$NON-NLS-1$
+    public static final String USERDEF001_NAME = "External"; //$NON-NLS-1$
 
     /**
      * The string that represents the type name of the Userdef002 node.
@@ -165,9 +165,19 @@ public final class SystemDefinitionConst {
     public static final String XSL_TO_GMF_PATH = "/resource/dcase_to_gmf.xsl";   //$NON-NLS-1$
 
     /**
+     * The path to the file to translate to New GMF model from Old GMF model.
+     */
+    public static final String XSL_TO_NEWGMF_PATH = "/resource/old_to_new.xsl";   //$NON-NLS-1$
+
+    /**
      * The path to the file to translate to ARM from GMF model.
      */
     public static final String XSL_TO_ARM_PATH = "/resource/gmf_to_arm.xsl";   //$NON-NLS-1$
+
+    /**
+     * The path to the file to translate to SACM from GMF model.
+     */
+    public static final String XSL_TO_SACM_PATH = "/resource/gmf_to_sacm.xsl";   //$NON-NLS-1$
 
     /**
      * The file extension of EPS. 

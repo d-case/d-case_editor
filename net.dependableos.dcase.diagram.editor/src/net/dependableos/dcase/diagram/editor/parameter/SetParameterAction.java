@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 
+
+
 import net.dependableos.dcase.Argument;
 import net.dependableos.dcase.BasicNode;
 import net.dependableos.dcase.diagram.common.command.ChangeBasicNodePropertyTransactionCommand;
@@ -21,6 +23,7 @@ import net.dependableos.dcase.diagram.editor.message.Menus;
 import net.dependableos.dcase.diagram.editor.message.Messages;
 import net.dependableos.dcase.diagram.editor.verifier.ParameterDialog;
 import net.dependableos.dcase.diagram.part.DcaseDiagramEditor;
+import net.dependableos.dcase.provider.DcaseEditPlugin;
 
 import org.eclipse.gmf.runtime.common.core.command.ICommand;
 import org.eclipse.gmf.runtime.diagram.ui.commands.ICommandProxy;
@@ -40,6 +43,11 @@ import org.eclipse.ui.PlatformUI;
  */
 public class SetParameterAction implements IObjectActionDelegate {
 
+	/**
+	 * the key of Parameter subtype.
+	 */
+	private static final String SUBTYPE_PARAMETER = "_UI_System_subType_param"; //$NON-NLS-1$
+	
     /**
      * the workbench.
      */
@@ -99,7 +107,7 @@ public class SetParameterAction implements IObjectActionDelegate {
             ParameterDialog dialog = new ParameterDialog(getShell());
             dialog.setNodeInfo(nodeInfo);
             if (dialog.getParameters().length == 0) {
-                String userdef009 = (String) nodeInfo.getAttribute(AttributeType.USERDEF009);
+                String userdef009 = (String) nodeInfo.getAttribute(AttributeType.PARAMETERDEFS);
                 String attributeName = ""; //$NON-NLS-1$
                 if (basicNode instanceof Argument) {
                     attributeName = "Global Parameters"; //$NON-NLS-1$
@@ -122,8 +130,10 @@ public class SetParameterAction implements IObjectActionDelegate {
                 // creates a map of the attributes to update and initializes it.
                 Map<AttributeType, Object> attributeMap = new HashMap<AttributeType, Object>();
                 // sets attribute values.
-                attributeMap.put(AttributeType.USERDEF007, nodeInfo
-                        .getAttribute(AttributeType.USERDEF007));
+                attributeMap.put(AttributeType.PARAMETERVALS, nodeInfo
+                        .getAttribute(AttributeType.PARAMETERVALS));
+                attributeMap.put(AttributeType.SUBTYPE,
+						DcaseEditPlugin.getPlugin().getString(SUBTYPE_PARAMETER));
                 // creates a command to update attribute values and initializes it.
                 ICommand changeCommand = new ChangeBasicNodePropertyTransactionCommand(
                         argumentEditPart.getEditingDomain(),

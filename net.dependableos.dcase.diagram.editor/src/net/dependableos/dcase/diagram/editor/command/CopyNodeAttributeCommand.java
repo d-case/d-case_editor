@@ -174,6 +174,18 @@ public class CopyNodeAttributeCommand extends AbstractTransactionalCommand {
         attrMap.put(AttributeType.ATTACHMENT, oldNode.getAttachment());
         attrMap.put(AttributeType.DESC, oldNode.getDesc());
         attrMap.put(AttributeType.STATUS, oldNode.getStatus());
+        attrMap.put(AttributeType.FLAG, oldNode.getFlag());
+        attrMap.put(AttributeType.RESPNAME, oldNode.getRespName());
+        attrMap.put(AttributeType.RESPADDRESS, oldNode.getRespAddress());
+        attrMap.put(AttributeType.RESPICON, oldNode.getRespIcon());
+        attrMap.put(AttributeType.RESPTIME, oldNode.getRespTime());
+        attrMap.put(AttributeType.MESSAGE, oldNode.getMessage());
+        attrMap.put(AttributeType.REQUIREMENT, oldNode.getRequirement());
+        attrMap.put(AttributeType.PARENT, oldNode.getParent());
+        attrMap.put(AttributeType.REFSOURCE, oldNode.getRefSource());
+        attrMap.put(AttributeType.PARAMETERDEFS, oldNode.getParameterDefs());
+        attrMap.put(AttributeType.PARAMETERVALS, oldNode.getParameterVals());
+        attrMap.put(AttributeType.PARAMETERIZEDDESC, oldNode.getParameterizedDesc());
         attrMap.put(AttributeType.USERDEF001, oldNode.getUserdef001());
         attrMap.put(AttributeType.USERDEF002, oldNode.getUserdef002());
         attrMap.put(AttributeType.USERDEF003, oldNode.getUserdef003());
@@ -231,6 +243,13 @@ public class CopyNodeAttributeCommand extends AbstractTransactionalCommand {
             case MONITOR:
                 Monitor monitor = (Monitor) oldNode;
                 append(sb, "Is Normal", Boolean.toString(monitor.isIsNormal())); //$NON-NLS-1$
+                break;
+            case SYSTEM:
+                net.dependableos.dcase.System system = (net.dependableos.dcase.System) oldNode;
+                append(sb, "SubType", system.getSubType()); //$NON-NLS-1$
+                append(sb, "LeafNode", system.getLeafNode()); //$NON-NLS-1$
+                append(sb, "i", Integer.toString(system.getI())); //$NON-NLS-1$
+                append(sb, "j", Integer.toString(system.getJ())); //$NON-NLS-1$
                 break;
             default:
         }

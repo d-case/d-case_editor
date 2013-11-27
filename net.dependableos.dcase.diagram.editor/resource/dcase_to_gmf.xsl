@@ -7,8 +7,8 @@
 <!--Transforms D-Case to GMF-->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                xmlns:dcase="http://www.dependable-os.net/2010/03/dcase/"
-                xmlns:dcase_std="http://www.dependable-os.net/2010/06/dcase"
+                xmlns:dcase="http://www.dependable-os.net/2013/11/dcase_model/"
+                xmlns:dcase_std="http://www.dependable-os.net/2013/11/dcase"
                 xmlns:dfunc="net.dependableos.dcase.diagram.common.xml.XsltExtFunctionUtil"
                 xmlns:dre="http://www.dependable-os.net/dre"
                 exclude-result-prefixes="dcase_std"
@@ -29,7 +29,7 @@
     <xsl:apply-templates select="dcase_std:nodes/dcase_std:node"/>
     <xsl:apply-templates select="dcase_std:links/dcase_std:link">
       <xsl:sort select="./@source" data-type="text" order="ascending"/>
-      <xsl:sort select="number(./dcase_std:properties/dcase_std:property[@name='Userdef001']/@value)" data-type="number" order="ascending"/>
+      <xsl:sort select="number(./dcase_std:properties/dcase_std:property[@name='SiblingOrder']/@value)" data-type="number" order="ascending"/>
     </xsl:apply-templates>
   </xsl:template>
 
@@ -45,14 +45,14 @@
           <xsl:when test="@type='Context'">dcase:Context</xsl:when>
           <xsl:when test="@type='Monitor'">dcase:Monitor</xsl:when>
           <xsl:when test="@type='Justification'">dcase:Justification</xsl:when>
-          <xsl:when test="@type='System'">dcase:System</xsl:when>
-          <xsl:when test="@type='Policy'">dcase:Policy</xsl:when>
-          <xsl:when test="@type='Userdef001'">dcase:Userdef001</xsl:when>
           <xsl:when test="@type='Userdef002'">dcase:Userdef002</xsl:when>
           <xsl:when test="@type='Userdef003'">dcase:Userdef003</xsl:when>
-          <xsl:when test="@type='Assumption'">dcase:Userdef004</xsl:when>
-          <xsl:when test="@type='Module'">dcase:Userdef005</xsl:when>
-          <xsl:when test="@type='Contract'">dcase:Userdef006</xsl:when>
+          <xsl:when test="@type='Assumption'">dcase:Assumption</xsl:when>
+          <xsl:when test="@type='Module'">dcase:Module</xsl:when>
+          <xsl:when test="@type='Contract'">dcase:Contract</xsl:when>
+          <xsl:when test="@type='Action'">dcase:Action</xsl:when>
+          <xsl:when test="@type='External'">dcase:External</xsl:when>
+          <xsl:when test="@type='Pattern'">dcase:Pattern</xsl:when>
           <xsl:otherwise>undefined</xsl:otherwise>
         </xsl:choose>
       </xsl:attribute>
@@ -66,9 +66,9 @@
     <rootBasicLink>
       <xsl:attribute name="xsi:type">
         <xsl:choose>
-          <xsl:when test="@type='SupportedBy'">dcase:DcaseLink001</xsl:when>
-          <xsl:when test="@type='InContextOf'">dcase:DcaseLink002</xsl:when>
-          <xsl:when test="@type='Link003'">dcase:DcaseLink003</xsl:when>
+          <xsl:when test="@type='SupportedBy'">dcase:SupportedBy</xsl:when>
+          <xsl:when test="@type='InContextOf'">dcase:InContextOf</xsl:when>
+          <xsl:when test="@type='Responsibility'">dcase:Responsibility</xsl:when>
           <xsl:when test="@type='Link004'">dcase:DcaseLink004</xsl:when>
          <xsl:otherwise>dcase:DcaseLink001</xsl:otherwise>
         </xsl:choose>
@@ -83,6 +83,12 @@
     <xsl:apply-templates select="@id|@name|@status" mode="basic"/>
     <xsl:call-template name="Description"/>
     <xsl:apply-templates select="dcase_std:properties/dcase_std:property"></xsl:apply-templates>
+    <xsl:if test="dcase_std:responsibility!='NaN'">
+      <xsl:apply-templates select="dcase_std:responsibility"/>
+    </xsl:if>
+    <xsl:if test="dcase_std:parameters!='NaN'">
+      <xsl:apply-templates select="dcase_std:parameters"/>
+    </xsl:if>
     <xsl:if test="dre:d-script!='NaN'">
       <xsl:apply-templates select="dre:d-script"/>
     </xsl:if>
@@ -226,6 +232,61 @@
           <xsl:value-of select="@value"/>
         </xsl:attribute>
       </xsl:when>
+      <xsl:when test="@name='Message'">
+        <xsl:attribute name="message">
+          <xsl:value-of select="@value"/>
+        </xsl:attribute>
+      </xsl:when>
+      <xsl:when test="@name='Requirement'">
+        <xsl:attribute name="requirement">
+          <xsl:value-of select="@value"/>
+        </xsl:attribute>
+      </xsl:when>
+      <xsl:when test="@name='ParameterizedDesc'">
+        <xsl:attribute name="parameterizedDesc">
+          <xsl:value-of select="@value"/>
+        </xsl:attribute>
+      </xsl:when>
+      <xsl:when test="@name='Parent'">
+        <xsl:attribute name="parent">
+          <xsl:value-of select="@value"/>
+        </xsl:attribute>
+      </xsl:when>
+      <xsl:when test="@name='RefSource'">
+        <xsl:attribute name="refSource">
+          <xsl:value-of select="@value"/>
+        </xsl:attribute>
+      </xsl:when>
+      <xsl:when test="@name='Flag'">
+        <xsl:attribute name="flag">
+          <xsl:value-of select="@value"/>
+        </xsl:attribute>
+      </xsl:when>
+      <xsl:when test="@name='LeafNode'">
+        <xsl:attribute name="leafNode">
+          <xsl:value-of select="@value"/>
+        </xsl:attribute>
+      </xsl:when>
+      <xsl:when test="@name='I'">
+        <xsl:attribute name="i">
+          <xsl:value-of select="@value"/>
+        </xsl:attribute>
+      </xsl:when>
+      <xsl:when test="@name='J'">
+        <xsl:attribute name="j">
+          <xsl:value-of select="@value"/>
+        </xsl:attribute>
+      </xsl:when>
+      <xsl:when test="@name='SiblingOrder'">
+        <xsl:attribute name="siblingOrder">
+          <xsl:value-of select="@value"/>
+        </xsl:attribute>
+      </xsl:when>
+      <xsl:when test="@name='ValidUntil'">
+        <xsl:attribute name="validUntil">
+          <xsl:value-of select="@value"/>
+        </xsl:attribute>
+      </xsl:when>
     </xsl:choose>
   </xsl:template>
 
@@ -248,6 +309,35 @@
         <xsl:value-of select="$num"/>
       </xsl:otherwise>
     </xsl:choose>
+  </xsl:template>
+
+  <!--Responsibility-->
+  <xsl:template match="dcase_std:responsibility">
+    <xsl:if test="@name">
+      <xsl:attribute name="respName">
+        <xsl:value-of select="@name"/>
+      </xsl:attribute>
+    </xsl:if>
+    <xsl:if test="@address">
+      <xsl:attribute name="respAddress">
+        <xsl:value-of select="@address"/>
+      </xsl:attribute>
+    </xsl:if>
+    <xsl:if test="@icon">
+      <xsl:attribute name="respIcon">
+        <xsl:value-of select="@icon"/>
+      </xsl:attribute>
+    </xsl:if>
+  </xsl:template>
+  
+  <!-- d-script -->
+  <xsl:template match="dcase_std:parameters" >
+    <xsl:attribute name="parameterVals">
+      <xsl:value-of select="dfunc:parameterizeVals(.)"/>
+    </xsl:attribute>
+    <xsl:attribute name="parameterDefs">
+      <xsl:value-of select="dfunc:parameterizeDefs(.)"/>
+    </xsl:attribute>
   </xsl:template>
 
   <!-- d-script -->

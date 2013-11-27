@@ -141,6 +141,9 @@ public final class Messages extends NLS {
     public static String XmlConversionToArmWizardPage_0;
     public static String XmlConversionToArmWizardPage_1;
     public static String XmlConversionToArmWizardPage_2;
+    public static String XmlConversionToSacmWizardPage_0;
+    public static String XmlConversionToSacmWizardPage_1;
+    public static String XmlConversionToSacmWizardPage_2;
     public static String XmlConversionToDcaseWizard_0;
     public static String XmlConversionToDcaseWizard_1;
     public static String XmlConversionToDcaseWizard_2;
@@ -149,6 +152,10 @@ public final class Messages extends NLS {
     public static String XmlConversionToGmfWizard_1;
     public static String XmlConversionToGmfWizard_2;
     public static String XmlConversionToGmfWizardPage_0;
+    public static String XmlConversionToNewGmfWizard_0;
+    public static String XmlConversionToNewGmfWizard_1;
+    public static String XmlConversionToNewGmfWizard_2;
+    public static String XmlConversionToNewGmfWizardPage_0;
     public static String XmlConversionToTextWizardPage_0;
     public static String XmlConversionToTextWizardPage_1;
     public static String XmlConversionToTextWizardPage_2;
@@ -216,6 +223,14 @@ public final class Messages extends NLS {
     public static String NewModuleInputDialog_Label;
     public static String CreateModuleDialog_1;
     public static String CreateModuleDialog_2;
+    public static String ModuleView_Label0;
+    public static String ModuleView_Label1;
+    public static String ModuleView_Label2;
+    public static String ModuleView_Label3;
+    public static String ModuleView_Title0;
+    public static String ModuleView_Title1;
+    public static String ModuleView_Tooltip0;
+    public static String ModuleView_Tooltip1;
 
     static {
         // initialize resource bundle

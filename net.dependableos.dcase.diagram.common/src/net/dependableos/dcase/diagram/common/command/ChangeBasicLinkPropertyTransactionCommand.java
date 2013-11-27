@@ -88,6 +88,12 @@ public class ChangeBasicLinkPropertyTransactionCommand extends
                 case STATUS:
                     basicLink.setStatus((String) value);
                     break;
+                case SIBLINGORDER:
+                    basicLink.setSiblingOrder((String) value);
+                    break;
+                case MESSAGE:
+                    basicLink.setMessage((String) value);
+                    break;
                 case USERDEF001:
                     basicLink.setUserdef001((String) value);
                     break;

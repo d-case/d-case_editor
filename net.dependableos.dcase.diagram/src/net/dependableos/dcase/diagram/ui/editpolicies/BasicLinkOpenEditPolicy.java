@@ -4,14 +4,13 @@
 package net.dependableos.dcase.diagram.ui.editpolicies;
 
 import net.dependableos.dcase.BasicLink;
+import net.dependableos.dcase.diagram.part.PatternUtil;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.emf.ecore.xmi.XMLResource;
-import org.eclipse.emf.workspace.util.WorkspaceSynchronizer;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
@@ -59,7 +58,7 @@ public class BasicLinkOpenEditPolicy extends OpenEditPolicy {
 		String moduleName = link.getAttachment();
 		// truncate icon string...
 		if (moduleName != null && moduleName.length() > 0) {
-			String moduleArray[] = moduleName.split(";"); //$NON-NLS-1$
+			String moduleArray[] = moduleName.split(PatternUtil.getResponsibilitySeparatorName());
 			if (moduleArray.length > 1) {
 				moduleName = moduleArray[0];
 			}
@@ -71,10 +70,7 @@ public class BasicLinkOpenEditPolicy extends OpenEditPolicy {
 		// get module file
 		IWorkbenchPage workbenchPage = PlatformUI.getWorkbench()
 				.getActiveWorkbenchWindow().getActivePage();
-		XMLResource resource = (XMLResource) link.eResource();
-		IFile modelFile = WorkspaceSynchronizer.getFile(resource);
-		IPath diagramPath = modelFile.getParent().getFullPath()
-				.append(moduleName).addFileExtension("dcase_diagram"); //$NON-NLS-1$
+		IPath diagramPath = PatternUtil.getDiagramPath(moduleName);
 		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 		IFile diagramFile = root.getFile(new Path(diagramPath.toOSString()));
 

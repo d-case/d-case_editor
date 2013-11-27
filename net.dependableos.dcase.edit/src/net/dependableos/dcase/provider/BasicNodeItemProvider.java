@@ -67,6 +67,18 @@ public class BasicNodeItemProvider
             addDescPropertyDescriptor(object);
             addAttachmentPropertyDescriptor(object);
             addStatusPropertyDescriptor(object);
+            addFlagPropertyDescriptor(object);
+            addRespNamePropertyDescriptor(object);
+            addRespAddressPropertyDescriptor(object);
+            addRespIconPropertyDescriptor(object);
+            addRespTimePropertyDescriptor(object);
+            addMessagePropertyDescriptor(object);
+            addRequirementPropertyDescriptor(object);
+            addParentPropertyDescriptor(object);
+            addRefSourcePropertyDescriptor(object);
+            addParameterDefsPropertyDescriptor(object);
+            addParameterValsPropertyDescriptor(object);
+            addParameterizedDescPropertyDescriptor(object);
             addUserdef001PropertyDescriptor(object);
             addUserdef002PropertyDescriptor(object);
             addUserdef003PropertyDescriptor(object);
@@ -166,6 +178,270 @@ public class BasicNodeItemProvider
                  getString("_UI_BasicNode_status_feature"),
                  getString("_UI_PropertyDescriptor_description", "_UI_BasicNode_status_feature",  ((BasicNode)object).getTypeName()),
                  DcasePackage.Literals.BASIC_NODE__STATUS,
+                 true,
+                 false,
+                 false,
+                 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+                 null,
+                 null));
+    }
+
+    /**
+     * This adds a property descriptor for the Flag feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated NOT
+     */
+    protected void addFlagPropertyDescriptor(Object object) {
+        itemPropertyDescriptors.add
+            (createItemPropertyDescriptor
+                (((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+                 getResourceLocator(),
+                 getString("_UI_BasicNode_flag_feature"),
+                 getString("_UI_PropertyDescriptor_description", "_UI_BasicNode_flag_feature",  ((BasicNode)object).getTypeName()),
+                 DcasePackage.Literals.BASIC_NODE__FLAG,
+                 true,
+                 false,
+                 false,
+                 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+                 null,
+                 null));
+    }
+
+    /**
+     * This adds a property descriptor for the RespName feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated NOT
+     */
+    protected void addRespNamePropertyDescriptor(Object object) {
+        itemPropertyDescriptors.add
+            (createItemPropertyDescriptor
+                (((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+                 getResourceLocator(),
+                 getString("_UI_BasicNode_respName_feature"),
+                 getString("_UI_PropertyDescriptor_description", "_UI_BasicNode_respName_feature",  ((BasicNode)object).getTypeName()),
+                 DcasePackage.Literals.BASIC_NODE__RESPNAME,
+                 true,
+                 false,
+                 false,
+                 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+                 null,
+                 null));
+    }
+
+    /**
+     * This adds a property descriptor for the RespAddress feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated NOT
+     */
+    protected void addRespAddressPropertyDescriptor(Object object) {
+        itemPropertyDescriptors.add
+            (createItemPropertyDescriptor
+                (((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+                 getResourceLocator(),
+                 getString("_UI_BasicNode_respAddress_feature"),
+                 getString("_UI_PropertyDescriptor_description", "_UI_BasicNode_respAddress_feature",  ((BasicNode)object).getTypeName()),
+                 DcasePackage.Literals.BASIC_NODE__RESPADDRESS,
+                 true,
+                 false,
+                 false,
+                 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+                 null,
+                 null));
+    }
+
+    /**
+     * This adds a property descriptor for the RespIcon feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated NOT
+     */
+    protected void addRespIconPropertyDescriptor(Object object) {
+        itemPropertyDescriptors.add
+            (createItemPropertyDescriptor
+                (((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+                 getResourceLocator(),
+                 getString("_UI_BasicNode_respIcon_feature"),
+                 getString("_UI_PropertyDescriptor_description", "_UI_BasicNode_respIcon_feature",  ((BasicNode)object).getTypeName()),
+                 DcasePackage.Literals.BASIC_NODE__RESPICON,
+                 true,
+                 false,
+                 false,
+                 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+                 null,
+                 null));
+    }
+
+    /**
+     * This adds a property descriptor for the RespTime feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated NOT
+     */
+    protected void addRespTimePropertyDescriptor(Object object) {
+        itemPropertyDescriptors.add
+            (createItemPropertyDescriptor
+                (((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+                 getResourceLocator(),
+                 getString("_UI_BasicNode_respTime_feature"),
+                 getString("_UI_PropertyDescriptor_description", "_UI_BasicNode_respTime_feature",  ((BasicNode)object).getTypeName()),
+                 DcasePackage.Literals.BASIC_NODE__RESPTIME,
+                 true,
+                 false,
+                 false,
+                 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+                 null,
+                 null));
+    }
+
+    /**
+     * This adds a property descriptor for the Message feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated NOT
+     */
+    protected void addMessagePropertyDescriptor(Object object) {
+        itemPropertyDescriptors.add
+            (createItemPropertyDescriptor
+                (((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+                 getResourceLocator(),
+                 getString("_UI_BasicNode_message_feature"),
+                 getString("_UI_PropertyDescriptor_description", "_UI_BasicNode_message_feature",  ((BasicNode)object).getTypeName()),
+                 DcasePackage.Literals.BASIC_NODE__MESSAGE,
+                 true,
+                 false,
+                 false,
+                 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+                 null,
+                 null));
+    }
+
+    /**
+     * This adds a property descriptor for the Requirement feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated NOT
+     */
+    protected void addRequirementPropertyDescriptor(Object object) {
+        itemPropertyDescriptors.add
+            (createItemPropertyDescriptor
+                (((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+                 getResourceLocator(),
+                 getString("_UI_BasicNode_requirement_feature"),
+                 getString("_UI_PropertyDescriptor_description", "_UI_BasicNode_requirement_feature",  ((BasicNode)object).getTypeName()),
+                 DcasePackage.Literals.BASIC_NODE__REQUIREMENT,
+                 true,
+                 false,
+                 false,
+                 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+                 null,
+                 null));
+    }
+
+    /**
+     * This adds a property descriptor for the Parent feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated NOT
+     */
+    protected void addParentPropertyDescriptor(Object object) {
+        itemPropertyDescriptors.add
+            (createItemPropertyDescriptor
+                (((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+                 getResourceLocator(),
+                 getString("_UI_BasicNode_parent_feature"),
+                 getString("_UI_PropertyDescriptor_description", "_UI_BasicNode_parent_feature",  ((BasicNode)object).getTypeName()),
+                 DcasePackage.Literals.BASIC_NODE__PARENT,
+                 true,
+                 false,
+                 false,
+                 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+                 null,
+                 null));
+    }
+
+    /**
+     * This adds a property descriptor for the RefSource feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated NOT
+     */
+    protected void addRefSourcePropertyDescriptor(Object object) {
+        itemPropertyDescriptors.add
+            (createItemPropertyDescriptor
+                (((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+                 getResourceLocator(),
+                 getString("_UI_BasicNode_refSource_feature"),
+                 getString("_UI_PropertyDescriptor_description", "_UI_BasicNode_refSource_feature",  ((BasicNode)object).getTypeName()),
+                 DcasePackage.Literals.BASIC_NODE__REFSOURCE,
+                 true,
+                 false,
+                 false,
+                 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+                 null,
+                 null));
+    }
+
+    /**
+     * This adds a property descriptor for the ParameterDefs feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated NOT
+     */
+    protected void addParameterDefsPropertyDescriptor(Object object) {
+        itemPropertyDescriptors.add
+            (createItemPropertyDescriptor
+                (((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+                 getResourceLocator(),
+                 getString("_UI_BasicNode_parameterDefs_feature"),
+                 getString("_UI_PropertyDescriptor_description", "_UI_BasicNode_parameterDefs_feature",  ((BasicNode)object).getTypeName()),
+                 DcasePackage.Literals.BASIC_NODE__PARAMETERDEFS,
+                 true,
+                 false,
+                 false,
+                 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+                 null,
+                 null));
+    }
+
+    /**
+     * This adds a property descriptor for the ParameterVals feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated NOT
+     */
+    protected void addParameterValsPropertyDescriptor(Object object) {
+        itemPropertyDescriptors.add
+            (createItemPropertyDescriptor
+                (((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+                 getResourceLocator(),
+                 getString("_UI_BasicNode_parameterVals_feature"),
+                 getString("_UI_PropertyDescriptor_description", "_UI_BasicNode_parameterVals_feature",  ((BasicNode)object).getTypeName()),
+                 DcasePackage.Literals.BASIC_NODE__PARAMETERVALS,
+                 true,
+                 false,
+                 false,
+                 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+                 null,
+                 null));
+    }
+
+    /**
+     * This adds a property descriptor for the ParameterizedDesc feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated NOT
+     */
+    protected void addParameterizedDescPropertyDescriptor(Object object) {
+        itemPropertyDescriptors.add
+            (createItemPropertyDescriptor
+                (((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+                 getResourceLocator(),
+                 getString("_UI_BasicNode_parameterizedDesc_feature"),
+                 getString("_UI_PropertyDescriptor_description", "_UI_BasicNode_parameterizedDesc_feature",  ((BasicNode)object).getTypeName()),
+                 DcasePackage.Literals.BASIC_NODE__PARAMETERIZEDDESC,
                  true,
                  false,
                  false,
@@ -556,6 +832,18 @@ public class BasicNodeItemProvider
             case DcasePackage.BASIC_NODE__DESC:
             case DcasePackage.BASIC_NODE__ATTACHMENT:
             case DcasePackage.BASIC_NODE__STATUS:
+            case DcasePackage.BASIC_NODE__FLAG:
+            case DcasePackage.BASIC_NODE__RESPNAME:
+            case DcasePackage.BASIC_NODE__RESPADDRESS:
+            case DcasePackage.BASIC_NODE__RESPICON:
+            case DcasePackage.BASIC_NODE__RESPTIME:
+            case DcasePackage.BASIC_NODE__MESSAGE:
+            case DcasePackage.BASIC_NODE__REQUIREMENT:
+            case DcasePackage.BASIC_NODE__PARENT:
+            case DcasePackage.BASIC_NODE__REFSOURCE:
+            case DcasePackage.BASIC_NODE__PARAMETERDEFS:
+            case DcasePackage.BASIC_NODE__PARAMETERVALS:
+            case DcasePackage.BASIC_NODE__PARAMETERIZEDDESC:
             case DcasePackage.BASIC_NODE__USERDEF001:
             case DcasePackage.BASIC_NODE__USERDEF002:
             case DcasePackage.BASIC_NODE__USERDEF003:

@@ -3,8 +3,6 @@
  */
 package net.dependableos.dcase.diagram.ui;
 
-import static net.dependableos.dcase.diagram.common.constant.SystemPropertyKeyConst.DIAGRAM_FILE_EXTENSION;
-
 import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -28,10 +26,8 @@ import net.dependableos.dcase.diagram.common.exception.DcaseSystemException;
 import net.dependableos.dcase.diagram.common.util.FileUtil;
 import net.dependableos.dcase.diagram.common.util.LinkManager;
 import net.dependableos.dcase.diagram.common.util.MessageTypeImpl;
-import net.dependableos.dcase.diagram.common.util.PropertyUtil;
 import net.dependableos.dcase.diagram.common.util.TermsMessages;
 import net.dependableos.dcase.diagram.common.util.UrlUtil;
-import net.dependableos.dcase.diagram.common.util.UserInterfaceUtil;
 import net.dependableos.dcase.diagram.edit.parts.ArgumentEditPart;
 import net.dependableos.dcase.diagram.edit.parts.SystemEditPart;
 import net.dependableos.dcase.diagram.edit.parts.custom.DcaseLinkEditPart;
@@ -40,6 +36,7 @@ import net.dependableos.dcase.diagram.part.DcaseDiagramEditor;
 import net.dependableos.dcase.diagram.part.DcaseDiagramEditorPlugin;
 import net.dependableos.dcase.diagram.part.DcaseDiagramEditorUtil;
 import net.dependableos.dcase.diagram.part.Messages;
+import net.dependableos.dcase.diagram.part.PatternUtil;
 import net.dependableos.dcase.diagram.providers.FileExtensionRestrictTreeContentProvider;
 import net.dependableos.dcase.impl.ParameterItem;
 import net.dependableos.dcase.impl.RequirementItem;
@@ -76,7 +73,6 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.dnd.TextTransfer;
@@ -175,16 +171,6 @@ public class AttributeDialog extends Dialog {
     private String status = null;
     
     /**
-     * a text control to input the value of the NodeLink attribute.
-     */
-    private Text nodeLinkText = null;
-
-    /**
-     * the value of the NodeLink attribute.
-     */
-    private String nodeLink = null;
-
-    /**
      * a text control to input the value of the Stakeholder attribute.
      */
     private Text stakeholderText = null;
@@ -280,6 +266,7 @@ public class AttributeDialog extends Dialog {
     private Text respNameText = null;
     private Text respAddrText = null;
     private Text respIconText = null;
+    private Text respTimeText = null;
 
     /**
      * the value of Responsibility.
@@ -287,7 +274,53 @@ public class AttributeDialog extends Dialog {
     private String respName = null;
     private String respAddr = null;
     private String respIcon = null;
+    private String respTime = null;
     
+    /**
+     * a text control to input the value of the SubType attribute.
+     */
+    private Combo subTypeCombo = null;
+
+    /**
+     * the value of the SubType attribute.
+     */
+    private String subType = null;
+
+    /**
+     * a text control to input the value of the LeafNode attribute.
+     */
+    private Combo leafNodeCombo = null;
+
+    /**
+     * the value of the leafNode attribute.
+     */
+    private String leafNode = null;
+
+    /**
+     * a text control to input the value of the I attribute.
+     */
+    private Spinner sysISpinner = null;
+
+    /**
+     * the value of the I attribute.
+     */
+    private int sysI = 0;
+
+    /**
+     * a text control to input the value of the J attribute.
+     */
+    private Spinner sysJSpinner = null;
+
+    /**
+     * the value of the J attribute.
+     */
+    private int sysJ = 0;
+    
+    /**
+     * the number of children.
+     */
+    private final int childNr;
+
     /**
      * the table viewer for parameters.
      */
@@ -398,9 +431,9 @@ public class AttributeDialog extends Dialog {
      */
     private static final String ATTRIBUTEDIALOG_6 = "_UI_System_score_feature"; //$NON-NLS-1$
     /**
-     * the key for the label text of the NodeLink attribute.
+     * the key for the label text of the SubType attribute.
      */
-    private static final String ATTRIBUTEDIALOG_7 = "_UI_System_nodeLink_feature"; //$NON-NLS-1$
+    private static final String ATTRIBUTEDIALOG_7 = "_UI_System_subType_feature"; //$NON-NLS-1$
     /**
      * the key for the label text of the Stakeholder attribute.
      */
@@ -424,23 +457,35 @@ public class AttributeDialog extends Dialog {
     private static final String ATTRIBUTEDIALOG_12 = "_UI_Goal_requirement_feature"; //$NON-NLS-1$
     
     /**
-     * the key for the label text of the requirement attribute of a Goal node.
+     * the key for the label text of the desc format attribute of a Goal node.
      */
-    private static final String ATTRIBUTEDIALOG_13 = "_UI_BasicNode_userdef005_feature"; //$NON-NLS-1$
+    private static final String ATTRIBUTEDIALOG_13 = "_UI_BasicNode_parameterizedDesc_feature"; //$NON-NLS-1$
     
     
     /**
-     * the key for the label text of the requirement attribute of a Goal node.
+     * the key for the label text of the script attribute of a Goal node.
      */
     private static final String ATTRIBUTEDIALOG_14 = "_UI_BasicNode_userdef006_feature"; //$NON-NLS-1$
 
     /**
      * the key for the label text of the Responsibility attribute.
      */
-    private static final String ATTRIBUTEDIALOG_15 = "_UI_BasicNode_userdef012_feature"; //$NON-NLS-1$
-    private static final String ATTRIBUTEDIALOG_16 = "_UI_BasicNode_userdef012_feature2"; //$NON-NLS-1$
-    private static final String ATTRIBUTEDIALOG_17 = "_UI_BasicNode_userdef012_feature3"; //$NON-NLS-1$
-    private static final String ATTRIBUTEDIALOG_18 = "_UI_BasicNode_userdef012_feature4"; //$NON-NLS-1$
+    private static final String ATTRIBUTEDIALOG_15 = "_UI_BasicNode_respName_feature"; //$NON-NLS-1$
+    private static final String ATTRIBUTEDIALOG_16 = "_UI_BasicNode_respAddress_feature"; //$NON-NLS-1$
+    private static final String ATTRIBUTEDIALOG_17 = "_UI_BasicNode_respIcon_feature"; //$NON-NLS-1$
+    private static final String ATTRIBUTEDIALOG_18 = "_UI_BasicNode_respIcon_label"; //$NON-NLS-1$
+    private static final String ATTRIBUTEDIALOG_22 = "_UI_BasicNode_respTime_feature"; //$NON-NLS-1$
+
+    /**
+     * the key for the label text of the leafNode attribute.
+     */
+    private static final String ATTRIBUTEDIALOG_19 = "_UI_System_leafNode_feature"; //$NON-NLS-1$
+
+    /**
+     * the key for the label text of the I,J attribute.
+     */
+    private static final String ATTRIBUTEDIALOG_20 = "_UI_System_i_feature"; //$NON-NLS-1$
+    private static final String ATTRIBUTEDIALOG_21 = "_UI_System_j_feature"; //$NON-NLS-1$
 
     /**
      * the format string for a label text.
@@ -462,7 +507,10 @@ public class AttributeDialog extends Dialog {
      * the values for parameter table.
      */
 	private static final String[] PARAMETER_TITLE_NAMES = {
-			"Name", "Value", "Type", "Node"
+			"_UI_ParameterTable_name", //$NON-NLS-1$
+			"_UI_ParameterTable_value", //$NON-NLS-1$
+			"_UI_ParameterTable_type", //$NON-NLS-1$
+			"_UI_ParameterTable_node", //$NON-NLS-1$
 		};
 	private static final int[] PARAMETER_GRID_WIDTHS = { 120, 160, 64, 120 };
 
@@ -477,6 +525,8 @@ public class AttributeDialog extends Dialog {
 
         this.basicNode = basicNode;
         this.editPart = editPart;
+        Argument argument = (Argument)basicNode.eContainer();
+        this.childNr = PatternUtil.getChildNr(basicNode, argument);
     }
 
     /**
@@ -519,8 +569,8 @@ public class AttributeDialog extends Dialog {
         if (statusText != null) {
             status = statusText.getText();
         }
-        if (nodeLinkText != null) {
-            nodeLink = nodeLinkText.getText();
+        if (subTypeCombo != null) {
+            subType = subTypeCombo.getText();
         }
         if (stakeholderText != null) {
             stakeholder = stakeholderText.getText();
@@ -540,6 +590,9 @@ public class AttributeDialog extends Dialog {
         if (respIconText != null) {
         	respIcon = respIconText.getText();
         }
+        if (respTimeText != null) {
+        	respTime = respTimeText.getText();
+        }
 
         if (requeirementCombo != null) {
             if (requirementList != null && requirementList.size() > 0) {
@@ -551,6 +604,15 @@ public class AttributeDialog extends Dialog {
                     requirement = item.getFullId();
                 }
             }
+        }
+        if (leafNodeCombo != null) {
+            leafNode = leafNodeCombo.getText();
+        }
+        if (sysISpinner != null) {
+            sysI = Integer.valueOf(sysISpinner.getText());
+        }
+        if (sysJSpinner != null) {
+            sysJ = Integer.valueOf(sysJSpinner.getText());
         }
         descFormat = descFormatText.getText();
         script = scriptText.getText();
@@ -608,6 +670,36 @@ public class AttributeDialog extends Dialog {
         expandBar.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, GRID_COLUMNS, 1));
         expandPanel = new Composite(expandBar, SWT.NULL);
         expandPanel.setLayout(new GridLayout(GRID_COLUMNS, false));
+        
+        // Label:Desc Format String
+        Label descFormatLabel = createLabel(expandPanel, getAttributeName(ATTRIBUTEDIALOG_13));
+        GridData gridLabelDescFormat = new GridData();
+        gridLabelDescFormat.verticalAlignment = GridData.BEGINNING;
+        descFormatLabel.setLayoutData(gridLabelDescFormat);
+
+        // Text:Desc Format String
+        descFormatText = createMultiLineText(expandPanel, descFormat);
+        descFormatText.addModifyListener(
+                new ModifyListener() {
+                    @Override
+                    public void modifyText(ModifyEvent e) {
+                        String input = descFormatText.getText();
+                        AttributeDialog.this.setDescFormat(input, false);
+                    }
+                }
+        );
+        GridData gridTextDescFormat = new GridData();
+        gridTextDescFormat.horizontalAlignment = GridData.FILL;
+        gridTextDescFormat.verticalAlignment = GridData.FILL;
+        gridTextDescFormat.minimumWidth = TEXT_WIDTH;
+        gridTextDescFormat.minimumHeight = TEXTAREA_HEIHGT;
+        gridTextDescFormat.grabExcessHorizontalSpace = true;
+        gridTextDescFormat.grabExcessVerticalSpace = true;
+        descFormatText.setLayoutData(gridTextDescFormat);
+        setDescFormat(descFormat);
+        
+        // LabelDunny:Desc Format String
+        createLabel(expandPanel);
         
         // Label:Attachment
         createLabel(expandPanel, getAttributeName(ATTRIBUTEDIALOG_2));
@@ -703,9 +795,28 @@ public class AttributeDialog extends Dialog {
         	}
         });
 
+        // Label:Responsibility_Time
+        createLabel(expandPanel, getAttributeName(ATTRIBUTEDIALOG_22));
+        
+        // Text:Responsibility_Time
+        respTimeText = createText(expandPanel, respTime);
+        GridData gridRespTime = new GridData();
+        gridRespTime.horizontalAlignment = GridData.FILL;
+        gridRespTime.minimumWidth = TEXT_WIDTH;
+        gridRespTime.grabExcessHorizontalSpace = true;
+        respTimeText.setLayoutData(gridRespTime);
+
+        // LabelDummy:Responsibility_Name
+        createLabel(expandPanel);
+        
         // Justification
         if (basicNode instanceof Justification) {
             createDialogAreaForJustification();
+        }
+
+        // Pattern
+        if (basicNode instanceof System) {
+            createDialogAreaForPattern();
         }
 
         // Monitor
@@ -717,30 +828,6 @@ public class AttributeDialog extends Dialog {
             createDialogForSystemOrGoal();
             createDialogAreaForGoal();
         }
-        
-        // Label:Desc Format String
-        createLabel(expandPanel, getAttributeName(ATTRIBUTEDIALOG_13));
-
-        // Text:Desc Format String
-        descFormatText = createText(expandPanel, descFormat);
-        descFormatText.addModifyListener(
-                new ModifyListener() {
-                    @Override
-                    public void modifyText(ModifyEvent e) {
-                        String input = descFormatText.getText();
-                        AttributeDialog.this.setDescFormat(input, false);
-                    }
-                }
-        );
-        GridData gridTextDescFormat = new GridData();
-        gridTextDescFormat.horizontalAlignment = GridData.FILL;
-        gridTextDescFormat.minimumWidth = TEXT_WIDTH;
-        gridTextDescFormat.grabExcessHorizontalSpace = true;
-        descFormatText.setLayoutData(gridTextDescFormat);
-        setDescFormat(descFormat);
-        
-        // LabelDunny:Name
-        createLabel(expandPanel);
         
         // Label:Script
         createLabel(expandPanel, getAttributeName(ATTRIBUTEDIALOG_14));
@@ -840,31 +927,116 @@ public class AttributeDialog extends Dialog {
     }
 
     /**
-     * Creates the additional controls for System node.
+     * Creates the additional controls for Pattern node.
      */
-    private void createDialogAreaForSystem() {
-        // Label:Node Link
+    private void createDialogAreaForPattern() {
+    	Argument argument = (Argument)basicNode.eContainer();
+    	
+        // Label:SubType
         createLabel(expandPanel, getAttributeName(ATTRIBUTEDIALOG_7));
-
-        // Text:Node Link
-        nodeLinkText = createText(expandPanel, nodeLink);
-        nodeLinkText.setEditable(false);
+        // Combo:SubType
+        subTypeCombo = new Combo(expandPanel, SWT.DROP_DOWN | SWT.MULTI | SWT.BORDER | SWT.READ_ONLY);
+        subTypeCombo.addSelectionListener(new SelectionListener() {
+        	public void widgetDefaultSelected(SelectionEvent e) {
+        	}
+        	public void widgetSelected(SelectionEvent e) {
+        		if (! PatternUtil.isChoice(subTypeCombo.getText())) {
+                	sysJSpinner.setMaximum(SPINNER_MAX);
+                } else {
+                	sysJSpinner.setMaximum(childNr);
+                	sysISpinner.setMaximum((sysJ >= childNr) ? childNr:sysJ);
+                }
+        	}
+        });
+        String[] stnames = PatternUtil.getSubtypeNames();
+        for (int i = 0; i < stnames.length; i++) {
+        	subTypeCombo.add(stnames[i]);
+        	if (subType != null && subType.equals(stnames[i])) {
+        		subTypeCombo.select(i);
+        	}
+        }
         GridData gridTextNodeLink = new GridData();
         gridTextNodeLink.horizontalAlignment = GridData.FILL;
         gridTextNodeLink.minimumWidth = TEXT_WIDTH;
         gridTextNodeLink.grabExcessHorizontalSpace = true;
-        nodeLinkText.setLayoutData(gridTextNodeLink);
-
-        // Button:Browse...
-        Button nodeLinkBrowseButton = createButton(expandPanel, TermsMessages.AttributeDialog_2);
-        GridData nodeLinkGridButton = new GridData();
-        nodeLinkGridButton.horizontalAlignment = GridData.FILL;
-        nodeLinkGridButton.minimumWidth = LABEL_WIDTH;
-        nodeLinkBrowseButton.setLayoutData(nodeLinkGridButton);
-
-        // adds a selection listener to the browse button for the NodeLink attribute.
-        nodeLinkBrowseButton
-                .addSelectionListener(createNodeLinkSelectionAdapter());
+        subTypeCombo.setLayoutData(gridTextNodeLink);
+        // LabelDunny:SubType
+        createLabel(expandPanel);
+        
+        // Label:LeafNode
+        createLabel(expandPanel, getAttributeName(ATTRIBUTEDIALOG_19));
+        // Combo:LeafNode
+        leafNodeCombo = new Combo(expandPanel, SWT.DROP_DOWN | SWT.MULTI | SWT.BORDER | SWT.READ_ONLY);
+        List<BasicNode> nodeList = PatternUtil.getLeafNodes(basicNode, argument);
+        for (int i = 0; i < nodeList.size(); i++) {
+        	String nodeName = nodeList.get(i).getName();
+        	leafNodeCombo.add(nodeName);
+        	if (nodeName.equals(leafNode)) {
+        		leafNodeCombo.select(i);
+        	}
+        }
+        GridData gridTextLeafNode = new GridData();
+        gridTextLeafNode.horizontalAlignment = GridData.FILL;
+        gridTextLeafNode.minimumWidth = TEXT_WIDTH;
+        gridTextLeafNode.grabExcessHorizontalSpace = true;
+        leafNodeCombo.setLayoutData(gridTextLeafNode);
+        // LabelDunny:SubType
+        createLabel(expandPanel);
+        
+        // Number of children
+        int n = SPINNER_MAX;
+        if (PatternUtil.isChoice(((System)basicNode).getSubType())) {
+        	n = childNr;
+        }
+        
+        // Label:I
+        createLabel(expandPanel, getAttributeName(ATTRIBUTEDIALOG_20));
+        // Spinner:I
+        sysISpinner = createSpinner(expandPanel, sysI);
+        sysISpinner.addSelectionListener(new SelectionListener() {
+        	public void widgetDefaultSelected(SelectionEvent e) {
+        	}
+        	public void widgetSelected(SelectionEvent e) {
+        		sysJSpinner.setMinimum(Integer.valueOf(sysISpinner.getText()));
+        	}
+        });
+        sysISpinner.setMaximum((sysJ >= n) ? n:sysJ);
+        sysISpinner.setMinimum(1);
+        GridData gridTextI = new GridData();
+        gridTextI.horizontalAlignment = GridData.FILL;
+        gridTextI.minimumWidth = TEXT_WIDTH;
+        gridTextI.grabExcessHorizontalSpace = true;
+        sysISpinner.setLayoutData(gridTextI);
+        // LabelDunny:I
+        createLabel(expandPanel);
+        
+        // Label:J
+        createLabel(expandPanel, getAttributeName(ATTRIBUTEDIALOG_21));
+        // Spinner:J
+        sysJSpinner = createSpinner(expandPanel, sysJ);
+        sysJSpinner.addSelectionListener(new SelectionListener() {
+        	public void widgetDefaultSelected(SelectionEvent e) {
+        	}
+        	public void widgetSelected(SelectionEvent e) {
+        		int n;
+        		if (! PatternUtil.isChoice(subTypeCombo.getText())) {
+                	n = SPINNER_MAX;
+                } else {
+                	n = childNr;
+                }
+        		int j = Integer.valueOf(sysJSpinner.getText());
+        		sysISpinner.setMaximum((j >= n) ? n:j);
+        	}
+        });
+        sysJSpinner.setMaximum(n);
+        sysJSpinner.setMinimum(sysI);
+        GridData gridTextJ = new GridData();
+        gridTextJ.horizontalAlignment = GridData.FILL;
+        gridTextJ.minimumWidth = TEXT_WIDTH;
+        gridTextJ.grabExcessHorizontalSpace = true;
+        sysJSpinner.setLayoutData(gridTextJ);
+        // LabelDunny:J
+        createLabel(expandPanel);
     }
     
     /**
@@ -993,7 +1165,7 @@ public class AttributeDialog extends Dialog {
             int selectNo = 1;
             for (RequirementItem item : requirementList) {
                 requeirementCombo.add(item.getDescription());
-                if (item.getFullId().equals(goal.getUserdef003())) {
+                if (item.getFullId().equals(goal.getRequirement())) {
                     requeirementCombo.select(selectNo);
                 }
                 selectNo++;
@@ -1075,12 +1247,21 @@ public class AttributeDialog extends Dialog {
                         if (selectedAttachment != null) {
                             attachmentText.setText(selectedAttachment);
                             if (currentAttachmentSelector != null) {
-                            	String respStr = currentAttachmentSelector.getResponsibility(selectedAttachment);
+                            	String respStr = currentAttachmentSelector.getRespName(selectedAttachment);
                             	if (respStr != null && respStr.length() > 0) {
-                            		String respArray[] = respStr.split(";"); //$NON-NLS-1$
-                            		respNameText.setText((respArray.length > 0) ? respArray[0] : ""); //$NON-NLS-1$
-                            		respAddrText.setText((respArray.length > 1) ? respArray[1] : ""); //$NON-NLS-1$
-                            		respIconText.setText((respArray.length > 2) ? respArray[2] : ""); //$NON-NLS-1$
+                            		respNameText.setText(respStr);
+                            	}
+                            	respStr = currentAttachmentSelector.getRespAddress(selectedAttachment);
+                            	if (respStr != null && respStr.length() > 0) {
+                            		respAddrText.setText(respStr);
+                            	}
+                            	respStr = currentAttachmentSelector.getRespIcon(selectedAttachment);
+                            	if (respStr != null && respStr.length() > 0) {
+                            		respIconText.setText(respStr);
+                            	}
+                            	respStr = currentAttachmentSelector.getRespTime(selectedAttachment);
+                            	if (respStr != null && respStr.length() > 0) {
+                            		respTimeText.setText(respStr);
                             	}
                             }
                         }
@@ -1144,62 +1325,6 @@ public class AttributeDialog extends Dialog {
         return false;
     }
 
-    /**
-     * Creates a selection adapter to select a diagram file from the workspace.
-     * 
-     * @return  a selection adapter to select a diagram file from the workspace.
-     */
-    private SelectionAdapter createNodeLinkSelectionAdapter() {
-        return new SelectionAdapter() {
-            public void widgetSelected(SelectionEvent event) {
-                // creates a element tree selection dialog.
-               ElementTreeSelectionDialog fileDialog = new ElementTreeSelectionDialog(
-                       expandPanel.getShell(),
-                        new DecoratingLabelProvider(
-                                new WorkbenchLabelProvider(), PlatformUI
-                                        .getWorkbench().getDecoratorManager()
-                                        .getLabelDecorator()),
-                        new FileExtensionRestrictTreeContentProvider(
-                                PropertyUtil
-                                        .getSystemProperty(DIAGRAM_FILE_EXTENSION)));
-
-               // Sets the projects as tree input.
-                fileDialog.setInput(ResourcesPlugin.getWorkspace().getRoot()
-                        .getProjects());
-                fileDialog.setAllowMultiple(false);
-                fileDialog.setBlockOnOpen(true);
-
-                // sets the validator.
-                fileDialog
-                        .setValidator(createElementSelectionStatusValidator());
-
-                fileDialog.setTitle(TermsMessages.AttributeDialog_0);
-
-                // sets the selected file.
-                TreePath treePath = UserInterfaceUtil
-                        .convertFilePathToTreePath(nodeLinkText.getText(),
-                                ResourcesPlugin.getWorkspace().getRoot());
-                if (treePath != null) {
-                    fileDialog.setInitialSelection(treePath);
-                }
-
-                // opens the dialog.
-                fileDialog.open();
-
-                // gets the selected file.
-                Object[] results = fileDialog.getResult();
-
-                // tests whether selected file is valid.
-                if (results != null && results.length == 1
-                        && results[0] instanceof IResource) {
-                    // sets the string representation of the file path.
-                    nodeLinkText.setText(((IResource) results[0]).getFullPath()
-                            .toString());
-                }
-            }
-        };
-    }
-    
     /**
      * Creates the command buttons.
      */
@@ -1313,8 +1438,23 @@ public class AttributeDialog extends Dialog {
      * @return the name of the attribute.
      */
     private String getAttributeName(String key) {
-        return String.format(LABEL_FORMAT, DcaseEditPlugin.getPlugin()
-                .getString(key));
+        return getAttributeName(key, true);
+    }
+
+    /**
+     * Returns the name of the attribute.
+     * 
+     * @param key the key for the name of the attribute.
+     * @param isLabel whether using label format or not.
+     * @return the name of the attribute.
+     */
+    private String getAttributeName(String key, boolean isLabel) {
+    	if (isLabel) {
+    		return String.format(LABEL_FORMAT, DcaseEditPlugin.getPlugin()
+    				.getString(key));
+    	} else {
+    		return DcaseEditPlugin.getPlugin().getString(key);
+    	}
     }
 
     /**
@@ -1554,25 +1694,25 @@ public class AttributeDialog extends Dialog {
     }
     
     /**
-     * Sets the value of NodeLink attribute.
+     * Sets the value of SubType attribute.
      * 
-     * @param nodeLink the value of NodeLink attribute.
+     * @param nodeLink the value of SubType attribute.
      */
-    public void setNodeLink(String nodeLink) {
-        if (nodeLink == null) {
-            this.nodeLink = ""; //$NON-NLS-1$
+    public void setSubType(String subType) {
+        if (subType == null) {
+            this.subType = ""; //$NON-NLS-1$
         } else {
-            this.nodeLink = nodeLink;
+            this.subType = subType;
         }
     }
 
     /**
-     * Returns the value of NodeLink attribute.
+     * Returns the value of SubType attribute.
      * 
-     * @return the value of NodeLink attribute.
+     * @return the value of SubType attribute.
      */
-    public String getNodeLink() {
-        return nodeLink;
+    public String getSubType() {
+        return subType;
     }
 
     /**
@@ -1834,33 +1974,145 @@ public class AttributeDialog extends Dialog {
     }
 
     /**
-     * Sets the value of Responsibility attribute.
+     * Sets the value of RespName attribute.
      * 
-     * @param nane the value of Responsiblity attribute.
+     * @param nane the value of RespName attribute.
      */
-    public void setResponsibility(String name) {
-        this.respName = this.respAddr = this.respIcon = ""; //$NON-NLS-1$
-        if (name != null && name.length() > 0) {
-    		String nameArray[] = name.split(";"); //$NON-NLS-1$
-    		if (nameArray.length > 0) {
-    			respName = nameArray[0];
-    			if (nameArray.length > 1) {
-    				respAddr = nameArray[1];
-    				if (nameArray.length > 2) {
-    					respIcon = nameArray[2];
-    				}
-        		}
-    		}
+    public void setRespName(String value) {
+        if (value == null) {
+            respName = ""; //$NON-NLS-1$
+        } else {
+            respName = value;
         }
     }
 
     /**
-     * Returns the value of Responsibility attribute.
+     * Returns the value of RespName attribute.
      * 
-     * @return the value of Responsibility attribute.
+     * @return the value of RespName attribute.
      */
-    public String getResponsibility() {
-        return respName + ";" + respAddr + ";" + respIcon; //$NON-NLS-1$ //$NON-NLS-2$
+    public String getRespName() {
+        return respName;
+    }
+
+    /**
+     * Sets the value of RespAddress attribute.
+     * 
+     * @param nane the value of RespAddress attribute.
+     */
+    public void setRespAddress(String value) {
+        if (value == null) {
+            respAddr = ""; //$NON-NLS-1$
+        } else {
+            respAddr = value;
+        }
+    }
+
+    /**
+     * Returns the value of RespAddress attribute.
+     * 
+     * @return the value of RespAddress attribute.
+     */
+    public String getRespAddress() {
+        return respAddr;
+    }
+
+    /**
+     * Sets the value of RespIcon attribute.
+     * 
+     * @param nane the value of RespIcon attribute.
+     */
+    public void setRespIcon(String value) {
+        if (value == null) {
+            respIcon = ""; //$NON-NLS-1$
+        } else {
+            respIcon = value;
+        }
+    }
+
+    /**
+     * Returns the value of RespIcon attribute.
+     * 
+     * @return the value of RespIcon attribute.
+     */
+    public String getRespIcon() {
+        return respIcon;
+    }
+
+    /**
+     * Sets the value of RespTime attribute.
+     * 
+     * @param nane the value of RespTime attribute.
+     */
+    public void setRespTime(String value) {
+        if (value == null) {
+            respTime = ""; //$NON-NLS-1$
+        } else {
+            respTime = value;
+        }
+    }
+
+    /**
+     * Returns the value of RespTime attribute.
+     * 
+     * @return the value of RespTime attribute.
+     */
+    public String getRespTime() {
+        return respTime;
+    }
+
+    /**
+     * Sets the value of LeafNode attribute.
+     * 
+     * @param val the value of LeafNode attribute.
+     */
+    public void setLeafNode(String val) {
+        this.leafNode = val;
+    }
+
+    /**
+     * Returns the value of LeafNode attribute.
+     * 
+     * @return the value of LeafNode attribute.
+     */
+    public String getLeafNode() {
+        return leafNode;
+    }
+
+    /**
+     * Sets the value of I attribute.
+     * 
+     * @param val the value of I attribute.
+     */
+    public void setI(int val) {
+        this.sysI = val;
+    }
+
+    /**
+     * Returns the value of I attribute.
+     * 
+     * @return the value of I attribute.
+     */
+    public int getI() {
+        return sysI;
+    }
+
+    /**
+     * Sets the value of J attribute.
+     * 
+     * @param val the value of J attribute.
+     */
+    public void setJ(int val) {
+        this.sysJ = val;
+    }
+
+    /**
+     * Returns the value of J attribute.
+     * 
+     * @return the value of J attribute.
+     */
+    public int getJ() {
+        return sysJ;
     }
 
     /*
@@ -1925,7 +2177,7 @@ public class AttributeDialog extends Dialog {
     	table.setLinesVisible(false);
     	for(int i=0; i<4; i++) {
     		TableColumn col = new TableColumn(table, SWT.NULL);
-    		col.setText(PARAMETER_TITLE_NAMES[i]);
+    		col.setText(getAttributeName(PARAMETER_TITLE_NAMES[i], false));
     		col.setWidth(PARAMETER_GRID_WIDTHS[i]);
     	}
     	
@@ -1975,21 +2227,6 @@ public class AttributeDialog extends Dialog {
     	ArrayList<ParamModel> paramList = new ArrayList<ParamModel>(map.values());
     	Collections.sort(paramList, new ParamModelComparator());
     	return paramList;
-    }
-    
-    /**
-     * Returns the current directory.
-     * @return the current directory.
-     */
-    private IPath getCurrentDir() {
-    	View view = ((GraphicalEditPart) editPart).getNotationView();
-        if (view == null) {
-            return null;
-        }
-        BasicNode basicNode = (BasicNode) ViewUtil.resolveSemanticElement(view);
-        XMLResource resource = (XMLResource)basicNode.eResource();
-        IFile modelFile = WorkspaceSynchronizer.getFile(resource);
-        return modelFile.getParent().getFullPath();
     }
     
     /**
@@ -2050,7 +2287,9 @@ public class AttributeDialog extends Dialog {
                 	continue;
                 }
                 BasicNode cNode = (BasicNode)cEditPart.getElement();
-                addNodeParameter(distance, cNode, moduleName, map);
+                if (PatternUtil.isParameter(((System)cNode).getSubType())) {
+                    addNodeParameter(distance, cNode, moduleName, map);
+                }
     		}
     	}
 
@@ -2070,27 +2309,28 @@ public class AttributeDialog extends Dialog {
     		}
     		// check parent module
     		Argument argument = (Argument)node.eContainer();
-    		String userdef011 = argument.getUserdef011();
-    		String userdef013 = argument.getUserdef013();
+    		String refSource = argument.getRefSource();
+    		String parent = argument.getParent();
 
-    		if(userdef011 == null || userdef011.length() == 0 ||
-    				userdef013 == null || userdef013.length() == 0) {
+    		if(refSource == null || refSource.length() == 0 ||
+    				parent == null || parent.length() == 0) {
     			return;
     		}
-    		for(String anotherName : userdef011.split(";")) { //$NON-NLS-1$
-    			String names[] = anotherName.split("/"); //$NON-NLS-1$
-    			if(names.length != 2 || !userdef013.equals(names[0])) {
+    		for(String anotherName : refSource.split(PatternUtil.getReferenceSeparator())) {
+    	    	String anotherModuleName = PatternUtil.getModuleName(anotherName);
+    	    	String anotherNodeName = PatternUtil.getNodeName(anotherName);
+    			if(! PatternUtil.isModuleReference(anotherName) || anotherName.equals(anotherNodeName)) {
     				continue;
     			}
-    			ArgumentEditPart anotherEditPart = getArgumentEditPart(names[0]);
+    			ArgumentEditPart anotherEditPart = getArgumentEditPart(anotherModuleName);
     			if (anotherEditPart == null) {
     				continue;
     			}
     			for(Object nobj : anotherEditPart.getChildren()) {
     				if(nobj instanceof DcaseNodeEditPart) {
     					BasicNode nnode = (BasicNode)DcaseNodeEditPart.getElement((DcaseNodeEditPart)nobj);
-    					if(nnode.getName().equals(names[1])) {
-    						getParameter(distance + 1, (DcaseNodeEditPart)nobj, names[0], map, uuidSet);
+    					if(nnode.getName().equals(anotherNodeName)) {
+    						getParameter(distance + 1, (DcaseNodeEditPart)nobj, anotherModuleName, map, uuidSet);
         				}
             		}
             	}
@@ -2099,10 +2339,10 @@ public class AttributeDialog extends Dialog {
     }
     
     private void addNodeParameter(int distance, BasicNode node, String moduleName, LinkedHashMap<String, ParamModel>map) {
-    	String userdef007 = node.getUserdef007();
-    	String userdef009 = node.getUserdef009();
+    	String userdef007 = node.getParameterVals();
+    	String userdef009 = node.getParameterDefs();
     	String nodeName = node.getName();
-    	String refName = (node instanceof Argument) ? moduleName : moduleName + "/" + nodeName; //$NON-NLS-1$
+    	String refName = (node instanceof Argument) ? moduleName : PatternUtil.createNodeReference(moduleName, nodeName);
     	// name + type
     	HashMap<String, String> userdef009Map = new HashMap<String, String>();
     	if (userdef009 != null && userdef009.length() > 0) {
@@ -2154,8 +2394,7 @@ public class AttributeDialog extends Dialog {
      * @return the argument edit part.
      */
     private ArgumentEditPart getArgumentEditPart(String moduleName) {
-    	IPath modelPath = getCurrentDir().append(moduleName);
-    	IPath diagramPath = modelPath.addFileExtension("dcase_diagram"); //$NON-NLS-1$
+    	IPath diagramPath = PatternUtil.getDiagramPath(moduleName);
     	IFile diagramFile = FileUtil.getWorksapceFileFromPath(diagramPath.toOSString());
     	IWorkbenchPage workbenchPage = PlatformUI.getWorkbench()
     			.getActiveWorkbenchWindow().getActivePage();
@@ -2281,7 +2520,7 @@ public class AttributeDialog extends Dialog {
         }
         return null;
     }
-
+    
 
     /**
      * The interface class to select the attachment.
@@ -2318,11 +2557,33 @@ public class AttributeDialog extends Dialog {
         void postProcess(BasicNode node, String attachment);
         
         /**
-         * Returns the responsibility value.
+         * Returns the respName value.
          * @param attachment the attachment value.
-         * @return the responsibility value.
+         * @return the respName value.
          */
-        String getResponsibility(String attachment);
+        String getRespName(String attachment);
+
+        /**
+         * Returns the respAddress value.
+         * @param attachment the attachment value.
+         * @return the respAddress value.
+         */
+        String getRespAddress(String attachment);
+
+        /**
+         * Returns the respIcon value.
+         * @param attachment the attachment value.
+         * @return the respIcon value.
+         */
+        String getRespIcon(String attachment);
+
+        /**
+         * Returns the respTime value.
+         * @param attachment the attachment value.
+         * @return the respTime value.
+         */
+        String getRespTime(String attachment);
+
     }
 
 }

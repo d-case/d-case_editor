@@ -18,6 +18,18 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link net.dependableos.dcase.BasicNode#getDesc <em>Desc</em>}</li>
  *   <li>{@link net.dependableos.dcase.BasicNode#getAttachment <em>Attachment</em>}</li>
  *   <li>{@link net.dependableos.dcase.BasicNode#getStatus <em>Status</em>}</li>
+ *   <li>{@link net.dependableos.dcase.BasicNode#getFlag <em>Flag</em>}</li>
+ *   <li>{@link net.dependableos.dcase.BasicNode#getRespName <em>RespName</em>}</li>
+ *   <li>{@link net.dependableos.dcase.BasicNode#getRespAddress <em>RespAddress</em>}</li>
+ *   <li>{@link net.dependableos.dcase.BasicNode#getRespIcon <em>RespIcon</em>}</li>
+ *   <li>{@link net.dependableos.dcase.BasicNode#getRespTime <em>RespTime</em>}</li>
+ *   <li>{@link net.dependableos.dcase.BasicNode#getMessage <em>Message</em>}</li>
+ *   <li>{@link net.dependableos.dcase.BasicNode#getRequirement <em>Requirement</em>}</li>
+ *   <li>{@link net.dependableos.dcase.BasicNode#getParent <em>Parent</em>}</li>
+ *   <li>{@link net.dependableos.dcase.BasicNode#getRefSource <em>RefSource</em>}</li>
+ *   <li>{@link net.dependableos.dcase.BasicNode#getParameterDefs <em>ParameterDefs</em>}</li>
+ *   <li>{@link net.dependableos.dcase.BasicNode#getParameterVals <em>ParameterVals</em>}</li>
+ *   <li>{@link net.dependableos.dcase.BasicNode#getParameterizedDesc <em>ParameterizedDesc</em>}</li>
  *   <li>{@link net.dependableos.dcase.BasicNode#getUserdef001 <em>Userdef001</em>}</li>
  *   <li>{@link net.dependableos.dcase.BasicNode#getUserdef002 <em>Userdef002</em>}</li>
  *   <li>{@link net.dependableos.dcase.BasicNode#getUserdef003 <em>Userdef003</em>}</li>
@@ -145,6 +157,294 @@ public interface BasicNode extends EObject {
      * @generated
      */
     void setStatus(String value);
+
+    /**
+     * Returns the value of the '<em><b>Flag</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <p>
+     * If the meaning of the '<em>Flag</em>' attribute isn't clear,
+     * there really should be more of a description here...
+     * </p>
+     * <!-- end-user-doc -->
+     * @return the value of the '<em>Flag</em>' attribute.
+     * @see #setFlag(String)
+     * @see net.dependableos.dcase.DcasePackage#getBasicNode_Flag()
+     * @model
+     */
+    String getFlag();
+
+    /**
+     * Sets the value of the '{@link net.dependableos.dcase.BasicNode#getFlag <em>Flag</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @param value the new value of the '<em>Flag</em>' attribute.
+     * @see #getFlag()
+     */
+    void setFlag(String value);
+
+    /**
+     * Returns the value of the '<em><b>RespName</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <p>
+     * If the meaning of the '<em>RespName</em>' attribute isn't clear,
+     * there really should be more of a description here...
+     * </p>
+     * <!-- end-user-doc -->
+     * @return the value of the '<em>RespName</em>' attribute.
+     * @see #setRespName(String)
+     * @see net.dependableos.dcase.DcasePackage#getBasicNode_RespName()
+     * @model
+     */
+    String getRespName();
+
+    /**
+     * Sets the value of the '{@link net.dependableos.dcase.BasicNode#getRespName <em>RespName</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @param value the new value of the '<em>RespName</em>' attribute.
+     * @see #getRespName()
+     */
+    void setRespName(String value);
+
+    /**
+     * Returns the value of the '<em><b>RespAddress</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <p>
+     * If the meaning of the '<em>RespAddress</em>' attribute isn't clear,
+     * there really should be more of a description here...
+     * </p>
+     * <!-- end-user-doc -->
+     * @return the value of the '<em>RespAddress</em>' attribute.
+     * @see #setRespAddress(String)
+     * @see net.dependableos.dcase.DcasePackage#getBasicNode_RespAddress()
+     * @model
+     */
+    String getRespAddress();
+
+    /**
+     * Sets the value of the '{@link net.dependableos.dcase.BasicNode#getRespAddress <em>RespAddress</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @param value the new value of the '<em>RespAddress</em>' attribute.
+     * @see #getRespAddress()
+     */
+    void setRespAddress(String value);
+
+    /**
+     * Returns the value of the '<em><b>RespIcon</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <p>
+     * If the meaning of the '<em>RespIcon</em>' attribute isn't clear,
+     * there really should be more of a description here...
+     * </p>
+     * <!-- end-user-doc -->
+     * @return the value of the '<em>RespIcon</em>' attribute.
+     * @see #setRespIcon(String)
+     * @see net.dependableos.dcase.DcasePackage#getBasicNode_RespIcon()
+     * @model
+     */
+    String getRespIcon();
+
+    /**
+     * Sets the value of the '{@link net.dependableos.dcase.BasicNode#getRespIcon <em>RespIcon</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @param value the new value of the '<em>RespIcon</em>' attribute.
+     * @see #getRespIcon()
+     */
+    void setRespIcon(String value);
+
+    /**
+     * Returns the value of the '<em><b>RespTime</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <p>
+     * If the meaning of the '<em>RespTime</em>' attribute isn't clear,
+     * there really should be more of a description here...
+     * </p>
+     * <!-- end-user-doc -->
+     * @return the value of the '<em>RespTime</em>' attribute.
+     * @see #setRespTime(String)
+     * @see net.dependableos.dcase.DcasePackage#getBasicNode_RespTime()
+     * @model
+     */
+    String getRespTime();
+
+    /**
+     * Sets the value of the '{@link net.dependableos.dcase.BasicNode#getRespTime <em>RespTime</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @param value the new value of the '<em>RespTime</em>' attribute.
+     * @see #getRespTime()
+     */
+    void setRespTime(String value);
+
+    /**
+     * Returns the value of the '<em><b>Message</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <p>
+     * If the meaning of the '<em>Message</em>' attribute isn't clear,
+     * there really should be more of a description here...
+     * </p>
+     * <!-- end-user-doc -->
+     * @return the value of the '<em>Message</em>' attribute.
+     * @see #setMessage(String)
+     * @see net.dependableos.dcase.DcasePackage#getBasicNode_Message()
+     * @model
+     */
+    String getMessage();
+
+    /**
+     * Sets the value of the '{@link net.dependableos.dcase.BasicNode#getMessage <em>Message</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @param value the new value of the '<em>Message</em>' attribute.
+     * @see #getMessage()
+     */
+    void setMessage(String value);
+
+    /**
+     * Returns the value of the '<em><b>Requirement</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <p>
+     * If the meaning of the '<em>Requirement</em>' attribute isn't clear,
+     * there really should be more of a description here...
+     * </p>
+     * <!-- end-user-doc -->
+     * @return the value of the '<em>Requirement</em>' attribute.
+     * @see #setRequirement(String)
+     * @see net.dependableos.dcase.DcasePackage#getBasicNode_Requirement()
+     * @model
+     */
+    String getRequirement();
+
+    /**
+     * Sets the value of the '{@link net.dependableos.dcase.BasicNode#getRequirement <em>Requirement</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @param value the new value of the '<em>Requirement</em>' attribute.
+     * @see #getRequirement()
+     */
+    void setRequirement(String value);
+
+    /**
+     * Returns the value of the '<em><b>Parent</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <p>
+     * If the meaning of the '<em>Parent</em>' attribute isn't clear,
+     * there really should be more of a description here...
+     * </p>
+     * <!-- end-user-doc -->
+     * @return the value of the '<em>Parent</em>' attribute.
+     * @see #setParent(String)
+     * @see net.dependableos.dcase.DcasePackage#getBasicNode_Parent()
+     * @model
+     */
+    String getParent();
+
+    /**
+     * Sets the value of the '{@link net.dependableos.dcase.BasicNode#getParent <em>Parent</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @param value the new value of the '<em>Parent</em>' attribute.
+     * @see #getParent()
+     */
+    void setParent(String value);
+
+    /**
+     * Returns the value of the '<em><b>RefSource</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <p>
+     * If the meaning of the '<em>RefSource</em>' attribute isn't clear,
+     * there really should be more of a description here...
+     * </p>
+     * <!-- end-user-doc -->
+     * @return the value of the '<em>RefSource</em>' attribute.
+     * @see #setRefSource(String)
+     * @see net.dependableos.dcase.DcasePackage#getBasicNode_RefSource()
+     * @model
+     */
+    String getRefSource();
+
+    /**
+     * Sets the value of the '{@link net.dependableos.dcase.BasicNode#getRefSource <em>RefSource</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @param value the new value of the '<em>RefSource</em>' attribute.
+     * @see #getRefSource()
+     */
+    void setRefSource(String value);
+
+    /**
+     * Returns the value of the '<em><b>ParameterDefs</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <p>
+     * If the meaning of the '<em>ParameterDefs</em>' attribute isn't clear,
+     * there really should be more of a description here...
+     * </p>
+     * <!-- end-user-doc -->
+     * @return the value of the '<em>ParameterDefs</em>' attribute.
+     * @see #setParameterDefs(String)
+     * @see net.dependableos.dcase.DcasePackage#getBasicNode_ParameterDefs()
+     * @model
+     */
+    String getParameterDefs();
+
+    /**
+     * Sets the value of the '{@link net.dependableos.dcase.BasicNode#getParameterDefs <em>ParameterDefs</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @param value the new value of the '<em>ParameterDefs</em>' attribute.
+     * @see #getParameterDefs()
+     */
+    void setParameterDefs(String value);
+
+    /**
+     * Returns the value of the '<em><b>ParameterVals</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <p>
+     * If the meaning of the '<em>ParameterVals</em>' attribute isn't clear,
+     * there really should be more of a description here...
+     * </p>
+     * <!-- end-user-doc -->
+     * @return the value of the '<em>ParameterVals</em>' attribute.
+     * @see #setParameterVals(String)
+     * @see net.dependableos.dcase.DcasePackage#getBasicNode_ParameterVals()
+     * @model
+     */
+    String getParameterVals();
+
+    /**
+     * Sets the value of the '{@link net.dependableos.dcase.BasicNode#getParameterVals <em>ParameterVals</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @param value the new value of the '<em>ParameterVals</em>' attribute.
+     * @see #getParameterVals()
+     */
+    void setParameterVals(String value);
+
+    /**
+     * Returns the value of the '<em><b>ParameterizedDesc</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <p>
+     * If the meaning of the '<em>ParameterizedDesc</em>' attribute isn't clear,
+     * there really should be more of a description here...
+     * </p>
+     * <!-- end-user-doc -->
+     * @return the value of the '<em>ParameterizedDesc</em>' attribute.
+     * @see #setParameterizedDesc(String)
+     * @see net.dependableos.dcase.DcasePackage#getBasicNode_ParameterizedDesc()
+     * @model
+     */
+    String getParameterizedDesc();
+
+    /**
+     * Sets the value of the '{@link net.dependableos.dcase.BasicNode#getParameterizedDesc <em>ParameterizedDesc</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @param value the new value of the '<em>ParameterizedDesc</em>' attribute.
+     * @see #getParameterizedDesc()
+     */
+    void setParameterizedDesc(String value);
 
     /**
      * Returns the value of the '<em><b>Userdef001</b></em>' attribute.

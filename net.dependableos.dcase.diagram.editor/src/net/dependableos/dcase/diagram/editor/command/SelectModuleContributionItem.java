@@ -18,6 +18,7 @@ import net.dependableos.dcase.BasicLink;
 import net.dependableos.dcase.DcaseFactory;
 import net.dependableos.dcase.Goal;
 import net.dependableos.dcase.Argument;
+import net.dependableos.dcase.Userdef001;
 import net.dependableos.dcase.Userdef005;
 import net.dependableos.dcase.diagram.common.command.ChangeBasicNodePropertyTransactionCommand;
 import net.dependableos.dcase.diagram.common.command.ChangeBasicLinkPropertyTransactionCommand;
@@ -36,6 +37,7 @@ import net.dependableos.dcase.diagram.editor.common.util.MessageWriter;
 import net.dependableos.dcase.diagram.editor.common.util.ModuleUtil;
 import net.dependableos.dcase.diagram.editor.ui.NewModuleInputDialog;
 import net.dependableos.dcase.diagram.part.DcaseDiagramEditorUtil;
+import net.dependableos.dcase.diagram.part.PatternUtil;
 import net.dependableos.dcase.diagram.ui.AttributeDialog.IAttachmentSelector;
 import net.dependableos.dcase.impl.ArgumentImpl;
 import net.dependableos.dcase.impl.ParameterItem;
@@ -43,6 +45,7 @@ import net.dependableos.dcase.impl.ParameterItem;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.operations.OperationHistoryFactory;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -266,7 +269,7 @@ public class SelectModuleContributionItem extends ContributionItem implements
 					.getEditingDomain(currentDiagram.eResource()
 							.getResourceSet());
 			Resource diagramResource = currentDiagram.eResource();
-			boolean newFlag = entryName.equals(newName);
+			final boolean newFlag = entryName.equals(newName);
 			boolean isModuleNode = false;
 
 			// get selected node or link
@@ -278,7 +281,7 @@ public class SelectModuleContributionItem extends ContributionItem implements
 			}
 			if (eobj instanceof BasicNode) {
 				selectedNode = (BasicNode) eobj;
-				isModuleNode = (selectedNode instanceof Userdef005);
+				isModuleNode = (selectedNode instanceof Userdef005 || selectedNode instanceof Userdef001);
 			} else if (eobj instanceof BasicLink) {
 				selectedLink = (BasicLink) eobj;
 			} else {
@@ -289,11 +292,21 @@ public class SelectModuleContributionItem extends ContributionItem implements
 			}
 
 			// get responsibility
-			String responsibility = null;
-			if (newFlag) {
-				responsibility = ""; //$NON-NLS-1$
-			} else if (selectedNode != null) {
-				responsibility = getResponsibility(entryName);
+			String respName = newFlag ? "":null; //$NON-NLS-1$
+			if (!newFlag && selectedNode != null) {
+				respName = getRespName(entryName);
+			}
+			String respAddr = newFlag ? "":null; //$NON-NLS-1$
+			if (!newFlag && selectedNode != null) {
+				respAddr = getRespAddress(entryName);
+			}
+			String respIcon = newFlag ? "":null; //$NON-NLS-1$
+			if (!newFlag && selectedNode != null) {
+				respIcon = getRespIcon(entryName);
+			}
+			String respTime = newFlag ? "":null; //$NON-NLS-1$
+			if (!newFlag && selectedNode != null) {
+				respTime = getRespTime(entryName);
 			}
 
 			// *** Copy Subtree
@@ -407,9 +420,11 @@ public class SelectModuleContributionItem extends ContributionItem implements
 			// *** Create or Copy Module
 			if (newFlag || isCopy) {
 				// get module name
+				IFile modelFile = DcaseEditorUtil.getModelFile(argumentEditPart);
 				IFile newDiagramFile = null;
 				IFile newModelFile = null;
 				String moduleName = null;
+				String modulePath = null;
 				do {
 					NewModuleInputDialog dialog = new NewModuleInputDialog(
 							DcaseEditorUtil.getActiveWindowShell(),
@@ -419,29 +434,42 @@ public class SelectModuleContributionItem extends ContributionItem implements
 						return;
 					}
 					moduleName = dialog.getInputedFilename();
+					IPath iPath = modelFile.getFullPath().removeFileExtension().addTrailingSeparator().append(moduleName);
+					modulePath = PatternUtil.getModuleName(iPath);
 					newDiagramFile = ResourcesPlugin.getWorkspace().getRoot()
-							.getFile(ModuleUtil.getDiagramPath(moduleName));
+							.getFile(ModuleUtil.getDiagramPath(modulePath));
 					newModelFile = ResourcesPlugin.getWorkspace().getRoot()
-							.getFile(ModuleUtil.getModelPath(moduleName));
+							.getFile(ModuleUtil.getModelPath(modulePath));
 				} while (newDiagramFile.exists() || newModelFile.exists());
 
 				final IPath newDiagramPath = newDiagramFile.getFullPath();
-				final IPath newModelPath = newModelFile.getFullPath();
+				final IFile newModelFileFixed = newModelFile;
+				// create diagram
 				if (newFlag) {
-					// create diagram
 					AbstractTransactionalCommand createCmd = new AbstractTransactionalCommand(
 							currentDomain, CREATE_DIAGRAM_CMD_LABEL,
 							Collections.EMPTY_LIST) {
 						protected CommandResult doExecuteWithResult(
 								IProgressMonitor monitor, IAdaptable info)
 								throws ExecutionException {
+							// create child's folder
+							IFolder newFolder = (IFolder)newModelFileFixed.getParent();
+							if (! newFolder.exists()) {
+								try {
+									newFolder.create(true, true, null);
+								} catch (CoreException e) {
+									return CommandResult.newErrorCommandResult(e.getMessage());
+								}
+							}
+							// create or get diagram
 							URI diagramURI = URI.createPlatformResourceURI(
 									newDiagramPath.toOSString(), false);
 							URI modelURI = URI.createPlatformResourceURI(
-									newModelPath.toOSString(), false);
+									newModelFileFixed.getFullPath().toOSString(), false);
 							Resource diagram = DcaseDiagramEditorUtil
 									.createDiagram(diagramURI, modelURI,
 											monitor);
+							// open diagram
 							try {
 								DcaseDiagramEditorUtil.openDiagram(diagram);
 							} catch (Exception e) {
@@ -466,7 +494,7 @@ public class SelectModuleContributionItem extends ContributionItem implements
 						e.printStackTrace();
 					}
 				} else {
-					// copy diagram
+					// copy files
 					IFile oldDiagramFile = ResourcesPlugin.getWorkspace()
 							.getRoot()
 							.getFile(ModuleUtil.getDiagramPath(entryName));
@@ -474,9 +502,10 @@ public class SelectModuleContributionItem extends ContributionItem implements
 							.getRoot()
 							.getFile(ModuleUtil.getModelPath(entryName));
 					FileUtil.copyFileTo(oldDiagramFile, newDiagramPath);
-					FileUtil.copyFileTo(oldModelFile, newModelPath);
+					FileUtil.copyFileTo(oldModelFile, newModelFileFixed.getFullPath());
+					ModelUtil.updateModelFileReference(oldDiagramFile, newModelFile, newDiagramFile, false);
 				}
-				entryName = moduleName;
+				entryName = modulePath;
 			}
 
 			// set reference to Attachment
@@ -492,7 +521,10 @@ public class SelectModuleContributionItem extends ContributionItem implements
 			attrNewMap.put(AttributeType.ATTACHMENT, entryName);
 			ICommand setAttachmentCommand;
 			if (selectedNode != null) {
-				attrNewMap.put(AttributeType.USERDEF012, responsibility);
+				attrNewMap.put(AttributeType.RESPNAME, respName);
+				attrNewMap.put(AttributeType.RESPADDRESS, respAddr);
+				attrNewMap.put(AttributeType.RESPICON, respIcon);
+				attrNewMap.put(AttributeType.RESPTIME, respTime);
 				setAttachmentCommand = new ChangeBasicNodePropertyTransactionCommand(
 						currentDomain, SET_ATTACHMENT_CMD_LABEL, null,
 						selectedNode, attrNewMap);
@@ -504,15 +536,15 @@ public class SelectModuleContributionItem extends ContributionItem implements
 			argumentEditPart.getDiagramEditDomain().getDiagramCommandStack()
 					.execute(new ICommandProxy(setAttachmentCommand));
 
-			// set reference to Userdef011
+			// set reference to RefSource
 			if (selectedNode != null) {
 				if (oldName != null && oldName.length() > 0
 						&& !ModuleUtil.isWorkspaceReference(oldName)
 						&& !ModuleUtil.isUrl(oldName)) {
-					setUserdef011(argumentEditPart, selectedEditPart, oldName,
+					setRefSource(argumentEditPart, selectedEditPart, oldName,
 							false);
 				}
-				setUserdef011AndName(argumentEditPart, selectedEditPart,
+				setRefSourceAndName(argumentEditPart, selectedEditPart,
 						entryName, true, isCopy);
 			}
 
@@ -547,21 +579,21 @@ public class SelectModuleContributionItem extends ContributionItem implements
 	}
 
 	/**
-	 * Sets Userdef011 to target node.
+	 * Sets RefSource to target node.
 	 * 
 	 * @param editPart
 	 *            the attaching edit part.
 	 * @param isAppend
 	 *            whether append or remove.
 	 */
-	private static void setUserdef011(ArgumentEditPart currentArgumentEditPart,
+	private static void setRefSource(ArgumentEditPart currentArgumentEditPart,
 			DcaseNodeEditPart editPart, String attachment, boolean isAppend) {
-		setUserdef011AndName(currentArgumentEditPart, editPart, attachment,
+		setRefSourceAndName(currentArgumentEditPart, editPart, attachment,
 				isAppend, false);
 	}
 
 	/**
-	 * Sets Userdef011 to target node.
+	 * Sets RefSource to target node.
 	 * 
 	 * @param editPart
 	 *            the attaching edit part.
@@ -570,7 +602,7 @@ public class SelectModuleContributionItem extends ContributionItem implements
 	 * @param isCopy
 	 *            whether copy or not.
 	 */
-	private static void setUserdef011AndName(
+	private static void setRefSourceAndName(
 			ArgumentEditPart currentArgumentEditPart,
 			DcaseNodeEditPart editPart, String attachment, boolean isAppend,
 			boolean isCopy) {
@@ -600,9 +632,9 @@ public class SelectModuleContributionItem extends ContributionItem implements
 				.appendModuleReference(nodeEditPart, refStr) : ModuleUtil
 				.removeModuleReference(nodeEditPart, refStr));
 		Map<AttributeType, Object> attrAddMap = new HashMap<AttributeType, Object>();
-		attrAddMap.put(AttributeType.USERDEF011, newAttrStr);
+		attrAddMap.put(AttributeType.REFSOURCE, newAttrStr);
 		if (isCopy) {
-			attrAddMap.put(AttributeType.NAME, moduleName);
+			attrAddMap.put(AttributeType.NAME, PatternUtil.getModuleBaseName(moduleName));
 		}
 		ICommand setUserdef011Command = new ChangeBasicNodePropertyTransactionCommand(
 				moduleDomain, SET_USERDEF011_CMD_LABEL, null, node, attrAddMap);
@@ -612,7 +644,7 @@ public class SelectModuleContributionItem extends ContributionItem implements
 	}
 
 	/**
-	 * Sets Userdef015 to argument.
+	 * Sets Flag to argument.
 	 * 
 	 * @param argumentEditPart
 	 *            the argument EditPart.
@@ -623,7 +655,7 @@ public class SelectModuleContributionItem extends ContributionItem implements
 				.getEditingDomain(currentDiagram.eResource().getResourceSet());
 		EObject aobj = DcaseEditorUtil.getElement(argumentEditPart);
 		Map<AttributeType, Object> attrAddMap = new HashMap<AttributeType, Object>();
-		attrAddMap.put(AttributeType.USERDEF015,
+		attrAddMap.put(AttributeType.FLAG,
 				ModuleUtil.getPublicFlagString());
 		ICommand command = new ChangeBasicNodePropertyTransactionCommand(
 				currentDomain, SET_PUBLICFLAG_CMD_LABEL, null, (Argument) aobj,
@@ -689,7 +721,7 @@ public class SelectModuleContributionItem extends ContributionItem implements
 					|| !(newEditPart instanceof DcaseNodeEditPart)) {
 				continue;
 			}
-			String formatter = newNode.getUserdef005();
+			String formatter = newNode.getParameterizedDesc();
 			if (formatter == null || formatter.length() == 0) {
 				continue;
 			}
@@ -702,7 +734,7 @@ public class SelectModuleContributionItem extends ContributionItem implements
 			String newFormattedDesc = ParameterItem.getFormattedDesc(
 					unknownParameters, formatter);
 			Map<AttributeType, Object> attrAddMap = new HashMap<AttributeType, Object>();
-			attrAddMap.put(AttributeType.USERDEF005, newFormattedDesc);
+			attrAddMap.put(AttributeType.PARAMETERIZEDDESC, newFormattedDesc);
 			ICommand command = new ChangeBasicNodePropertyTransactionCommand(
 					currentDomain, SET_USERDEF005_CMD_LABEL, null, newNode,
 					attrAddMap);
@@ -753,7 +785,8 @@ public class SelectModuleContributionItem extends ContributionItem implements
 	 */
 	public String selectAttachment(Shell parent, String currentAttachment,
 			BasicNode basicNode) {
-		if (basicNode instanceof Goal || basicNode instanceof Userdef005) {
+		if (basicNode instanceof Goal || basicNode instanceof Userdef005 ||
+				basicNode instanceof Userdef001) {
 			ListDialog dialog = new ListDialog(parent);
 			dialog.setTitle("Select from Modules..."); //$NON-NLS-1$
 			dialog.setMessage("Select from the following Modules..."); //$NON-NLS-1$
@@ -845,13 +878,13 @@ public class SelectModuleContributionItem extends ContributionItem implements
 		if (oldAttachment != null && oldAttachment.length() > 0
 				&& !ModuleUtil.isWorkspaceReference(oldAttachment)
 				&& !ModuleUtil.isUrl(oldAttachment)) {
-			setUserdef011(currentArgumentEditPart, currentEditPart,
+			setRefSource(currentArgumentEditPart, currentEditPart,
 					oldAttachment, false);
 		}
 		if (attachment != null && attachment.length() > 0
 				&& !ModuleUtil.isWorkspaceReference(attachment)
 				&& !ModuleUtil.isUrl(oldAttachment)) {
-			setUserdef011(currentArgumentEditPart, currentEditPart, attachment,
+			setRefSource(currentArgumentEditPart, currentEditPart, attachment,
 					true);
 		}
 
@@ -865,39 +898,83 @@ public class SelectModuleContributionItem extends ContributionItem implements
 		}
 
 	}
-
+	
 	/**
-	 * Returns the responsibility.
-	 * 
-	 * @param attachment
-	 *            the attachment string.
-	 * @return the responsibility.
+	 * Returns the node including responsibilities.
+	 * @param attachment  the attachment string.
+	 * @return the node.
 	 */
-	public String getResponsibility(String attachment) {
-		String responsibility = null;
+	private BasicNode getRespNode(String attachment) {
 		String moduleName = ModuleUtil.getModuleName(attachment);
 		String nodeName = attachment.equals(moduleName) ? null : ModuleUtil
 				.getNodeName(attachment);
 		IPath path = ModuleUtil.getModelPath(moduleName);
 		IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(path);
-		EObject mobj = ModelUtil.getModel(file);
+		EObject mobj = ModelUtil.getModel(file, true);
 		if (mobj instanceof Argument) {
 			// from Argument
 			if (nodeName == null || nodeName.length() == 0) {
-				responsibility = ((Argument) mobj).getUserdef012();
+				return (Argument) mobj;
 			} else {
 				// from Node
 				EList<BasicNode> nodeList = ((Argument) mobj)
 						.getRootBasicNode();
 				for (BasicNode node : nodeList) {
 					if (node.getName().equals(nodeName)) {
-						responsibility = node.getUserdef012();
-						break;
+						return node;
 					}
 				}
 			}
 		}
-		return (responsibility != null) ? responsibility : ""; //$NON-NLS-1$
+		return null;
+	}
+
+	/**
+	 * Returns the respName.
+	 * 
+	 * @param attachment
+	 *            the attachment string.
+	 * @return the respName.
+	 */
+	public String getRespName(String attachment) {
+		BasicNode node = getRespNode(attachment);
+		return (node != null) ? node.getRespName() : ""; //$NON-NLS-1$
+	}
+
+	/**
+	 * Returns the respAddress.
+	 * 
+	 * @param attachment
+	 *            the attachment string.
+	 * @return the respAddress.
+	 */
+	public String getRespAddress(String attachment) {
+		BasicNode node = getRespNode(attachment);
+		return (node != null) ? node.getRespAddress() : ""; //$NON-NLS-1$
+	}
+
+	/**
+	 * Returns the respIcon.
+	 * 
+	 * @param attachment
+	 *            the attachment string.
+	 * @return the respIcon.
+	 */
+	public String getRespIcon(String attachment) {
+		BasicNode node = getRespNode(attachment);
+		return (node != null) ? node.getRespIcon() : ""; //$NON-NLS-1$
+	}
+
+	/**
+	 * Returns the respTime.
+	 * 
+	 * @param attachment
+	 *            the attachment string.
+	 * @return the respTime.
+	 */
+	public String getRespTime(String attachment) {
+		BasicNode node = getRespNode(attachment);
+		return (node != null) ? node.getRespTime() : ""; //$NON-NLS-1$
 	}
 
 }

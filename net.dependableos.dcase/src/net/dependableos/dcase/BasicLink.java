@@ -20,6 +20,8 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link net.dependableos.dcase.BasicLink#getDesc <em>Desc</em>}</li>
  *   <li>{@link net.dependableos.dcase.BasicLink#getAttachment <em>Attachment</em>}</li>
  *   <li>{@link net.dependableos.dcase.BasicLink#getStatus <em>Status</em>}</li>
+ *   <li>{@link net.dependableos.dcase.BasicLink#getSiblingOrder <em>SiblingOrder</em>}</li>
+ *   <li>{@link net.dependableos.dcase.BasicLink#getMessage <em>Message</em>}</li>
  *   <li>{@link net.dependableos.dcase.BasicLink#getUserdef001 <em>Userdef001</em>}</li>
  *   <li>{@link net.dependableos.dcase.BasicLink#getUserdef002 <em>Userdef002</em>}</li>
  *   <li>{@link net.dependableos.dcase.BasicLink#getUserdef003 <em>Userdef003</em>}</li>
@@ -199,6 +201,54 @@ public interface BasicLink extends EObject {
      * @generated
      */
     void setStatus(String value);
+
+    /**
+     * Returns the value of the '<em><b>SiblingOrder</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <p>
+     * If the meaning of the '<em>SiblingOrder</em>' attribute isn't clear,
+     * there really should be more of a description here...
+     * </p>
+     * <!-- end-user-doc -->
+     * @return the value of the '<em>SiblingOrder</em>' attribute.
+     * @see #setSiblingOrder(String)
+     * @see net.dependableos.dcase.DcasePackage#getBasicLink_SiblingOrder()
+     * @model
+     */
+    String getSiblingOrder();
+
+    /**
+     * Sets the value of the '{@link net.dependableos.dcase.BasicLink#getSiblingOrder <em>SiblingOrder</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @param value the new value of the '<em>SiblingOrder</em>' attribute.
+     * @see #getSiblingOrder()
+     */
+    void setSiblingOrder(String value);
+
+    /**
+     * Returns the value of the '<em><b>Message</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <p>
+     * If the meaning of the '<em>Message</em>' attribute isn't clear,
+     * there really should be more of a description here...
+     * </p>
+     * <!-- end-user-doc -->
+     * @return the value of the '<em>Message</em>' attribute.
+     * @see #setMessage(String)
+     * @see net.dependableos.dcase.DcasePackage#getBasicLink_Message()
+     * @model
+     */
+    String getMessage();
+
+    /**
+     * Sets the value of the '{@link net.dependableos.dcase.BasicLink#getMessage <em>Message</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @param value the new value of the '<em>Message</em>' attribute.
+     * @see #getMessage()
+     */
+    void setMessage(String value);
 
     /**
      * Returns the value of the '<em><b>Userdef001</b></em>' attribute.

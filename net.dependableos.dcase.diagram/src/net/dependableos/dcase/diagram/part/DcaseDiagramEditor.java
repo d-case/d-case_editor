@@ -98,6 +98,13 @@ public class DcaseDiagramEditor extends DiagramDocumentEditor implements
     }
 
     /**
+     * @generated NOT
+     */
+    public DcaseDiagramEditor(boolean hasFlyoutPalette) {
+        super(hasFlyoutPalette);
+    }
+
+    /**
      * @generated
      */
     protected String getContextID() {

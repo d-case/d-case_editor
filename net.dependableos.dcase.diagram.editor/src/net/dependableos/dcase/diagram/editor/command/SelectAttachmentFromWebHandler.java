@@ -135,8 +135,16 @@ public class SelectAttachmentFromWebHandler extends AbstractEditPartHandler impl
     	SelectModuleContributionItem.doPostProcess(node, null);
     }
     
-    public String getResponsibility(String attachment) {
+    public String getRespName(String attachment) {
     	return null;
     }
-
+    public String getRespAddress(String attachment) {
+    	return null;
+    }
+    public String getRespIcon(String attachment) {
+    	return null;
+    }
+    public String getRespTime(String attachment) {
+    	return null;
+    }
 }

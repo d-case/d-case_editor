@@ -230,6 +230,18 @@ public final class ModelUtil {
         nodeInfo.setAttribute(AttributeType.ATTACHMENT, basicNode
                 .getAttachment());
         nodeInfo.setAttribute(AttributeType.STATUS, basicNode.getStatus());
+        nodeInfo.setAttribute(AttributeType.FLAG, basicNode.getFlag());
+        nodeInfo.setAttribute(AttributeType.RESPNAME, basicNode.getRespName());
+        nodeInfo.setAttribute(AttributeType.RESPADDRESS, basicNode.getRespAddress());
+        nodeInfo.setAttribute(AttributeType.RESPICON, basicNode.getRespIcon());
+        nodeInfo.setAttribute(AttributeType.RESPTIME, basicNode.getRespTime());
+        nodeInfo.setAttribute(AttributeType.MESSAGE, basicNode.getMessage());
+        nodeInfo.setAttribute(AttributeType.REQUIREMENT, basicNode.getRequirement());
+        nodeInfo.setAttribute(AttributeType.PARENT, basicNode.getParent());
+        nodeInfo.setAttribute(AttributeType.REFSOURCE, basicNode.getRefSource());
+        nodeInfo.setAttribute(AttributeType.PARAMETERDEFS, basicNode.getParameterDefs());
+        nodeInfo.setAttribute(AttributeType.PARAMETERVALS, basicNode.getParameterVals());
+        nodeInfo.setAttribute(AttributeType.PARAMETERIZEDDESC, basicNode.getParameterizedDesc());
         nodeInfo.setAttribute(AttributeType.USERDEF001, basicNode
                 .getUserdef001());
         nodeInfo.setAttribute(AttributeType.USERDEF002, basicNode
@@ -280,12 +292,12 @@ public final class ModelUtil {
                     justificationNode.getRiskAnalysis());
         } else if (basicNode instanceof net.dependableos.dcase.System) {
             net.dependableos.dcase.System systemNode = (net.dependableos.dcase.System) basicNode;
-            nodeInfo.setAttribute(AttributeType.SCORE, systemNode.getScore());
-            nodeInfo.setAttribute(AttributeType.WEIGHT, systemNode.getWeight());
-            nodeInfo.setAttribute(AttributeType.NODE_LINK, systemNode
-                    .getNodeLink());
+            nodeInfo.setAttribute(AttributeType.SUBTYPE, systemNode.getSubType());
+            nodeInfo.setAttribute(AttributeType.LEAFNODE, systemNode.getLeafNode());
+            nodeInfo.setAttribute(AttributeType.I, systemNode.getI());
+            nodeInfo.setAttribute(AttributeType.J, systemNode.getJ());
         } else if (basicNode instanceof net.dependableos.dcase.Context) {
-            nodeInfo.setAttribute(AttributeType.USERDEF003,
+            nodeInfo.setAttribute(AttributeType.REQUIREMENT,
                     ((Context) basicNode).getRequirements());
         }
 
@@ -320,6 +332,8 @@ public final class ModelUtil {
         linkInfo.setAttribute(AttributeType.TARGET, targetId);
         linkInfo.setAttribute(AttributeType.NAME, basicLink.getName());
         linkInfo.setAttribute(AttributeType.STATUS, basicLink.getStatus());
+        linkInfo.setAttribute(AttributeType.SIBLINGORDER, basicLink.getSiblingOrder());
+        linkInfo.setAttribute(AttributeType.MESSAGE, basicLink.getMessage());
         linkInfo.setAttribute(AttributeType.USERDEF001, basicLink
                 .getUserdef001());
         linkInfo.setAttribute(AttributeType.USERDEF002, basicLink
@@ -363,6 +377,17 @@ public final class ModelUtil {
      * @return the EObject
      */
     public static EObject getModel(IFile modelFile) {
+    	return getModel(modelFile, false);
+    }
+    
+    /**
+     * Returns the EObject from the model file.
+     * 
+     * @param modelFile the model file.
+     * @param isIgnoreException ignore exception if true.
+     * @return the EObject
+     */
+    public static EObject getModel(IFile modelFile, boolean isIgnoreException) {
 
         // creates URI.
         URI modelURI = URI.createPlatformResourceURI(modelFile.getFullPath()
@@ -377,9 +402,11 @@ public final class ModelUtil {
             Resource resource = resourceSet.getResource(modelURI, true);
             diagramRoot = (EObject) resource.getContents().get(0);
         } catch (WrappedException we) {
-            throw new DcaseSystemException(
-                    Messages.TemplateModelAdditionAction_4, we,
-                    MessageTypeImpl.TEMPLATE_INSERT_INTERNAL_ERROR);
+        	if (! isIgnoreException) {
+                throw new DcaseSystemException(
+                        Messages.TemplateModelAdditionAction_4, we,
+                        MessageTypeImpl.TEMPLATE_INSERT_INTERNAL_ERROR);
+        	}
         }
 
         return diagramRoot;

@@ -450,6 +450,102 @@ public class DcasePackageImpl extends EPackageImpl implements DcasePackage {
     /**
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
+     */
+    public EAttribute getBasicNode_Flag() {
+        return (EAttribute)basicNodeEClass.getEStructuralFeatures().get(20);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     */
+    public EAttribute getBasicNode_RespName() {
+        return (EAttribute)basicNodeEClass.getEStructuralFeatures().get(21);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     */
+    public EAttribute getBasicNode_RespAddress() {
+        return (EAttribute)basicNodeEClass.getEStructuralFeatures().get(22);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     */
+    public EAttribute getBasicNode_RespIcon() {
+        return (EAttribute)basicNodeEClass.getEStructuralFeatures().get(23);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     */
+    public EAttribute getBasicNode_RespTime() {
+        return (EAttribute)basicNodeEClass.getEStructuralFeatures().get(24);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     */
+    public EAttribute getBasicNode_Message() {
+        return (EAttribute)basicNodeEClass.getEStructuralFeatures().get(25);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     */
+    public EAttribute getBasicNode_Requirement() {
+        return (EAttribute)basicNodeEClass.getEStructuralFeatures().get(26);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     */
+    public EAttribute getBasicNode_Parent() {
+        return (EAttribute)basicNodeEClass.getEStructuralFeatures().get(27);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     */
+    public EAttribute getBasicNode_RefSource() {
+        return (EAttribute)basicNodeEClass.getEStructuralFeatures().get(28);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     */
+    public EAttribute getBasicNode_ParameterDefs() {
+        return (EAttribute)basicNodeEClass.getEStructuralFeatures().get(29);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     */
+    public EAttribute getBasicNode_ParameterVals() {
+        return (EAttribute)basicNodeEClass.getEStructuralFeatures().get(30);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     */
+    public EAttribute getBasicNode_ParameterizedDesc() {
+        return (EAttribute)basicNodeEClass.getEStructuralFeatures().get(31);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
      * @generated
      */
     public EClass getArgument() {
@@ -513,27 +609,24 @@ public class DcasePackageImpl extends EPackageImpl implements DcasePackage {
     /**
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
      */
-    public EAttribute getSystem_Score() {
+    public EAttribute getSystem_SubType() {
         return (EAttribute)systemEClass.getEStructuralFeatures().get(0);
     }
 
     /**
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
      */
-    public EAttribute getSystem_Weight() {
+    public EAttribute getSystem_LeafNode() {
         return (EAttribute)systemEClass.getEStructuralFeatures().get(1);
     }
 
     /**
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
      */
-    public EAttribute getSystem_NodeLink() {
+    public EAttribute getSystem_I() {
         return (EAttribute)systemEClass.getEStructuralFeatures().get(2);
     }
 
@@ -541,7 +634,7 @@ public class DcasePackageImpl extends EPackageImpl implements DcasePackage {
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      */
-    public EAttribute getSystem_Param() {
+    public EAttribute getSystem_J() {
         return (EAttribute)systemEClass.getEStructuralFeatures().get(3);
     }
 
@@ -899,6 +992,22 @@ public class DcasePackageImpl extends EPackageImpl implements DcasePackage {
     /**
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
+     */
+    public EAttribute getBasicLink_SiblingOrder() {
+        return (EAttribute)basicLinkEClass.getEStructuralFeatures().get(22);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     */
+    public EAttribute getBasicLink_Message() {
+        return (EAttribute)basicLinkEClass.getEStructuralFeatures().get(23);
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
      * @generated
      */
     public EClass getDcaseLink001() {
@@ -965,6 +1074,18 @@ public class DcasePackageImpl extends EPackageImpl implements DcasePackage {
         createEAttribute(basicNodeEClass, BASIC_NODE__DESC);
         createEAttribute(basicNodeEClass, BASIC_NODE__ATTACHMENT);
         createEAttribute(basicNodeEClass, BASIC_NODE__STATUS);
+        createEAttribute(basicNodeEClass, BASIC_NODE__FLAG);
+        createEAttribute(basicNodeEClass, BASIC_NODE__RESPNAME);
+        createEAttribute(basicNodeEClass, BASIC_NODE__RESPADDRESS);
+        createEAttribute(basicNodeEClass, BASIC_NODE__RESPICON);
+        createEAttribute(basicNodeEClass, BASIC_NODE__RESPTIME);
+        createEAttribute(basicNodeEClass, BASIC_NODE__MESSAGE);
+        createEAttribute(basicNodeEClass, BASIC_NODE__REQUIREMENT);
+        createEAttribute(basicNodeEClass, BASIC_NODE__PARENT);
+        createEAttribute(basicNodeEClass, BASIC_NODE__REFSOURCE);
+        createEAttribute(basicNodeEClass, BASIC_NODE__PARAMETERDEFS);
+        createEAttribute(basicNodeEClass, BASIC_NODE__PARAMETERVALS);
+        createEAttribute(basicNodeEClass, BASIC_NODE__PARAMETERIZEDDESC);
         createEAttribute(basicNodeEClass, BASIC_NODE__USERDEF001);
         createEAttribute(basicNodeEClass, BASIC_NODE__USERDEF002);
         createEAttribute(basicNodeEClass, BASIC_NODE__USERDEF003);
@@ -991,10 +1112,10 @@ public class DcasePackageImpl extends EPackageImpl implements DcasePackage {
         createEAttribute(goalEClass, GOAL__WEIGHT);
 
         systemEClass = createEClass(SYSTEM);
-        createEAttribute(systemEClass, SYSTEM__SCORE);
-        createEAttribute(systemEClass, SYSTEM__WEIGHT);
-        createEAttribute(systemEClass, SYSTEM__NODE_LINK);
-        createEAttribute(systemEClass, SYSTEM__PARAM);
+        createEAttribute(systemEClass, SYSTEM__SUBTYPE);
+        createEAttribute(systemEClass, SYSTEM__LEAFNODE);
+        createEAttribute(systemEClass, SYSTEM__I);
+        createEAttribute(systemEClass, SYSTEM__J);
 
         strategyEClass = createEClass(STRATEGY);
 
@@ -1032,6 +1153,8 @@ public class DcasePackageImpl extends EPackageImpl implements DcasePackage {
         createEAttribute(basicLinkEClass, BASIC_LINK__DESC);
         createEAttribute(basicLinkEClass, BASIC_LINK__ATTACHMENT);
         createEAttribute(basicLinkEClass, BASIC_LINK__STATUS);
+        createEAttribute(basicLinkEClass, BASIC_LINK__SIBLINGORDER);
+        createEAttribute(basicLinkEClass, BASIC_LINK__MESSAGE);
         createEAttribute(basicLinkEClass, BASIC_LINK__USERDEF001);
         createEAttribute(basicLinkEClass, BASIC_LINK__USERDEF002);
         createEAttribute(basicLinkEClass, BASIC_LINK__USERDEF003);
@@ -1113,6 +1236,18 @@ public class DcasePackageImpl extends EPackageImpl implements DcasePackage {
         initEAttribute(getBasicNode_Desc(), ecorePackage.getEString(), "desc", null, 0, 1, BasicNode.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
         initEAttribute(getBasicNode_Attachment(), ecorePackage.getEString(), "attachment", null, 0, 1, BasicNode.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
         initEAttribute(getBasicNode_Status(), ecorePackage.getEString(), "status", null, 0, 1, BasicNode.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getBasicNode_Flag(), ecorePackage.getEString(), "flag", null, 0, 1, BasicNode.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getBasicNode_RespName(), ecorePackage.getEString(), "respName", null, 0, 1, BasicNode.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getBasicNode_RespAddress(), ecorePackage.getEString(), "respAddress", null, 0, 1, BasicNode.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getBasicNode_RespIcon(), ecorePackage.getEString(), "respIcon", null, 0, 1, BasicNode.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getBasicNode_RespTime(), ecorePackage.getEString(), "validUntil", null, 0, 1, BasicNode.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getBasicNode_Message(), ecorePackage.getEString(), "message", null, 0, 1, BasicNode.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getBasicNode_Requirement(), ecorePackage.getEString(), "requirement", null, 0, 1, BasicNode.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getBasicNode_Parent(), ecorePackage.getEString(), "parent", null, 0, 1, BasicNode.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getBasicNode_RefSource(), ecorePackage.getEString(), "refSource", null, 0, 1, BasicNode.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getBasicNode_ParameterDefs(), ecorePackage.getEString(), "parameterDefs", null, 0, 1, BasicNode.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getBasicNode_ParameterVals(), ecorePackage.getEString(), "parameterVals", null, 0, 1, BasicNode.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getBasicNode_ParameterizedDesc(), ecorePackage.getEString(), "parameterizedDesc", null, 0, 1, BasicNode.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
         initEAttribute(getBasicNode_Userdef001(), ecorePackage.getEString(), "userdef001", null, 0, 1, BasicNode.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
         initEAttribute(getBasicNode_Userdef002(), ecorePackage.getEString(), "userdef002", null, 0, 1, BasicNode.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
         initEAttribute(getBasicNode_Userdef003(), ecorePackage.getEString(), "userdef003", null, 0, 1, BasicNode.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1138,11 +1273,11 @@ public class DcasePackageImpl extends EPackageImpl implements DcasePackage {
         initEAttribute(getGoal_Score(), ecorePackage.getEBigDecimal(), "score", "0", 0, 1, Goal.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
         initEAttribute(getGoal_Weight(), ecorePackage.getEInt(), "weight", "1", 0, 1, Goal.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-        initEClass(systemEClass, net.dependableos.dcase.System.class, "System", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-        initEAttribute(getSystem_Score(), ecorePackage.getEBigDecimal(), "score", "0", 0, 1, net.dependableos.dcase.System.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getSystem_Weight(), ecorePackage.getEInt(), "weight", "1", 0, 1, net.dependableos.dcase.System.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getSystem_NodeLink(), ecorePackage.getEString(), "nodeLink", null, 0, 1, net.dependableos.dcase.System.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-        initEAttribute(getSystem_Param(), ecorePackage.getEString(), "param", null, 0, 1, net.dependableos.dcase.System.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEClass(systemEClass, net.dependableos.dcase.System.class, "Pattern", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+        initEAttribute(getSystem_SubType(), ecorePackage.getEString(), "subType", null, 0, 1, net.dependableos.dcase.System.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getSystem_LeafNode(), ecorePackage.getEString(), "leafNode", null, 0, 1, net.dependableos.dcase.System.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getSystem_I(), ecorePackage.getEInt(), "i", "0", 0, 1, net.dependableos.dcase.System.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getSystem_J(), ecorePackage.getEInt(), "j", "0", 0, 1, net.dependableos.dcase.System.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
         initEClass(strategyEClass, Strategy.class, "Strategy", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
@@ -1159,19 +1294,19 @@ public class DcasePackageImpl extends EPackageImpl implements DcasePackage {
         initEAttribute(getJustification_Stakeholder(), ecorePackage.getEString(), "stakeholder", "", 0, 1, Justification.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
         initEAttribute(getJustification_RiskAnalysis(), ecorePackage.getEString(), "riskAnalysis", null, 0, 1, Justification.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-        initEClass(policyEClass, Policy.class, "Policy", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+        initEClass(policyEClass, Policy.class, "Action", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
-        initEClass(userdef001EClass, Userdef001.class, "Userdef001", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+        initEClass(userdef001EClass, Userdef001.class, "External", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
         initEClass(userdef002EClass, Userdef002.class, "Userdef002", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
         initEClass(userdef003EClass, Userdef003.class, "Userdef003", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
-        initEClass(userdef004EClass, Userdef004.class, "Userdef004", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+        initEClass(userdef004EClass, Userdef004.class, "Assumption", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
-        initEClass(userdef005EClass, Userdef005.class, "Userdef005", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+        initEClass(userdef005EClass, Userdef005.class, "Module", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
-        initEClass(userdef006EClass, Userdef006.class, "Userdef006", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+        initEClass(userdef006EClass, Userdef006.class, "Contract", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
         initEClass(basicLinkEClass, BasicLink.class, "BasicLink", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
         initEReference(getBasicLink_Source(), this.getBasicNode(), null, "source", null, 0, 1, BasicLink.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1180,6 +1315,8 @@ public class DcasePackageImpl extends EPackageImpl implements DcasePackage {
         initEAttribute(getBasicLink_Desc(), ecorePackage.getEString(), "desc", null, 0, 1, BasicLink.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
         initEAttribute(getBasicLink_Attachment(), ecorePackage.getEString(), "attachment", null, 0, 1, BasicLink.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
         initEAttribute(getBasicLink_Status(), ecorePackage.getEString(), "status", null, 0, 1, BasicLink.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getBasicLink_SiblingOrder(), ecorePackage.getEString(), "siblingOrder", null, 0, 1, BasicLink.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        initEAttribute(getBasicLink_Message(), ecorePackage.getEString(), "message", null, 0, 1, BasicLink.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
         initEAttribute(getBasicLink_Userdef001(), ecorePackage.getEString(), "userdef001", null, 0, 1, BasicLink.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
         initEAttribute(getBasicLink_Userdef002(), ecorePackage.getEString(), "userdef002", null, 0, 1, BasicLink.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
         initEAttribute(getBasicLink_Userdef003(), ecorePackage.getEString(), "userdef003", null, 0, 1, BasicLink.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1197,11 +1334,11 @@ public class DcasePackageImpl extends EPackageImpl implements DcasePackage {
         initEAttribute(getBasicLink_Userdef015(), ecorePackage.getEString(), "userdef015", null, 0, 1, BasicLink.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
         initEAttribute(getBasicLink_Userdef016(), ecorePackage.getEString(), "userdef016", null, 0, 1, BasicLink.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-        initEClass(dcaseLink001EClass, DcaseLink001.class, "DcaseLink001", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+        initEClass(dcaseLink001EClass, DcaseLink001.class, "SupportedBy", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
-        initEClass(dcaseLink002EClass, DcaseLink002.class, "DcaseLink002", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+        initEClass(dcaseLink002EClass, DcaseLink002.class, "InContextOf", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
-        initEClass(dcaseLink003EClass, DcaseLink003.class, "DcaseLink003", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+        initEClass(dcaseLink003EClass, DcaseLink003.class, "Responsibility", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
         initEClass(dcaseLink004EClass, DcaseLink004.class, "DcaseLink004", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 

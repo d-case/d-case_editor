@@ -11,13 +11,13 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static net.dependableos.dcase.impl.ParameterItem.PARAM_ITEM_FORMAT;
-
+import static net.dependableos.dcase.impl.ParameterItem.PARAM_ITEM_REGEX_FORMAT;
 import net.dependableos.dcase.Argument;
 import net.dependableos.dcase.BasicNode;
 import net.dependableos.dcase.Goal;
 import net.dependableos.dcase.Justification;
 import net.dependableos.dcase.Monitor;
+import net.dependableos.dcase.Userdef001;
 import net.dependableos.dcase.Userdef005;
 import net.dependableos.dcase.diagram.common.command.ChangeBasicNodePropertyTransactionCommand;
 import net.dependableos.dcase.diagram.common.model.AttributeType;
@@ -26,13 +26,11 @@ import net.dependableos.dcase.diagram.edit.parts.ArgumentEditPart;
 import net.dependableos.dcase.diagram.edit.parts.custom.DcaseNodeEditPart;
 import net.dependableos.dcase.diagram.part.DcaseDiagramEditor;
 import net.dependableos.dcase.diagram.part.DcaseDiagramEditorUtil;
+import net.dependableos.dcase.diagram.part.PatternUtil;
 import net.dependableos.dcase.diagram.ui.AttributeDialog;
+import net.dependableos.dcase.impl.ParameterItem;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.emf.workspace.util.WorkspaceSynchronizer;
@@ -47,13 +45,10 @@ import org.eclipse.gmf.runtime.diagram.ui.editpolicies.OpenEditPolicy;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.IEditorDescriptor;
 import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.console.MessageConsoleStream;
-import org.eclipse.ui.part.FileEditorInput;
 
 
 /**
@@ -85,52 +80,30 @@ public class BasicNodeOpenEditPolicy extends OpenEditPolicy {
         // open module when dstar diagram
     	XMLResource resource = (XMLResource)basicNode.eResource();
     	IFile modelFile = WorkspaceSynchronizer.getFile(resource);
-    	if (modelFile.getFileExtension().equals("dstar_model") || //$NON-NLS-1$
-    		basicNode instanceof Userdef005 || basicNode instanceof Goal) {
+    	if (PatternUtil.isDstarModelFile(modelFile) ||
+    		basicNode instanceof Userdef005 || basicNode instanceof Userdef001 ||
+    		basicNode instanceof Goal) {
     		String moduleName = basicNode.getAttachment();
-    		if (DcaseNodeEditPart.isReference(moduleName)) {
-    			DcaseDiagramEditor newEditor;
-    			String nodeName = null;
-    			int index = moduleName.indexOf("/");
-    			if (index > 0) {
-    				nodeName = moduleName.substring(index + 1);
-    				moduleName = moduleName.substring(0, index);
-    			}
-    			IWorkbenchPage workbenchPage = PlatformUI.getWorkbench()
-    					.getActiveWorkbenchWindow().getActivePage();
-    			IPath diagramPath = modelFile.getParent().getFullPath()
-    					.append(moduleName).addFileExtension("dcase_diagram"); //$NON-NLS-1$
-    			IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-    			IFile diagramFile = root.getFile(new Path(diagramPath.toOSString()));
-            
-    			// open diagram
-    			IEditorDescriptor desc = PlatformUI.getWorkbench()
-    					.getEditorRegistry().getDefaultEditor(diagramFile.getName());
-    			if (desc != null) {
-    				try {
-    					newEditor = (DcaseDiagramEditor)workbenchPage.openEditor(
-    							new FileEditorInput(diagramFile), desc.getId());
-    				} catch (Exception e) {
-    					e.printStackTrace();
-    					return null;
-    				}
+    		if (PatternUtil.isModuleReference(moduleName)) {
+    			String nodeName = PatternUtil.getNodeName(moduleName);
+    			moduleName = PatternUtil.getModuleName(moduleName);
+    			DcaseDiagramEditor newEditor = (DcaseDiagramEditor)PatternUtil.openModuleEditor(moduleName);
     				
-    				// Away Goal...
-    				if (nodeName != null && nodeName.length() > 0 && newEditor != null) {
-    					ArgumentEditPart argumentEditPart = (ArgumentEditPart)newEditor.getDiagramEditPart();
-    					Argument argument = (Argument)newEditor.getDiagram().getElement();
-    					for (BasicNode node : argument.getRootBasicNode()) {
-    						if (node.getName().equals(nodeName)) {
-    							EditPart nodeEditPart = argumentEditPart.findEditPart(null, node);
-    							DcaseDiagramEditorUtil.selectElementsInDiagram(newEditor,
-    									Arrays.asList(new EditPart[] { nodeEditPart }));
-    							break;
-    						}
+    			// Away Goal...
+    			if (nodeName != null && nodeName.length() > 0 && newEditor != null) {
+    				ArgumentEditPart argumentEditPart = (ArgumentEditPart)newEditor.getDiagramEditPart();
+    				Argument argument = (Argument)newEditor.getDiagram().getElement();
+    				for (BasicNode node : argument.getRootBasicNode()) {
+    					if (node.getName().equals(nodeName)) {
+    						EditPart nodeEditPart = argumentEditPart.findEditPart(null, node);
+    						DcaseDiagramEditorUtil.selectElementsInDiagram(newEditor,
+    								Arrays.asList(new EditPart[] { nodeEditPart }));
+    						break;
     					}
     				}
     			}
     			return null;
-    		} else if (modelFile.getFileExtension().equals("dstar_model")) { //$NON-NLS-1$
+    		} else if (PatternUtil.isDstarModelFile(modelFile)) {
     			return null;
     		}
     	}
@@ -141,11 +114,14 @@ public class BasicNodeOpenEditPolicy extends OpenEditPolicy {
         String attachment = basicNode.getAttachment();
         int weight = 0;
         BigDecimal score = null;
-        String descFormat = basicNode.getUserdef005();
+        String descFormat = ParameterItem.unescapeLineSeparator(basicNode.getParameterizedDesc());
         String script = basicNode.getUserdef006();
-        String parameter = basicNode.getUserdef007();
-        String parameterDefinitions = basicNode.getUserdef009();
-        String responsibility = basicNode.getUserdef012();
+        String parameter = basicNode.getParameterVals();
+        String parameterDefinitions = basicNode.getParameterDefs();
+        String respName = basicNode.getRespName();
+        String respAddress = basicNode.getRespAddress();
+        String respIcon = basicNode.getRespIcon();
+        String respTime = basicNode.getRespTime();
 
         NodeType nodeType = NodeType.getNodeType(basicNode);
         switch (nodeType) {
@@ -168,7 +144,10 @@ public class BasicNodeOpenEditPolicy extends OpenEditPolicy {
         dialog.setScript(script);
         dialog.setParameters(parameter);
         dialog.setParameterDefinitions(parameterDefinitions);
-        dialog.setResponsibility(responsibility);
+        dialog.setRespName(respName);
+        dialog.setRespAddress(respAddress);
+        dialog.setRespIcon(respIcon);
+        dialog.setRespTime(respTime);
         
         dialog.setStatus(basicNode.getStatus());
 
@@ -181,6 +160,12 @@ public class BasicNodeOpenEditPolicy extends OpenEditPolicy {
                 break;
             case MONITOR:
                 dialog.setIsNormal(((Monitor) basicNode).isIsNormal());
+                break;
+            case SYSTEM:
+                dialog.setSubType(((net.dependableos.dcase.System) basicNode).getSubType());
+                dialog.setLeafNode(((net.dependableos.dcase.System) basicNode).getLeafNode());
+                dialog.setI(((net.dependableos.dcase.System) basicNode).getI());
+                dialog.setJ(((net.dependableos.dcase.System) basicNode).getJ());
                 break;
             default:
         }
@@ -209,16 +194,20 @@ public class BasicNodeOpenEditPolicy extends OpenEditPolicy {
                 attrMap.put(AttributeType.DESC, dialog.getDesc());
                 attrMap.put(AttributeType.ATTACHMENT, dialog.getAttachment());
                 attrMap.put(AttributeType.STATUS, dialog.getStatus());
-                attrMap.put(AttributeType.USERDEF005, dialog.getDescFormat());
+                attrMap.put(AttributeType.PARAMETERIZEDDESC,
+                		ParameterItem.escapeLineSeparator(dialog.getDescFormat()));
                 attrMap.put(AttributeType.USERDEF006, dialog.getScript());
-                attrMap.put(AttributeType.USERDEF007, dialog.getParameters());
-                attrMap.put(AttributeType.USERDEF009, dialog.getParameterDefinitions());
-                attrMap.put(AttributeType.USERDEF012, dialog.getResponsibility());
+                attrMap.put(AttributeType.PARAMETERVALS, dialog.getParameters());
+                attrMap.put(AttributeType.PARAMETERDEFS, dialog.getParameterDefinitions());
+                attrMap.put(AttributeType.RESPNAME, dialog.getRespName());
+                attrMap.put(AttributeType.RESPADDRESS, dialog.getRespAddress());
+                attrMap.put(AttributeType.RESPICON, dialog.getRespIcon());
+                attrMap.put(AttributeType.RESPTIME, dialog.getRespTime());
 
                 switch (nodeType) {
                     case GOAL:
                         attrMap.put(AttributeType.WEIGHT, dialog.getWeight());
-                        attrMap.put(AttributeType.USERDEF003, dialog.getRequirement());
+                        attrMap.put(AttributeType.REQUIREMENT, dialog.getRequirement());
                         break;
                     case JUSTIFICATION:
                         attrMap.put(AttributeType.STAKEHOLDER, dialog
@@ -229,6 +218,12 @@ public class BasicNodeOpenEditPolicy extends OpenEditPolicy {
                     case MONITOR:
                         attrMap.put(AttributeType.IS_NORMAL, dialog
                                 .isIsNormal());
+                        break;
+                    case SYSTEM:
+                        attrMap.put(AttributeType.SUBTYPE, dialog.getSubType());
+                        attrMap.put(AttributeType.LEAFNODE, dialog.getLeafNode());
+                        attrMap.put(AttributeType.I, dialog.getI());
+                        attrMap.put(AttributeType.J, dialog.getJ());
                         break;
                     default:
                 }
@@ -266,11 +261,15 @@ public class BasicNodeOpenEditPolicy extends OpenEditPolicy {
                 || !dialog.getDesc().equals(convertEmptyString(node.getDesc()))
                 || !dialog.getAttachment().equals(convertEmptyString(node.getAttachment()))
                 || !dialog.getStatus().equals(convertEmptyString(node.getStatus()))
-                || !dialog.getDescFormat().equals(convertEmptyString(node.getUserdef005()))
+                || !dialog.getDescFormat().equals(convertEmptyString(node.getParameterizedDesc()))
                 || !dialog.getScript().equals(convertEmptyString(node.getUserdef006()))
-                || !dialog.getParameters().equals(convertEmptyString(node.getUserdef007()))
-                || !dialog.getParameterDefinitions().equals(convertEmptyString(node.getUserdef009()))
-                || !dialog.getResponsibility().equals(convertEmptyString(node.getUserdef012()))) {
+                || !dialog.getParameters().equals(convertEmptyString(node.getParameterVals()))
+                || !dialog.getParameterDefinitions().equals(convertEmptyString(node.getParameterDefs()))
+                || !dialog.getRespName().equals(convertEmptyString(node.getRespName()))
+                || !dialog.getRespAddress().equals(convertEmptyString(node.getRespAddress()))
+                || !dialog.getRespIcon().equals(convertEmptyString(node.getRespIcon()))
+                || !dialog.getRespTime().equals(convertEmptyString(node.getRespTime()))
+                ) {
             return true;
         }
         NodeType nodeType = NodeType.getNodeType(node);
@@ -279,7 +278,7 @@ public class BasicNodeOpenEditPolicy extends OpenEditPolicy {
             String requirement = null;
             Goal goal = (Goal) node;
             weight = goal.getWeight();
-            requirement = goal.getUserdef003();
+            requirement = goal.getRequirement();
             if (requirement == null) {
                 requirement = "";   //$NON-NLS-1$
             }
@@ -299,6 +298,24 @@ public class BasicNodeOpenEditPolicy extends OpenEditPolicy {
         }
         if (nodeType == NodeType.MONITOR) {
             if (!dialog.isIsNormal() == ((Monitor) node).isIsNormal()) {
+                return true;
+            }
+        }       
+        if (nodeType == NodeType.SYSTEM) {
+            if (!dialog.getSubType()
+                    .equals(convertEmptyString(((net.dependableos.dcase.System) node)
+                            .getSubType()))) {
+                return true;
+            }
+            if (!dialog.getLeafNode()
+                    .equals(convertEmptyString(((net.dependableos.dcase.System) node)
+                            .getLeafNode()))) {
+                return true;
+            }
+            if (dialog.getI() != ((net.dependableos.dcase.System) node).getI()) {
+                return true;
+            }
+            if (dialog.getJ() != ((net.dependableos.dcase.System) node).getJ()) {
                 return true;
             }
         }       
@@ -333,7 +350,7 @@ public class BasicNodeOpenEditPolicy extends OpenEditPolicy {
     		}
     		String parameter = m.group(1);
     		paramList.add(parameter);
-    		desc = desc.replaceAll(String.format(PARAM_ITEM_FORMAT, parameter), ""); //$NON-NLS-1$
+    		desc = desc.replaceAll(String.format(PARAM_ITEM_REGEX_FORMAT, parameter), ""); //$NON-NLS-1$
     	}
     	// found unknown parameters.
     	if (paramList.size() > 0) {

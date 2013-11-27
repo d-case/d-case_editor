@@ -48,6 +48,8 @@ public final class Menus extends NLS {
     public static String ExpressModelDiffrenceLogic_0;
     public static String ExpressModelDiffrenceLogic_1;
     public static String ExpressModelDiffrenceLogic_2;
+    public static String AddPattern_0;
+    public static String AddPattern_1;
     
     static {
         // initialize resource bundle

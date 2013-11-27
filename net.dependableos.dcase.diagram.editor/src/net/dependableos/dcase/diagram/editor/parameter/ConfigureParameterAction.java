@@ -86,12 +86,12 @@ public class ConfigureParameterAction implements IObjectActionDelegate {
                 // creates a map of attributes to update.
                 Map<AttributeType, Object> attributeMap = new HashMap<AttributeType, Object>();
                 // sets values to the map.
-                attributeMap.put(AttributeType.USERDEF005, nodeInfo
-                        .getAttribute(AttributeType.USERDEF005));
+                attributeMap.put(AttributeType.PARAMETERIZEDDESC, nodeInfo
+                        .getAttribute(AttributeType.PARAMETERIZEDDESC));
                 attributeMap.put(AttributeType.USERDEF006, nodeInfo
                         .getAttribute(AttributeType.USERDEF006));
-                attributeMap.put(AttributeType.USERDEF007, nodeInfo
-                        .getAttribute(AttributeType.USERDEF007));
+                attributeMap.put(AttributeType.PARAMETERVALS, nodeInfo
+                        .getAttribute(AttributeType.PARAMETERVALS));
                 // creates a command.
                 ICommand changeCommand = new ChangeBasicNodePropertyTransactionCommand(
                         argumentEditPart.getEditingDomain(),

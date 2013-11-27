@@ -120,7 +120,7 @@ IStructuredContentProvider {
         Context context = (Context) DcaseEditorUtil.getElement(editPart);
         requirements = context.getRequirements();
         try {
-            parameters = editPart.getParameters(context.getUserdef007());
+            parameters = editPart.getParameters(context.getParameterVals());
         } catch (Exception e) {
             parameters = ""; //$NON-NLS-1$
         }

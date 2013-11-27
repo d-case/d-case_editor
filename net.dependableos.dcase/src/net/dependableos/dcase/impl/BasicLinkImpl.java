@@ -30,6 +30,8 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  *   <li>{@link net.dependableos.dcase.impl.BasicLinkImpl#getDesc <em>Desc</em>}</li>
  *   <li>{@link net.dependableos.dcase.impl.BasicLinkImpl#getAttachment <em>Attachment</em>}</li>
  *   <li>{@link net.dependableos.dcase.impl.BasicLinkImpl#getStatus <em>Status</em>}</li>
+ *   <li>{@link net.dependableos.dcase.impl.BasicLinkImpl#getSiblingOrder <em>SiblingOrder</em>}</li>
+ *   <li>{@link net.dependableos.dcase.impl.BasicLinkImpl#getMessage <em>Message</em>}</li>
  *   <li>{@link net.dependableos.dcase.impl.BasicLinkImpl#getUserdef001 <em>Userdef001</em>}</li>
  *   <li>{@link net.dependableos.dcase.impl.BasicLinkImpl#getUserdef002 <em>Userdef002</em>}</li>
  *   <li>{@link net.dependableos.dcase.impl.BasicLinkImpl#getUserdef003 <em>Userdef003</em>}</li>
@@ -151,6 +153,42 @@ public abstract class BasicLinkImpl extends EObjectImpl implements BasicLink {
      * @ordered
      */
     protected String status = STATUS_EDEFAULT;
+
+    /**
+     * The default value of the '{@link #getSiblingOrder() <em>SiblingOrder</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getSiblingOrder()
+     * @ordered
+     */
+    protected static final String SIBLINGORDER_EDEFAULT = null;
+
+    /**
+     * The cached value of the '{@link #getSiblingOrder() <em>SiblingOrder</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getSliblingOrder()
+     * @ordered
+     */
+    protected String siblingOrder = SIBLINGORDER_EDEFAULT;
+
+    /**
+     * The default value of the '{@link #getMessage() <em>Message</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getMessage()
+     * @ordered
+     */
+    protected static final String MESSAGE_EDEFAULT = null;
+
+    /**
+     * The cached value of the '{@link #getMessage() <em>Message</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getMessage()
+     * @ordered
+     */
+    protected String message = MESSAGE_EDEFAULT;
 
     /**
      * The default value of the '{@link #getUserdef001() <em>Userdef001</em>}' attribute.
@@ -654,6 +692,44 @@ public abstract class BasicLinkImpl extends EObjectImpl implements BasicLink {
     /**
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
+     */
+    public String getSiblingOrder() {
+        return siblingOrder;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     */
+    public void setSiblingOrder(String newSiblingOrder) {
+        String oldSiblingOrder = siblingOrder;
+        siblingOrder = newSiblingOrder;
+        if (eNotificationRequired())
+            eNotify(new ENotificationImpl(this, Notification.SET, DcasePackage.BASIC_LINK__SIBLINGORDER, oldSiblingOrder, siblingOrder));
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     */
+    public String getMessage() {
+        return message;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     */
+    public void setMessage(String newValue) {
+        String oldValue = message;
+        message = newValue;
+        if (eNotificationRequired())
+            eNotify(new ENotificationImpl(this, Notification.SET, DcasePackage.BASIC_LINK__MESSAGE, oldValue, newValue));
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
      * @generated
      */
     public String getUserdef001() {
@@ -1009,6 +1085,10 @@ public abstract class BasicLinkImpl extends EObjectImpl implements BasicLink {
                 return getAttachment();
             case DcasePackage.BASIC_LINK__STATUS:
                 return getStatus();
+            case DcasePackage.BASIC_LINK__SIBLINGORDER:
+                return getSiblingOrder();
+            case DcasePackage.BASIC_LINK__MESSAGE:
+                return getMessage();
             case DcasePackage.BASIC_LINK__USERDEF001:
                 return getUserdef001();
             case DcasePackage.BASIC_LINK__USERDEF002:
@@ -1070,6 +1150,12 @@ public abstract class BasicLinkImpl extends EObjectImpl implements BasicLink {
                 return;
             case DcasePackage.BASIC_LINK__STATUS:
                 setStatus((String)newValue);
+                return;
+            case DcasePackage.BASIC_LINK__SIBLINGORDER:
+                setSiblingOrder((String)newValue);
+                return;
+            case DcasePackage.BASIC_LINK__MESSAGE:
+                setMessage((String)newValue);
                 return;
             case DcasePackage.BASIC_LINK__USERDEF001:
                 setUserdef001((String)newValue);
@@ -1149,6 +1235,12 @@ public abstract class BasicLinkImpl extends EObjectImpl implements BasicLink {
             case DcasePackage.BASIC_LINK__STATUS:
                 setStatus(STATUS_EDEFAULT);
                 return;
+            case DcasePackage.BASIC_LINK__SIBLINGORDER:
+                setSiblingOrder(SIBLINGORDER_EDEFAULT);
+                return;
+            case DcasePackage.BASIC_LINK__MESSAGE:
+                setMessage(MESSAGE_EDEFAULT);
+                return;
             case DcasePackage.BASIC_LINK__USERDEF001:
                 setUserdef001(USERDEF001_EDEFAULT);
                 return;
@@ -1221,6 +1313,10 @@ public abstract class BasicLinkImpl extends EObjectImpl implements BasicLink {
                 return ATTACHMENT_EDEFAULT == null ? attachment != null : !ATTACHMENT_EDEFAULT.equals(attachment);
             case DcasePackage.BASIC_LINK__STATUS:
                 return STATUS_EDEFAULT == null ? status != null : !STATUS_EDEFAULT.equals(status);
+            case DcasePackage.BASIC_LINK__SIBLINGORDER:
+                return SIBLINGORDER_EDEFAULT == null ? siblingOrder != null : !SIBLINGORDER_EDEFAULT.equals(siblingOrder);
+            case DcasePackage.BASIC_LINK__MESSAGE:
+                return MESSAGE_EDEFAULT == null ? message != null : !MESSAGE_EDEFAULT.equals(message);
             case DcasePackage.BASIC_LINK__USERDEF001:
                 return USERDEF001_EDEFAULT == null ? userdef001 != null : !USERDEF001_EDEFAULT.equals(userdef001);
             case DcasePackage.BASIC_LINK__USERDEF002:
@@ -1275,6 +1371,10 @@ public abstract class BasicLinkImpl extends EObjectImpl implements BasicLink {
         result.append(attachment);
         result.append(", status: ");
         result.append(status);
+        result.append(", message: ");
+        result.append(message);
+        result.append(", siblingOrder: ");
+        result.append(siblingOrder);
         result.append(", userdef001: ");
         result.append(userdef001);
         result.append(", userdef002: ");

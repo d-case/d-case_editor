@@ -9,7 +9,7 @@
 
    <extension point="org.eclipse.emf.ecore.generated_package">
       <package
-            uri="http://www.dependable-os.net/2010/03/dcase/"
+            uri="http://www.dependable-os.net/2013/11/dcase_model/"
             class="net.dependableos.dcase.DcasePackage"
             genModel="model/dcase.genmodel"/>
    </extension>

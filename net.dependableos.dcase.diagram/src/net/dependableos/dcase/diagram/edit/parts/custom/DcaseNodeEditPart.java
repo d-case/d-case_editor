@@ -3,22 +3,24 @@
  */
 package net.dependableos.dcase.diagram.edit.parts.custom;
 
-import static net.dependableos.dcase.diagram.common.constant.SystemPropertyKeyConst.DIAGRAM_FILE_EXTENSION;
 import static net.dependableos.dcase.diagram.common.constant.SystemPropertyKeyConst.DSTAR_FILE_EXTENSION;
 import net.dependableos.dcase.Argument;
 import net.dependableos.dcase.BasicNode;
+import net.dependableos.dcase.System;
+import net.dependableos.dcase.Userdef001;
 import net.dependableos.dcase.Userdef005;
 import net.dependableos.dcase.impl.ParameterItem;
+import net.dependableos.dcase.provider.DcaseEditPlugin;
 import net.dependableos.dcase.diagram.common.util.FileUtil;
+import net.dependableos.dcase.diagram.common.util.Messages;
 import net.dependableos.dcase.diagram.common.util.PropertyUtil;
 import net.dependableos.dcase.diagram.edit.parts.ArgumentEditPart;
 import net.dependableos.dcase.diagram.edit.parts.SystemEditPart;
 import net.dependableos.dcase.diagram.ui.editpolicies.BasicNodeOpenEditPolicy;
 import net.dependableos.dcase.diagram.part.DcaseDiagramEditor;
 import net.dependableos.dcase.diagram.part.DcaseDiagramEditorUtil;
+import net.dependableos.dcase.diagram.part.PatternUtil;
 
-import java.net.URL;
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -44,6 +46,7 @@ import org.eclipse.gmf.runtime.notation.FillStyle;
 import org.eclipse.gmf.runtime.notation.NotationPackage;
 import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.emf.workspace.util.WorkspaceSynchronizer;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.ui.IActionFilter;
@@ -63,9 +66,21 @@ import org.eclipse.ui.part.FileEditorInput;
 public abstract class DcaseNodeEditPart extends ShapeNodeEditPart implements
         DcaseDelegateNodeEditPart, DcaseDelegateEditPart {
 
-	private static final String DSTAR_MODULE_NAME = "main"; //$NON-NLS-1$
+	/**
+	 * The module name of d*.
+	 */
+	private static final String DSTAR_MODULE_NAME = PatternUtil.getMainModuleName();
 	
+	 /**
+	  * The console name.
+	  */
     private static final String CONSOLE_NAME = "Console"; //$NON-NLS-1$
+    
+    /**
+     * The key of Parameter subtype.
+     */
+    private static final String SUBTYPE_PARAMETER = "_UI_System_subType_param"; //$NON-NLS-1$
+    private String subTypeParameter;
 
     /**
      * Allocates a DcaseNodeEditPart object.
@@ -74,6 +89,7 @@ public abstract class DcaseNodeEditPart extends ShapeNodeEditPart implements
      */
     public DcaseNodeEditPart(View view) {
         super(view);
+        subTypeParameter = DcaseEditPlugin.getPlugin().getString(SUBTYPE_PARAMETER);
     }
 
 
@@ -205,7 +221,8 @@ public abstract class DcaseNodeEditPart extends ShapeNodeEditPart implements
     		if(feature instanceof EAttribute) {
     	    	// process parameters
     			EAttribute attr = (EAttribute)feature;
-    			if(attr.getName().equals("userdef007")) {
+    			if(attr.getName().equals("parameterVals") || //$NON-NLS-1$
+    					attr.getName().equals("subType")) { //$NON-NLS-1$
     				this.notifyParameters();
             	}
             	// change background
@@ -267,9 +284,10 @@ public abstract class DcaseNodeEditPart extends ShapeNodeEditPart implements
     	
     	// set notify flag to attachment.
     	String attachment = node.getAttachment();
-    	if(node instanceof Userdef005 && isReference(attachment)) {
-    		String[] names = attachment.split("/"); //$NON-NLS-1$
-    		DcaseDiagramEditor editor = getDcaseDiagramEditor(node, names[0]);
+    	if((node instanceof Userdef005 || node instanceof Userdef001)
+    			&& PatternUtil.isModuleReference(attachment)) {
+    		String moduleName = PatternUtil.getModuleName(attachment);
+    		DcaseDiagramEditor editor = getDcaseDiagramEditor(node, moduleName);
     		if(editor != null) {
     			editor.setNotifyFlag(true);
     		}
@@ -314,7 +332,7 @@ public abstract class DcaseNodeEditPart extends ShapeNodeEditPart implements
     protected String parameterListToString(List<ParameterData> paramList) {
     	Collections.sort(paramList, new ParameterComparator());
     	StringBuffer ret = new StringBuffer();
-    	ArrayList<String> nameList = new ArrayList<String>();
+    	ArrayList<String> nameList = null;
     	int prevdist = -1;
     	
     	for (int i = 0; i < paramList.size(); i++) {
@@ -332,14 +350,14 @@ public abstract class DcaseNodeEditPart extends ShapeNodeEditPart implements
     			String name = item.getParameterId();
     			if (nameList.contains(name)) {
     				MessageConsoleStream stream = getMessageConsoleStream();
-    				stream.println(name + " : detected duplicate"); //$NON-NLS-1$
+    				stream.println(NLS.bind(Messages.ParameterDuplicated, name));
     			} else {
     				nameList.add(name);
     			}
     		}
     		ret.append(curData.getValues());
     		if (i < paramList.size() - 1) {
-    			ret.append(","); //$NON-NLS-1$
+    			ret.append(ParameterItem.SEPARATOR);
     		}
     	}
     	return ret.toString();
@@ -347,6 +365,7 @@ public abstract class DcaseNodeEditPart extends ShapeNodeEditPart implements
     
     /**
      * Returns the parameter string.
+     * @param distance the distance.
      * @param userdef007 the current parameter string.
      * @param uuidSet the node set.
      * @return the parameter string.
@@ -354,6 +373,20 @@ public abstract class DcaseNodeEditPart extends ShapeNodeEditPart implements
     protected List<ParameterData> getParameters(int distance, String userdef007, HashSet<String> uuidSet) {
     	// "userdef007" is used only Parameter node.
     	ArrayList<ParameterData> myParameter = new ArrayList<ParameterData>();
+    	boolean isNeedDstar = (uuidSet != null && uuidSet.size() == 0);
+    	
+    	// check UUID
+    	if (uuidSet != null) {
+    		BasicNode node = (BasicNode)getElement();
+        	if(node == null) {
+        		return myParameter;
+        	}
+        	String uuid = getUUID(node);
+        	if(uuidSet.contains(uuid)) {
+        		return myParameter;
+        	}
+        	uuidSet.add(uuid);
+    	}
     	
     	// get parameters of child Parameter nodes.
     	for(Object link : this.getSourceConnections()) {
@@ -361,17 +394,18 @@ public abstract class DcaseNodeEditPart extends ShapeNodeEditPart implements
     			DcaseNodeEditPart child = (DcaseNodeEditPart)((DcaseLinkEditPart)link).getTarget();
     			if (child instanceof SystemEditPart) {
     				BasicNode childNode = (BasicNode)child.getElement();
-    				String childParameter = childNode.getUserdef007();
-    				myParameter.add(new ParameterData(distance, childParameter));
+    				if (subTypeParameter.equals(((System)childNode).getSubType())) {
+    					String childParameter = childNode.getParameterVals();
+    					myParameter.add(new ParameterData(distance, childParameter));
+    				}
     			}
     		}
     	}
     	
+		// if uuidSet is null, only returns the current node's parameters.
     	if (uuidSet == null) {
-    		// only returns the current node's parameters.
     		return myParameter;
     	}
-    	boolean isNeedDstar = (uuidSet.size() == 0);
     	
     	// get Ancestor's parameters
     	List<ParameterData> ret = getParentParameters(distance + 1, uuidSet);
@@ -384,7 +418,7 @@ public abstract class DcaseNodeEditPart extends ShapeNodeEditPart implements
     			DiagramEditPart dstarEditPart = editor.getDiagramEditPart();
     			if (dstarEditPart instanceof ArgumentEditPart) {
     				Argument argument = (Argument)getElement(dstarEditPart);
-    				String dstarUserdef007 = argument.getUserdef007();
+    				String dstarUserdef007 = argument.getParameterVals();
     				ret.add(new ParameterData(Integer.MAX_VALUE, dstarUserdef007));
     			}
 			}
@@ -423,13 +457,13 @@ public abstract class DcaseNodeEditPart extends ShapeNodeEditPart implements
     		return ret;
     	}
     	Argument argument = (Argument)node.eContainer();
-    	String userdef011 = argument.getUserdef011();
-    	String userdef013 = argument.getUserdef013();
-    	if (userdef011 != null && userdef011.length() > 0 &&
-    		userdef013 != null && userdef013.length() > 0) {
+    	String refSource = argument.getRefSource();
+    	String parent = argument.getParent();
+    	if (refSource != null && refSource.length() > 0 &&
+    		parent != null && parent.length() > 0) {
 			// search parent module
-    		for(String nodeName : userdef011.split(";")) { //$NON-NLS-1$
-    			if (userdef013.equals(getModuleName(nodeName))) {
+    		for(String nodeName : refSource.split(PatternUtil.getReferenceSeparator())) {
+    			if (parent.equals(PatternUtil.getModuleName(nodeName))) {
     				ret.add(nodeName);
     			}
     		}
@@ -444,16 +478,16 @@ public abstract class DcaseNodeEditPart extends ShapeNodeEditPart implements
      * @param uuidSet the node set.
      * @return the another module's parameters.
      */
-    private void getAnotherParameters(List<ParameterData> paramList, int distance, String nodeName, HashSet<String> uuidSet) {
+    private void getAnotherParameters(List<ParameterData> paramList, int distance, String nodePath, HashSet<String> uuidSet) {
     	BasicNode node = (BasicNode)getElement();
     	if(node == null) {
     		return;
     	}
 
-    	// names[0]: module name, names[1]: node name
-    	String[] names = nodeName.split("/"); //$NON-NLS-1$
-    	if(isReference(nodeName) && names.length == 2) {
-    		DcaseDiagramEditor editor = getDcaseDiagramEditor(node, names[0]);
+    	String moduleName = PatternUtil.getModuleName(nodePath);
+    	String nodeName = PatternUtil.getNodeName(nodePath);
+    	if(PatternUtil.isModuleReference(nodePath) && (! nodePath.equals(nodeName))) {
+    		DcaseDiagramEditor editor = getDcaseDiagramEditor(node, moduleName);
     		if(editor == null) {
     			return;
     		}
@@ -464,7 +498,7 @@ public abstract class DcaseNodeEditPart extends ShapeNodeEditPart implements
     		for(Object nobj : ((ArgumentEditPart)editPart).getChildren()) {
     			if(nobj instanceof DcaseNodeEditPart) {
     				BasicNode nnode = (BasicNode)getElement((DcaseNodeEditPart)nobj);
-    				if(!nnode.getName().equals(names[1])) {
+    				if(!nnode.getName().equals(nodeName)) {
     					continue;
     				}
     				List<ParameterData> nret = ((DcaseNodeEditPart)nobj).getParentParameters(distance + 1, uuidSet);
@@ -481,17 +515,6 @@ public abstract class DcaseNodeEditPart extends ShapeNodeEditPart implements
      * @return the parameter string of ancestors.
      */
     private void getParentParameters(List<ParameterData> paramList, int distance, HashSet<String> uuidSet) {
-    	// check and add UUID.
-    	BasicNode node = (BasicNode)getElement();
-    	if(node == null) {
-    		return;
-    	}
-    	String uuid = getUUID(node);
-    	if(uuidSet.contains(uuid)) {
-    		return;
-    	}
-    	uuidSet.add(uuid);
-    	
     	// add parent's parameters.
     	for(Object link : this.getTargetConnections()) {
     		if(link instanceof DcaseLinkEditPart) {
@@ -503,23 +526,6 @@ public abstract class DcaseNodeEditPart extends ShapeNodeEditPart implements
     			paramList.addAll(parentEditPart.getParameters(distance, null, uuidSet));
     		}
     	}
-    }
-    
-    public static boolean isReference(String attachment) {
-    	if(attachment == null || attachment.length() < 1) {
-    		return false;
-    	}
-    	// check workspace name
-    	if(attachment.substring(0, 1).equals("/")) { //$NON-NLS-1$
-    		return false;
-    	}
-    	// check URL
-    	try {
-    		new URL(attachment);
-    	} catch(MalformedURLException e) {
-    		return true;
-    	}
-    	return false;
     }
     
     /**
@@ -583,17 +589,12 @@ public abstract class DcaseNodeEditPart extends ShapeNodeEditPart implements
     private DcaseDiagramEditor getDcaseDiagramEditor(BasicNode node, String moduleName, boolean isDstar) {
 		XMLResource resource = (XMLResource)node.eResource();
 		IFile modelFile = WorkspaceSynchronizer.getFile(resource);
-    	IPath basePath = modelFile.getParent().getFullPath().append(moduleName);
-    	if(basePath == null) {
-    		return null;
-    	}
-    	String extensionStr;
-    	if (isDstar) {
-			extensionStr = PropertyUtil.getSystemProperty(DSTAR_FILE_EXTENSION);
-    	} else {
-    		extensionStr = PropertyUtil.getSystemProperty(DIAGRAM_FILE_EXTENSION);
-    	}
-    	IPath diagramPath = basePath.addFileExtension(extensionStr);
+		IPath diagramPath = null;
+		if (isDstar) {
+			diagramPath = PatternUtil.getDstarPath(modelFile);
+		} else {
+			diagramPath = PatternUtil.getDiagramPath(modelFile, moduleName);
+		}
     	if(diagramPath == null) {
     		return null;
     	}
@@ -603,7 +604,7 @@ public abstract class DcaseNodeEditPart extends ShapeNodeEditPart implements
     	IEditorPart editor = null;
     	try {
     		editor = workbenchPage.findEditor(new FileEditorInput(diagramFile));
-    		if (editor == null && !isDstar) {
+    		if (editor == null && diagramFile.exists()) {
     			IEditorDescriptor desc = PlatformUI.getWorkbench()
                         .getEditorRegistry().getDefaultEditor(diagramFile.getName());
     			if (desc != null) {
@@ -629,7 +630,7 @@ public abstract class DcaseNodeEditPart extends ShapeNodeEditPart implements
     }
 
     /**
-     * Sets the background for Attachment and Userdef011.
+     * Sets the background for Attachment and RefSource.
      */
     public Color getAttributeBackground() {
     	BasicNode node = getBasicNode();
@@ -643,11 +644,11 @@ public abstract class DcaseNodeEditPart extends ShapeNodeEditPart implements
         	if (! diagram.getName().equals(dstarDiagramName)) {
             	if(node != null) {
             		String attachmentValue = node.getAttachment();
-            		if(isModuleName(attachmentValue)) {
+            		if(PatternUtil.isModuleReference(attachmentValue)) {
             			condition += 1;
             		}
-            		String userdef011Value = node.getUserdef011();
-            		if(userdef011Value != null && userdef011Value.length() > 0) {
+            		String refSourceValue = node.getRefSource();
+            		if(refSourceValue != null && refSourceValue.length() > 0) {
             			condition += 2;
             		}
             	}
@@ -681,42 +682,6 @@ public abstract class DcaseNodeEditPart extends ShapeNodeEditPart implements
     }
     
     /**
-     * Checks whether the Attachment is module name or not.
-     * @param name the attachment value.
-     * @return the Attachment is module name or not.
-     */
-    public static boolean isModuleName(String name) {
-    	// null check
-    	if(name == null || name.length() == 0) {
-    		return false;
-    	}
-    	// check Workspace
-    	if(name.startsWith("/")) { //$NON-NLS-1$
-    		return false;
-    	}
-    	// check URL
-    	try {
-    		/*URL url = */new URL(name);
-    	} catch(MalformedURLException e) {
-    		return true;
-    	}
-    	return false;
-    }
-
-    /**
-     * Returns the module name.
-     * @param name the module name or the node name.
-     * @return the module name.
-     */
-    public static String getModuleName(String name) {
-    	if(name == null || name.length() == 0) {
-    		return name;
-    	}
-    	int index = name.indexOf("/"); //$NON-NLS-1$
-    	return (index >= 0) ? name.substring(0, index):name;
-    }
-
-    /**
      * A class for sorting parameters.
      *
      */
@@ -734,7 +699,7 @@ public abstract class DcaseNodeEditPart extends ShapeNodeEditPart implements
     		return values;
     	}
     	public String toString() {
-    		return "{" + distance + "," + values + "}";
+    		return "{" + distance + "," + values + "}"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
     	}
     }
 

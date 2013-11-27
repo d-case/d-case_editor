@@ -51,11 +51,11 @@ public class ConfigureParameterHandler extends SetAttributeHandler {
         // gets the attribute dialog.
         AttributeDialog attributeDialog = getAttributeDialog(event);
         // sets the desc format string
-        nodeInfo.setAttribute(AttributeType.USERDEF005, attributeDialog.getDescFormat());
+        nodeInfo.setAttribute(AttributeType.PARAMETERIZEDDESC, attributeDialog.getDescFormat());
         // sets the script.
         nodeInfo.setAttribute(AttributeType.USERDEF006, attributeDialog.getScript());
         // sets the parameters.
-        nodeInfo.setAttribute(AttributeType.USERDEF007, attributeDialog.getParameters());
+        nodeInfo.setAttribute(AttributeType.PARAMETERVALS, attributeDialog.getParameters());
         return dialog;
     }
 
@@ -68,13 +68,13 @@ public class ConfigureParameterHandler extends SetAttributeHandler {
         AttributeDialog attributeDialog = getAttributeDialog(event);
         // sets the desc format.
         attributeDialog.setDescFormat(
-                (String) nodeInfo.getAttribute(AttributeType.USERDEF005));
+                (String) nodeInfo.getAttribute(AttributeType.PARAMETERIZEDDESC));
         // sets the script.
         attributeDialog.setScript(
                 (String) nodeInfo.getAttribute(AttributeType.USERDEF006));
         // sets the parameters.
         attributeDialog.setParameters(
-                (String) nodeInfo.getAttribute(AttributeType.USERDEF007));
+                (String) nodeInfo.getAttribute(AttributeType.PARAMETERVALS));
         return null;
     }
     

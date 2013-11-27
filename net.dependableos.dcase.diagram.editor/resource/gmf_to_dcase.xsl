@@ -7,8 +7,8 @@
 <!--Transforms GMF to D-Case-->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                xmlns:dcase_gmf="http://www.dependable-os.net/2010/03/dcase/"
-                xmlns:dcase="http://www.dependable-os.net/2010/06/dcase"
+                xmlns:dcase_gmf="http://www.dependable-os.net/2013/11/dcase_model/"
+                xmlns:dcase="http://www.dependable-os.net/2013/11/dcase"
                 xmlns:dre="http://www.dependable-os.net/dre"
                 xmlns:exsl="http://exslt.org/common"
                 xmlns:dfunc="net.dependableos.dcase.diagram.common.xml.XsltExtFunctionUtil"
@@ -19,7 +19,7 @@
 
   <!--Root-->
   <xsl:template match="/">
-    <xsl:element name="dcase:dcase" namespace="http://www.dependable-os.net/2010/06/dcase">
+    <xsl:element name="dcase:dcase" namespace="http://www.dependable-os.net/2013/11/dcase">
       <xsl:apply-templates select="dcase_gmf:Argument"/>
     </xsl:element>
   </xsl:template>
@@ -39,15 +39,21 @@
     </xsl:variable>
 
     <xsl:call-template name="ArgumentAttribute"/>
-    <xsl:element name="dcase:description" namespace="http://www.dependable-os.net/2010/06/dcase">
+    <xsl:element name="dcase:description" namespace="http://www.dependable-os.net/2013/11/dcase">
       <xsl:value-of select="@desc"/>
     </xsl:element>
     <xsl:call-template name="Properties"/>
-    <xsl:element name="dcase:nodes" namespace="http://www.dependable-os.net/2010/06/dcase">
+    <xsl:if test="@respName!='NaN' or @respAddress!='NaN' or @respIcon!='NaN'">
+      <xsl:call-template name="Responsibilities"/>
+    </xsl:if>
+    <xsl:if test="@parameterVals!='NaN' and string-length(@parameterVals) &gt; 0 and @parameterDefs!='NaN' and string-length(@parameterDefs) &gt; 0">
+      <xsl:call-template name="Parameters"/>
+    </xsl:if>
+    <xsl:element name="dcase:nodes" namespace="http://www.dependable-os.net/2013/11/dcase">
       <xsl:apply-templates select="rootBasicNode"/>
     </xsl:element>
       <!-- Links-->
-    <xsl:element name="dcase:links" namespace="http://www.dependable-os.net/2010/06/dcase">
+    <xsl:element name="dcase:links" namespace="http://www.dependable-os.net/2013/11/dcase">
       <!-- Outputs descendant links of the root node eliminating duplicate links-->
       <xsl:for-each select="exsl:node-set($linkResult)/dcase:link[not(@id=preceding::dcase:link/@id)]">
         <xsl:copy-of select="."/>
@@ -60,12 +66,18 @@
 
   <!--Node-->
   <xsl:template match="rootBasicNode">
-    <xsl:element name="dcase:node" namespace="http://www.dependable-os.net/2010/06/dcase">
+    <xsl:element name="dcase:node" namespace="http://www.dependable-os.net/2013/11/dcase">
       <xsl:call-template name="BasicNodeAttribute"/>
-      <xsl:element name="dcase:description" namespace="http://www.dependable-os.net/2010/06/dcase">
+      <xsl:element name="dcase:description" namespace="http://www.dependable-os.net/2013/11/dcase">
         <xsl:value-of select="@desc"/>
       </xsl:element>
       <xsl:call-template name="Properties"/>
+      <xsl:if test="@respName!='NaN' or @respAddress!='NaN' or @respIcon!='NaN'">
+        <xsl:call-template name="Responsibilities"/>
+      </xsl:if>
+      <xsl:if test="@parameterVals!='NaN' and string-length(@parameterVals) &gt; 0 and @parameterDefs!='NaN' and string-length(@parameterDefs) &gt; 0">
+        <xsl:call-template name="Parameters"/>
+      </xsl:if>
       <xsl:if test="@userdef011!='NaN' and string-length(@userdef011) &gt; 0">
         <xsl:call-template name="D-Script"/>
       </xsl:if>
@@ -91,16 +103,16 @@
 
     <!--Tests whether the link is looped-->
     <xsl:if test="not(exsl:node-set($tmpAncestors)/AncestorID[.=$source])">
-      <xsl:apply-templates select="/dcase_gmf:Argument/rootBasicLink[(@source=$source) and (string(number(@userdef001)) != 'NaN')]" mode="basic">
-        <xsl:sort select="number(@userdef001)" data-type="number" order="ascending"/>
+      <xsl:apply-templates select="/dcase_gmf:Argument/rootBasicLink[(@source=$source) and (string(number(@siblingOrder)) != 'NaN')]" mode="basic">
+        <xsl:sort select="number(@siblingOrder)" data-type="number" order="ascending"/>
       </xsl:apply-templates>
-      <xsl:apply-templates select="/dcase_gmf:Argument/rootBasicLink[(@source=$source) and (string(number(@userdef001)) = 'NaN')]" mode="basic"/>
+      <xsl:apply-templates select="/dcase_gmf:Argument/rootBasicLink[(@source=$source) and (string(number(@siblingOrder)) = 'NaN')]" mode="basic"/>
 
-      <xsl:apply-templates select="/dcase_gmf:Argument/rootBasicLink[(@source=$source) and (string(number(@userdef001)) != 'NaN')]" mode="procChildren">
-        <xsl:sort select="./@userdef001" data-type="number" order="ascending"/>
+      <xsl:apply-templates select="/dcase_gmf:Argument/rootBasicLink[(@source=$source) and (string(number(@siblingOrder)) != 'NaN')]" mode="procChildren">
+        <xsl:sort select="./@siblingOrder" data-type="number" order="ascending"/>
         <xsl:with-param name="ancestors" select="$newAncestors"/>
       </xsl:apply-templates>
-      <xsl:apply-templates select="/dcase_gmf:Argument/rootBasicLink[(@source=$source) and (string(number(@userdef001)) = 'NaN')]" mode="procChildren">
+      <xsl:apply-templates select="/dcase_gmf:Argument/rootBasicLink[(@source=$source) and (string(number(@siblingOrder)) = 'NaN')]" mode="procChildren">
         <xsl:with-param name="ancestors" select="$newAncestors"/>
       </xsl:apply-templates>
     </xsl:if>
@@ -108,9 +120,9 @@
 
   <!--Link-->
   <xsl:template match="rootBasicLink" mode="basic">
-    <xsl:element name="dcase:link" namespace="http://www.dependable-os.net/2010/06/dcase">
+    <xsl:element name="dcase:link" namespace="http://www.dependable-os.net/2013/11/dcase">
       <xsl:call-template name="BasicLinkAttribute"/>
-      <xsl:element name="dcase:description" namespace="http://www.dependable-os.net/2010/06/dcase">
+      <xsl:element name="dcase:description" namespace="http://www.dependable-os.net/2013/11/dcase">
         <xsl:value-of select="@desc"/>
       </xsl:element>
       <xsl:call-template name="Properties"/>
@@ -149,14 +161,14 @@
         <xsl:when test="@xsi:type='dcase:Context'">Context</xsl:when>
         <xsl:when test="@xsi:type='dcase:Monitor'">Monitor</xsl:when>
         <xsl:when test="@xsi:type='dcase:Justification'">Justification</xsl:when>
-        <xsl:when test="@xsi:type='dcase:System'">System</xsl:when>
-        <xsl:when test="@xsi:type='dcase:Policy'">Policy</xsl:when>
-        <xsl:when test="@xsi:type='dcase:Userdef001'">Userdef001</xsl:when>
         <xsl:when test="@xsi:type='dcase:Userdef002'">Userdef002</xsl:when>
         <xsl:when test="@xsi:type='dcase:Userdef003'">Userdef003</xsl:when>
-        <xsl:when test="@xsi:type='dcase:Userdef004'">Assumption</xsl:when>
-        <xsl:when test="@xsi:type='dcase:Userdef005'">Module</xsl:when>
-        <xsl:when test="@xsi:type='dcase:Userdef006'">Contract</xsl:when>
+        <xsl:when test="@xsi:type='dcase:Assumption'">Assumption</xsl:when>
+        <xsl:when test="@xsi:type='dcase:Module'">Module</xsl:when>
+        <xsl:when test="@xsi:type='dcase:Contract'">Contract</xsl:when>
+        <xsl:when test="@xsi:type='dcase:Action'">Action</xsl:when>
+        <xsl:when test="@xsi:type='dcase:Pattern'">Pattern</xsl:when>
+        <xsl:when test="@xsi:type='dcase:External'">External</xsl:when>
         <xsl:otherwise>undefined</xsl:otherwise>
       </xsl:choose>
     </xsl:attribute>
@@ -173,9 +185,9 @@
   <xsl:template name="LinkType">
     <xsl:attribute name="type">
       <xsl:choose>
-        <xsl:when test="@xsi:type='dcase:DcaseLink001'">SupportedBy</xsl:when>
-        <xsl:when test="@xsi:type='dcase:DcaseLink002'">InContextOf</xsl:when>
-        <xsl:when test="@xsi:type='dcase:DcaseLink003'">Link003</xsl:when>
+        <xsl:when test="@xsi:type='dcase:SupportedBy'">SupportedBy</xsl:when>
+        <xsl:when test="@xsi:type='dcase:InContextOf'">InContextOf</xsl:when>
+        <xsl:when test="@xsi:type='dcase:Responsibility'">Responsibility</xsl:when>
         <xsl:when test="@xsi:type='dcase:DcaseLink004'">Link004</xsl:when>
         <xsl:otherwise>SupportedBy</xsl:otherwise>
       </xsl:choose>
@@ -198,7 +210,7 @@
 
   <!--Properties-->
   <xsl:template name="Properties">
-    <xsl:element name="dcase:properties" namespace="http://www.dependable-os.net/2010/06/dcase">
+    <xsl:element name="dcase:properties" namespace="http://www.dependable-os.net/2013/11/dcase">
       <xsl:apply-templates select="@attachment" mode="property">
         <xsl:with-param name="propertyName">Attachment</xsl:with-param>
       </xsl:apply-templates>
@@ -268,6 +280,39 @@
       <xsl:apply-templates select="@riskAnalysis" mode="property">
         <xsl:with-param name="propertyName">RiskAnalysis</xsl:with-param>
       </xsl:apply-templates>
+      <xsl:apply-templates select="@message" mode="property">
+        <xsl:with-param name="propertyName">Message</xsl:with-param>
+      </xsl:apply-templates>
+      <xsl:apply-templates select="@requirement" mode="property">
+        <xsl:with-param name="propertyName">Requirement</xsl:with-param>
+      </xsl:apply-templates>
+      <xsl:apply-templates select="@parameterizedDesc" mode="property">
+        <xsl:with-param name="propertyName">ParameterizedDesc</xsl:with-param>
+      </xsl:apply-templates>
+      <xsl:apply-templates select="@parent" mode="property">
+        <xsl:with-param name="propertyName">Parent</xsl:with-param>
+      </xsl:apply-templates>
+      <xsl:apply-templates select="@refSource" mode="property">
+        <xsl:with-param name="propertyName">RefSource</xsl:with-param>
+      </xsl:apply-templates>
+      <xsl:apply-templates select="@flag" mode="property">
+        <xsl:with-param name="propertyName">Flag</xsl:with-param>
+      </xsl:apply-templates>
+      <xsl:apply-templates select="@leafNode" mode="property">
+        <xsl:with-param name="propertyName">LeafNode</xsl:with-param>
+      </xsl:apply-templates>
+      <xsl:apply-templates select="@i" mode="property">
+        <xsl:with-param name="propertyName">I</xsl:with-param>
+      </xsl:apply-templates>
+      <xsl:apply-templates select="@j" mode="property">
+        <xsl:with-param name="propertyName">J</xsl:with-param>
+      </xsl:apply-templates>
+      <xsl:apply-templates select="@siblingOrder" mode="property">
+        <xsl:with-param name="propertyName">SiblingOrder</xsl:with-param>
+      </xsl:apply-templates>
+      <xsl:apply-templates select="@validUntil" mode="property">
+        <xsl:with-param name="propertyName">ValidUntil</xsl:with-param>
+      </xsl:apply-templates>
     </xsl:element>
   </xsl:template>
 
@@ -275,7 +320,7 @@
   <!--Property values-->
   <xsl:template match="@*" mode="property">
     <xsl:param name="propertyName">undefined</xsl:param>
-    <xsl:element name="dcase:property" namespace="http://www.dependable-os.net/2010/06/dcase">
+    <xsl:element name="dcase:property" namespace="http://www.dependable-os.net/2013/11/dcase">
       <xsl:attribute name="name">
         <xsl:value-of select="$propertyName"/>
       </xsl:attribute>
@@ -283,6 +328,32 @@
         <xsl:value-of select="."/>
       </xsl:attribute>
     </xsl:element>
+  </xsl:template>
+
+  <!--Responsibilities-->
+  <xsl:template name="Responsibilities">
+    <xsl:element name="dcase:responsibility" namespace="http://www.dependable-os.net/2013/11/dcase">
+      <xsl:if test="@respName!='NaN'">
+        <xsl:attribute name="name">
+          <xsl:value-of select="@respName"/>
+        </xsl:attribute>
+      </xsl:if>
+      <xsl:if test="@respAddress!='NaN'">
+        <xsl:attribute name="address">
+          <xsl:value-of select="@respAddress"/>
+        </xsl:attribute>
+      </xsl:if>
+      <xsl:if test="@respIcon!='NaN'">
+        <xsl:attribute name="icon">
+          <xsl:value-of select="@respIcon"/>
+        </xsl:attribute>
+      </xsl:if>
+    </xsl:element>
+  </xsl:template>
+
+  <!--Parameters-->
+  <xsl:template name="Parameters">
+    <xsl:copy-of select="dfunc:deparameterize(@parameterVals, @parameterDefs)"/>
   </xsl:template>
 
   <!-- d-script element -->

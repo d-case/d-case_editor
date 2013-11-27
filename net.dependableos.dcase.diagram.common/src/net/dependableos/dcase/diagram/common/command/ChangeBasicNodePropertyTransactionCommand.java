@@ -94,17 +94,17 @@ public class ChangeBasicNodePropertyTransactionCommand extends
                 break;
             case SYSTEM:
                 net.dependableos.dcase.System system = (net.dependableos.dcase.System) basicNode;
-                if (attrributeTypeSet.contains(AttributeType.SCORE)) {
-                    system.setScore((BigDecimal) attributeMap
-                            .get(AttributeType.SCORE));
+                if (attrributeTypeSet.contains(AttributeType.SUBTYPE)) {
+                    system.setSubType((String) attributeMap.get(AttributeType.SUBTYPE));
                 }
-                if (attrributeTypeSet.contains(AttributeType.WEIGHT)) {
-                    system.setWeight((Integer) attributeMap
-                            .get(AttributeType.WEIGHT));
+                if (attrributeTypeSet.contains(AttributeType.LEAFNODE)) {
+                    system.setLeafNode((String) attributeMap.get(AttributeType.LEAFNODE));
                 }
-                if (attrributeTypeSet.contains(AttributeType.NODE_LINK)) {
-                    system.setNodeLink((String) attributeMap
-                            .get(AttributeType.NODE_LINK));
+                if (attrributeTypeSet.contains(AttributeType.I)) {
+                    system.setI((Integer) attributeMap.get(AttributeType.I));
+                }
+                if (attrributeTypeSet.contains(AttributeType.J)) {
+                    system.setJ((Integer) attributeMap.get(AttributeType.J));
                 }
                 break;
             case MONITOR:
@@ -159,6 +159,42 @@ public class ChangeBasicNodePropertyTransactionCommand extends
                     break;
                 case STATUS:
                     basicNode.setStatus((String) value);
+                    break;
+                case FLAG:
+                    basicNode.setFlag((String) value);
+                    break;
+                case RESPNAME:
+                    basicNode.setRespName((String) value);
+                    break;
+                case RESPADDRESS:
+                    basicNode.setRespAddress((String) value);
+                    break;
+                case RESPICON:
+                    basicNode.setRespIcon((String) value);
+                    break;
+                case RESPTIME:
+                    basicNode.setRespTime((String) value);
+                    break;
+                case MESSAGE:
+                    basicNode.setMessage((String) value);
+                    break;
+                case REQUIREMENT:
+                    basicNode.setRequirement((String) value);
+                    break;
+                case PARENT:
+                    basicNode.setParent((String) value);
+                    break;
+                case REFSOURCE:
+                    basicNode.setRefSource((String) value);
+                    break;
+                case PARAMETERDEFS:
+                    basicNode.setParameterDefs((String) value);
+                    break;
+                case PARAMETERVALS:
+                    basicNode.setParameterVals((String) value);
+                    break;
+                case PARAMETERIZEDDESC:
+                    basicNode.setParameterizedDesc((String) value);
                     break;
                 case USERDEF001:
                     basicNode.setUserdef001((String) value);

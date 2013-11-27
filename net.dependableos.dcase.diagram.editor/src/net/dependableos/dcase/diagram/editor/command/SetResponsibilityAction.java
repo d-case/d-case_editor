@@ -32,8 +32,8 @@ import org.eclipse.ui.IWorkbenchPart;
  */
 public class SetResponsibilityAction implements IObjectActionDelegate {
 
-	private final String CHANGE_ATTR_CMD_LABEL = "change userdef012 attribute"; //$NON-NLS-1$
-	private final String SET_USERDEF012_CMD_LABEL = "set userdef012"; //$NON-NLS-1$
+	private final String CHANGE_ATTR_CMD_LABEL = "change responsibilities attribute"; //$NON-NLS-1$
+	private final String SET_RESP_CMD_LABEL = "set responsibilities"; //$NON-NLS-1$
 
 	/**
 	 * the action ID.
@@ -73,16 +73,23 @@ public class SetResponsibilityAction implements IObjectActionDelegate {
 			return;
 		}
 		Argument argument = (Argument) aobj;
-		String orgStr = argument.getUserdef012();
 		SetResponsibilityDialog dialog = new SetResponsibilityDialog(targetPart
 				.getSite().getShell());
-		dialog.setName(ModuleUtil.getResponsibilityName(argument));
-		dialog.setAddress(ModuleUtil.getResponsibilityAddress(argument));
-		dialog.setIconPath(ModuleUtil.getResponsibilityIconPath(argument));
+		String oldName = ModuleUtil.getResponsibilityName(argument);
+		dialog.setName(oldName);
+		String oldAddr = ModuleUtil.getResponsibilityAddress(argument);
+		dialog.setAddress(oldAddr);
+		String oldIcon = ModuleUtil.getResponsibilityIconPath(argument);
+		dialog.setIconPath(oldIcon);
+		String oldTime = ModuleUtil.getResponsibilityTime(argument);
+		dialog.setTime(oldTime);
 		if (dialog.open() == Dialog.OK) {
-			String newStr = dialog.getValue();
-			if ((orgStr == null && newStr == null)
-					|| (orgStr != null && orgStr.equals(newStr))) {
+			String newName = dialog.getName();
+			String newAddr = dialog.getAddress();
+			String newIcon = dialog.getIconPath();
+			String newTime = dialog.getTime();
+			String newStr = newName + newAddr + newIcon + newTime; // new* != null
+			if (newStr.equals(oldName + oldAddr + oldIcon + oldTime)) {
 				return;
 			}
 
@@ -91,11 +98,21 @@ public class SetResponsibilityAction implements IObjectActionDelegate {
 					.getEditingDomain(currentDiagram.eResource()
 							.getResourceSet());
 			Map<AttributeType, Object> attrNewMap = new HashMap<AttributeType, Object>();
-			attrNewMap.put(AttributeType.USERDEF012, newStr);
+			if (! newName.equals(oldName)) {
+				attrNewMap.put(AttributeType.RESPNAME, newName);
+			}
+			if (! newAddr.equals(oldName)) {
+				attrNewMap.put(AttributeType.RESPADDRESS, newAddr);
+			}
+			if (! newIcon.equals(oldIcon)) {
+				attrNewMap.put(AttributeType.RESPICON, newIcon);
+			}
+			if (! newTime.equals(oldTime)) {
+				attrNewMap.put(AttributeType.RESPTIME, newTime);
+			}
 			CompoundCommand addCmd = new CompoundCommand(CHANGE_ATTR_CMD_LABEL);
 			ICommand setUserdef012Command = new ChangeBasicNodePropertyTransactionCommand(
-					currentDomain, SET_USERDEF012_CMD_LABEL, null, argument,
-					attrNewMap);
+					currentDomain, SET_RESP_CMD_LABEL, null, argument, attrNewMap);
 			addCmd.add(new ICommandProxy(setUserdef012Command));
 			argumentEditPart.getDiagramEditDomain().getDiagramCommandStack()
 					.execute(addCmd);

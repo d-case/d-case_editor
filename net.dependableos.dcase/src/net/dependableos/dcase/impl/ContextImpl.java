@@ -47,8 +47,8 @@ public class ContextImpl extends BasicNodeImpl implements Context {
      * {@inheritDoc}
      */
     @Override
-    public void setUserdef003(String newUserdef003) {
-        super.setUserdef003(newUserdef003);
+    public void setRequirement(String newReq) {
+        super.setRequirement(newReq);
     }
     
     /**
@@ -58,7 +58,7 @@ public class ContextImpl extends BasicNodeImpl implements Context {
         List<RequirementItem> requirementList = new ArrayList<RequirementItem>();
 
         String id = ((XMLResource)eResource()).getID(this);
-        String requirementsString = getUserdef003();
+        String requirementsString = getRequirement();
         String parameters = ""; //$NON-NLS-1$;
         try {
             parameters = getParameters();
@@ -89,7 +89,7 @@ public class ContextImpl extends BasicNodeImpl implements Context {
             requirementsStringBuilder.append(requirement.toString());
             requirementsStringBuilder.append(RequirementItem.REQUIREMENT_DELIMITER);
         }
-        setUserdef003(requirementsStringBuilder.toString());
+        setRequirement(requirementsStringBuilder.toString());
     }
     
     /**
@@ -99,11 +99,11 @@ public class ContextImpl extends BasicNodeImpl implements Context {
      * @param parameters the parameters.
      */
     private void setContextDesc(Context basicNode , String parameters) {
-        String userdef005 = basicNode.getUserdef005();
+        String paramDesc = basicNode.getParameterizedDesc();
         // tests whether the formatter is valid.
-        if (userdef005 != null && userdef005.trim().length() != 0) {
+        if (paramDesc != null && paramDesc.trim().length() != 0) {
             basicNode.setDesc(getFormattedDesc(basicNode, parameters,
-                    userdef005));
+                    paramDesc));
         }
     }
     

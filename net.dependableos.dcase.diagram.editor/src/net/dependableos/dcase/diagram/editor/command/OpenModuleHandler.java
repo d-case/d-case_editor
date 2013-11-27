@@ -14,6 +14,7 @@ import net.dependableos.dcase.diagram.common.util.MessageTypeImpl;
 import net.dependableos.dcase.diagram.common.util.Messages;
 import net.dependableos.dcase.diagram.edit.parts.ArgumentEditPart;
 import net.dependableos.dcase.diagram.edit.parts.GoalEditPart;
+import net.dependableos.dcase.diagram.edit.parts.Userdef001EditPart;
 import net.dependableos.dcase.diagram.edit.parts.Userdef005EditPart;
 import net.dependableos.dcase.diagram.edit.parts.custom.DcaseLinkEditPart;
 import net.dependableos.dcase.diagram.edit.parts.custom.DcaseNodeEditPart;
@@ -114,6 +115,12 @@ public class OpenModuleHandler extends AbstractEditPartHandler {
 				String moduleName = ModuleUtil.getModuleName(attrStr);
 				if (moduleName != null && moduleName.length() > 0) {
 					dimension = ((Userdef005EditPart) editPart)
+							.setModuleValue(moduleName);
+				}
+			} else if (editPart instanceof Userdef001EditPart) {
+				String moduleName = ModuleUtil.getModuleName(attrStr);
+				if (moduleName != null && moduleName.length() > 0) {
+					dimension = ((Userdef001EditPart) editPart)
 							.setModuleValue(moduleName);
 				}
 			} else {

@@ -125,7 +125,7 @@ public class FindAndReplaceLogic {
         findSelectedNodeId();
 
         // creates the Global Parameter list. 
-        descReplaceManager = new DescReplaceManager(argumentEditPart, argument.getUserdef007());
+        descReplaceManager = new DescReplaceManager(argumentEditPart, argument.getParameterVals());
 
         if (this.argumentEditPart != null) {
             createSearchNodeList();
@@ -286,7 +286,7 @@ public class FindAndReplaceLogic {
                     String linkTargetId = (String) linkInfo.getAttribute(AttributeType.TARGET);
                     if (targetIdList.contains(linkTargetId)) {
                         int siblingOrder = NumberUtil.parseIntWithDefault(
-                                (String) linkInfo.getAttribute(AttributeType.USERDEF001), NON_NUMBER);
+                                (String) linkInfo.getAttribute(AttributeType.SIBLINGORDER), NON_NUMBER);
                         if (siblingOrder != NON_NUMBER) {
                             siblingOrderMap.put(linkTargetId, siblingOrder);
                         }

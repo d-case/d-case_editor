@@ -18,6 +18,7 @@ import net.dependableos.dcase.diagram.common.exception.DcaseSystemException;
 import net.dependableos.dcase.diagram.common.util.MessageTypeImpl;
 import net.dependableos.dcase.diagram.common.util.Messages;
 import net.dependableos.dcase.diagram.common.util.ModelUtil;
+import net.dependableos.dcase.provider.DcaseEditPlugin;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
@@ -167,20 +168,11 @@ public class XmlConversionToTextLogic {
 	 * @return the node type name.
 	 */
 	private String getNodeName(String key) {
-		if (key.equals("Userdef004")) { //$NON-NLS-1$
-			return "Assumption"; //$NON-NLS-1$
-		} else if (key.equals("Userdef005")) { //$NON-NLS-1$
-			return "Module"; //$NON-NLS-1$
-		} else if (key.equals("Userdef006")) { //$NON-NLS-1$
-			return "Contract"; //$NON-NLS-1$
-		}
-		return key;
+		return DcaseEditPlugin.getPlugin().getString("_UI_" + key + "_type"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**
 	 * Comparator class for Node Type Name.
-	 * 
-	 * @author usuda
 	 * 
 	 */
 	private class NodeTypeComparator implements Comparator {

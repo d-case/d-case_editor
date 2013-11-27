@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns="http://www.dependable-os.net/dre" elementFormDefault="qualified"
+           targetNamespace="http://www.dependable-os.net/dre">
+<xs:element name="d-script">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="full-name" type="xs:string" maxOccurs="1" minOccurs="1"/>
+<xs:element name="values" maxOccurs="1" minOccurs="1">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="value" type="ValueType" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+<xs:complexType name="ValueType">
+<xs:simpleContent>
+<xs:extension base="xs:string">
+<xs:attribute name="name" type="xs:string" use="required"/>
+</xs:extension>
+</xs:simpleContent>
+</xs:complexType>
+</xs:schema>

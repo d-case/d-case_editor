@@ -233,7 +233,7 @@ public abstract class DcaseNodeResponsibilityEditPart extends CompartmentEditPar
      */
     protected Image getLabelIcon() {
     	Image image = null;
-    	String iconPath = getResponsibilityString(2);
+    	String iconPath = getResponsibilityString(1);
     	if (iconPath != null && iconPath.length() > 0) {
         	Display display = Display.getDefault();
             String path = ResourcesPlugin.getWorkspace().getRoot().getLocation().toOSString() + iconPath;

@@ -118,7 +118,7 @@ public class LinkManager {
             nodeMap.put(id, nodeInfo);
             if (nodeInfo.getNodeType() == NodeType.CONTEXT) {
                 Object contextRequriements = nodeInfo
-                        .getAttribute(AttributeType.USERDEF003);
+                        .getAttribute(AttributeType.REQUIREMENT);
                 if (contextRequriements != null
                         && contextRequriements instanceof List<?>) {
                     requirements
@@ -126,7 +126,7 @@ public class LinkManager {
                 }
             } else if (nodeInfo.getNodeType() == NodeType.GOAL) {
                 Object goalRequriement = nodeInfo
-                        .getAttribute(AttributeType.USERDEF003);
+                        .getAttribute(AttributeType.REQUIREMENT);
                 if (goalRequriement != null
                         && goalRequriement.toString().length() > 0) {
                     goals.add(nodeInfo);
@@ -137,8 +137,8 @@ public class LinkManager {
         for (RequirementItem requirement : requirements) {
             for (NodeInfo goal : goals) {
                 if (requirement.getFullId().equals(
-                        goal.getAttribute(AttributeType.USERDEF003).toString())) {
-                    goal.setAttribute(AttributeType.USERDEF003, requirement);
+                        goal.getAttribute(AttributeType.REQUIREMENT).toString())) {
+                    goal.setAttribute(AttributeType.REQUIREMENT, requirement);
                 }
             }
         }

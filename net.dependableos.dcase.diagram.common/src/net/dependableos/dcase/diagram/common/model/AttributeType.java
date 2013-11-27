@@ -20,6 +20,30 @@ public enum AttributeType {
     ATTACHMENT(AttributeRuleType.NO_RULE),
     /** The Status attribute. */
     STATUS(AttributeRuleType.NO_RULE),
+    /** The Flag attribute. */
+    FLAG(AttributeRuleType.NO_RULE),
+    /** The RespName attribute. */
+    RESPNAME(AttributeRuleType.NO_RULE),
+    /** The RespAddress attribute. */
+    RESPADDRESS(AttributeRuleType.NO_RULE),
+    /** The RespIcon attribute. */
+    RESPICON(AttributeRuleType.NO_RULE),
+    /** The RespTime attribute. */
+    RESPTIME(AttributeRuleType.NO_RULE),
+    /** The Message attribute. */
+    MESSAGE(AttributeRuleType.NO_RULE),
+    /** The Requirement attribute. */
+    REQUIREMENT(AttributeRuleType.NO_RULE),
+    /** The Parent attribute. */
+    PARENT(AttributeRuleType.NO_RULE),
+    /** The RefSource attribute. */
+    REFSOURCE(AttributeRuleType.NO_RULE),
+    /** The ParameterDefs attribute. */
+    PARAMETERDEFS(AttributeRuleType.NO_RULE),
+    /** The ParameterVals attribute. */
+    PARAMETERVALS(AttributeRuleType.NO_RULE),
+    /** The ParameterizedDesc attribute. */
+    PARAMETERIZEDDESC(AttributeRuleType.NO_RULE),
     /** The Userdef001 attribute. */
     USERDEF001(AttributeRuleType.NO_RULE),
     /** The Userdef002 attribute. */
@@ -58,18 +82,26 @@ public enum AttributeType {
     WEIGHT(AttributeRuleType.INTEGER_ONE_OR_MORE),
     /** requirements. */
     REQUIREMENTS(AttributeRuleType.NO_RULE),
-    /** The NodeLink attribute. */
-    NODE_LINK(AttributeRuleType.NO_RULE),
     /** The IsNormal attribute. */
     IS_NORMAL(AttributeRuleType.NO_RULE),
     /** The Stakeholder attribute. */
     STAKEHOLDER(AttributeRuleType.NO_RULE),
     /** The RiskAnalysis attribute. */
     RISK_ANALYSIS(AttributeRuleType.STRING_URL),
+    /** The SubType attribute. */
+    SUBTYPE(AttributeRuleType.NO_RULE),
+    /** The LeafNode attribute. */
+    LEAFNODE(AttributeRuleType.NO_RULE),
+    /** The I attribute. */
+    I(AttributeRuleType.NO_RULE),
+    /** The J attribute. */
+    J(AttributeRuleType.NO_RULE),
     /** The source attribute. */
     SOURCE(AttributeRuleType.NO_RULE),
     /** The target attribute. */
-    TARGET(AttributeRuleType.NO_RULE);
+    TARGET(AttributeRuleType.NO_RULE),
+    /** The SiblingOrder attribute. */
+    SIBLINGORDER(AttributeRuleType.NO_RULE);
 
     /**
      * the regulation of the value. 

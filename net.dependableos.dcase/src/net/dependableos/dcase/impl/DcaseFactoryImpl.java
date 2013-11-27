@@ -50,7 +50,7 @@ public class DcaseFactoryImpl extends EFactoryImpl implements DcaseFactory {
      */
     public static DcaseFactory init() {
         try {
-            DcaseFactory theDcaseFactory = (DcaseFactory)EPackage.Registry.INSTANCE.getEFactory("http://www.dependable-os.net/2010/03/dcase/"); 
+            DcaseFactory theDcaseFactory = (DcaseFactory)EPackage.Registry.INSTANCE.getEFactory("http://www.dependable-os.net/2013/11/dcase_model/"); 
             if (theDcaseFactory != null) {
                 return theDcaseFactory;
             }

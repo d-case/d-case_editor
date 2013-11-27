@@ -4,7 +4,6 @@
 // AUTO_GENERATED:START
 package net.dependableos.dcase.impl;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.HashMap;
 
@@ -18,15 +17,15 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>System</b></em>'.
+ * An implementation of the model object '<em><b>Pattern</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link net.dependableos.dcase.impl.SystemImpl#getScore <em>Score</em>}</li>
- *   <li>{@link net.dependableos.dcase.impl.SystemImpl#getWeight <em>Weight</em>}</li>
- *   <li>{@link net.dependableos.dcase.impl.SystemImpl#getNodeLink <em>Node Link</em>}</li>
- *   <li>{@link net.dependableos.dcase.impl.SystemImpl#getParam <em>Param</em>}</li>
+ *   <li>{@link net.dependableos.dcase.impl.SystemImpl#getSubType <em>SubType</em>}</li>
+ *   <li>{@link net.dependableos.dcase.impl.SystemImpl#getLeafNode <em>LeafNode</em>}</li>
+ *   <li>{@link net.dependableos.dcase.impl.SystemImpl#getI <em>I</em>}</li>
+ *   <li>{@link net.dependableos.dcase.impl.SystemImpl#getJ <em>J</em>}</li>
  * </ul>
  * </p>
  *
@@ -34,88 +33,76 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  */
 public class SystemImpl extends BasicNodeImpl implements net.dependableos.dcase.System {
     /**
-     * The default value of the '{@link #getScore() <em>Score</em>}' attribute.
+     * The default value of the '{@link #getSubType() <em>SubType</em>}' attribute.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getScore()
-     * @generated
-     * @ordered
+     * @see #getSubType()
+^     * @ordered
      */
-    protected static final BigDecimal SCORE_EDEFAULT = new BigDecimal("0");
+    protected static final String SUBTYPE_EDEFAULT = null;
 
     /**
-     * The cached value of the '{@link #getScore() <em>Score</em>}' attribute.
+     * The cached value of the '{@link #getSubType() <em>SubType</em>}' attribute.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getScore()
-     * @generated
+     * @see #getSubType()
      * @ordered
      */
-    protected BigDecimal score = SCORE_EDEFAULT;
+    protected String subType = SUBTYPE_EDEFAULT;
 
     /**
-     * The default value of the '{@link #getWeight() <em>Weight</em>}' attribute.
+     * The default value of the '{@link #getLeafNode() <em>LeafNode</em>}' attribute.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getWeight()
-     * @generated
-     * @ordered
+     * @see #getLeafNode()
+^     * @ordered
      */
-    protected static final int WEIGHT_EDEFAULT = 1;
+    protected static final String LEAFNODE_EDEFAULT = null;
 
     /**
-     * The cached value of the '{@link #getWeight() <em>Weight</em>}' attribute.
+     * The cached value of the '{@link #getLeafNode() <em>LeafNode</em>}' attribute.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getWeight()
-     * @generated
+     * @see #getLefNode()
      * @ordered
      */
-    protected int weight = WEIGHT_EDEFAULT;
+    protected String leafNode = LEAFNODE_EDEFAULT;
 
     /**
-     * The default value of the '{@link #getNodeLink() <em>Node Link</em>}' attribute.
+     * The default value of the '{@link #getI() <em>I</em>}' attribute.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getNodeLink()
-     * @generated
+     * @see #getI()
      * @ordered
      */
-    protected static final String NODE_LINK_EDEFAULT = null;
+    protected static final int I_EDEFAULT = 0;
 
     /**
-     * The cached value of the '{@link #getNodeLink() <em>Node Link</em>}' attribute.
+     * The cached value of the '{@link #getI() <em>I</em>}' attribute.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getNodeLink()
-     * @generated
+     * @see #getI()
      * @ordered
      */
-    protected String nodeLink = NODE_LINK_EDEFAULT;
+    protected int i = I_EDEFAULT;
 
     /**
-     * The default value of the '{@link #getNodeLink() <em>Node Link</em>}' attribute.
+     * The default value of the '{@link #getJ() <em>J</em>}' attribute.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getNodeLink()
-     * @generated
+     * @see #getJ()
      * @ordered
      */
-    protected static final String PARAM_EDEFAULT = null;
+    protected static final int J_EDEFAULT = 0;
 
     /**
-     * The cached value of the '{@link #getParam() <em>Param</em>}' attribute.
+     * The cached value of the '{@link #getJ() <em>J</em>}' attribute.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getParam()
+     * @see #getJ()
      * @ordered
      */
-    protected String param = PARAM_EDEFAULT;
-    
-    /**
-     * The delimiter for Userdef009.
-     */
-    public static final String PARAMDEF_DELIMITER = ";"; //$NON-NLS-1$
+    protected int j = J_EDEFAULT;
 
     /**
      * <!-- begin-user-doc -->
@@ -139,149 +126,79 @@ public class SystemImpl extends BasicNodeImpl implements net.dependableos.dcase.
     /**
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
      */
-    public BigDecimal getScore() {
-        return score;
+    public String getSubType() {
+        return subType;
     }
 
     /**
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
      */
-    public void setScore(BigDecimal newScore) {
-        BigDecimal oldScore = score;
-        score = newScore;
+    public void setSubType(String newSubType) {
+        String oldSubType = subType;
+        subType = newSubType;
         if (eNotificationRequired())
-            eNotify(new ENotificationImpl(this, Notification.SET, DcasePackage.SYSTEM__SCORE, oldScore, score));
+            eNotify(new ENotificationImpl(this, Notification.SET, DcasePackage.SYSTEM__SUBTYPE, oldSubType, subType));
     }
 
     /**
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
      */
-    public int getWeight() {
-        return weight;
+    public String getLeafNode() {
+        return leafNode;
     }
 
     /**
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
      */
-    public void setWeight(int newWeight) {
-        int oldWeight = weight;
-        weight = newWeight;
+    public void setLeafNode(String newLeafNode) {
+        String oldLeafNode = leafNode;
+        leafNode = newLeafNode;
         if (eNotificationRequired())
-            eNotify(new ENotificationImpl(this, Notification.SET, DcasePackage.SYSTEM__WEIGHT, oldWeight, weight));
+            eNotify(new ENotificationImpl(this, Notification.SET, DcasePackage.SYSTEM__LEAFNODE, oldLeafNode, leafNode));
     }
 
     /**
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
      */
-    public String getNodeLink() {
-        return nodeLink;
+    public int getI() {
+        return i;
     }
 
     /**
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
      */
-    public void setNodeLink(String newNodeLink) {
-        String oldNodeLink = nodeLink;
-        nodeLink = newNodeLink;
+    public void setI(int newI) {
+        int oldI = i;
+        i = newI;
         if (eNotificationRequired())
-            eNotify(new ENotificationImpl(this, Notification.SET, DcasePackage.SYSTEM__NODE_LINK, oldNodeLink, nodeLink));
+            eNotify(new ENotificationImpl(this, Notification.SET, DcasePackage.SYSTEM__I, oldI, i));
     }
 
     /**
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      */
-    public String getParam() {
-    	// parse userdef007 and userdef009
-    	StringBuffer paramBuffer = new StringBuffer();
-    	List<ParameterItem> paramList = ParameterItem.getPatameterList(userdef007);
-    	HashMap<String,String> typeMap = new HashMap<String,String>();
-    	if (userdef009 != null && userdef009.length() > 0) {
-    		String[] paramDefs = userdef009.split(PARAMDEF_DELIMITER);
-    		// paramDefs[0] is the list of parameter names, so ignore.
-    		for (int i=1; i<paramDefs.length; i++) {
-    			String pname = null;
-    			String ptype = null;
-    			// trim after type...
-    			int index1 = paramDefs[i].indexOf(ParameterItem.SEPARATOR);
-    			int index2 = paramDefs[i].indexOf(ParameterItem.SEPARATOR, index1+1);
-    			String paramDef = paramDefs[i].substring(0, (index2 < 0) ? paramDefs[i].length():index2);
-    			for (ParameterItem item : ParameterItem.getPatameterList(paramDef)) {
-    				if (item.getParameterId().equals("name")) { //$NON-NLS-1$
-    					pname = item.getParameterValue();
-    				} else if (item.getParameterId().equals("type")) { //$NON-NLS-1$
-    					ptype = item.getParameterValue();
-    				}
-    				if (pname != null && ptype != null) {
-    					typeMap.put(pname, ptype);
-    					break;
-    				}
-    			}
-    		}
-    	}
-    	// create param string.
-    	boolean pfirst = true;
-    	for (ParameterItem item : paramList) {
-    		String pname = item.getParameterId();
-    		String pvalue = item.getParameterValue();
-    		String ptype = typeMap.get(pname);
-    		if (ptype == null || ptype.length() == 0) {
-    			ptype = "?"; //$NON-NLS-1$
-    		}
-    		if (! pfirst) {
-    			paramBuffer.append(System.getProperty("line.separator")); //$NON-NLS-3$
-    		} else {
-    			pfirst = false;
-    		}
-    		paramBuffer.append(pname + ":" + ptype + "=" + pvalue); //$NON-NLS-1$ //$NON-NLS-2$
-    	}
-    	param = paramBuffer.toString();
-        return param;
+    public int getJ() {
+        return j;
     }
 
     /**
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      */
-    public void setParam(String dummy) {
-        String oldParam = param;
-    	param = getParam();
+    public void setJ(int newJ) {
+        int oldJ = j;
+        j = newJ;
         if (eNotificationRequired())
-            eNotify(new ENotificationImpl(this, Notification.SET, DcasePackage.SYSTEM__PARAM, oldParam, param));
+            eNotify(new ENotificationImpl(this, Notification.SET, DcasePackage.SYSTEM__J, oldJ, j));
     }
-    
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     */
-    public void setUserdef007(String newStr) {
-    	super.setUserdef007(newStr);
-    	if (eNotificationRequired())
-            eNotify(new ENotificationImpl(this, Notification.SET, DcasePackage.SYSTEM__PARAM, param, null));
-    }
-    
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     */
-    public void setUserdef009(String newStr) {
-    	super.setUserdef009(newStr);
-    	if (eNotificationRequired())
-            eNotify(new ENotificationImpl(this, Notification.SET, DcasePackage.SYSTEM__PARAM, param, null));
-    }
-    
+
     /**
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -290,14 +207,14 @@ public class SystemImpl extends BasicNodeImpl implements net.dependableos.dcase.
     @Override
     public Object eGet(int featureID, boolean resolve, boolean coreType) {
         switch (featureID) {
-            case DcasePackage.SYSTEM__SCORE:
-                return getScore();
-            case DcasePackage.SYSTEM__WEIGHT:
-                return getWeight();
-            case DcasePackage.SYSTEM__NODE_LINK:
-                return getNodeLink();
-            case DcasePackage.SYSTEM__PARAM:
-            	return getParam();
+            case DcasePackage.SYSTEM__SUBTYPE:
+                return getSubType();
+            case DcasePackage.SYSTEM__LEAFNODE:
+                return getLeafNode();
+            case DcasePackage.SYSTEM__I:
+                return getI();
+            case DcasePackage.SYSTEM__J:
+                return getJ();
         }
         return super.eGet(featureID, resolve, coreType);
     }
@@ -310,16 +227,17 @@ public class SystemImpl extends BasicNodeImpl implements net.dependableos.dcase.
     @Override
     public void eSet(int featureID, Object newValue) {
         switch (featureID) {
-            case DcasePackage.SYSTEM__SCORE:
-                setScore((BigDecimal)newValue);
+            case DcasePackage.SYSTEM__SUBTYPE:
+                setSubType((String)newValue);
                 return;
-            case DcasePackage.SYSTEM__WEIGHT:
-                setWeight((Integer)newValue);
+            case DcasePackage.SYSTEM__LEAFNODE:
+                setLeafNode((String)newValue);
                 return;
-            case DcasePackage.SYSTEM__NODE_LINK:
-                setNodeLink((String)newValue);
-            case DcasePackage.SYSTEM__PARAM:
-            	setParam((String)newValue);
+            case DcasePackage.SYSTEM__I:
+                setI((Integer)newValue);
+                return;
+            case DcasePackage.SYSTEM__J:
+                setJ((Integer)newValue);
                 return;
         }
         super.eSet(featureID, newValue);
@@ -333,16 +251,17 @@ public class SystemImpl extends BasicNodeImpl implements net.dependableos.dcase.
     @Override
     public void eUnset(int featureID) {
         switch (featureID) {
-            case DcasePackage.SYSTEM__SCORE:
-                setScore(SCORE_EDEFAULT);
+            case DcasePackage.SYSTEM__SUBTYPE:
+                setSubType(SUBTYPE_EDEFAULT);
                 return;
-            case DcasePackage.SYSTEM__WEIGHT:
-                setWeight(WEIGHT_EDEFAULT);
+            case DcasePackage.SYSTEM__LEAFNODE:
+                setLeafNode(LEAFNODE_EDEFAULT);
                 return;
-            case DcasePackage.SYSTEM__NODE_LINK:
-                setNodeLink(NODE_LINK_EDEFAULT);
-            case DcasePackage.SYSTEM__PARAM:
-            	setParam(PARAM_EDEFAULT);
+            case DcasePackage.SYSTEM__I:
+                setI(I_EDEFAULT);
+                return;
+            case DcasePackage.SYSTEM__J:
+                setI(J_EDEFAULT);
                 return;
         }
         super.eUnset(featureID);
@@ -356,14 +275,14 @@ public class SystemImpl extends BasicNodeImpl implements net.dependableos.dcase.
     @Override
     public boolean eIsSet(int featureID) {
         switch (featureID) {
-            case DcasePackage.SYSTEM__SCORE:
-                return SCORE_EDEFAULT == null ? score != null : !SCORE_EDEFAULT.equals(score);
-            case DcasePackage.SYSTEM__WEIGHT:
-                return weight != WEIGHT_EDEFAULT;
-            case DcasePackage.SYSTEM__NODE_LINK:
-                return NODE_LINK_EDEFAULT == null ? nodeLink != null : !NODE_LINK_EDEFAULT.equals(nodeLink);
-            case DcasePackage.SYSTEM__PARAM:
-            	return PARAM_EDEFAULT == null ? param != null : !PARAM_EDEFAULT.equals(param);
+            case DcasePackage.SYSTEM__SUBTYPE:
+                return SUBTYPE_EDEFAULT == null ? subType != null : !SUBTYPE_EDEFAULT.equals(subType);
+            case DcasePackage.SYSTEM__LEAFNODE:
+                return LEAFNODE_EDEFAULT == null ? leafNode != null : !LEAFNODE_EDEFAULT.equals(leafNode);
+            case DcasePackage.SYSTEM__I:
+                return i != I_EDEFAULT;
+            case DcasePackage.SYSTEM__J:
+                return j != J_EDEFAULT;
         }
         return super.eIsSet(featureID);
     }
@@ -378,10 +297,14 @@ public class SystemImpl extends BasicNodeImpl implements net.dependableos.dcase.
         if (eIsProxy()) return super.toString();
 
         StringBuffer result = new StringBuffer(super.toString());
-        result.append(" (score: ");
-        result.append(score);
-        result.append(", weight: ");
-        result.append(weight);
+        result.append(" (subTypee: ");
+        result.append(subType);
+        result.append(", leafNode: ");
+        result.append(leafNode);
+        result.append(", i: ");
+        result.append(i);
+        result.append(", j: ");
+        result.append(j);
         result.append(')');
         return result.toString();
     }

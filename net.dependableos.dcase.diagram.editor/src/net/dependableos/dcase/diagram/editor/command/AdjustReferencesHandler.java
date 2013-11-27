@@ -7,6 +7,7 @@ package net.dependableos.dcase.diagram.editor.command;
 import net.dependableos.dcase.Argument;
 import net.dependableos.dcase.BasicNode;
 import net.dependableos.dcase.Goal;
+import net.dependableos.dcase.Userdef001;
 import net.dependableos.dcase.Userdef005;
 import net.dependableos.dcase.diagram.common.command.ChangeBasicNodePropertyTransactionCommand;
 import net.dependableos.dcase.diagram.common.model.AttributeType;
@@ -28,11 +29,8 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Path;
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
@@ -56,7 +54,7 @@ public class AdjustReferencesHandler extends AbstractEditPartHandler {
 	private final static String SET_ATTR_CMD_LABEL = "command for setting attributes"; //$NON-NLS-1$
 
 	/**
-	 * Adjusts the refecences between Attachment and Userdef011.
+	 * Adjusts the refecences between Attachment and RefSource.
 	 * 
 	 * @param event
 	 *            An event
@@ -66,11 +64,7 @@ public class AdjustReferencesHandler extends AbstractEditPartHandler {
 		Diagram currentDiagram = DcaseEditorUtil.getCurrentDiagram();
 		ArgumentEditPart currentArgumentEditPart = DcaseEditorUtil
 				.getCurrentArgumentEditPart();
-		Argument currentArgument = (Argument) DcaseEditorUtil
-				.getElement(currentArgumentEditPart);
-		URI uri = currentArgument.eResource().getURI();
-		IFile file = ResourcesPlugin.getWorkspace().getRoot()
-				.getFile(new Path(uri.toPlatformString(false)));
+		IFile file = DcaseEditorUtil.getModelFile(currentArgumentEditPart);
 
 		Map<String, String> moduleMap = null;
 		HashSet<String> savingModuleSet = new HashSet<String>();
@@ -78,7 +72,7 @@ public class AdjustReferencesHandler extends AbstractEditPartHandler {
 		try {
 			// get current map
 			moduleMap = ModuleUtil.getModulesAndNodes(file, true);
-			resources = file.getParent().members();
+			resources = ModuleUtil.getMembers(file.getProject());
 		} catch (CoreException e) {
 			e.printStackTrace();
 		}
@@ -89,7 +83,7 @@ public class AdjustReferencesHandler extends AbstractEditPartHandler {
 				if (!ModuleUtil.isModelFile(resFile)) {
 					continue;
 				}
-				EObject eobj = ModelUtil.getModel(resFile);
+				EObject eobj = ModelUtil.getModel(resFile, true);
 				if (eobj instanceof Argument) {
 					Argument argument = (Argument) eobj;
 					String moduleStr = ModuleUtil.getModuleName(resFile);
@@ -97,7 +91,7 @@ public class AdjustReferencesHandler extends AbstractEditPartHandler {
 					// check Goal and Module Nodes
 					for (BasicNode node : argument.getRootBasicNode()) {
 						if (!(node instanceof Goal)
-								&& !(node instanceof Userdef005)) {
+								&& !(node instanceof Userdef005) && !(node instanceof Userdef001)) {
 							continue;
 						}
 						String refStr = ModuleUtil.createNodeReference(
@@ -110,29 +104,46 @@ public class AdjustReferencesHandler extends AbstractEditPartHandler {
 								&& !ModuleUtil.isUrl(attachmentStr)) {
 							if (moduleMap.containsKey(attachmentStr)) {
 								// Attachment exists.
-								String userdef011Str = moduleMap
+								String refSourceStr = moduleMap
 										.get(attachmentStr);
 								String newStr = ""; //$NON-NLS-1$
-								if (userdef011Str == null) {
-									userdef011Str = ""; //$NON-NLS-1$
+								if (refSourceStr == null) {
+									refSourceStr = ""; //$NON-NLS-1$
 								}
-								if (userdef011Str.length() > 0) {
+								if (refSourceStr.length() > 0) {
 									newStr = ModuleUtil.removeModuleReference(
-											userdef011Str, refStr);
+											refSourceStr, refStr);
 								}
-								if (userdef011Str.equals(newStr)) {
-									addUserdef011(attachmentStr, refStr);
+								if (refSourceStr.equals(newStr)) {
+									addRefSource(attachmentStr, refStr);
 									savingModuleSet.add(ModuleUtil
 											.getModuleName(attachmentStr));
 								} else {
 									moduleMap.put(attachmentStr, newStr);
 								}
 								// Sync Responsibility
-								String respRefStr = getUserdef012(attachmentStr);
-								String respMyStr = (node.getUserdef012() != null) ? node
-										.getUserdef012() : ""; //$NON-NLS-1$
-								if (!respMyStr.equals(respRefStr)) {
-									setUserdef012(refStr, respRefStr);
+								String respRefName = getRespName(attachmentStr);
+								String respRefAddr = getRespAddress(attachmentStr);
+								String respRefIcon = getRespIcon(attachmentStr);
+								String respRefTime = getRespTime(attachmentStr);
+								String respMyName = (node.getRespName() != null) ? node.getRespName():""; //$NON-NLS-1$
+								String respMyAddr = (node.getRespAddress() != null) ? node.getRespAddress():""; //$NON-NLS-1$
+								String respMyIcon = (node.getRespIcon() != null) ? node.getRespIcon():""; //$NON-NLS-1$
+								String respMyTime = (node.getRespTime() != null) ? node.getRespTime():""; //$NON-NLS-1$
+								if (!respMyName.equals(respRefName)) {
+									setRespName(refStr, respRefName);
+									savingModuleSet.add(moduleStr);
+								}
+								if (!respMyAddr.equals(respRefAddr)) {
+									setRespAddress(refStr, respRefAddr);
+									savingModuleSet.add(moduleStr);
+								}
+								if (!respMyIcon.equals(respRefIcon)) {
+									setRespIcon(refStr, respRefIcon);
+									savingModuleSet.add(moduleStr);
+								}
+								if (!respMyTime.equals(respRefTime)) {
+									setRespTime(refStr, respRefTime);
 									savingModuleSet.add(moduleStr);
 								}
 							} else {
@@ -148,10 +159,10 @@ public class AdjustReferencesHandler extends AbstractEditPartHandler {
 
 		// remove unreferenced...
 		for (Map.Entry<String, String> entry : moduleMap.entrySet()) {
-			String userdef011Str = entry.getValue();
-			if (userdef011Str != null && userdef011Str.length() > 0) {
+			String refSourceStr = entry.getValue();
+			if (refSourceStr != null && refSourceStr.length() > 0) {
 				String nodeName = entry.getKey();
-				removeUserdef011(nodeName, userdef011Str);
+				removeRefSource(nodeName, refSourceStr);
 				savingModuleSet.add(ModuleUtil.getModuleName(nodeName));
 			}
 		}
@@ -187,26 +198,62 @@ public class AdjustReferencesHandler extends AbstractEditPartHandler {
 	}
 
 	/**
-	 * Sets the userdef012 attribute.
+	 * Sets the respName attribute.
 	 * 
 	 * @param nodeName
 	 *            the node name.
 	 * @param str
-	 *            the userdef012 value.
+	 *            the respName value.
 	 */
-	private void setUserdef012(String nodeName, String str) {
-		setAttribute(nodeName, AttributeType.USERDEF012, str);
+	private void setRespName(String nodeName, String str) {
+		setAttribute(nodeName, AttributeType.RESPNAME, str);
 	}
 
 	/**
-	 * Appends to the userdef011 attribute.
+	 * Sets the respAddress attribute.
+	 * 
+	 * @param nodeName
+	 *            the node name.
+	 * @param str
+	 *            the respAddress value.
+	 */
+	private void setRespAddress(String nodeName, String str) {
+		setAttribute(nodeName, AttributeType.RESPADDRESS, str);
+	}
+
+	/**
+	 * Sets the respIcon attribute.
+	 * 
+	 * @param nodeName
+	 *            the node name.
+	 * @param str
+	 *            the respIcon value.
+	 */
+	private void setRespIcon(String nodeName, String str) {
+		setAttribute(nodeName, AttributeType.RESPICON, str);
+	}
+
+	/**
+	 * Sets the respTime attribute.
+	 * 
+	 * @param nodeName
+	 *            the node name.
+	 * @param str
+	 *            the respTime value.
+	 */
+	private void setRespTime(String nodeName, String str) {
+		setAttribute(nodeName, AttributeType.RESPTIME, str);
+	}
+
+	/**
+	 * Appends to the refSource attribute.
 	 * 
 	 * @param nodeName
 	 *            the node name.
 	 * @param refStr
 	 *            the value to append.
 	 */
-	private void addUserdef011(String nodeName, String refStr) {
+	private void addRefSource(String nodeName, String refStr) {
 		BasicNode node = nodeNameToNode(nodeName);
 		if (node == null) {
 			MessageWriter.writeMessageToConsole(
@@ -214,23 +261,23 @@ public class AdjustReferencesHandler extends AbstractEditPartHandler {
 					MessageTypeImpl.ADJUST_REFERENCE_FAILED);
 			return;
 		}
-		String userdef011Str = node.getUserdef011();
+		String refSourceStr = node.getRefSource();
 		for (String ref : refStr.split(ModuleUtil.getReferenceSeparator())) {
-			userdef011Str = ModuleUtil
-					.appendModuleReference(userdef011Str, ref);
+			refSourceStr = ModuleUtil
+					.appendModuleReference(refSourceStr, ref);
 		}
-		setAttribute(node, AttributeType.USERDEF011, userdef011Str);
+		setAttribute(node, AttributeType.REFSOURCE, refSourceStr);
 	}
 
 	/**
-	 * Removes from the userdef011 attribute.
+	 * Removes from the refSource attribute.
 	 * 
 	 * @param nodeName
 	 *            the node name.
 	 * @param refStr
 	 *            the value to remove.
 	 */
-	private void removeUserdef011(String nodeName, String refStr) {
+	private void removeRefSource(String nodeName, String refStr) {
 		BasicNode node = nodeNameToNode(nodeName);
 		if (node == null) {
 			MessageWriter.writeMessageToConsole(
@@ -238,12 +285,12 @@ public class AdjustReferencesHandler extends AbstractEditPartHandler {
 					MessageTypeImpl.ADJUST_REFERENCE_FAILED);
 			return;
 		}
-		String userdef011Str = node.getUserdef011();
+		String refSourceStr = node.getRefSource();
 		for (String ref : refStr.split(ModuleUtil.getReferenceSeparator())) {
-			userdef011Str = ModuleUtil
-					.removeModuleReference(userdef011Str, ref);
+			refSourceStr = ModuleUtil
+					.removeModuleReference(refSourceStr, ref);
 		}
-		setAttribute(node, AttributeType.USERDEF011, userdef011Str);
+		setAttribute(node, AttributeType.REFSOURCE, refSourceStr);
 	}
 
 	/**
@@ -262,6 +309,10 @@ public class AdjustReferencesHandler extends AbstractEditPartHandler {
 
 		if (eobj != null && eobj instanceof Argument) {
 			String nodePartName = ModuleUtil.getNodeName(nodeName);
+			if (nodePartName == null) {
+				return null;
+			}
+			// If nodeName is module name, return Argument
 			if (nodePartName.equals(nodeName)) {
 				return (BasicNode) eobj;
 			}
@@ -316,13 +367,13 @@ public class AdjustReferencesHandler extends AbstractEditPartHandler {
 	}
 
 	/**
-	 * Returns the userdef012 attribute value.
+	 * Returns the respName attribute value.
 	 * 
 	 * @param nodeName
 	 *            the node name.
-	 * @return the userdef012 attribute value.
+	 * @return the urespName attribute value.
 	 */
-	private String getUserdef012(String nodeName) {
+	private String getRespName(String nodeName) {
 		BasicNode node = nodeNameToNode(nodeName);
 		if (node == null) {
 			MessageWriter.writeMessageToConsole(
@@ -330,7 +381,65 @@ public class AdjustReferencesHandler extends AbstractEditPartHandler {
 					MessageTypeImpl.ADJUST_REFERENCE_FAILED);
 			return null;
 		}
-		return node.getUserdef012();
+		String ret = node.getRespName();
+		return (ret == null) ? "":ret;  //$NON-NLS-1$
+	}
+
+	/**
+	 * Returns the respAddress attribute value.
+	 * 
+	 * @param nodeName
+	 *            the node name.
+	 * @return the urespAddress attribute value.
+	 */
+	private String getRespAddress(String nodeName) {
+		BasicNode node = nodeNameToNode(nodeName);
+		if (node == null) {
+			MessageWriter.writeMessageToConsole(
+					NLS.bind(Messages.AdjustReference_0, nodeName),
+					MessageTypeImpl.ADJUST_REFERENCE_FAILED);
+			return null;
+		}
+		String ret = node.getRespAddress();
+		return (ret == null) ? "":ret;  //$NON-NLS-1$
+	}
+
+	/**
+	 * Returns the respIcon attribute value.
+	 * 
+	 * @param nodeName
+	 *            the node name.
+	 * @return the urespName attribute value.
+	 */
+	private String getRespIcon(String nodeName) {
+		BasicNode node = nodeNameToNode(nodeName);
+		if (node == null) {
+			MessageWriter.writeMessageToConsole(
+					NLS.bind(Messages.AdjustReference_0, nodeName),
+					MessageTypeImpl.ADJUST_REFERENCE_FAILED);
+			return null;
+		}
+		String ret = node.getRespIcon();
+		return (ret == null) ? "":ret;  //$NON-NLS-1$
+	}
+
+	/**
+	 * Returns the respTime attribute value.
+	 * 
+	 * @param nodeName
+	 *            the node name.
+	 * @return the urespTime attribute value.
+	 */
+	private String getRespTime(String nodeName) {
+		BasicNode node = nodeNameToNode(nodeName);
+		if (node == null) {
+			MessageWriter.writeMessageToConsole(
+					NLS.bind(Messages.AdjustReference_0, nodeName),
+					MessageTypeImpl.ADJUST_REFERENCE_FAILED);
+			return null;
+		}
+		String ret = node.getRespTime();
+		return (ret == null) ? "":ret;  //$NON-NLS-1$
 	}
 
 	/**

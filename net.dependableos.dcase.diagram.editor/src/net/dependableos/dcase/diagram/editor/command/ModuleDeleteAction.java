@@ -60,10 +60,10 @@ public class ModuleDeleteAction extends Action {
 		IPath modelPath = ModuleUtil.getModelPath(moduleName);
 		IFile modelFile = ResourcesPlugin.getWorkspace().getRoot()
 				.getFile(modelPath);
-		EObject eobj = ModelUtil.getModel(modelFile);
+		EObject eobj = ModelUtil.getModel(modelFile, true);
 		// check reference number
 		if (eobj instanceof Argument) {
-			String refStr = ((Argument) eobj).getUserdef011();
+			String refStr = ((Argument) eobj).getRefSource();
 			if (ModuleUtil.getReferenceNumber(refStr) > 0) {
 				MessageWriter.writeMessageToConsole(
 						NLS.bind(Messages.ModuleDeleteAction_2, moduleName),
@@ -72,8 +72,8 @@ public class ModuleDeleteAction extends Action {
 			}
 			String publicFlagStr = ModuleUtil.getPublicFlagString();
 			for (BasicNode node : ((Argument) eobj).getRootBasicNode()) {
-				String flagStr = node.getUserdef015();
-				refStr = node.getUserdef011();
+				String flagStr = node.getFlag();
+				refStr = node.getRefSource();
 				if (flagStr == null || flagStr.length() == 0) {
 					continue;
 				}

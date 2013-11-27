@@ -160,7 +160,7 @@ public class RequirementViewPart extends ViewPart {
                     if (nodeInfo.getNodeType() == NodeType.CONTEXT) {
                         try {
                             List<RequirementItem> contextRequirement = (List<RequirementItem>) nodeInfo
-                                    .getAttribute(AttributeType.USERDEF003);
+                                    .getAttribute(AttributeType.REQUIREMENT);
                             if (contextRequirement != null
                                     && contextRequirement.size() > 0) {
                                 contexts.add(nodeInfo);
@@ -169,7 +169,7 @@ public class RequirementViewPart extends ViewPart {
                             continue;
                         }
                     } else if (nodeInfo.getNodeType() == NodeType.GOAL) {
-                        Object requirement = nodeInfo.getAttribute(AttributeType.USERDEF003);
+                        Object requirement = nodeInfo.getAttribute(AttributeType.REQUIREMENT);
                         if (requirement != null
                                 && requirement instanceof RequirementItem) {
                             goals.add(nodeInfo);
@@ -343,7 +343,7 @@ public class RequirementViewPart extends ViewPart {
                     NodeInfo selectedGoal = (NodeInfo) table
                             .getItem(table.getSelectionIndex()).getData();
                     RequirementItem selectedRequirement = (RequirementItem) selectedGoal
-                            .getAttribute(AttributeType.USERDEF003);
+                            .getAttribute(AttributeType.REQUIREMENT);
 
                     Context context = (Context) linkManager
                             .getBasicNode(selectedRequirement
@@ -549,7 +549,7 @@ public class RequirementViewPart extends ViewPart {
          */
         public String getColumnText(Object element, int columnIndex) {
             NodeInfo goal = (NodeInfo) element;
-            RequirementItem requirement = (RequirementItem) goal.getAttribute(AttributeType.USERDEF003);
+            RequirementItem requirement = (RequirementItem) goal.getAttribute(AttributeType.REQUIREMENT);
             if (columnIndex == COLUMN_1) {
                 NodeInfo context = linkManager.getNodeInfo(requirement.getContextId());
                 return (String) context.getAttribute(AttributeType.NAME);
@@ -618,7 +618,7 @@ public class RequirementViewPart extends ViewPart {
         @Override
         public boolean select(Viewer viewer, Object parentElement, Object element) {
             NodeInfo goal = (NodeInfo) element;
-            RequirementItem requirement = (RequirementItem) goal.getAttribute(AttributeType.USERDEF003);
+            RequirementItem requirement = (RequirementItem) goal.getAttribute(AttributeType.REQUIREMENT);
            
             
             if (filterContext != null) {

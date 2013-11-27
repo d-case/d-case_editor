@@ -5,8 +5,6 @@ package net.dependableos.dcase.provider;
 
 
 import net.dependableos.dcase.BasicNode;
-import net.dependableos.dcase.Goal;
-import net.dependableos.dcase.Monitor;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.util.ResourceLocator;
@@ -52,7 +50,7 @@ public class DescPropertyDescription extends ItemPropertyDescriptor {
         // tests the property can be set.
         if (canSet) {
             // tests whether the desc format string is set.
-            String descScript = ((BasicNode) object).getUserdef005();
+            String descScript = ((BasicNode) object).getParameterizedDesc();
             if (descScript != null && descScript.trim().length() > 0) {
                 canSet = false;
             }

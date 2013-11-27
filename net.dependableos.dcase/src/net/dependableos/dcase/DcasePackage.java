@@ -39,7 +39,7 @@ public interface DcasePackage extends EPackage {
      * <!-- end-user-doc -->
      * @generated
      */
-    String eNS_URI = "http://www.dependable-os.net/2010/03/dcase/";
+    String eNS_URI = "http://www.dependable-os.net/2013/11/dcase_model/";
 
     /**
      * The package namespace name.
@@ -248,13 +248,109 @@ public interface DcasePackage extends EPackage {
     int BASIC_NODE__USERDEF016 = 19;
 
     /**
+     * The feature id for the '<em><b>Flag</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int BASIC_NODE__FLAG = 20;
+
+    /**
+     * The feature id for the '<em><b>RespName</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int BASIC_NODE__RESPNAME = 21;
+
+    /**
+     * The feature id for the '<em><b>RespAddress</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int BASIC_NODE__RESPADDRESS = 22;
+
+    /**
+     * The feature id for the '<em><b>RespIcon</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int BASIC_NODE__RESPICON = 23;
+
+    /**
+     * The feature id for the '<em><b>RespTime</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int BASIC_NODE__RESPTIME = 24;
+
+    /**
+     * The feature id for the '<em><b>Message</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int BASIC_NODE__MESSAGE = 25;
+
+    /**
+     * The feature id for the '<em><b>Requirement</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int BASIC_NODE__REQUIREMENT = 26;
+
+    /**
+     * The feature id for the '<em><b>Parent</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int BASIC_NODE__PARENT = 27;
+
+    /**
+     * The feature id for the '<em><b>RefSource</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int BASIC_NODE__REFSOURCE = 28;
+
+    /**
+     * The feature id for the '<em><b>ParameterDefs</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int BASIC_NODE__PARAMETERDEFS = 29;
+
+    /**
+     * The feature id for the '<em><b>ParameterVals</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int BASIC_NODE__PARAMETERVALS = 30;
+
+    /**
+     * The feature id for the '<em><b>ParameterizedDesc</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int BASIC_NODE__PARAMETERIZEDDESC = 31;
+
+    /**
      * The number of structural features of the '<em>Basic Node</em>' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-    int BASIC_NODE_FEATURE_COUNT = 20;
+    int BASIC_NODE_FEATURE_COUNT = 32;
 
     /**
      * The meta object id for the '{@link net.dependableos.dcase.impl.ArgumentImpl <em>Argument</em>}' class.
@@ -445,6 +541,102 @@ public interface DcasePackage extends EPackage {
      * @ordered
      */
     int ARGUMENT__USERDEF016 = BASIC_NODE__USERDEF016;
+
+    /**
+     * The feature id for the '<em><b>Flag</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int ARGUMENT__FLAG = BASIC_NODE__FLAG;
+
+    /**
+     * The feature id for the '<em><b>RespName</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int ARGUMENT__RESPNAME = BASIC_NODE__RESPNAME;
+
+    /**
+     * The feature id for the '<em><b>RespAddress</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int ARGUMENT__RESPADDRESS = BASIC_NODE__RESPADDRESS;
+
+    /**
+     * The feature id for the '<em><b>RespIcon</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int ARGUMENT__RESPICON = BASIC_NODE__RESPICON;
+
+    /**
+     * The feature id for the '<em><b>RespTime</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int ARGUMENT__RESPTIME = BASIC_NODE__RESPTIME;
+
+    /**
+     * The feature id for the '<em><b>Message</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int ARGUMENT__MESSAGE = BASIC_NODE__MESSAGE;
+
+    /**
+     * The feature id for the '<em><b>Requirement</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int ARGUMENT__REQUIREMENT = BASIC_NODE__REQUIREMENT;
+
+    /**
+     * The feature id for the '<em><b>Parent</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int ARGUMENT__PARENT = BASIC_NODE__PARENT;
+
+    /**
+     * The feature id for the '<em><b>RefSource</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int ARGUMENT__REFSOURCE = BASIC_NODE__REFSOURCE;
+
+    /**
+     * The feature id for the '<em><b>ParameterDefs</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int ARGUMENT__PARAMETERDEFS = BASIC_NODE__PARAMETERDEFS;
+
+    /**
+     * The feature id for the '<em><b>ParameterVals</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int ARGUMENT__PARAMETERVALS = BASIC_NODE__PARAMETERVALS;
+
+    /**
+     * The feature id for the '<em><b>ParameterizedDesc</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int ARGUMENT__PARAMETERIZEDDESC = BASIC_NODE__PARAMETERIZEDDESC;
 
     /**
      * The feature id for the '<em><b>Root Basic Node</b></em>' containment reference list.
@@ -664,6 +856,102 @@ public interface DcasePackage extends EPackage {
     int GOAL__USERDEF016 = BASIC_NODE__USERDEF016;
 
     /**
+     * The feature id for the '<em><b>Flag</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int GOAL__FLAG = BASIC_NODE__FLAG;
+
+    /**
+     * The feature id for the '<em><b>RespName</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int GOAL__RESPNAME = BASIC_NODE__RESPNAME;
+
+    /**
+     * The feature id for the '<em><b>RespAddress</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int GOAL__RESPADDRESS = BASIC_NODE__RESPADDRESS;
+
+    /**
+     * The feature id for the '<em><b>RespIcon</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int GOAL__RESPICON = BASIC_NODE__RESPICON;
+
+    /**
+     * The feature id for the '<em><b>RespTime</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int GOAL__RESPTIME = BASIC_NODE__RESPTIME;
+
+    /**
+     * The feature id for the '<em><b>Message</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int GOAL__MESSAGE = BASIC_NODE__MESSAGE;
+
+    /**
+     * The feature id for the '<em><b>Requirement</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int GOAL__REQUIREMENT = BASIC_NODE__REQUIREMENT;
+
+    /**
+     * The feature id for the '<em><b>Parent</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int GOAL__PARENT = BASIC_NODE__PARENT;
+
+    /**
+     * The feature id for the '<em><b>RefSource</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int GOAL__REFSOURCE = BASIC_NODE__REFSOURCE;
+
+    /**
+     * The feature id for the '<em><b>ParameterDefs</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int GOAL__PARAMETERDEFS = BASIC_NODE__PARAMETERDEFS;
+
+    /**
+     * The feature id for the '<em><b>ParameterVals</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int GOAL__PARAMETERVALS = BASIC_NODE__PARAMETERVALS;
+
+    /**
+     * The feature id for the '<em><b>ParameterizedDesc</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int GOAL__PARAMETERIZEDDESC = BASIC_NODE__PARAMETERIZEDDESC;
+
+    /**
      * The feature id for the '<em><b>Score</b></em>' attribute.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -881,39 +1169,132 @@ public interface DcasePackage extends EPackage {
     int SYSTEM__USERDEF016 = BASIC_NODE__USERDEF016;
 
     /**
-     * The feature id for the '<em><b>Score</b></em>' attribute.
+     * The feature id for the '<em><b>Flag</b></em>' attribute.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
      * @ordered
      */
-    int SYSTEM__SCORE = BASIC_NODE_FEATURE_COUNT + 0;
+    int SYSTEM__FLAG = BASIC_NODE__FLAG;
 
     /**
-     * The feature id for the '<em><b>Weight</b></em>' attribute.
+     * The feature id for the '<em><b>RespName</b></em>' attribute.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
      * @ordered
      */
-    int SYSTEM__WEIGHT = BASIC_NODE_FEATURE_COUNT + 1;
+    int SYSTEM__RESPNAME = BASIC_NODE__RESPNAME;
 
     /**
-     * The feature id for the '<em><b>Node Link</b></em>' attribute.
+     * The feature id for the '<em><b>RespAddress</b></em>' attribute.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
      * @ordered
      */
-    int SYSTEM__NODE_LINK = BASIC_NODE_FEATURE_COUNT + 2;
+    int SYSTEM__RESPADDRESS = BASIC_NODE__RESPADDRESS;
 
     /**
-     * The feature id for the '<em><b>Param</b></em>' attribute.
+     * The feature id for the '<em><b>RespIcon</b></em>' attribute.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @ordered
      */
-    int SYSTEM__PARAM = BASIC_NODE_FEATURE_COUNT + 3;
+    int SYSTEM__RESPICON = BASIC_NODE__RESPICON;
+
+    /**
+     * The feature id for the '<em><b>RespTime</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int SYSTEM__RESPTIME = BASIC_NODE__RESPTIME;
+
+    /**
+     * The feature id for the '<em><b>Message</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int SYSTEM__MESSAGE = BASIC_NODE__MESSAGE;
+
+    /**
+     * The feature id for the '<em><b>Requirement</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int SYSTEM__REQUIREMENT = BASIC_NODE__REQUIREMENT;
+
+    /**
+     * The feature id for the '<em><b>Parent</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int SYSTEM__PARENT = BASIC_NODE__PARENT;
+
+    /**
+     * The feature id for the '<em><b>RefSource</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int SYSTEM__REFSOURCE = BASIC_NODE__REFSOURCE;
+
+    /**
+     * The feature id for the '<em><b>ParameterDefs</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int SYSTEM__PARAMETERDEFS = BASIC_NODE__PARAMETERDEFS;
+
+    /**
+     * The feature id for the '<em><b>ParameterVals</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int SYSTEM__PARAMETERVALS = BASIC_NODE__PARAMETERVALS;
+
+    /**
+     * The feature id for the '<em><b>ParameterizedDesc</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int SYSTEM__PARAMETERIZEDDESC = BASIC_NODE__PARAMETERIZEDDESC;
+
+    /**
+     * The feature id for the '<em><b>SubType</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int SYSTEM__SUBTYPE = BASIC_NODE_FEATURE_COUNT + 0;
+
+    /**
+     * The feature id for the '<em><b>LeafNode</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int SYSTEM__LEAFNODE = BASIC_NODE_FEATURE_COUNT + 1;
+
+    /**
+     * The feature id for the '<em><b>I</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int SYSTEM__I = BASIC_NODE_FEATURE_COUNT + 2;
+
+    /**
+     * The feature id for the '<em><b>J</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int SYSTEM__J = BASIC_NODE_FEATURE_COUNT + 3;
 
     /**
      * The number of structural features of the '<em>System</em>' class.
@@ -1115,6 +1496,102 @@ public interface DcasePackage extends EPackage {
     int STRATEGY__USERDEF016 = BASIC_NODE__USERDEF016;
 
     /**
+     * The feature id for the '<em><b>Flag</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int STRATEGY__FLAG = BASIC_NODE__FLAG;
+
+    /**
+     * The feature id for the '<em><b>RespName</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int STRATEGY__RESPNAME = BASIC_NODE__RESPNAME;
+
+    /**
+     * The feature id for the '<em><b>RespAddress</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int STRATEGY__RESPADDRESS = BASIC_NODE__RESPADDRESS;
+
+    /**
+     * The feature id for the '<em><b>RespIcon</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int STRATEGY__RESPICON = BASIC_NODE__RESPICON;
+
+    /**
+     * The feature id for the '<em><b>RespTime</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int STRATEGY__RESPTIME = BASIC_NODE__RESPTIME;
+
+    /**
+     * The feature id for the '<em><b>Message</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int STRATEGY__MESSAGE = BASIC_NODE__MESSAGE;
+
+    /**
+     * The feature id for the '<em><b>Requirement</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int STRATEGY__REQUIREMENT = BASIC_NODE__REQUIREMENT;
+
+    /**
+     * The feature id for the '<em><b>Parent</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int STRATEGY__PARENT = BASIC_NODE__PARENT;
+
+    /**
+     * The feature id for the '<em><b>RefSource</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int STRATEGY__REFSOURCE = BASIC_NODE__REFSOURCE;
+
+    /**
+     * The feature id for the '<em><b>ParameterDefs</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int STRATEGY__PARAMETERDEFS = BASIC_NODE__PARAMETERDEFS;
+
+    /**
+     * The feature id for the '<em><b>ParameterVals</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int STRATEGY__PARAMETERVALS = BASIC_NODE__PARAMETERVALS;
+
+    /**
+     * The feature id for the '<em><b>ParameterizedDesc</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int STRATEGY__PARAMETERIZEDDESC = BASIC_NODE__PARAMETERIZEDDESC;
+
+    /**
      * The number of structural features of the '<em>Strategy</em>' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -1314,6 +1791,102 @@ public interface DcasePackage extends EPackage {
     int EVIDENCE__USERDEF016 = BASIC_NODE__USERDEF016;
 
     /**
+     * The feature id for the '<em><b>Flag</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int EVIDENCE__FLAG = BASIC_NODE__FLAG;
+
+    /**
+     * The feature id for the '<em><b>RespName</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int EVIDENCE__RESPNAME = BASIC_NODE__RESPNAME;
+
+    /**
+     * The feature id for the '<em><b>RespAddress</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int EVIDENCE__RESPADDRESS = BASIC_NODE__RESPADDRESS;
+
+    /**
+     * The feature id for the '<em><b>RespIcon</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int EVIDENCE__RESPICON = BASIC_NODE__RESPICON;
+
+    /**
+     * The feature id for the '<em><b>RespTime</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int EVIDENCE__RESPTIME = BASIC_NODE__RESPTIME;
+
+    /**
+     * The feature id for the '<em><b>Message</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int EVIDENCE__MESSAGE = BASIC_NODE__MESSAGE;
+
+    /**
+     * The feature id for the '<em><b>Requirement</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int EVIDENCE__REQUIREMENT = BASIC_NODE__REQUIREMENT;
+
+    /**
+     * The feature id for the '<em><b>Parent</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int EVIDENCE__PARENT = BASIC_NODE__PARENT;
+
+    /**
+     * The feature id for the '<em><b>RefSource</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int EVIDENCE__REFSOURCE = BASIC_NODE__REFSOURCE;
+
+    /**
+     * The feature id for the '<em><b>ParameterDefs</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int EVIDENCE__PARAMETERDEFS = BASIC_NODE__PARAMETERDEFS;
+
+    /**
+     * The feature id for the '<em><b>ParameterVals</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int EVIDENCE__PARAMETERVALS = BASIC_NODE__PARAMETERVALS;
+
+    /**
+     * The feature id for the '<em><b>ParameterizedDesc</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int EVIDENCE__PARAMETERIZEDDESC = BASIC_NODE__PARAMETERIZEDDESC;
+
+    /**
      * The number of structural features of the '<em>Evidence</em>' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -1511,6 +2084,102 @@ public interface DcasePackage extends EPackage {
      * @ordered
      */
     int MONITOR__USERDEF016 = BASIC_NODE__USERDEF016;
+
+    /**
+     * The feature id for the '<em><b>Flag</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int MONITOR__FLAG = BASIC_NODE__FLAG;
+
+    /**
+     * The feature id for the '<em><b>RespName</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int MONITOR__RESPNAME = BASIC_NODE__RESPNAME;
+
+    /**
+     * The feature id for the '<em><b>RespAddress</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int MONITOR__RESPADDRESS = BASIC_NODE__RESPADDRESS;
+
+    /**
+     * The feature id for the '<em><b>RespIcon</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int MONITOR__RESPICON = BASIC_NODE__RESPICON;
+
+    /**
+     * The feature id for the '<em><b>RespTime</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int MONITOR__RESPTIME = BASIC_NODE__RESPTIME;
+
+    /**
+     * The feature id for the '<em><b>Message</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int MONITOR__MESSAGE = BASIC_NODE__MESSAGE;
+
+    /**
+     * The feature id for the '<em><b>Requirement</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int MONITOR__REQUIREMENT = BASIC_NODE__REQUIREMENT;
+
+    /**
+     * The feature id for the '<em><b>Parent</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int MONITOR__PARENT = BASIC_NODE__PARENT;
+
+    /**
+     * The feature id for the '<em><b>RefSource</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int MONITOR__REFSOURCE = BASIC_NODE__REFSOURCE;
+
+    /**
+     * The feature id for the '<em><b>ParameterDefs</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int MONITOR__PARAMETERDEFS = BASIC_NODE__PARAMETERDEFS;
+
+    /**
+     * The feature id for the '<em><b>ParameterVals</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int MONITOR__PARAMETERVALS = BASIC_NODE__PARAMETERVALS;
+
+    /**
+     * The feature id for the '<em><b>ParameterizedDesc</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int MONITOR__PARAMETERIZEDDESC = BASIC_NODE__PARAMETERIZEDDESC;
 
     /**
      * The feature id for the '<em><b>Is Normal</b></em>' attribute.
@@ -1721,6 +2390,102 @@ public interface DcasePackage extends EPackage {
     int UNDEVELOPED__USERDEF016 = BASIC_NODE__USERDEF016;
 
     /**
+     * The feature id for the '<em><b>Flag</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int UNDEVELOPED__FLAG = BASIC_NODE__FLAG;
+
+    /**
+     * The feature id for the '<em><b>RespName</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int UNDEVELOPED__RESPNAME = BASIC_NODE__RESPNAME;
+
+    /**
+     * The feature id for the '<em><b>RespAddress</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int UNDEVELOPED__RESPADDRESS = BASIC_NODE__RESPADDRESS;
+
+    /**
+     * The feature id for the '<em><b>RespIcon</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int UNDEVELOPED__RESPICON = BASIC_NODE__RESPICON;
+
+    /**
+     * The feature id for the '<em><b>RespTime</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int UNDEVELOPED__RESPTIME = BASIC_NODE__RESPTIME;
+
+    /**
+     * The feature id for the '<em><b>Message</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int UNDEVELOPED__MESSAGE = BASIC_NODE__MESSAGE;
+
+    /**
+     * The feature id for the '<em><b>Requirement</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int UNDEVELOPED__REQUIREMENT = BASIC_NODE__REQUIREMENT;
+
+    /**
+     * The feature id for the '<em><b>Parent</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int UNDEVELOPED__PARENT = BASIC_NODE__PARENT;
+
+    /**
+     * The feature id for the '<em><b>RefSource</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int UNDEVELOPED__REFSOURCE = BASIC_NODE__REFSOURCE;
+
+    /**
+     * The feature id for the '<em><b>ParameterDefs</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int UNDEVELOPED__PARAMETERDEFS = BASIC_NODE__PARAMETERDEFS;
+
+    /**
+     * The feature id for the '<em><b>ParameterVals</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int UNDEVELOPED__PARAMETERVALS = BASIC_NODE__PARAMETERVALS;
+
+    /**
+     * The feature id for the '<em><b>ParameterizedDesc</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int UNDEVELOPED__PARAMETERIZEDDESC = BASIC_NODE__PARAMETERIZEDDESC;
+
+    /**
      * The number of structural features of the '<em>Undeveloped</em>' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -1920,6 +2685,102 @@ public interface DcasePackage extends EPackage {
     int CONTEXT__USERDEF016 = BASIC_NODE__USERDEF016;
 
     /**
+     * The feature id for the '<em><b>Flag</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int CONTEXT__FLAG = BASIC_NODE__FLAG;
+
+    /**
+     * The feature id for the '<em><b>RespName</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int CONTEXT__RESPNAME = BASIC_NODE__RESPNAME;
+
+    /**
+     * The feature id for the '<em><b>RespAddress</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int CONTEXT__RESPADDRESS = BASIC_NODE__RESPADDRESS;
+
+    /**
+     * The feature id for the '<em><b>RespIcon</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int CONTEXT__RESPICON = BASIC_NODE__RESPICON;
+
+    /**
+     * The feature id for the '<em><b>RespTime</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int CONTEXT__RESPTIME = BASIC_NODE__RESPTIME;
+
+    /**
+     * The feature id for the '<em><b>Message</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int CONTEXT__MESSAGE = BASIC_NODE__MESSAGE;
+
+    /**
+     * The feature id for the '<em><b>Requirement</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int CONTEXT__REQUIREMENT = BASIC_NODE__REQUIREMENT;
+
+    /**
+     * The feature id for the '<em><b>Parent</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int CONTEXT__PARENT = BASIC_NODE__PARENT;
+
+    /**
+     * The feature id for the '<em><b>RefSource</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int CONTEXT__REFSOURCE = BASIC_NODE__REFSOURCE;
+
+    /**
+     * The feature id for the '<em><b>ParameterDefs</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int CONTEXT__PARAMETERDEFS = BASIC_NODE__PARAMETERDEFS;
+
+    /**
+     * The feature id for the '<em><b>ParameterVals</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int CONTEXT__PARAMETERVALS = BASIC_NODE__PARAMETERVALS;
+
+    /**
+     * The feature id for the '<em><b>ParameterizedDesc</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int CONTEXT__PARAMETERIZEDDESC = BASIC_NODE__PARAMETERIZEDDESC;
+
+    /**
      * The number of structural features of the '<em>Context</em>' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -2117,6 +2978,102 @@ public interface DcasePackage extends EPackage {
      * @ordered
      */
     int JUSTIFICATION__USERDEF016 = BASIC_NODE__USERDEF016;
+
+    /**
+     * The feature id for the '<em><b>Flag</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int JUSTIFICATION__FLAG = BASIC_NODE__FLAG;
+
+    /**
+     * The feature id for the '<em><b>RespName</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int JUSTIFICATION__RESPNAME = BASIC_NODE__RESPNAME;
+
+    /**
+     * The feature id for the '<em><b>RespAddress</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int JUSTIFICATION__RESPADDRESS = BASIC_NODE__RESPADDRESS;
+
+    /**
+     * The feature id for the '<em><b>RespIcon</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int JUSTIFICATION__RESPICON = BASIC_NODE__RESPICON;
+
+    /**
+     * The feature id for the '<em><b>RespTime</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int JUSTIFICATION__RESPTIME = BASIC_NODE__RESPTIME;
+
+    /**
+     * The feature id for the '<em><b>Message</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int JUSTIFICATION__MESSAGE = BASIC_NODE__MESSAGE;
+
+    /**
+     * The feature id for the '<em><b>Requirement</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int JUSTIFICATION__REQUIREMENT = BASIC_NODE__REQUIREMENT;
+
+    /**
+     * The feature id for the '<em><b>Parent</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int JUSTIFICATION__PARENT = BASIC_NODE__PARENT;
+
+    /**
+     * The feature id for the '<em><b>RefSource</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int JUSTIFICATION__REFSOURCE = BASIC_NODE__REFSOURCE;
+
+    /**
+     * The feature id for the '<em><b>ParameterDefs</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int JUSTIFICATION__PARAMETERDEFS = BASIC_NODE__PARAMETERDEFS;
+
+    /**
+     * The feature id for the '<em><b>ParameterVals</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int JUSTIFICATION__PARAMETERVALS = BASIC_NODE__PARAMETERVALS;
+
+    /**
+     * The feature id for the '<em><b>ParameterizedDesc</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int JUSTIFICATION__PARAMETERIZEDDESC = BASIC_NODE__PARAMETERIZEDDESC;
 
     /**
      * The feature id for the '<em><b>Stakeholder</b></em>' attribute.
@@ -2336,6 +3293,102 @@ public interface DcasePackage extends EPackage {
     int POLICY__USERDEF016 = BASIC_NODE__USERDEF016;
 
     /**
+     * The feature id for the '<em><b>Flag</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int POLICY__FLAG = BASIC_NODE__FLAG;
+
+    /**
+     * The feature id for the '<em><b>RespName</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int POLICY__RESPNAME = BASIC_NODE__RESPNAME;
+
+    /**
+     * The feature id for the '<em><b>RespAddress</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int POLICY__RESPADDRESS = BASIC_NODE__RESPADDRESS;
+
+    /**
+     * The feature id for the '<em><b>RespIcon</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int POLICY__RESPICON = BASIC_NODE__RESPICON;
+
+    /**
+     * The feature id for the '<em><b>RespTime</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int POLICY__RESPTIME = BASIC_NODE__RESPTIME;
+
+    /**
+     * The feature id for the '<em><b>Message</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int POLICY__MESSAGE = BASIC_NODE__MESSAGE;
+
+    /**
+     * The feature id for the '<em><b>Requirement</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int POLICY__REQUIREMENT = BASIC_NODE__REQUIREMENT;
+
+    /**
+     * The feature id for the '<em><b>Parent</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int POLICY__PARENT = BASIC_NODE__PARENT;
+
+    /**
+     * The feature id for the '<em><b>RefSource</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int POLICY__REFSOURCE = BASIC_NODE__REFSOURCE;
+
+    /**
+     * The feature id for the '<em><b>ParameterDefs</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int POLICY__PARAMETERDEFS = BASIC_NODE__PARAMETERDEFS;
+
+    /**
+     * The feature id for the '<em><b>ParameterVals</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int POLICY__PARAMETERVALS = BASIC_NODE__PARAMETERVALS;
+
+    /**
+     * The feature id for the '<em><b>ParameterizedDesc</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int POLICY__PARAMETERIZEDDESC = BASIC_NODE__PARAMETERIZEDDESC;
+
+    /**
      * The number of structural features of the '<em>Policy</em>' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -2533,6 +3586,102 @@ public interface DcasePackage extends EPackage {
      * @ordered
      */
     int USERDEF001__USERDEF016 = BASIC_NODE__USERDEF016;
+
+    /**
+     * The feature id for the '<em><b>Flag</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int USERDEF001__FLAG = BASIC_NODE__FLAG;
+
+    /**
+     * The feature id for the '<em><b>RespName</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int USERDEF001__RESPNAME = BASIC_NODE__RESPNAME;
+
+    /**
+     * The feature id for the '<em><b>RespAddress</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int USERDEF001__RESPADDRESS = BASIC_NODE__RESPADDRESS;
+
+    /**
+     * The feature id for the '<em><b>RespIcon</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int USERDEF001__RESPICON = BASIC_NODE__RESPICON;
+
+    /**
+     * The feature id for the '<em><b>RespTime</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int USERDEF001__RESPTIME = BASIC_NODE__RESPTIME;
+
+    /**
+     * The feature id for the '<em><b>Message</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int USERDEF001__MESSAGE = BASIC_NODE__MESSAGE;
+
+    /**
+     * The feature id for the '<em><b>Requirement</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int USERDEF001__REQUIREMENT = BASIC_NODE__REQUIREMENT;
+
+    /**
+     * The feature id for the '<em><b>Parent</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int USERDEF001__PARENT = BASIC_NODE__PARENT;
+
+    /**
+     * The feature id for the '<em><b>RefSource</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int USERDEF001__REFSOURCE = BASIC_NODE__REFSOURCE;
+
+    /**
+     * The feature id for the '<em><b>ParameterDefs</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int USERDEF001__PARAMETERDEFS = BASIC_NODE__PARAMETERDEFS;
+
+    /**
+     * The feature id for the '<em><b>ParameterVals</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int USERDEF001__PARAMETERVALS = BASIC_NODE__PARAMETERVALS;
+
+    /**
+     * The feature id for the '<em><b>ParameterizedDesc</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int USERDEF001__PARAMETERIZEDDESC = BASIC_NODE__PARAMETERIZEDDESC;
 
     /**
      * The number of structural features of the '<em>Userdef001</em>' class.
@@ -2734,6 +3883,102 @@ public interface DcasePackage extends EPackage {
     int USERDEF002__USERDEF016 = BASIC_NODE__USERDEF016;
 
     /**
+     * The feature id for the '<em><b>Flag</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int USERDEF002__FLAG = BASIC_NODE__FLAG;
+
+    /**
+     * The feature id for the '<em><b>RespName</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int USERDEF002__RESPNAME = BASIC_NODE__RESPNAME;
+
+    /**
+     * The feature id for the '<em><b>RespAddress</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int USERDEF002__RESPADDRESS = BASIC_NODE__RESPADDRESS;
+
+    /**
+     * The feature id for the '<em><b>RespIcon</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int USERDEF002__RESPICON = BASIC_NODE__RESPICON;
+
+    /**
+     * The feature id for the '<em><b>RespTime</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int USERDEF002__RESPTIME = BASIC_NODE__RESPTIME;
+
+    /**
+     * The feature id for the '<em><b>Message</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int USERDEF002__MESSAGE = BASIC_NODE__MESSAGE;
+
+    /**
+     * The feature id for the '<em><b>Requirement</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int USERDEF002__REQUIREMENT = BASIC_NODE__REQUIREMENT;
+
+    /**
+     * The feature id for the '<em><b>Parent</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int USERDEF002__PARENT = BASIC_NODE__PARENT;
+
+    /**
+     * The feature id for the '<em><b>RefSource</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int USERDEF002__REFSOURCE = BASIC_NODE__REFSOURCE;
+
+    /**
+     * The feature id for the '<em><b>ParameterDefs</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int USERDEF002__PARAMETERDEFS = BASIC_NODE__PARAMETERDEFS;
+
+    /**
+     * The feature id for the '<em><b>ParameterVals</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int USERDEF002__PARAMETERVALS = BASIC_NODE__PARAMETERVALS;
+
+    /**
+     * The feature id for the '<em><b>ParameterizedDesc</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int USERDEF002__PARAMETERIZEDDESC = BASIC_NODE__PARAMETERIZEDDESC;
+
+    /**
      * The number of structural features of the '<em>Userdef002</em>' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -2931,6 +4176,102 @@ public interface DcasePackage extends EPackage {
      * @ordered
      */
     int USERDEF003__USERDEF016 = BASIC_NODE__USERDEF016;
+
+    /**
+     * The feature id for the '<em><b>Flag</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int USERDEF003__FLAG = BASIC_NODE__FLAG;
+
+    /**
+     * The feature id for the '<em><b>RespName</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int USERDEF003__RESPNAME = BASIC_NODE__RESPNAME;
+
+    /**
+     * The feature id for the '<em><b>RespAddress</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int USERDEF003__RESPADDRESS = BASIC_NODE__RESPADDRESS;
+
+    /**
+     * The feature id for the '<em><b>RespIcon</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int USERDEF003__RESPICON = BASIC_NODE__RESPICON;
+
+    /**
+     * The feature id for the '<em><b>RespTime</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int USERDEF003__RESPTIME = BASIC_NODE__RESPTIME;
+
+    /**
+     * The feature id for the '<em><b>Message</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int USERDEF003__MESSAGE = BASIC_NODE__MESSAGE;
+
+    /**
+     * The feature id for the '<em><b>Requirement</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int USERDEF003__REQUIREMENT = BASIC_NODE__REQUIREMENT;
+
+    /**
+     * The feature id for the '<em><b>Parent</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int USERDEF003__PARENT = BASIC_NODE__PARENT;
+
+    /**
+     * The feature id for the '<em><b>RefSource</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int USERDEF003__REFSOURCE = BASIC_NODE__REFSOURCE;
+
+    /**
+     * The feature id for the '<em><b>ParameterDefs</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int USERDEF003__PARAMETERDEFS = BASIC_NODE__PARAMETERDEFS;
+
+    /**
+     * The feature id for the '<em><b>ParameterVals</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int USERDEF003__PARAMETERVALS = BASIC_NODE__PARAMETERVALS;
+
+    /**
+     * The feature id for the '<em><b>ParameterizedDesc</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int USERDEF003__PARAMETERIZEDDESC = BASIC_NODE__PARAMETERIZEDDESC;
 
     /**
      * The number of structural features of the '<em>Userdef003</em>' class.
@@ -3132,6 +4473,102 @@ public interface DcasePackage extends EPackage {
     int USERDEF004__USERDEF016 = BASIC_NODE__USERDEF016;
 
     /**
+     * The feature id for the '<em><b>Flag</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int USERDEF004__FLAG = BASIC_NODE__FLAG;
+
+    /**
+     * The feature id for the '<em><b>RespName</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int USERDEF004__RESPNAME = BASIC_NODE__RESPNAME;
+
+    /**
+     * The feature id for the '<em><b>RespAddress</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int USERDEF004__RESPADDRESS = BASIC_NODE__RESPADDRESS;
+
+    /**
+     * The feature id for the '<em><b>RespIcon</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int USERDEF004__RESPICON = BASIC_NODE__RESPICON;
+
+    /**
+     * The feature id for the '<em><b>RespTime</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int USERDEF004__RESPTIME = BASIC_NODE__RESPTIME;
+
+    /**
+     * The feature id for the '<em><b>Message</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int USERDEF004__MESSAGE = BASIC_NODE__MESSAGE;
+
+    /**
+     * The feature id for the '<em><b>Requirement</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int USERDEF004__REQUIREMENT = BASIC_NODE__REQUIREMENT;
+
+    /**
+     * The feature id for the '<em><b>Parent</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int USERDEF004__PARENT = BASIC_NODE__PARENT;
+
+    /**
+     * The feature id for the '<em><b>RefSource</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int USERDEF004__REFSOURCE = BASIC_NODE__REFSOURCE;
+
+    /**
+     * The feature id for the '<em><b>ParameterDefs</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int USERDEF004__PARAMETERDEFS = BASIC_NODE__PARAMETERDEFS;
+
+    /**
+     * The feature id for the '<em><b>ParameterVals</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int USERDEF004__PARAMETERVALS = BASIC_NODE__PARAMETERVALS;
+
+    /**
+     * The feature id for the '<em><b>ParameterizedDesc</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int USERDEF004__PARAMETERIZEDDESC = BASIC_NODE__PARAMETERIZEDDESC;
+
+    /**
      * The number of structural features of the '<em>Userdef004</em>' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -3331,6 +4768,102 @@ public interface DcasePackage extends EPackage {
     int USERDEF005__USERDEF016 = BASIC_NODE__USERDEF016;
 
     /**
+     * The feature id for the '<em><b>Flag</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int USERDEF005__FLAG = BASIC_NODE__FLAG;
+
+    /**
+     * The feature id for the '<em><b>RespName</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int USERDEF005__RESPNAME = BASIC_NODE__RESPNAME;
+
+    /**
+     * The feature id for the '<em><b>RespAddress</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int USERDEF005__RESPADDRESS = BASIC_NODE__RESPADDRESS;
+
+    /**
+     * The feature id for the '<em><b>RespIcon</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int USERDEF005__RESPICON = BASIC_NODE__RESPICON;
+
+    /**
+     * The feature id for the '<em><b>RespTime</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int USERDEF005__RESPTIME = BASIC_NODE__RESPTIME;
+
+    /**
+     * The feature id for the '<em><b>Message</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int USERDEF005__MESSAGE = BASIC_NODE__MESSAGE;
+
+    /**
+     * The feature id for the '<em><b>Requirement</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int USERDEF005__REQUIREMENT = BASIC_NODE__REQUIREMENT;
+
+    /**
+     * The feature id for the '<em><b>Parent</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int USERDEF005__PARENT = BASIC_NODE__PARENT;
+
+    /**
+     * The feature id for the '<em><b>RefSource</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int USERDEF005__REFSOURCE = BASIC_NODE__REFSOURCE;
+
+    /**
+     * The feature id for the '<em><b>ParameterDefs</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int USERDEF005__PARAMETERDEFS = BASIC_NODE__PARAMETERDEFS;
+
+    /**
+     * The feature id for the '<em><b>ParameterVals</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int USERDEF005__PARAMETERVALS = BASIC_NODE__PARAMETERVALS;
+
+    /**
+     * The feature id for the '<em><b>ParameterizedDesc</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int USERDEF005__PARAMETERIZEDDESC = BASIC_NODE__PARAMETERIZEDDESC;
+
+    /**
      * The number of structural features of the '<em>Userdef005</em>' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -3528,6 +5061,102 @@ public interface DcasePackage extends EPackage {
      * @ordered
      */
     int USERDEF006__USERDEF016 = BASIC_NODE__USERDEF016;
+
+    /**
+     * The feature id for the '<em><b>Flag</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int USERDEF006__FLAG = BASIC_NODE__FLAG;
+
+    /**
+     * The feature id for the '<em><b>RespName</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int USERDEF006__RESPNAME = BASIC_NODE__RESPNAME;
+
+    /**
+     * The feature id for the '<em><b>RespAddress</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int USERDEF006__RESPADDRESS = BASIC_NODE__RESPADDRESS;
+
+    /**
+     * The feature id for the '<em><b>RespIcon</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int USERDEF006__RESPICON = BASIC_NODE__RESPICON;
+
+    /**
+     * The feature id for the '<em><b>RespTime</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int USERDEF006__RESPTIME = BASIC_NODE__RESPTIME;
+
+    /**
+     * The feature id for the '<em><b>Message</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int USERDEF006__MESSAGE = BASIC_NODE__MESSAGE;
+
+    /**
+     * The feature id for the '<em><b>Requirement</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int USERDEF006__REQUIREMENT = BASIC_NODE__REQUIREMENT;
+
+    /**
+     * The feature id for the '<em><b>Parent</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int USERDEF006__PARENT = BASIC_NODE__PARENT;
+
+    /**
+     * The feature id for the '<em><b>RefSource</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int USERDEF006__REFSOURCE = BASIC_NODE__REFSOURCE;
+
+    /**
+     * The feature id for the '<em><b>ParameterDefs</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int USERDEF006__PARAMETERDEFS = BASIC_NODE__PARAMETERDEFS;
+
+    /**
+     * The feature id for the '<em><b>ParameterVals</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int USERDEF006__PARAMETERVALS = BASIC_NODE__PARAMETERVALS;
+
+    /**
+     * The feature id for the '<em><b>ParameterizedDesc</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int USERDEF006__PARAMETERIZEDDESC = BASIC_NODE__PARAMETERIZEDDESC;
 
     /**
      * The number of structural features of the '<em>Userdef006</em>' class.
@@ -3747,13 +5376,29 @@ public interface DcasePackage extends EPackage {
     int BASIC_LINK__USERDEF016 = 21;
 
     /**
+     * The feature id for the '<em><b>SiblingOrder</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int BASIC_LINK__SIBLINGORDER = 22;
+
+    /**
+     * The feature id for the '<em><b>Message</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int BASIC_LINK__MESSAGE = 23;
+
+    /**
      * The number of structural features of the '<em>Basic Link</em>' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-    int BASIC_LINK_FEATURE_COUNT = 22;
+    int BASIC_LINK_FEATURE_COUNT = 24;
 
     /**
      * The meta object id for the '{@link net.dependableos.dcase.impl.DcaseLink001Impl <em>Link001</em>}' class.
@@ -3962,6 +5607,22 @@ public interface DcasePackage extends EPackage {
      * @ordered
      */
     int DCASE_LINK001__USERDEF016 = BASIC_LINK__USERDEF016;
+
+     /**
+      * The feature id for the '<em><b>SibringOrder</b></em>' attribute.
+      * <!-- begin-user-doc -->
+      * <!-- end-user-doc -->
+      * @ordered
+      */
+     int DCASE_LINK001__SIBLINGORDER = BASIC_LINK__SIBLINGORDER;
+
+     /**
+      * The feature id for the '<em><b>Message</b></em>' attribute.
+      * <!-- begin-user-doc -->
+      * <!-- end-user-doc -->
+      * @ordered
+      */
+     int DCASE_LINK001__MESSAGE = BASIC_LINK__MESSAGE;
 
     /**
      * The number of structural features of the '<em>Link001</em>' class.
@@ -4181,6 +5842,22 @@ public interface DcasePackage extends EPackage {
     int DCASE_LINK002__USERDEF016 = BASIC_LINK__USERDEF016;
 
     /**
+     * The feature id for the '<em><b>SiblingOrder</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int DCASE_LINK002__SIBLINGORDER = BASIC_LINK__SIBLINGORDER;
+
+    /**
+     * The feature id for the '<em><b>Message</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int DCASE_LINK002__MESSAGE = BASIC_LINK__MESSAGE;
+
+    /**
      * The number of structural features of the '<em>Link002</em>' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -4396,6 +6073,22 @@ public interface DcasePackage extends EPackage {
      * @ordered
      */
     int DCASE_LINK003__USERDEF016 = BASIC_LINK__USERDEF016;
+
+    /**
+     * The feature id for the '<em><b>SiblingOrder</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int DCASE_LINK003__SIBLINGORDER = BASIC_LINK__SIBLINGORDER;
+
+    /**
+     * The feature id for the '<em><b>Message</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int DCASE_LINK003__MESSAGE = BASIC_LINK__MESSAGE;
 
     /**
      * The number of structural features of the '<em>Link003</em>' class.
@@ -4615,6 +6308,22 @@ public interface DcasePackage extends EPackage {
     int DCASE_LINK004__USERDEF016 = BASIC_LINK__USERDEF016;
 
     /**
+     * The feature id for the '<em><b>SiblingOrder</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int DCASE_LINK004__SIBLINGORDER = BASIC_LINK__SIBLINGORDER;
+
+    /**
+     * The feature id for the '<em><b>Message</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @ordered
+     */
+    int DCASE_LINK004__MESSAGE = BASIC_LINK__MESSAGE;
+
+    /**
      * The number of structural features of the '<em>Link004</em>' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -4622,7 +6331,6 @@ public interface DcasePackage extends EPackage {
      * @ordered
      */
     int DCASE_LINK004_FEATURE_COUNT = BASIC_LINK_FEATURE_COUNT + 0;
-
 
     /**
      * Returns the meta object for class '{@link net.dependableos.dcase.BasicNode <em>Basic Node</em>}'.
@@ -4855,6 +6563,126 @@ public interface DcasePackage extends EPackage {
     EAttribute getBasicNode_Userdef016();
 
     /**
+     * Returns the meta object for the attribute '{@link net.dependableos.dcase.BasicNode#getFlag <em>Flag</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Flag</em>'.
+     * @see net.dependableos.dcase.BasicNode#getFlag()
+     * @see #getBasicNode()
+     */
+    EAttribute getBasicNode_Flag();
+
+    /**
+     * Returns the meta object for the attribute '{@link net.dependableos.dcase.BasicNode#getRespName <em>RespName</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>RespName</em>'.
+     * @see net.dependableos.dcase.BasicNode#getRespName()
+     * @see #getBasicNode()
+     */
+    EAttribute getBasicNode_RespName();
+
+    /**
+     * Returns the meta object for the attribute '{@link net.dependableos.dcase.BasicNode#getRespAddress <em>RespAddress</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>RespAddress</em>'.
+     * @see net.dependableos.dcase.BasicNode#getRespAddress()
+     * @see #getBasicNode()
+     */
+    EAttribute getBasicNode_RespAddress();
+
+    /**
+     * Returns the meta object for the attribute '{@link net.dependableos.dcase.BasicNode#getRespIcon <em>RespIcon</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>RespIcon</em>'.
+     * @see net.dependableos.dcase.BasicNode#getRespIcon()
+     * @see #getBasicNode()
+     */
+    EAttribute getBasicNode_RespIcon();
+
+    /**
+     * Returns the meta object for the attribute '{@link net.dependableos.dcase.BasicNode#getRespTime <em>RespTime</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>RespTime</em>'.
+     * @see net.dependableos.dcase.BasicNode#getRespTime()
+     * @see #getBasicNode()
+     */
+    EAttribute getBasicNode_RespTime();
+
+    /**
+     * Returns the meta object for the attribute '{@link net.dependableos.dcase.BasicNode#getMessage <em>Message</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Message</em>'.
+     * @see net.dependableos.dcase.BasicNode#getMessage()
+     * @see #getBasicNode()
+     */
+    EAttribute getBasicNode_Message();
+
+    /**
+     * Returns the meta object for the attribute '{@link net.dependableos.dcase.BasicNode#getResquirement <em>Requirement</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Requirement</em>'.
+     * @see net.dependableos.dcase.BasicNode#getRequirement()
+     * @see #getBasicNode()
+     */
+    EAttribute getBasicNode_Requirement();
+
+    /**
+     * Returns the meta object for the attribute '{@link net.dependableos.dcase.BasicNode#getParent <em>Parent</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Parent</em>'.
+     * @see net.dependableos.dcase.BasicNode#getParent()
+     * @see #getBasicNode()
+     */
+    EAttribute getBasicNode_Parent();
+
+    /**
+     * Returns the meta object for the attribute '{@link net.dependableos.dcase.BasicNode#getRefSource <em>RefSource</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>RefSource</em>'.
+     * @see net.dependableos.dcase.BasicNode#getRefSource()
+     * @see #getBasicNode()
+     */
+    EAttribute getBasicNode_RefSource();
+
+    /**
+     * Returns the meta object for the attribute '{@link net.dependableos.dcase.BasicNode#getParameterDefs <em>ParameterDefs</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>ParameterDefs</em>'.
+     * @see net.dependableos.dcase.BasicNode#getParameterDefs()
+     * @see #getBasicNode()
+     */
+    EAttribute getBasicNode_ParameterDefs();
+
+    /**
+     * Returns the meta object for the attribute '{@link net.dependableos.dcase.BasicNode#getParameterVals <em>ParameterVals</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>ParameterVals</em>'.
+     * @see net.dependableos.dcase.BasicNode#getParameterVals()
+     * @see #getBasicNode()
+     */
+    EAttribute getBasicNode_ParameterVals();
+
+    /**
+     * Returns the meta object for the attribute '{@link net.dependableos.dcase.BasicNode#getParameterizedDesc <em>ParameterizedDesc</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>ParameterizedDesc</em>'.
+     * @see net.dependableos.dcase.BasicNode#getParameterizedDesc()
+     * @see #getBasicNode()
+     */
+    EAttribute getBasicNode_ParameterizedDesc();
+
+    /**
      * Returns the meta object for class '{@link net.dependableos.dcase.Argument <em>Argument</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -4929,47 +6757,44 @@ public interface DcasePackage extends EPackage {
     EClass getSystem();
 
     /**
-     * Returns the meta object for the attribute '{@link net.dependableos.dcase.System#getScore <em>Score</em>}'.
+     * Returns the meta object for the attribute '{@link net.dependableos.dcase.System#getSubType <em>SubType</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @return the meta object for the attribute '<em>Score</em>'.
-     * @see net.dependableos.dcase.System#getScore()
+     * @return the meta object for the attribute '<em>SubType</em>'.
+     * @see net.dependableos.dcase.System#getSubType()
      * @see #getSystem()
-     * @generated
      */
-    EAttribute getSystem_Score();
+    EAttribute getSystem_SubType();
 
     /**
-     * Returns the meta object for the attribute '{@link net.dependableos.dcase.System#getWeight <em>Weight</em>}'.
+     * Returns the meta object for the attribute '{@link net.dependableos.dcase.System#getLeafNode <em>LeafNode</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @return the meta object for the attribute '<em>Weight</em>'.
-     * @see net.dependableos.dcase.System#getWeight()
+     * @return the meta object for the attribute '<em>LeafNode</em>'.
+     * @see net.dependableos.dcase.System#getLeafNode()
      * @see #getSystem()
-     * @generated
      */
-    EAttribute getSystem_Weight();
+    EAttribute getSystem_LeafNode();
 
     /**
-     * Returns the meta object for the attribute '{@link net.dependableos.dcase.System#getNodeLink <em>Node Link</em>}'.
+     * Returns the meta object for the attribute '{@link net.dependableos.dcase.System#getI <em>I</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @return the meta object for the attribute '<em>Node Link</em>'.
-     * @see net.dependableos.dcase.System#getNodeLink()
+     * @return the meta object for the attribute '<em>I</em>'.
+     * @see net.dependableos.dcase.System#getI()
      * @see #getSystem()
-     * @generated
      */
-    EAttribute getSystem_NodeLink();
+    EAttribute getSystem_I();
 
     /**
-     * Returns the meta object for the attribute '{@link net.dependableos.dcase.System#getParam <em>Param</em>}'.
+     * Returns the meta object for the attribute '{@link net.dependableos.dcase.System#getJ <em>J</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @return the meta object for the attribute '<em>Param</em>'.
-     * @see net.dependableos.dcase.System#getParam()
+     * @return the meta object for the attribute '<em>J</em>'.
+     * @see net.dependableos.dcase.System#getJ()
      * @see #getSystem()
      */
-    EAttribute getSystem_Param();
+    EAttribute getSystem_J();
 
     /**
      * Returns the meta object for class '{@link net.dependableos.dcase.Strategy <em>Strategy</em>}'.
@@ -5387,6 +7212,26 @@ public interface DcasePackage extends EPackage {
     EAttribute getBasicLink_Userdef016();
 
     /**
+     * Returns the meta object for the attribute '{@link net.dependableos.dcase.BasicLink#getSiblingOrder <em>SiblinrOrder</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>SiblingOrder</em>'.
+     * @see net.dependableos.dcase.BasicLink#getSiblingOrder()
+     * @see #getBasicLink()
+     */
+    EAttribute getBasicLink_SiblingOrder();
+
+    /**
+     * Returns the meta object for the attribute '{@link net.dependableos.dcase.BasicLink#getMessage <em>Message</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Message</em>'.
+     * @see net.dependableos.dcase.BasicLink#getMessage()
+     * @see #getBasicLink()
+     */
+    EAttribute getBasicLink_Message();
+
+    /**
      * Returns the meta object for class '{@link net.dependableos.dcase.DcaseLink001 <em>Link001</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -5619,6 +7464,90 @@ public interface DcasePackage extends EPackage {
         EAttribute BASIC_NODE__USERDEF016 = eINSTANCE.getBasicNode_Userdef016();
 
         /**
+         * The meta object literal for the '<em><b>Flag</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         */
+        EAttribute BASIC_NODE__FLAG = eINSTANCE.getBasicNode_Flag();
+
+        /**
+         * The meta object literal for the '<em><b>RespName</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         */
+        EAttribute BASIC_NODE__RESPNAME = eINSTANCE.getBasicNode_RespName();
+
+        /**
+         * The meta object literal for the '<em><b>RespAddress</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         */
+        EAttribute BASIC_NODE__RESPADDRESS = eINSTANCE.getBasicNode_RespAddress();
+
+        /**
+         * The meta object literal for the '<em><b>RespIcon</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         */
+        EAttribute BASIC_NODE__RESPICON = eINSTANCE.getBasicNode_RespIcon();
+
+        /**
+         * The meta object literal for the '<em><b>RespTime</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         */
+        EAttribute BASIC_NODE__RESPTIME = eINSTANCE.getBasicNode_RespTime();
+
+        /**
+         * The meta object literal for the '<em><b>Message</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         */
+        EAttribute BASIC_NODE__MESSAGE = eINSTANCE.getBasicNode_Message();
+
+        /**
+         * The meta object literal for the '<em><b>Requirement</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         */
+        EAttribute BASIC_NODE__REQUIREMENT = eINSTANCE.getBasicNode_Requirement();
+
+        /**
+         * The meta object literal for the '<em><b>Parent</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         */
+        EAttribute BASIC_NODE__PARENT = eINSTANCE.getBasicNode_Parent();
+
+        /**
+         * The meta object literal for the '<em><b>RefSource</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         */
+        EAttribute BASIC_NODE__REFSOURCE = eINSTANCE.getBasicNode_RefSource();
+
+        /**
+         * The meta object literal for the '<em><b>ParameterDefs</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         */
+        EAttribute BASIC_NODE__PARAMETERDEFS = eINSTANCE.getBasicNode_ParameterDefs();
+
+        /**
+         * The meta object literal for the '<em><b>ParameterVals</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         */
+        EAttribute BASIC_NODE__PARAMETERVALS = eINSTANCE.getBasicNode_ParameterVals();
+
+        /**
+         * The meta object literal for the '<em><b>ParameterizedDesc</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         */
+        EAttribute BASIC_NODE__PARAMETERIZEDDESC = eINSTANCE.getBasicNode_ParameterizedDesc();
+
+        /**
          * The meta object literal for the '{@link net.dependableos.dcase.impl.ArgumentImpl <em>Argument</em>}' class.
          * <!-- begin-user-doc -->
          * <!-- end-user-doc -->
@@ -5681,35 +7610,32 @@ public interface DcasePackage extends EPackage {
         EClass SYSTEM = eINSTANCE.getSystem();
 
         /**
-         * The meta object literal for the '<em><b>Score</b></em>' attribute feature.
+         * The meta object literal for the '<em><b>SubType</b></em>' attribute feature.
          * <!-- begin-user-doc -->
          * <!-- end-user-doc -->
-         * @generated
          */
-        EAttribute SYSTEM__SCORE = eINSTANCE.getSystem_Score();
+        EAttribute SYSTEM__SUBTYPE = eINSTANCE.getSystem_SubType();
 
         /**
-         * The meta object literal for the '<em><b>Weight</b></em>' attribute feature.
+         * The meta object literal for the '<em><b>LeafNode</b></em>' attribute feature.
          * <!-- begin-user-doc -->
          * <!-- end-user-doc -->
-         * @generated
          */
-        EAttribute SYSTEM__WEIGHT = eINSTANCE.getSystem_Weight();
+        EAttribute SYSTEM__LEAFNODE = eINSTANCE.getSystem_LeafNode();
 
         /**
-         * The meta object literal for the '<em><b>Node Link</b></em>' attribute feature.
+         * The meta object literal for the '<em><b>I</b></em>' attribute feature.
          * <!-- begin-user-doc -->
          * <!-- end-user-doc -->
-         * @generated
          */
-        EAttribute SYSTEM__NODE_LINK = eINSTANCE.getSystem_NodeLink();
+        EAttribute SYSTEM__I = eINSTANCE.getSystem_I();
 
         /**
-         * The meta object literal for the '<em><b>Param</b></em>' attribute feature.
+         * The meta object literal for the '<em><b>J</b></em>' attribute feature.
          * <!-- begin-user-doc -->
          * <!-- end-user-doc -->
          */
-        EAttribute SYSTEM__PARAM = eINSTANCE.getSystem_Param();
+        EAttribute SYSTEM__J = eINSTANCE.getSystem_J();
 
         /**
          * The meta object literal for the '{@link net.dependableos.dcase.impl.StrategyImpl <em>Strategy</em>}' class.
@@ -5922,6 +7848,20 @@ public interface DcasePackage extends EPackage {
          * @generated
          */
         EAttribute BASIC_LINK__STATUS = eINSTANCE.getBasicLink_Status();
+
+        /**
+         * The meta object literal for the '<em><b>SiblingOrder</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         */
+        EAttribute BASIC_LINK__SLIBINGORDER = eINSTANCE.getBasicLink_SiblingOrder();
+
+        /**
+         * The meta object literal for the '<em><b>Message</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         */
+        EAttribute BASIC_LINK__MESSAGE = eINSTANCE.getBasicLink_Message();
 
         /**
          * The meta object literal for the '<em><b>Userdef001</b></em>' attribute feature.

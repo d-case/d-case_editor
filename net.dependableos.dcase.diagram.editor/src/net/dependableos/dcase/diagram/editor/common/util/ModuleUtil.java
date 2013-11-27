@@ -3,21 +3,21 @@
  */
 package net.dependableos.dcase.diagram.editor.common.util;
 
-import static net.dependableos.dcase.diagram.common.constant.SystemPropertyKeyConst.DIAGRAM_FILE_EXTENSION;
-import static net.dependableos.dcase.diagram.common.constant.SystemPropertyKeyConst.MODEL_GMF_FILE_EXTENSION;
-import static net.dependableos.dcase.diagram.common.constant.SystemPropertyKeyConst.DSTAR_FILE_EXTENSION;
-import static net.dependableos.dcase.diagram.common.constant.SystemPropertyKeyConst.MODEL_DSTAR_FILE_EXTENSION;
 import net.dependableos.dcase.BasicLink;
 import net.dependableos.dcase.BasicNode;
 import net.dependableos.dcase.Argument;
+import net.dependableos.dcase.DcaseFactory;
+import net.dependableos.dcase.System;
 import net.dependableos.dcase.diagram.common.model.AttributeType;
 import net.dependableos.dcase.diagram.common.model.NodeInfo;
-import net.dependableos.dcase.diagram.common.util.FileUtil;
+import net.dependableos.dcase.diagram.common.util.Menus;
 import net.dependableos.dcase.diagram.common.util.MessageTypeImpl;
 import net.dependableos.dcase.diagram.common.util.Messages;
 import net.dependableos.dcase.diagram.common.util.ModelUtil;
-import net.dependableos.dcase.diagram.common.util.PropertyUtil;
 import net.dependableos.dcase.diagram.edit.parts.ArgumentEditPart;
+import net.dependableos.dcase.diagram.editor.parameter.ParameterUtil;
+import net.dependableos.dcase.diagram.editor.ui.PatternNumberDialog;
+import net.dependableos.dcase.diagram.part.PatternUtil;
 
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
@@ -30,6 +30,8 @@ import java.util.LinkedHashMap;
 import java.util.HashSet;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
@@ -42,11 +44,11 @@ import org.eclipse.gef.Tool;
 import org.eclipse.gef.tools.AbstractTool;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.GraphicalEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.parts.IDiagramGraphicalViewer;
-import org.eclipse.ui.IEditorDescriptor;
+import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.part.FileEditorInput;
 
 /**
  * A utility class that handles modules.
@@ -56,31 +58,27 @@ public final class ModuleUtil {
 	/**
 	 * the file extension of a diagram.
 	 */
-	private static final String DIAGRAM_FILE_EXTENSION_NAME = PropertyUtil
-			.getSystemProperty(DIAGRAM_FILE_EXTENSION);
+	private static final String DIAGRAM_FILE_EXTENSION_NAME = PatternUtil.getDiagramFileExtension();
 
 	/**
 	 * the file extension of a model.
 	 */
-	private static final String MODEL_FILE_EXTENSION_NAME = PropertyUtil
-			.getSystemProperty(MODEL_GMF_FILE_EXTENSION);
+	private static final String MODEL_FILE_EXTENSION_NAME = PatternUtil.getModelFileExtension();
 
 	/**
 	 * the file extension of a d* diagram.
 	 */
-	private static final String DSTAR_FILE_EXTENSION_NAME = PropertyUtil
-			.getSystemProperty(DSTAR_FILE_EXTENSION);
+	private static final String DSTAR_FILE_EXTENSION_NAME = PatternUtil.getDstarDiagramFileExtension();
 
 	/**
 	 * the file extension of a model.
 	 */
-	private static final String DSTAR_MODEL_FILE_EXTENSION_NAME = PropertyUtil
-			.getSystemProperty(MODEL_DSTAR_FILE_EXTENSION);
+	private static final String DSTAR_MODEL_FILE_EXTENSION_NAME = PatternUtil.getDstarModelFileExtension();
 
 	/**
 	 * the main module name.
 	 */
-	private static final String MAIN_MODULE_NAME = "main"; //$NON-NLS-1$
+	private static final String MAIN_MODULE_NAME = PatternUtil.getMainModuleName();
 
 	/**
 	 * the separator string of references.
@@ -100,7 +98,7 @@ public final class ModuleUtil {
 	/**
 	 * the separator string of responsibility.
 	 */
-	private static final String RESPONSIBILITY_SEPARATOR_NAME = ";"; //$NON-NLS-1$
+	private static final String RESPONSIBILITY_SEPARATOR_NAME = PatternUtil.getResponsibilitySeparatorName(); //$NON-NLS-1$
 
 	/**
 	 * the Contract flag name.
@@ -198,30 +196,18 @@ public final class ModuleUtil {
 	 * @return whether the name is workspace reference.
 	 */
 	public static boolean isWorkspaceReference(String name) {
-		try {
-			if (name.substring(0, 1).equals(MODULE_SEPARATOR_NAME)) {
-				return true;
-			} else {
-				return false;
-			}
-		} catch (StringIndexOutOfBoundsException e) {
-			return false;
-		}
+		return PatternUtil.isWorkspaceReference(name);
 	}
 
 	/**
-	 * Returns whether the node is public.
+	 * Returns whether the node name or not.
 	 * 
 	 * @param name
 	 *            the node name.
-	 * @return whether the node is public.
+	 * @return whether the node name or not.
 	 */
 	public static boolean isPublicNodeName(String name) {
-		if (name != null) {
-			return (name.indexOf(MODULE_SEPARATOR_NAME) >= 0);
-		} else {
-			return false;
-		}
+		return PatternUtil.isPublicNodeName(name);
 	}
 
 	/**
@@ -232,13 +218,7 @@ public final class ModuleUtil {
 	 * @return whether the file is model file.
 	 */
 	public static boolean isModelFile(IFile file) {
-		if (file != null) {
-			String extensionStr = file.getFileExtension();
-			if (extensionStr != null) {
-				return extensionStr.equals(MODEL_FILE_EXTENSION_NAME);
-			}
-		}
-		return false;
+		return PatternUtil.isModelFile(file);
 	}
 
 	/**
@@ -249,13 +229,7 @@ public final class ModuleUtil {
 	 * @return whether the file is diagram file.
 	 */
 	public static boolean isDiagramFile(IFile file) {
-		if (file != null) {
-			String extensionStr = file.getFileExtension();
-			if (extensionStr != null) {
-				return extensionStr.equals(DIAGRAM_FILE_EXTENSION_NAME);
-			}
-		}
-		return false;
+		return PatternUtil.isDiagramFile(file);
 	}
 
 	/**
@@ -266,13 +240,7 @@ public final class ModuleUtil {
 	 * @return whether the file is d* model file.
 	 */
 	public static boolean isDstarModelFile(IFile file) {
-		if (file != null) {
-			String extensionStr = file.getFileExtension();
-			if (extensionStr != null) {
-				return extensionStr.equals(DSTAR_MODEL_FILE_EXTENSION_NAME);
-			}
-		}
-		return false;
+		return PatternUtil.isDstarModelFile(file);
 	}
 
 	/**
@@ -283,13 +251,7 @@ public final class ModuleUtil {
 	 * @return whether the file is d* diagram file.
 	 */
 	public static boolean isDstarFile(IFile file) {
-		if (file != null) {
-			String extensionStr = file.getFileExtension();
-			if (extensionStr != null) {
-				return extensionStr.equals(DSTAR_FILE_EXTENSION_NAME);
-			}
-		}
-		return false;
+		return PatternUtil.isDstarFile(file);
 	}
 
 	/**
@@ -300,32 +262,20 @@ public final class ModuleUtil {
 	 * @return the module name.
 	 */
 	public static String getModuleName(IFile file) {
-		if (file != null) {
-			return file.getFullPath().removeFileExtension().lastSegment();
-		} else {
-			return null;
-		}
+		return PatternUtil.getModuleName(file);
 	}
 
 	/**
 	 * Returns the module name.
 	 * 
-	 * @param nodeName
-	 *            the node name.
+	 * @param name
+	 *            the module name or node name.
 	 * @return the module name.
 	 */
-	public static String getModuleName(String nodeName) {
-		if (nodeName == null) {
-			return null;
-		}
-		int index = nodeName.indexOf(MODULE_SEPARATOR_NAME);
-		if (index >= 0) {
-			return nodeName.substring(0, index);
-		} else {
-			return nodeName;
-		}
+	public static String getModuleName(String name) {
+		return PatternUtil.getModuleName(name);
 	}
-
+	
 	/**
 	 * Returns the node name.
 	 * 
@@ -334,15 +284,7 @@ public final class ModuleUtil {
 	 * @return the node name.
 	 */
 	public static String getNodeName(String nodeName) {
-		if (nodeName == null) {
-			return null;
-		}
-		int index = nodeName.indexOf(MODULE_SEPARATOR_NAME);
-		if (index >= 0) {
-			return nodeName.substring(index + 1);
-		} else {
-			return nodeName;
-		}
+		return PatternUtil.getNodeName(nodeName);
 	}
 
 	/**
@@ -353,11 +295,7 @@ public final class ModuleUtil {
 	 * @return the diagram file path.
 	 */
 	public static IPath getDiagramPath(String name) {
-		ArgumentEditPart editPart = DcaseEditorUtil
-				.getCurrentArgumentEditPart();
-		IFile modelFile = DcaseEditorUtil.getModelFile(editPart);
-		IPath basePath = modelFile.getParent().getFullPath().append(name);
-		return basePath.addFileExtension(DIAGRAM_FILE_EXTENSION_NAME);
+		return PatternUtil.getDiagramPath(name);
 	}
 
 	/**
@@ -368,41 +306,25 @@ public final class ModuleUtil {
 	 * @return the model file path.
 	 */
 	public static IPath getModelPath(String name) {
-		ArgumentEditPart editPart = DcaseEditorUtil
-				.getCurrentArgumentEditPart();
-		IFile modelFile = DcaseEditorUtil.getModelFile(editPart);
-		IPath basePath = modelFile.getParent().getFullPath().append(name);
-		return basePath.addFileExtension(MODEL_FILE_EXTENSION_NAME);
+		return PatternUtil.getModelPath(name);
 	}
 
 	/**
 	 * Returns the d* Diagram file path.
 	 * 
-	 * @param name
-	 *            the module name.
 	 * @return the d* diagram file path.
 	 */
-	public static IPath getDstarPath(String name) {
-		ArgumentEditPart editPart = DcaseEditorUtil
-				.getCurrentArgumentEditPart();
-		IFile modelFile = DcaseEditorUtil.getModelFile(editPart);
-		IPath basePath = modelFile.getParent().getFullPath().append(name);
-		return basePath.addFileExtension(DSTAR_FILE_EXTENSION_NAME);
+	public static IPath getDstarPath() {
+		return PatternUtil.getDstarPath();
 	}
 
 	/**
 	 * Returns the d* Model file path.
 	 * 
-	 * @param name
-	 *            the module name.
 	 * @return the d* model file path.
 	 */
-	public static IPath getDstarModelPath(String name) {
-		ArgumentEditPart editPart = DcaseEditorUtil
-				.getCurrentArgumentEditPart();
-		IFile modelFile = DcaseEditorUtil.getModelFile(editPart);
-		IPath basePath = modelFile.getParent().getFullPath().append(name);
-		return basePath.addFileExtension(DSTAR_MODEL_FILE_EXTENSION_NAME);
+	public static IPath getDstarModelPath() {
+		return PatternUtil.getDstarModelPath();
 	}
 
 	/**
@@ -415,7 +337,7 @@ public final class ModuleUtil {
 	 * @return the public node reference string.
 	 */
 	public static String createNodeReference(String moduleName, String nodeName) {
-		return moduleName + MODULE_SEPARATOR_NAME + nodeName;
+		return PatternUtil.createNodeReference(moduleName, nodeName);
 	}
 
 	/**
@@ -428,14 +350,14 @@ public final class ModuleUtil {
 	 * @return the public node reference string.
 	 */
 	public static String createNodeReference(IFile modelFile, String nodeName) {
-		return createNodeReference(getModuleName(modelFile), nodeName);
+		return PatternUtil.createNodeReference(getModuleName(modelFile), nodeName);
 	}
 
 	/**
 	 * Returns the reference number.
 	 * 
 	 * @param reference
-	 *            Userdef011 value.
+	 *            RefSource value.
 	 * @return the reference number.
 	 */
 	public static int getReferenceNumber(String reference) {
@@ -484,11 +406,11 @@ public final class ModuleUtil {
 	}
 
 	/**
-	 * Returns the Userdef011 attribute value.
+	 * Returns the RefSource attribute value.
 	 * 
 	 * @param list
 	 *            the reference list.
-	 * @return the Userdef011 attribute value.
+	 * @return the RefSource attribute value.
 	 */
 	private static String makeModuleReference(ArrayList<String> list) {
 		StringBuffer buffer = new StringBuffer();
@@ -502,10 +424,10 @@ public final class ModuleUtil {
 	}
 
 	/**
-	 * Appends reference to Userdef011 and returns the new references.
+	 * Appends reference to RefSource and returns the new references.
 	 * 
 	 * @param allStr
-	 *            the Userdef011.
+	 *            the RefSource.
 	 * @param refStr
 	 *            the adding reference.
 	 * @return the new references.
@@ -525,7 +447,7 @@ public final class ModuleUtil {
 	}
 
 	/**
-	 * Appends reference to Userdef011 and returns the new references.
+	 * Appends reference to RefSource and returns the new references.
 	 * 
 	 * @param node
 	 *            the node.
@@ -534,11 +456,11 @@ public final class ModuleUtil {
 	 * @return the new references.
 	 */
 	public static String appendModuleReference(BasicNode node, String refStr) {
-		return appendModuleReference(node.getUserdef011(), refStr);
+		return appendModuleReference(node.getRefSource(), refStr);
 	}
 
 	/**
-	 * Appends reference to Userdef011 and returns the new references.
+	 * Appends reference to RefSource and returns the new references.
 	 * 
 	 * @param editPart
 	 *            the editpart.
@@ -557,10 +479,10 @@ public final class ModuleUtil {
 	}
 
 	/**
-	 * Removes reference from Userdef011 and returns the new references.
+	 * Removes reference from RefSource and returns the new references.
 	 * 
 	 * @param allStr
-	 *            the Userdef011.
+	 *            the RefSource.
 	 * @param refStr
 	 *            the removing reference.
 	 * @return the new references.
@@ -580,7 +502,7 @@ public final class ModuleUtil {
 	}
 
 	/**
-	 * Removes reference from Userdef011 and returns the new references.
+	 * Removes reference from RefSource and returns the new references.
 	 * 
 	 * @param node
 	 *            the node.
@@ -589,11 +511,11 @@ public final class ModuleUtil {
 	 * @return the new references.
 	 */
 	public static String removeModuleReference(BasicNode node, String refStr) {
-		return removeModuleReference(node.getUserdef011(), refStr);
+		return removeModuleReference(node.getRefSource(), refStr);
 	}
 
 	/**
-	 * Removes reference from Userdef011 and returns the new references.
+	 * Removes reference from RefSource and returns the new references.
 	 * 
 	 * @param editPart
 	 *            the editpart.
@@ -675,7 +597,7 @@ public final class ModuleUtil {
 		if (file == null) {
 			return moduleMap;
 		}
-		IResource[] resources = file.getParent().members();
+		IResource[] resources = getMembers(file.getProject());
 		for (IResource resource : resources) {
 			if (resource instanceof IFile) {
 				IFile resFile = (IFile) resource;
@@ -684,19 +606,16 @@ public final class ModuleUtil {
 				}
 				// add the module to list
 				String moduleName = getModuleName(resFile);
-				// if(moduleName.equals(MAIN_MODULE_NAME)) {
-				// continue;
-				// }
-				EObject eobj = ModelUtil.getModel(resFile);
+				EObject eobj = ModelUtil.getModel(resFile, true);
 				if (eobj instanceof Argument) {
 					Argument argument = (Argument) eobj;
-					String userdef011Str = argument.getUserdef011();
+					String refSourceStr = argument.getRefSource();
 					// check whether module is public or not.
 					boolean addModule = true;
 					if (currentModuleName != null) {
-						String parent = argument.getUserdef013();
+						String parent = argument.getParent();
 						if (parent == null || !parent.equals(currentModuleName)) {
-							String flags = argument.getUserdef015();
+							String flags = argument.getFlag();
 							if (flags == null || flags.length() == 0
 									|| flags.indexOf(PUBLIC_FLAG_NAME) < 0) {
 								addModule = false;
@@ -705,22 +624,22 @@ public final class ModuleUtil {
 					}
 					if (addModule) {
 						moduleMap.put(getModuleName(resFile),
-								(userdef011Str != null) ? userdef011Str : ""); //$NON-NLS-1$
+								(refSourceStr != null) ? refSourceStr : ""); //$NON-NLS-1$
 					}
 					// add public node to list
 					if (needNode) {
 						EList<BasicNode> nodes = argument.getRootBasicNode();
 						for (BasicNode node : nodes) {
-							String flags = node.getUserdef015();
+							String flags = node.getFlag();
 							if (flags == null || flags.length() == 0) {
 								continue;
 							}
 							if (flags.indexOf(PUBLIC_FLAG_NAME) >= 0) {
-								userdef011Str = node.getUserdef011();
+								refSourceStr = node.getRefSource();
 								moduleMap.put(
 										createNodeReference(moduleName,
 												node.getName()),
-										(userdef011Str != null) ? userdef011Str
+										(refSourceStr != null) ? refSourceStr
 												: ""); //$NON-NLS-1$
 							}
 						}
@@ -729,6 +648,40 @@ public final class ModuleUtil {
 			}
 		}
 		return moduleMap;
+	}
+	
+	/**
+	 * Returns the files belong to the project.
+	 * @param project the project.
+	 * @return the files belong to the project.
+	 */
+	public static IResource[] getMembers(IProject project) throws CoreException {
+		ArrayList<IResource>ret = new ArrayList<IResource>();
+		for (IResource res : project.members()) {
+			if (res instanceof IFolder) {
+				ret.addAll(getMembers((IFolder)res));
+			} else {
+				ret.add(res);
+			}
+		}
+		return ret.toArray(new IResource[ret.size()]);
+	}
+	
+	/**
+	 * Returns the files belong to the folder (recursively).
+	 * @param folder the folder.
+	 * @return the files belong to the folder.
+	 */
+	private static List<IResource> getMembers(IFolder folder) throws CoreException {
+		ArrayList<IResource>ret = new ArrayList<IResource>();
+		for (IResource res : folder.members()) {
+			if (res instanceof IFolder) {
+				ret.addAll(getMembers((IFolder)res));
+			} else {
+				ret.add(res);
+			}
+		}
+		return ret;
 	}
 
 	/**
@@ -740,40 +693,8 @@ public final class ModuleUtil {
 	 *            whether normal diagram.
 	 * @return the opened module editor.
 	 */
-	public static IEditorPart openModuleEditor(String moduleName,
-			boolean isDiagram) {
-		IPath diagramPath;
-		if (isDiagram) {
-			diagramPath = ModuleUtil.getDiagramPath(moduleName);
-		} else {
-			diagramPath = ModuleUtil.getDstarPath(moduleName);
-		}
-		if (diagramPath == null) {
-			return null;
-		}
-		IFile diagramFile = FileUtil.getWorksapceFileFromPath(diagramPath
-				.toOSString());
-		if (diagramFile == null) {
-			return null;
-		}
-		IWorkbenchPage workbenchPage = PlatformUI.getWorkbench()
-				.getActiveWorkbenchWindow().getActivePage();
-		IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry()
-				.getDefaultEditor(diagramFile.getName());
-		if (desc != null) {
-			try {
-				return workbenchPage.openEditor(
-						new FileEditorInput(diagramFile), desc.getId());
-			} catch (Exception e) {
-				MessageWriter.writeMessageToConsole(Messages.OpenModuleFile_0,
-						MessageTypeImpl.OPEN_MODULE_FILE_FAILED);
-				return null;
-			}
-		} else {
-			MessageWriter.writeMessageToConsole(Messages.OpenModuleFile_1,
-					MessageTypeImpl.OPEN_MODULE_FILE_FAILED);
-			return null;
-		}
+	public static IEditorPart openModuleEditor(String moduleName, boolean isDiagram) {
+		return PatternUtil.openModuleEditor(moduleName, isDiagram);
 	}
 
 	/**
@@ -784,7 +705,7 @@ public final class ModuleUtil {
 	 * @return the opened module editor.
 	 */
 	public static IEditorPart openModuleEditor(String moduleName) {
-		return openModuleEditor(moduleName, true);
+		return PatternUtil.openModuleEditor(moduleName);
 	}
 
 	/**
@@ -796,10 +717,16 @@ public final class ModuleUtil {
 	 *            whether normal diagram.
 	 */
 	public static void saveModuleEditor(String moduleName, boolean isDiagram) {
-		IEditorPart editorPart = openModuleEditor(moduleName, isDiagram);
-		IWorkbenchPage workbenchPage = PlatformUI.getWorkbench()
-				.getActiveWorkbenchWindow().getActivePage();
-		workbenchPage.saveEditor(editorPart, false);
+		PatternUtil.saveModuleEditor(moduleName, isDiagram);
+	}
+	
+	/**
+	 * Saves the module diagram.
+	 * 
+	 * @param diagramFile the diagram file.
+	 */
+	public static void saveModuleEditor(IFile diagramFile) {
+		PatternUtil.saveModuleEditor(diagramFile);
 	}
 
 	/**
@@ -873,7 +800,7 @@ public final class ModuleUtil {
 		if (path != null) {
 			IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(path);
 			if (file != null) {
-				EObject eobj = ModelUtil.getModel(file);
+				EObject eobj = ModelUtil.getModel(file, true);
 				if (eobj instanceof Argument) {
 					EList<BasicNode> nodes = ((Argument) eobj)
 							.getRootBasicNode();
@@ -908,7 +835,7 @@ public final class ModuleUtil {
 	 * @return the root node.
 	 */
 	public static BasicNode getRootNode(IFile file) {
-		EObject templateModel = ModelUtil.getModel(file);
+		EObject templateModel = ModelUtil.getModel(file, true);
 		return getRootNode((Argument) templateModel);
 	}
 
@@ -940,14 +867,17 @@ public final class ModuleUtil {
 	 * @return the responsibility value.
 	 */
 	public static String getResponsibilityValue(BasicNode node, int index) {
-		String respStr = node.getUserdef012();
-		if (respStr != null && respStr.length() > 0) {
-			String respArray[] = respStr.split(RESPONSIBILITY_SEPARATOR_NAME);
-			if (respArray.length > index) {
-				return respArray[index];
-			}
+		switch (index) {
+		case 0: // RespName
+			return node.getRespName();
+		case 1: // RespAddress
+			return node.getRespAddress();
+		case 2: // RespIcon
+			return node.getRespIcon();
+		case 3: // RespTime
+			return node.getRespTime();
 		}
-		return ""; //$NON-NLS-1$
+		return null;
 	}
 
 	/**
@@ -984,6 +914,17 @@ public final class ModuleUtil {
 	}
 
 	/**
+	 * Returns the responsibility time.
+	 * 
+	 * @param node
+	 *            the node.
+	 * @return the responsibility time.
+	 */
+	public static String getResponsibilityTime(BasicNode node) {
+		return getResponsibilityValue(node, 3);
+	}
+
+	/**
 	 * Returns the responsibility value.
 	 * 
 	 * @param argument
@@ -991,14 +932,7 @@ public final class ModuleUtil {
 	 * @return the responsibility value.
 	 */
 	public static String getResponsibilityValue(Argument argument, int index) {
-		String respStr = argument.getUserdef012();
-		if (respStr != null && respStr.length() > 0) {
-			String respArray[] = respStr.split(RESPONSIBILITY_SEPARATOR_NAME);
-			if (respArray.length > index) {
-				return respArray[index];
-			}
-		}
-		return ""; //$NON-NLS-1$
+		return getResponsibilityValue((BasicNode)argument, index);
 	}
 
 	/**
@@ -1078,14 +1012,32 @@ public final class ModuleUtil {
 	public static String getContractIconString(BasicNode node1, BasicNode node2) {
 		String ret = ""; //$NON-NLS-1$
 		if (node1 != null && node2 != null) {
-			String str1 = node1.getUserdef012();
-			String str2 = node2.getUserdef012();
-			if (str1 != null && str1.length() > 0 && str2 != null
-					&& str2.length() > 0) {
-				ret = RESPONSIBILITY_SEPARATOR_NAME
-						+ (str1.equals(str2) ? CONTRACT_FLAG_NAME
-								: RESPONSIBILITY_CONTRACT_FLAG_NAME);
+			String[] resp1 = new String[] {
+					getResponsibilityName(node1),
+					getResponsibilityAddress(node1),
+					getResponsibilityIconPath(node1),
+			};
+			String[] resp2 = new String[] {
+					getResponsibilityName(node2),
+					getResponsibilityAddress(node2),
+					getResponsibilityIconPath(node2),
+			};
+			boolean isCheck = false;
+			for (String s : resp1) {
+				if (s != null && s.length() > 0) {
+					isCheck = true;
+					break;
+				}
 			}
+			for (String s : resp2) {
+				if (s != null && s.length() > 0) {
+					isCheck = true;
+					break;
+				}
+			}
+			ret = RESPONSIBILITY_SEPARATOR_NAME
+					+ (isCheck && Arrays.equals(resp1, resp2) ? CONTRACT_FLAG_NAME
+							: RESPONSIBILITY_CONTRACT_FLAG_NAME);
 		}
 		return ret;
 	}
@@ -1105,6 +1057,201 @@ public final class ModuleUtil {
 			}
 		}
 		return attachment;
+	}
+
+	/**
+	 * Processes the Patterns.
+	 * @param copyArgument the copied argument.
+	 * @return false if invalid or cancelled.
+	 */
+	public static boolean processPatterns(Argument copyArgument) {
+		// get root node
+		BasicNode rootNode = ModuleUtil.getRootNode(copyArgument);
+		if (rootNode == null) {
+			return false;
+		}
+
+		// process loop
+		while (true) {
+			// search Patterns
+			BasicNode cNode = searchFirstPattern(rootNode, copyArgument, new HashSet<BasicNode>());
+			if (cNode == null) {
+				break;
+			}
+			if (! PatternUtil.isValid(cNode, copyArgument)) {
+				MessageWriter.writeMessageToConsole(
+						NLS.bind(Messages.AddPatternContributionItem_2, cNode.getName()),
+						MessageTypeImpl.CREATE_PATTERN_FAILED);
+				return false;
+			}
+			
+			// process Pattern nodes.
+			System scNode = (System)cNode;
+			String subType = scNode.getSubType();
+			int k = getPatternNumber(scNode);
+			if (k <= 0) {
+				return false;
+			}
+			// Loop
+			if (PatternUtil.isLoop(subType)) {
+				// add k-1 times
+				BasicNode parent = PatternUtil.getParent(cNode, copyArgument);
+				ArrayList<BasicNode>pnodeList = new ArrayList<BasicNode>();
+				ArrayList<BasicLink>plinkList = new ArrayList<BasicLink>();
+				PatternUtil.getSubtree(scNode, copyArgument, pnodeList, plinkList);
+				String leafName = scNode.getLeafNode();
+				BasicNode leafNode = PatternUtil.getNode(leafName, pnodeList);
+				for (int i = 1; i < k; i++) {
+					if (leafNode == null) {
+						MessageWriter.writeMessageToConsole(
+								NLS.bind(Messages.AddPatternContributionItem_2, leafName),
+								MessageTypeImpl.CREATE_PATTERN_FAILED);
+						return false;
+					}
+					ArrayList<BasicNode>newNodeList = new ArrayList<BasicNode>();
+					ArrayList<BasicLink>newLinkList = new ArrayList<BasicLink>();
+					BasicNode newpNode = PatternUtil.copySubtree(parent, pnodeList, plinkList, newNodeList, newLinkList);
+					copyArgument.getRootBasicNode().addAll(newNodeList);
+					copyArgument.getRootBasicLink().addAll(newLinkList);
+					BasicLink newLink = DcaseFactory.eINSTANCE.createDcaseLink001();
+					newLink.setSource(leafNode);
+					newLink.setTarget(newpNode);
+					copyArgument.getRootBasicLink().add(newLink);
+					leafNode = PatternUtil.getNode(leafName, newNodeList);
+				}
+			}
+			// Choice
+			if (PatternUtil.isChoice(subType)) {
+				// remove from k+1 to n
+				List<BasicNode> childList = PatternUtil.getChildren(cNode, copyArgument);
+				for (int i = k; i < childList.size(); i++) {
+					ArrayList<BasicNode>pnodeList = new ArrayList<BasicNode>();
+					ArrayList<BasicLink>plinkList = new ArrayList<BasicLink>();
+					HashSet<BasicNode>checkedSet = new HashSet<BasicNode>();
+					BasicNode pnode = childList.get(i);
+					PatternUtil.getSubtree(pnode, copyArgument, pnodeList, plinkList, checkedSet);
+					copyArgument.getRootBasicNode().removeAll(pnodeList);
+					copyArgument.getRootBasicLink().removeAll(plinkList);
+					// remove links of deleted nodes.
+					for (BasicNode dnode : pnodeList) {
+						PatternUtil.removeLinks(dnode, copyArgument.getRootBasicLink());
+					}
+				}
+			}
+			// Multiplicity
+			if (PatternUtil.isMultiplicity(subType)) {
+				// add k-1 times
+				BasicNode parent = PatternUtil.getParent(cNode, copyArgument);
+				ArrayList<BasicNode>pnodeList = new ArrayList<BasicNode>();
+				ArrayList<BasicLink>plinkList = new ArrayList<BasicLink>();
+				HashSet<BasicNode>checkedSet = new HashSet<BasicNode>();
+				BasicNode pnode = PatternUtil.getChild(cNode, copyArgument, 1);
+				PatternUtil.getSubtree(pnode, copyArgument, pnodeList, plinkList, checkedSet);
+				for (BasicLink link : copyArgument.getRootBasicLink()) {
+					if (link.getSource() == parent) {
+						link.setSiblingOrder(Integer.toString(1));
+					}
+				}
+				for (int i = 1; i < k; i++) {
+					ArrayList<BasicNode>newNodeList = new ArrayList<BasicNode>();
+					ArrayList<BasicLink>newLinkList = new ArrayList<BasicLink>();
+					BasicNode newpNode = PatternUtil.copySubtree(pnode, pnodeList, plinkList, newNodeList, newLinkList);
+					copyArgument.getRootBasicNode().addAll(newNodeList);
+					copyArgument.getRootBasicLink().addAll(newLinkList);
+					BasicLink newLink = DcaseFactory.eINSTANCE.createDcaseLink001();
+					newLink.setSource(parent);
+					newLink.setTarget(newpNode);
+					newLink.setSiblingOrder(Integer.toString(i+1));
+					copyArgument.getRootBasicLink().add(newLink);
+				}
+			}
+			// remove the current Pattern node.
+			PatternUtil.removeLinks(cNode, copyArgument.getRootBasicLink());
+			copyArgument.getRootBasicNode().remove(cNode);
+		}
+		
+		// process all Parameter nodes.
+		for (BasicNode cNode : copyArgument.getRootBasicNode()) {
+			if (! (cNode instanceof System)) {
+        		continue;
+        	}
+			if (PatternUtil.isParameter(((System)cNode).getSubType())) {
+				if (!ParameterUtil.processParameter(cNode)) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+	
+	/**
+	 * Returns the first Pattern node.
+	 * @param rootNode the root node.
+	 * @param argument the argument.
+	 * @param nodeSet the checked node set.
+	 * @return the first Pattern node.
+	 */
+	private static BasicNode searchFirstPattern(BasicNode rootNode, Argument argument,
+			HashSet<BasicNode> nodeSet) {
+		if (! nodeSet.add(rootNode)) {
+			return null;
+		}
+		List<BasicNode>childList = PatternUtil.getChildren(rootNode, argument, false);
+		if (childList == null) {
+			return null;
+		}
+		// check all children
+		while (childList.size() > 0) {
+			// must be Array (for siblingOrder)
+			ArrayList<BasicNode>nextList = new ArrayList<BasicNode>();
+			for (BasicNode node : childList) {
+				if (node instanceof System) {
+					String subType = ((System)node).getSubType();
+					if (PatternUtil.isLoop(subType) ||
+							PatternUtil.isChoice(subType) ||
+							PatternUtil.isMultiplicity(subType)) {
+						return node;
+					}
+				}
+				// gather grandchildren
+				List<BasicNode>gcList = PatternUtil.getChildren(node, argument, false);
+				if (gcList != null) {
+					for (BasicNode gcnode : gcList) {
+						if (nodeSet.add(gcnode)) {
+							nextList.add(gcnode);
+						}
+					}
+				}
+			}
+			// try grandchildren
+			childList = nextList;
+		}
+		return null;
+	}
+
+	/**
+	 * Gets the number of k.
+	 * @param scNode the System node.
+	 * @return the number of k.
+	 */
+	private static int getPatternNumber(System scNode) {
+		int i = scNode.getI();
+		int j = scNode.getJ();
+		if (PatternUtil.isLoop(scNode.getSubType())) {
+			i = 1;
+			j = 100; // SPINNER_MAX at AttributeDialog.
+		}
+		if (i == j) {
+			return i;
+		}
+		PatternNumberDialog dialog = new PatternNumberDialog(
+				DcaseEditorUtil.getActiveWindowShell(),
+				NLS.bind(Menus.AddPattern_0, scNode.getSubType()),
+				NLS.bind(Menus.AddPattern_1, scNode.getName()), i, j);
+		if (dialog.open() != Dialog.OK) {
+			return -1;
+		}
+		return dialog.getNumber();
 	}
 
 }
