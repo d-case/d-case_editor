@@ -183,7 +183,12 @@ public abstract class AbstractParser implements IParser {
      * @generated
      */
     protected Object getValue(EObject element, EAttribute feature) {
-        Object value = element.eGet(feature);
+    	Object value = null;
+    	try {
+    		value = element.eGet(feature);
+    	} catch (NullPointerException e) {
+    		// for systemDesc_4031Parser
+        }
         Class iClass = feature.getEAttributeType().getInstanceClass();
         if (String.class.equals(iClass)) {
             if (value == null) {
