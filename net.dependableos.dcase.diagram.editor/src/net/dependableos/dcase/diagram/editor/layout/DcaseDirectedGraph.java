@@ -7,9 +7,11 @@ import java.util.Collection;
 import java.util.HashMap;
 
 
+
 import net.dependableos.dcase.diagram.edit.parts.ContextEditPart;
 import net.dependableos.dcase.diagram.edit.parts.JustificationEditPart;
 import net.dependableos.dcase.diagram.edit.parts.SystemEditPart;
+import net.dependableos.dcase.diagram.edit.parts.Userdef004EditPart;
 
 import org.eclipse.draw2d.graph.DirectedGraph;
 import org.eclipse.draw2d.graph.EdgeList;
@@ -103,7 +105,8 @@ public class DcaseDirectedGraph {
     protected static boolean isEast(Node node) {
         if (node.data instanceof JustificationEditPart
                 || node.data instanceof ContextEditPart
-                || node.data instanceof SystemEditPart) { // Parameter node
+                || node.data instanceof SystemEditPart // Parameter node
+                || node.data instanceof Userdef004EditPart) { // Assumption node
             return true;
         }
         return false;

@@ -120,6 +120,11 @@ public final class PatternUtil {
 	private static final String RESPONSIBILITY_SEPARATOR_NAME = ";"; //$NON-NLS-1$
 
 	/**
+	 * the format of node label.
+	 */
+	private static final String NODELABEL_FORMAT1 = "%s: <%s>\n%s: \"%s\""; //$NON-NLS-1$
+	private static final String NODELABEL_FORMAT2 = "%s: <%s>\n"; //$NON-NLS-1$
+	/**
 	 * A constructor.
 	 */
 	private PatternUtil() {
@@ -389,10 +394,21 @@ public final class PatternUtil {
 	 * @return the parent node of the Pattern node.
 	 */
 	public static BasicNode getParent(BasicNode node, Argument argument) {
+		return getParent(node, argument, true);
+	}
+	
+	/**
+	 * Returns the parent node of the Pattern node.
+	 * @param node the Pattern node.
+	 * @param argument the argument.
+	 * @param isPattern true if Pattern only.
+	 * @return the parent node of the Pattern node.
+	 */
+	public static BasicNode getParent(BasicNode node, Argument argument, boolean isPattern) {
 		BasicNode parent = null;
 		int nr = 0;
 		for (BasicLink link : argument.getRootBasicLink()) {
-			if (link instanceof DcaseLink002) {
+			if (!isPattern || (link instanceof DcaseLink002)) {
 				if (link.getTarget() == node) {
 					parent = link.getSource();
 					nr++;
@@ -524,12 +540,22 @@ public final class PatternUtil {
 		checkedSet.add(parent);
 		nodeList.add(parent);
 		for (BasicLink link : argument.getRootBasicLink()) {
-			if ((! (link instanceof DcaseLink002)) && link.getSource() == parent) {
-				if (linkList != null && ! linkList.contains(link)) {
-					linkList.add(link);
-				}
-				getSubtree(link.getTarget(), argument, nodeList, linkList, checkedSet);
+			if (link.getSource() != parent) {
+				continue;
 			}
+			if (link instanceof DcaseLink002) {
+				BasicNode child = link.getTarget();
+				if (child instanceof System) {
+					String subType = ((System)child).getSubType();
+					if (! isParameter(subType)) {
+						continue;
+					}
+				}
+			}
+			if (linkList != null && ! linkList.contains(link)) {
+				linkList.add(link);
+			}
+			getSubtree(link.getTarget(), argument, nodeList, linkList, checkedSet);
 		}
 	}
 	
@@ -1261,7 +1287,55 @@ public final class PatternUtil {
 		if (editorPart != null) {
 			IWorkbenchPage workbenchPage = PlatformUI.getWorkbench()
 					.getActiveWorkbenchWindow().getActivePage();
-			workbenchPage.saveEditor(editorPart, false);		}
+			workbenchPage.saveEditor(editorPart, false);
+		}
+	}
+	
+	/**
+	 * Returns the label of the node.
+	 * @param node the target node.
+	 * @param argument the argument.
+	 * @return the label of the node.
+	 */
+	public static String getNodeLabel(BasicNode node, Argument argument) {
+		if (node == null) {
+			return ""; //$NON-NLS-1$
+		}
+		String desc = node.getDesc();
+		if (desc != null && desc.length() > 0) {
+			return String.format(NODELABEL_FORMAT1,
+					DcaseEditPlugin.getPlugin().getString("_UI_BasicNode_name_feature"),  //$NON-NLS-1$
+					getFullPath(node, argument),
+					DcaseEditPlugin.getPlugin().getString("_UI_BasicNode_desc_feature"),  //$NON-NLS-1$
+					desc);
+		} else {
+			return String.format(NODELABEL_FORMAT2,
+					DcaseEditPlugin.getPlugin().getString("_UI_BasicNode_name_feature"),  //$NON-NLS-1$
+					getFullPath(node, argument));
+		}
+	}
+	
+	/**
+	 * Returns the full path of the node.
+	 * @param tNode the target node.
+	 * @param argument the argument.
+	 * @return the full path of the node.
+	 */
+	public static String getFullPath(BasicNode tNode, Argument argument) {
+		if (tNode == null) {
+			return ""; //$NON-NLS-1$
+		}
+		ArrayList<BasicNode> pList = new ArrayList<BasicNode>();
+		BasicNode parent = tNode;
+		do {
+			pList.add(parent);
+			parent = getParent(parent, argument, false);
+		} while (parent != null);
+		StringBuffer buffer = new StringBuffer(MODULE_SEPARATOR_NAME);
+		for (int i = pList.size()-1; i >= 0; i--) {
+			buffer.append(pList.get(i).getName() + MODULE_SEPARATOR_NAME);
+		}
+		return buffer.substring(0, buffer.length()-1);
 	}
 
 }

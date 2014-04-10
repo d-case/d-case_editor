@@ -17,6 +17,7 @@ import net.dependableos.dcase.diagram.common.util.ModelUtil;
 import net.dependableos.dcase.diagram.edit.parts.ArgumentEditPart;
 import net.dependableos.dcase.diagram.editor.parameter.ParameterUtil;
 import net.dependableos.dcase.diagram.editor.ui.PatternNumberDialog;
+import net.dependableos.dcase.diagram.editor.ui.SelectSubtreeDialog;
 import net.dependableos.dcase.diagram.part.PatternUtil;
 
 import java.lang.reflect.Method;
@@ -40,11 +41,13 @@ import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.gef.Tool;
 import org.eclipse.gef.tools.AbstractTool;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.GraphicalEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.parts.IDiagramGraphicalViewer;
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPage;
@@ -1036,7 +1039,7 @@ public final class ModuleUtil {
 				}
 			}
 			ret = RESPONSIBILITY_SEPARATOR_NAME
-					+ (isCheck && Arrays.equals(resp1, resp2) ? CONTRACT_FLAG_NAME
+					+ (!isCheck || Arrays.equals(resp1, resp2) ? CONTRACT_FLAG_NAME
 							: RESPONSIBILITY_CONTRACT_FLAG_NAME);
 		}
 		return ret;
@@ -1065,6 +1068,15 @@ public final class ModuleUtil {
 	 * @return false if invalid or cancelled.
 	 */
 	public static boolean processPatterns(Argument copyArgument) {
+		return processPatterns(copyArgument, new HashSet<BasicNode>());
+	}
+	/**
+	 * Processes the Patterns.
+	 * @param copyArgument the copied argument.
+	 * @param paramSet the processed Parameters.
+	 * @return false if invalid or cancelled.
+	 */
+	public static boolean processPatterns(Argument copyArgument, HashSet<BasicNode> paramSet) {
 		// get root node
 		BasicNode rootNode = ModuleUtil.getRootNode(copyArgument);
 		if (rootNode == null) {
@@ -1074,7 +1086,8 @@ public final class ModuleUtil {
 		// process loop
 		while (true) {
 			// search Patterns
-			BasicNode cNode = searchFirstPattern(rootNode, copyArgument, new HashSet<BasicNode>());
+			BasicNode cNode = searchFirstPattern(rootNode, copyArgument,
+					new HashSet<BasicNode>(), paramSet);
 			if (cNode == null) {
 				break;
 			}
@@ -1088,47 +1101,73 @@ public final class ModuleUtil {
 			// process Pattern nodes.
 			System scNode = (System)cNode;
 			String subType = scNode.getSubType();
-			int k = getPatternNumber(scNode);
-			if (k <= 0) {
-				return false;
-			}
+
 			// Loop
 			if (PatternUtil.isLoop(subType)) {
-				// add k-1 times
 				BasicNode parent = PatternUtil.getParent(cNode, copyArgument);
-				ArrayList<BasicNode>pnodeList = new ArrayList<BasicNode>();
-				ArrayList<BasicLink>plinkList = new ArrayList<BasicLink>();
-				PatternUtil.getSubtree(scNode, copyArgument, pnodeList, plinkList);
+				String parentPath = PatternUtil.getFullPath(parent, copyArgument);
+				List<BasicNode> pNodeList = new ArrayList<BasicNode>();
+				List<BasicLink> pLinkList = new ArrayList<BasicLink>();
+				PatternUtil.getSubtree(scNode, copyArgument, pNodeList, pLinkList);
 				String leafName = scNode.getLeafNode();
-				BasicNode leafNode = PatternUtil.getNode(leafName, pnodeList);
-				for (int i = 1; i < k; i++) {
-					if (leafNode == null) {
-						MessageWriter.writeMessageToConsole(
-								NLS.bind(Messages.AddPatternContributionItem_2, leafName),
-								MessageTypeImpl.CREATE_PATTERN_FAILED);
-						return false;
+				BasicNode leafNode = PatternUtil.getNode(leafName, pNodeList);
+				if (leafNode == null) {
+					MessageWriter.writeMessageToConsole(
+							NLS.bind(Messages.AddPatternContributionItem_2, leafName),
+							MessageTypeImpl.CREATE_PATTERN_FAILED);
+					return false;
+				}
+				// get the loop number of times
+				String nrStr = scNode.getUserdef001();
+				int nr = 1;
+				if (nrStr != null && nrStr.length() > 0) {
+					nr = Integer.parseInt(nrStr);
+					if (nr < 1) {
+						nr = 1;
 					}
-					ArrayList<BasicNode>newNodeList = new ArrayList<BasicNode>();
-					ArrayList<BasicLink>newLinkList = new ArrayList<BasicLink>();
-					BasicNode newpNode = PatternUtil.copySubtree(parent, pnodeList, plinkList, newNodeList, newLinkList);
-					copyArgument.getRootBasicNode().addAll(newNodeList);
-					copyArgument.getRootBasicLink().addAll(newLinkList);
+				}
+				if (! askLoopDialog(parentPath, nr)) {
+					// remove the current loop pattern
+					copyArgument.getRootBasicNode().removeAll(pNodeList);
+					copyArgument.getRootBasicLink().removeAll(pLinkList);
+					PatternUtil.removeLinks(parent, copyArgument.getRootBasicLink());
+				} else {
+					// unroll the loop pattern
+					List<BasicNode> nNodeList = new ArrayList<BasicNode>();
+					List<BasicLink> nLinkList = new ArrayList<BasicLink>();
+					BasicNode newpNode = PatternUtil.copySubtree(parent, pNodeList, pLinkList,
+							nNodeList, nLinkList);
+					copyArgument.getRootBasicNode().addAll(nNodeList);
+					copyArgument.getRootBasicLink().addAll(nLinkList);
+					// add Loop node
+					System scNewNode = EcoreUtil.copy(scNode);
+					scNewNode.setUserdef001(Integer.toString(nr+1));
+					BasicLink scLink = DcaseFactory.eINSTANCE.createDcaseLink002();
+					scLink.setSource(newpNode);
+					scLink.setTarget(scNewNode);
+					copyArgument.getRootBasicNode().add(scNewNode);
+					copyArgument.getRootBasicLink().add(scLink);
+					// add link
 					BasicLink newLink = DcaseFactory.eINSTANCE.createDcaseLink001();
 					newLink.setSource(leafNode);
 					newLink.setTarget(newpNode);
 					copyArgument.getRootBasicLink().add(newLink);
-					leafNode = PatternUtil.getNode(leafName, newNodeList);
 				}
 			}
 			// Choice
 			if (PatternUtil.isChoice(subType)) {
 				// remove from k+1 to n
 				List<BasicNode> childList = PatternUtil.getChildren(cNode, copyArgument);
-				for (int i = k; i < childList.size(); i++) {
+				SelectSubtreeDialog dialog = new SelectSubtreeDialog(
+						DcaseEditorUtil.getActiveWindowShell(), childList, scNode, copyArgument);
+				if (dialog.open() != Dialog.OK) {
+					return false;
+				}
+				List<BasicNode> removedList = dialog.getUnselectedNodes();
+				for (BasicNode pnode : removedList) {
 					ArrayList<BasicNode>pnodeList = new ArrayList<BasicNode>();
 					ArrayList<BasicLink>plinkList = new ArrayList<BasicLink>();
 					HashSet<BasicNode>checkedSet = new HashSet<BasicNode>();
-					BasicNode pnode = childList.get(i);
 					PatternUtil.getSubtree(pnode, copyArgument, pnodeList, plinkList, checkedSet);
 					copyArgument.getRootBasicNode().removeAll(pnodeList);
 					copyArgument.getRootBasicLink().removeAll(plinkList);
@@ -1140,6 +1179,10 @@ public final class ModuleUtil {
 			}
 			// Multiplicity
 			if (PatternUtil.isMultiplicity(subType)) {
+				int k = getPatternNumber(scNode, copyArgument);
+				if (k <= 0) {
+					return false;
+				}
 				// add k-1 times
 				BasicNode parent = PatternUtil.getParent(cNode, copyArgument);
 				ArrayList<BasicNode>pnodeList = new ArrayList<BasicNode>();
@@ -1165,22 +1208,18 @@ public final class ModuleUtil {
 					copyArgument.getRootBasicLink().add(newLink);
 				}
 			}
-			// remove the current Pattern node.
-			PatternUtil.removeLinks(cNode, copyArgument.getRootBasicLink());
-			copyArgument.getRootBasicNode().remove(cNode);
-		}
-		
-		// process all Parameter nodes.
-		for (BasicNode cNode : copyArgument.getRootBasicNode()) {
-			if (! (cNode instanceof System)) {
-        		continue;
-        	}
-			if (PatternUtil.isParameter(((System)cNode).getSubType())) {
-				if (!ParameterUtil.processParameter(cNode)) {
+			// Parameter
+			if (PatternUtil.isParameter(subType)) {
+				if (!ParameterUtil.processParameter(cNode, copyArgument)) {
 					return false;
 				}
+			} else {
+				// remove the current Pattern node.
+				PatternUtil.removeLinks(cNode, copyArgument.getRootBasicLink());
+				copyArgument.getRootBasicNode().remove(cNode);
 			}
 		}
+		
 		return true;
 	}
 	
@@ -1189,11 +1228,12 @@ public final class ModuleUtil {
 	 * @param rootNode the root node.
 	 * @param argument the argument.
 	 * @param nodeSet the checked node set.
+	 * @param paramSet the checked Parameter node set.
 	 * @return the first Pattern node.
 	 */
 	private static BasicNode searchFirstPattern(BasicNode rootNode, Argument argument,
-			HashSet<BasicNode> nodeSet) {
-		if (! nodeSet.add(rootNode)) {
+			HashSet<BasicNode> nodeSet, HashSet<BasicNode> paramSet) {
+		if (rootNode == null || ! nodeSet.add(rootNode)) {
 			return null;
 		}
 		List<BasicNode>childList = PatternUtil.getChildren(rootNode, argument, false);
@@ -1209,8 +1249,11 @@ public final class ModuleUtil {
 					String subType = ((System)node).getSubType();
 					if (PatternUtil.isLoop(subType) ||
 							PatternUtil.isChoice(subType) ||
-							PatternUtil.isMultiplicity(subType)) {
-						return node;
+							PatternUtil.isMultiplicity(subType) ||
+							PatternUtil.isParameter(subType)) {
+						if (paramSet.add(node)) {
+							return node;
+						}
 					}
 				}
 				// gather grandchildren
@@ -1234,7 +1277,7 @@ public final class ModuleUtil {
 	 * @param scNode the System node.
 	 * @return the number of k.
 	 */
-	private static int getPatternNumber(System scNode) {
+	private static int getPatternNumber(System scNode, Argument argument) {
 		int i = scNode.getI();
 		int j = scNode.getJ();
 		if (PatternUtil.isLoop(scNode.getSubType())) {
@@ -1247,11 +1290,23 @@ public final class ModuleUtil {
 		PatternNumberDialog dialog = new PatternNumberDialog(
 				DcaseEditorUtil.getActiveWindowShell(),
 				NLS.bind(Menus.AddPattern_0, scNode.getSubType()),
-				NLS.bind(Menus.AddPattern_1, scNode.getName()), i, j);
+				NLS.bind(Menus.AddPattern_1, scNode.getName()), scNode, argument);
 		if (dialog.open() != Dialog.OK) {
 			return -1;
 		}
 		return dialog.getNumber();
+	}
+	
+	/**
+	 * Ask a question about Loop unrolling.
+	 * @param times the times.
+	 * @return the answer of loop unrolling.
+	 */
+	private static boolean askLoopDialog(String path, int times) {
+		return MessageDialog.openQuestion(
+				DcaseEditorUtil.getActiveWindowShell(),
+				NLS.bind(Menus.LoopUnroll_0, times),
+				NLS.bind(Menus.LoopUnroll_1, path, times));
 	}
 
 }

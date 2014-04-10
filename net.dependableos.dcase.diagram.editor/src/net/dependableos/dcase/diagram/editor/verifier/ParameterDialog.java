@@ -107,6 +107,11 @@ public class ParameterDialog extends Dialog {
      * running mode.NORMAL or SINGLE.
      */
     private int runningMode = NORMAL;
+    
+    /**
+     * additional label.
+     */
+    private String addLabel = null;
 
     /**
      * Creates an instance and initializes it.
@@ -210,6 +215,14 @@ public class ParameterDialog extends Dialog {
         }
         return list.toArray(new Boolean[0]);
     }
+    
+    /**
+     * Sets the additional label.
+     * @param label the additional label.
+     */
+    public void setAdditionalLabel(String label) {
+    	this.addLabel = label;
+    }
 
     /**
      * {@inheritDoc}
@@ -230,7 +243,11 @@ public class ParameterDialog extends Dialog {
         ParameterItem[] parameters = getParameters();
 
         if (runningMode == NORMAL) {
-            descLabel = createLabel(panel, DESCSTR_OFFSET.concat(userdef005Str));
+            if (addLabel != null) {
+                descLabel = createLabel(panel, addLabel);
+            } else {
+                descLabel = createLabel(panel, DESCSTR_OFFSET.concat(userdef005Str));
+            }
             GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
             //gridData.horizontalSpan = 2;
             descLabel.setLayoutData(gridData);

@@ -4,6 +4,10 @@
  */
 package net.dependableos.dcase.diagram.editor.ui;
 
+import net.dependableos.dcase.Argument;
+import net.dependableos.dcase.System;
+import net.dependableos.dcase.diagram.part.PatternUtil;
+
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
@@ -32,6 +36,12 @@ public class PatternNumberDialog extends Dialog {
     private String labelStr = null;
     
     /**
+     * the node and the argument.
+     */
+    private System sNode;
+    private Argument argument;
+    
+    /**
      * the number.
      */
     private int nr;
@@ -50,12 +60,20 @@ public class PatternNumberDialog extends Dialog {
      * @param min the minimum number.
      * @param max the maximum number.
      */
-    public PatternNumberDialog(Shell parentShell, String titleStr, String labelStr, int min, int max) {
+    public PatternNumberDialog(Shell parentShell, String titleStr, String labelStr,
+    		System sNode, Argument argument) {
         super(parentShell);
         this.titleStr = titleStr;
         this.labelStr = labelStr;
-        this.min = this.nr = min;
-        this.max = max;
+        this.sNode = sNode;
+        this.argument = argument;
+        if (PatternUtil.isLoop(sNode.getSubType())) {
+        	this.min = this.nr = 1;
+        	this.max = 100; // SPINNER_MAX at AttributeDialog.
+        } else {
+        	this.min = this.nr = sNode.getI();
+        	this.max = sNode.getJ();
+        }
     }
 
     /**
@@ -91,7 +109,9 @@ public class PatternNumberDialog extends Dialog {
 
         // create a label and initializes it.
         Label label = new Label(panel, SWT.WRAP);
-        label.setText(labelStr);
+        label.setText(String.format("%s\n%s", //$NON-NLS-1$
+        		PatternUtil.getNodeLabel(PatternUtil.getParent(sNode, argument), argument),
+        		labelStr));
         label.setLayoutData(new GridData());
 
         // creates a spinner.

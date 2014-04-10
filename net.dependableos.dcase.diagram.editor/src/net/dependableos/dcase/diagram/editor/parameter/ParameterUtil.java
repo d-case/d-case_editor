@@ -15,12 +15,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import net.dependableos.dcase.Argument;
 import net.dependableos.dcase.BasicNode;
 import net.dependableos.dcase.diagram.common.model.AttributeType;
 import net.dependableos.dcase.diagram.common.model.NodeInfo;
 import net.dependableos.dcase.diagram.editor.common.util.DcaseEditorUtil;
 import net.dependableos.dcase.diagram.editor.verifier.DataTypeVerifier;
 import net.dependableos.dcase.diagram.editor.verifier.ParameterDialog;
+import net.dependableos.dcase.diagram.part.PatternUtil;
 import net.dependableos.dcase.impl.ParameterItem;
 
 import org.eclipse.jface.dialogs.Dialog;
@@ -39,10 +41,21 @@ public final class ParameterUtil {
     /**
      * Shows a dialog to set parameters if the each node of the specified argument is configured parameters.
      * 
-     * @param argument the argument.
+     * @param node the node.
      * @return true if and only if the parameters are set;false otherwise.
      */
     public static boolean processParameter(BasicNode node) {
+        return processParameter(node, null);
+    }
+    
+    /**
+     * Shows a dialog to set parameters if the each node of the specified argument is configured parameters.
+     * 
+     * @param node the node.
+     * @param argument the argument.
+     * @return true if and only if the parameters are set;false otherwise.
+     */
+    public static boolean processParameter(BasicNode node, Argument argument) {
         boolean result = true;
         String userdef007 = node.getParameterVals();
         String userdef009 = node.getParameterDefs();
@@ -61,6 +74,10 @@ public final class ParameterUtil {
         		ParameterDialog dialog = new ParameterDialog(
         				DcaseEditorUtil.getActiveWindowShell());
         		dialog.setNodeInfo(nodeInfo);
+        		if (argument != null) {
+        			dialog.setAdditionalLabel(PatternUtil.getNodeLabel(
+        					PatternUtil.getParent(node, argument), argument));
+        		}
         		if (Dialog.OK == dialog.open()) {
         			// applies the parameters to the node.
         			node.setParameterVals((String) nodeInfo.getAttribute(AttributeType.PARAMETERVALS));

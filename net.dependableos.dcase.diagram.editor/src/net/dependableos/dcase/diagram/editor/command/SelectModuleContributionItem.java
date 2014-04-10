@@ -29,6 +29,7 @@ import net.dependableos.dcase.diagram.common.util.MessageTypeImpl;
 import net.dependableos.dcase.diagram.common.util.Messages;
 import net.dependableos.dcase.diagram.common.util.ModelUtil;
 import net.dependableos.dcase.diagram.edit.parts.ArgumentEditPart;
+import net.dependableos.dcase.diagram.edit.parts.DcaseLink003Userdef001DescUserdef00EditPart;
 import net.dependableos.dcase.diagram.edit.parts.GoalEditPart;
 import net.dependableos.dcase.diagram.edit.parts.custom.DcaseNodeEditPart;
 import net.dependableos.dcase.diagram.edit.parts.custom.DcaseLinkEditPart;
@@ -36,6 +37,7 @@ import net.dependableos.dcase.diagram.editor.common.util.DcaseEditorUtil;
 import net.dependableos.dcase.diagram.editor.common.util.MessageWriter;
 import net.dependableos.dcase.diagram.editor.common.util.ModuleUtil;
 import net.dependableos.dcase.diagram.editor.ui.NewModuleInputDialog;
+import net.dependableos.dcase.diagram.part.DcaseDiagramEditor;
 import net.dependableos.dcase.diagram.part.DcaseDiagramEditorUtil;
 import net.dependableos.dcase.diagram.part.PatternUtil;
 import net.dependableos.dcase.diagram.ui.AttributeDialog.IAttachmentSelector;
@@ -72,6 +74,7 @@ import org.eclipse.gmf.runtime.notation.Diagram;
 import org.eclipse.jface.action.ContributionItem;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -285,10 +288,24 @@ public class SelectModuleContributionItem extends ContributionItem implements
 			} else if (eobj instanceof BasicLink) {
 				selectedLink = (BasicLink) eobj;
 			} else {
-				MessageWriter.writeMessageToConsole(
-						Messages.SelectModuleContributionItem_1,
-						MessageTypeImpl.SELECT_MODULE_FAILED);
-				return;
+				DcaseDiagramEditor editor = DcaseEditorUtil.getCurrentDcaseEditor();
+				Object obj = editor.getSite().getPage().getSelection();
+				if (obj instanceof StructuredSelection) {
+					Object sobj = ((StructuredSelection) obj).getFirstElement();
+					if (sobj instanceof DcaseLink003Userdef001DescUserdef00EditPart) {
+						DcaseLink003Userdef001DescUserdef00EditPart dobj =
+								(DcaseLink003Userdef001DescUserdef00EditPart)sobj;
+						selectedLinkEditPart = (DcaseLinkEditPart)dobj.getParent();
+						eobj = DcaseEditorUtil.getElement(selectedLinkEditPart);
+						selectedLink = (BasicLink) eobj;
+					}
+				}
+				if (selectedLink == null) {
+					MessageWriter.writeMessageToConsole(
+							Messages.SelectModuleContributionItem_1,
+							MessageTypeImpl.SELECT_MODULE_FAILED);
+					return;
+				}
 			}
 
 			// get responsibility

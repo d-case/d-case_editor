@@ -127,7 +127,9 @@ public class TemplateModelAdditionAction extends Action {
                 BasicNode rootNode = ModuleUtil.getRootNode(copyArgument);
                 if (rootNode != null) {
                     // processes all Pattern nodes.
-                    ModuleUtil.processPatterns(copyArgument);
+                    if (! ModuleUtil.processPatterns(copyArgument)) {
+                    	return;
+                    }
 
                     // gets the set of node IDs from the editing argument edit part.
                     Set<String> idSet = DcaseEditorUtil.getChildUUIDs(currentArgumentEditPart);

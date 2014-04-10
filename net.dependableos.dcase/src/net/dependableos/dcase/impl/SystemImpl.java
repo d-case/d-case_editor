@@ -4,9 +4,6 @@
 // AUTO_GENERATED:START
 package net.dependableos.dcase.impl;
 
-import java.util.List;
-import java.util.HashMap;
-
 import net.dependableos.dcase.DcasePackage;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -297,7 +294,7 @@ public class SystemImpl extends BasicNodeImpl implements net.dependableos.dcase.
         if (eIsProxy()) return super.toString();
 
         StringBuffer result = new StringBuffer(super.toString());
-        result.append(" (subTypee: ");
+        result.append(" (subType: ");
         result.append(subType);
         result.append(", leafNode: ");
         result.append(leafNode);
