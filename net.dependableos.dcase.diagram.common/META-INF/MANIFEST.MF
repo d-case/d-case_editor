@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: D-Case Editor Common
 Bundle-SymbolicName: net.dependableos.dcase.diagram.common
-Bundle-Version: 0.9.4.axe_qualifier
+Bundle-Version: 0.9.5.axe_qualifier
 Bundle-Vendor: DEOSC.
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Export-Package: net.dependableos.dcase.diagram.common.command,

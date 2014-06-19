@@ -15,6 +15,7 @@
           <xsd:element name="argumentation" type="ARM:Argumentation"/>
           <xsd:element name="argumentElement" type="ARM:ArgumentElement"/>
         </xsd:choice>
+        <xsd:attribute name="parent" type="xsd:string" use="optional"/>
       </xsd:extension>
     </xsd:complexContent>
   </xsd:complexType>
@@ -46,8 +47,12 @@
         </xsd:choice>
         <xsd:attribute name="url" type="xsd:string" use="required"/>
         <xsd:attribute name="evidence" type="xsd:string"/>
-        <xsd:attribute name="parameterDefs" type="xsd:string"/>
-        <xsd:attribute name="parameterVals" type="xsd:string"/>
+        <xsd:attribute name="parameterDefs" type="xsd:string" use="optional"/>
+        <xsd:attribute name="parameterVals" type="xsd:string" use="optional"/>
+        <xsd:attribute name="subType" type="xsd:string" use="optional"/>
+        <xsd:attribute name="leafNode" type="xsd:string" use="optional"/>
+        <xsd:attribute name="i" type="xsd:string" use="optional"/>
+        <xsd:attribute name="j" type="xsd:string" use="optional"/>
       </xsd:extension>
     </xsd:complexContent>
   </xsd:complexType>
@@ -97,6 +102,7 @@
       <xsd:extension base="ARM:Assertion">
         <xsd:attribute name="assumed" type="xsd:string" use="required"/>
         <xsd:attribute name="toBeSupported" type="xsd:string" use="required"/>
+        <xsd:attribute name="attachment" type="xsd:string" use="optional"/>
       </xsd:extension>
     </xsd:complexContent>
   </xsd:complexType>
@@ -136,7 +142,9 @@
       <xsd:extension base="SACM:ModelElement">
         <xsd:attribute name="description" type="xsd:string" use="required"/>
         <xsd:attribute name="content" type="xsd:string" use="required"/>
-        <xsd:attribute name="parameterizedContent" type="xsd:string"/>
+        <xsd:attribute name="parameterizedContent" type="xsd:string" use="optional"/>
+        <xsd:attribute name="flag" type="xsd:string" use="optional"/>
+        <xsd:attribute name="refSource" type="xsd:string" use="optional"/>
       </xsd:extension>
     </xsd:complexContent>
   </xsd:complexType>

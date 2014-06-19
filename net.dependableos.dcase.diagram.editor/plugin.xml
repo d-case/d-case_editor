@@ -411,11 +411,13 @@ Copyright (C) Yutaka Matsuno 2010-2012 All rights reserved.
                    id="net.dependableos.dcase.diagram.editor.menu.xmlconversiontosacmwizard"
                    label="%net.dependableos.dcase.diagram.editor.menu.xmlconversiontosacmwizard.label">
                 </command>
+                <!--
                 <command
                    commandId="net.dependableos.dcase.diagram.editor.command.xmlconversiontoarmwizard"
                    id="net.dependableos.dcase.diagram.editor.menu.xmlconversiontoarmwizard"
                    label="%net.dependableos.dcase.diagram.editor.menu.xmlconversiontoarmwizard.label">
                 </command>
+                -->
                 <command
                    commandId="net.dependableos.dcase.diagram.editor.command.xmlconversiontotextwizard"
                    id="net.dependableos.dcase.diagram.editor.menu.xmlconversiontotextwizard"

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
- * Copyright (C) 2013  The University of Electro-Communications All rights reserved.
- * Copyright (C) 2013  AXE,Inc.
+ * Copyright (C) 2013,2014  The University of Electro-Communications All rights reserved.
+ * Copyright (C) 2013,2014  AXE,Inc.
 -->
 
 <!-- The XLS file that converts the GMF model file to SACM model file. -->
@@ -31,6 +31,11 @@
 
   <xsl:template match="dcase_gmf:Argument">
     <xsl:call-template name="NodeElementAttribute" />
+    <xsl:if test="@parent!=''">
+      <xsl:attribute name="parent">
+        <xsl:value-of select="@parent"/>
+      </xsl:attribute>
+    </xsl:if>
     <xsl:apply-templates select="rootBasicNode" mode="basic" />
     <xsl:apply-templates select="rootBasicLink" mode="basic" />
   </xsl:template>
@@ -69,12 +74,36 @@
                <xsl:attribute name="url"/>
              </xsl:if>
              <xsl:if test="@xsi:type='dcase:Pattern'">
-               <xsl:attribute name="parameterDefs">
-                 <xsl:value-of select="@parameterDefs"/>
-               </xsl:attribute>
-               <xsl:attribute name="parameterVals">
-                 <xsl:value-of select="@parameterVals"/>
-               </xsl:attribute>
+               <xsl:if test="@subType!=''">
+                 <xsl:attribute name="subType">
+                   <xsl:value-of select="@subType"/>
+                 </xsl:attribute>
+               </xsl:if>
+               <xsl:if test="@leafNode!=''">
+                 <xsl:attribute name="leafNode">
+                   <xsl:value-of select="@leafNode"/>
+                 </xsl:attribute>
+               </xsl:if>
+               <xsl:if test="@i!=''">
+                 <xsl:attribute name="i">
+                   <xsl:value-of select="@i"/>
+                 </xsl:attribute>
+               </xsl:if>
+               <xsl:if test="@j!=''">
+                 <xsl:attribute name="j">
+                   <xsl:value-of select="@j"/>
+                 </xsl:attribute>
+               </xsl:if>
+               <xsl:if test="@parameterDefs!=''">
+                 <xsl:attribute name="parameterDefs">
+                   <xsl:value-of select="@parameterDefs"/>
+                 </xsl:attribute>
+               </xsl:if>
+               <xsl:if test="@parameterVals!=''">
+                 <xsl:attribute name="parameterVals">
+                   <xsl:value-of select="@parameterVals"/>
+                 </xsl:attribute>
+               </xsl:if>
              </xsl:if>
            </xsl:element>
         </xsl:when>
@@ -96,7 +125,7 @@
     <xsl:if test="contains($sourceNodeType, 'dcase:Goal') or contains($sourceNodeType, 'dcase:Strategy') or contains($sourceNodeType, 'dcase:Evidence') or contains($sourceNodeType, 'dcase:Monitor') or contains($sourceNodeType, 'dcase:Justification') or contains($sourceNodeType, 'dcase:Context') or contains($sourceNodeType, 'dcase:Assumption') or contains($sourceNodeType, 'dcase:Module') or contains($sourceNodeType, 'dcase:Contract') or contains($sourceNodeType, 'dcase:Pattern') or contains($sourceNodeType, 'dcase:Action') or contains($sourceNodeType, 'dcase:External')">
       <xsl:if test="contains($targetNodeType, 'dcase:Goal') or contains($targetNodeType, 'dcase:Strategy') or contains($targetNodeType, 'dcase:Evidence') or contains($targetNodeType, 'dcase:Monitor') or contains($targetNodeType, 'dcase:Justification') or contains($targetNodeType, 'dcase:Context') or contains($targetNodeType, 'dcase:Assumption') or contains($targetNodeType, 'dcase:Module') or contains($targetNodeType, 'dcase:Contract') or contains($targetNodeType, 'dcase:Pattern') or contains($targetNodeType, 'dcase:Action') or contains($targetNodeType, 'dcase:External')">
         <xsl:choose>
-            <!-- outputs to the ARM file -->
+            <!-- outputs to the SACM file -->
             <xsl:when test="(@xsi:type='dcase:SupportedBy') or (@xsi:type='dcase:Responsibility') or (@xsi:type='dcase:DcaseLink004')">
                 <xsl:element name="argumentElement">
                   <xsl:call-template name="LinkType" />
@@ -197,6 +226,21 @@
     <xsl:attribute name="parameterizedContent">
       <xsl:value-of select="@parameterizedDesc"/>
     </xsl:attribute>
+    <xsl:if test="@flag!=''">
+      <xsl:attribute name="flag">
+        <xsl:value-of select="@flag"/>
+      </xsl:attribute>
+    </xsl:if>
+    <xsl:if test="@refSource!=''">
+      <xsl:attribute name="refSource">
+        <xsl:value-of select="@refSource"/>
+      </xsl:attribute>
+    </xsl:if>
+    <xsl:if test="@attachment!=''">
+      <xsl:attribute name="attachment">
+        <xsl:value-of select="@attachment"/>
+      </xsl:attribute>
+    </xsl:if>
     <xsl:attribute name="description"/>
   </xsl:template>
 
