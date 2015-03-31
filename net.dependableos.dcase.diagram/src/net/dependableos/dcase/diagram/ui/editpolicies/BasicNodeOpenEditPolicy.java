@@ -3,7 +3,6 @@
  */
 package net.dependableos.dcase.diagram.ui.editpolicies;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -112,8 +111,6 @@ public class BasicNodeOpenEditPolicy extends OpenEditPolicy {
         String name = basicNode.getName();
         String desc = basicNode.getDesc();
         String attachment = basicNode.getAttachment();
-        int weight = 0;
-        BigDecimal score = null;
         String descFormat = ParameterItem.unescapeLineSeparator(basicNode.getParameterizedDesc());
         String script = basicNode.getUserdef006();
         String parameter = basicNode.getParameterVals();
@@ -124,13 +121,6 @@ public class BasicNodeOpenEditPolicy extends OpenEditPolicy {
         String respTime = basicNode.getRespTime();
 
         NodeType nodeType = NodeType.getNodeType(basicNode);
-        switch (nodeType) {
-            case GOAL:
-                weight = ((Goal) basicNode).getWeight();
-                score = ((Goal) basicNode).getScore();
-                break;
-            default:
-        }
 
         AttributeDialog dialog = new AttributeDialog(getActiveWindowShell(),
                 basicNode, (DcaseNodeEditPart)editPart);
@@ -138,8 +128,6 @@ public class BasicNodeOpenEditPolicy extends OpenEditPolicy {
         dialog.setName(name);
         dialog.setDesc(desc);
         dialog.setAttachment(attachment);
-        dialog.setWeight(weight);
-        dialog.setScore(score);
         dialog.setDescFormat(descFormat);
         dialog.setScript(script);
         dialog.setParameters(parameter);
@@ -149,8 +137,6 @@ public class BasicNodeOpenEditPolicy extends OpenEditPolicy {
         dialog.setRespIcon(respIcon);
         dialog.setRespTime(respTime);
         
-        dialog.setStatus(basicNode.getStatus());
-
         switch (nodeType) {
             case JUSTIFICATION:
                 dialog.setStakeholder(((Justification) basicNode)
@@ -193,7 +179,6 @@ public class BasicNodeOpenEditPolicy extends OpenEditPolicy {
                 attrMap.put(AttributeType.NAME, dialog.getName());
                 attrMap.put(AttributeType.DESC, dialog.getDesc());
                 attrMap.put(AttributeType.ATTACHMENT, dialog.getAttachment());
-                attrMap.put(AttributeType.STATUS, dialog.getStatus());
                 attrMap.put(AttributeType.PARAMETERIZEDDESC,
                 		ParameterItem.escapeLineSeparator(dialog.getDescFormat()));
                 attrMap.put(AttributeType.USERDEF006, dialog.getScript());
@@ -205,10 +190,6 @@ public class BasicNodeOpenEditPolicy extends OpenEditPolicy {
                 attrMap.put(AttributeType.RESPTIME, dialog.getRespTime());
 
                 switch (nodeType) {
-                    case GOAL:
-                        attrMap.put(AttributeType.WEIGHT, dialog.getWeight());
-                        attrMap.put(AttributeType.REQUIREMENT, dialog.getRequirement());
-                        break;
                     case JUSTIFICATION:
                         attrMap.put(AttributeType.STAKEHOLDER, dialog
                                 .getStakeholder());
@@ -260,7 +241,6 @@ public class BasicNodeOpenEditPolicy extends OpenEditPolicy {
         if (!dialog.getName().equals(convertEmptyString(node.getName()))
                 || !dialog.getDesc().equals(convertEmptyString(node.getDesc()))
                 || !dialog.getAttachment().equals(convertEmptyString(node.getAttachment()))
-                || !dialog.getStatus().equals(convertEmptyString(node.getStatus()))
                 || !dialog.getDescFormat().equals(convertEmptyString(node.getParameterizedDesc()))
                 || !dialog.getScript().equals(convertEmptyString(node.getUserdef006()))
                 || !dialog.getParameters().equals(convertEmptyString(node.getParameterVals()))
@@ -273,20 +253,6 @@ public class BasicNodeOpenEditPolicy extends OpenEditPolicy {
             return true;
         }
         NodeType nodeType = NodeType.getNodeType(node);
-        if (nodeType == NodeType.GOAL) {
-            int weight = 0;
-            String requirement = null;
-            Goal goal = (Goal) node;
-            weight = goal.getWeight();
-            requirement = goal.getRequirement();
-            if (requirement == null) {
-                requirement = "";   //$NON-NLS-1$
-            }
-            if ((dialog.getWeight() != weight) 
-                    || !dialog.getRequirement().equals(requirement)) {
-                return true;
-            }
-        }
         if (nodeType == NodeType.JUSTIFICATION) {
             if (!dialog.getStakeholder()
                     .equals(convertEmptyString(((Justification) node)

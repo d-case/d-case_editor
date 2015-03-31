@@ -71,56 +71,39 @@
                <xsl:attribute name="toBeSupported">false</xsl:attribute>
              </xsl:if>
              <xsl:if test="(@xsi:type='dcase:Context') or (@xsi:type='dcase:Justification') or (@xsi:type='dcase:Evidence') or (@xsi:type='dcase:Monitor') or (@xsi:type='dcase:Assumption') or (@xsi:type='dcase:Pattern') or (@xsi:type='dcase:Action')">
-               <xsl:attribute name="url">
-                 <xsl:if test="@attachment!=''">
-                   <xsl:value-of select="@attachment"/>
-                 </xsl:if>
-               </xsl:attribute>
+               <xsl:attribute name="url"/>
              </xsl:if>
              <xsl:if test="@xsi:type='dcase:Pattern'">
-               <xsl:variable name="subType">
-                 <xsl:if test="@subType!=''">
+               <xsl:if test="@subType!=''">
+                 <xsl:attribute name="subType">
                    <xsl:value-of select="@subType"/>
-                 </xsl:if>
-               </xsl:variable>
-               <xsl:variable name="leafNode">
-                 <xsl:if test="@leafNode!=''">
+                 </xsl:attribute>
+               </xsl:if>
+               <xsl:if test="@leafNode!=''">
+                 <xsl:attribute name="leafNode">
                    <xsl:value-of select="@leafNode"/>
-                 </xsl:if>
-               </xsl:variable>
-               <xsl:variable name="i">
-                 <xsl:if test="@i!=''">
+                 </xsl:attribute>
+               </xsl:if>
+               <xsl:if test="@i!=''">
+                 <xsl:attribute name="i">
                    <xsl:value-of select="@i"/>
-                 </xsl:if>
-               </xsl:variable>
-               <xsl:variable name="j">
-                 <xsl:if test="@j!=''">
+                 </xsl:attribute>
+               </xsl:if>
+               <xsl:if test="@j!=''">
+                 <xsl:attribute name="j">
                    <xsl:value-of select="@j"/>
-                 </xsl:if>
-               </xsl:variable>
-               <xsl:variable name="paramDefs">
-                 <xsl:if test="@parameterDefs!=''">
+                 </xsl:attribute>
+               </xsl:if>
+               <xsl:if test="@parameterDefs!=''">
+                 <xsl:attribute name="parameterDefs">
                    <xsl:value-of select="@parameterDefs"/>
-                 </xsl:if>
-               </xsl:variable>
-               <xsl:variable name="paramVals">
-                 <xsl:if test="@parameterVals!=''">
+                 </xsl:attribute>
+               </xsl:if>
+               <xsl:if test="@parameterVals!=''">
+                 <xsl:attribute name="parameterVals">
                    <xsl:value-of select="@parameterVals"/>
-                 </xsl:if>
-               </xsl:variable>
-               <xsl:attribute name="description">
-                 <xsl:choose>
-                   <xsl:when test="$subType='Parameter'">
-                     <xsl:value-of select="concat('subType=', $subType, ' parameterDefs=', $paramDefs, ' parameterVals=', $paramVals)" />
-                   </xsl:when>
-                   <xsl:when test="$subType='Loop'">
-                     <xsl:value-of select="concat('subType=', $subType, ' leafNode=', $leafNode)" />
-                   </xsl:when>
-                   <xsl:otherwise>
-                     <xsl:value-of select="concat('subType=', $subType, ' i=', $i, ' j=', $j)" />
-                   </xsl:otherwise>
-                 </xsl:choose>
-               </xsl:attribute>
+                 </xsl:attribute>
+               </xsl:if>
              </xsl:if>
            </xsl:element>
         </xsl:when>
@@ -240,6 +223,24 @@
     <xsl:attribute name="content">
       <xsl:value-of select="@desc"/>
     </xsl:attribute>
+    <xsl:attribute name="parameterizedContent">
+      <xsl:value-of select="@parameterizedDesc"/>
+    </xsl:attribute>
+    <xsl:if test="@flag!=''">
+      <xsl:attribute name="flag">
+        <xsl:value-of select="@flag"/>
+      </xsl:attribute>
+    </xsl:if>
+    <xsl:if test="@refSource!=''">
+      <xsl:attribute name="refSource">
+        <xsl:value-of select="@refSource"/>
+      </xsl:attribute>
+    </xsl:if>
+    <xsl:if test="@attachment!=''">
+      <xsl:attribute name="attachment">
+        <xsl:value-of select="@attachment"/>
+      </xsl:attribute>
+    </xsl:if>
     <xsl:attribute name="description"/>
   </xsl:template>
 

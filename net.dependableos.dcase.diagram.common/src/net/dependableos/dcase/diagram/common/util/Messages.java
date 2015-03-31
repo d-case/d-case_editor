@@ -157,6 +157,9 @@ public final class Messages extends NLS {
     public static String XmlConversionToSacmWizard_1;
     public static String XmlConversionToSacmWizard_2;
     public static String XmlConversionToSacmWizard_3;
+    public static String XmlConversionToExtSacmWizard_1;
+    public static String XmlConversionToExtSacmWizard_2;
+    public static String XmlConversionToExtSacmWizard_3;
 
     public static String XmlConversionToGmfLogic_00;
 

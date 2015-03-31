@@ -31,6 +31,11 @@ Copyright (C) Yutaka Matsuno 2010-2012 All rights reserved.
 		    id="net.dependableos.dcase.diagram.editor.command.xmlconversiontosacmwizard">
 		</command>
 		<command
+		    name="XML Convert to Extended SACM Format Command"
+		    categoryId="net.dependableos.dcase.diagram.editor.category"
+		    id="net.dependableos.dcase.diagram.editor.command.xmlconversiontoextsacmwizard">
+		</command>
+		<command
 		    name="XML Convert to ARM Format Command"
 		    categoryId="net.dependableos.dcase.diagram.editor.category"
 		    id="net.dependableos.dcase.diagram.editor.command.xmlconversiontoarmwizard">
@@ -226,6 +231,10 @@ Copyright (C) Yutaka Matsuno 2010-2012 All rights reserved.
 			class="net.dependableos.dcase.diagram.editor.command.XmlConversionToSacmWizardHandler">
 		</handler>
 		<handler
+			commandId="net.dependableos.dcase.diagram.editor.command.xmlconversiontoextsacmwizard"
+			class="net.dependableos.dcase.diagram.editor.command.XmlConversionToExtSacmWizardHandler">
+		</handler>
+		<handler
 			commandId="net.dependableos.dcase.diagram.editor.command.xmlconversiontoarmwizard"
 			class="net.dependableos.dcase.diagram.editor.command.XmlConversionToArmWizardHandler">
 		</handler>
@@ -410,6 +419,11 @@ Copyright (C) Yutaka Matsuno 2010-2012 All rights reserved.
                    commandId="net.dependableos.dcase.diagram.editor.command.xmlconversiontosacmwizard"
                    id="net.dependableos.dcase.diagram.editor.menu.xmlconversiontosacmwizard"
                    label="%net.dependableos.dcase.diagram.editor.menu.xmlconversiontosacmwizard.label">
+                </command>
+                <command
+                   commandId="net.dependableos.dcase.diagram.editor.command.xmlconversiontoextsacmwizard"
+                   id="net.dependableos.dcase.diagram.editor.menu.xmlconversiontoextsacmwizard"
+                   label="%net.dependableos.dcase.diagram.editor.menu.xmlconversiontoextsacmwizard.label">
                 </command>
                 <!--
                 <command

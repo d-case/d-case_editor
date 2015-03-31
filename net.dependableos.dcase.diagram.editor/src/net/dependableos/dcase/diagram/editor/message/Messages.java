@@ -144,6 +144,9 @@ public final class Messages extends NLS {
     public static String XmlConversionToSacmWizardPage_0;
     public static String XmlConversionToSacmWizardPage_1;
     public static String XmlConversionToSacmWizardPage_2;
+    public static String XmlConversionToExtSacmWizardPage_0;
+    public static String XmlConversionToExtSacmWizardPage_1;
+    public static String XmlConversionToExtSacmWizardPage_2;
     public static String XmlConversionToDcaseWizard_0;
     public static String XmlConversionToDcaseWizard_1;
     public static String XmlConversionToDcaseWizard_2;

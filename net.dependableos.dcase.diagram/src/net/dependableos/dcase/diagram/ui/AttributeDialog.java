@@ -3,7 +3,6 @@
  */
 package net.dependableos.dcase.diagram.ui;
 
-import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -16,7 +15,6 @@ import java.util.HashSet;
 
 import net.dependableos.dcase.Argument;
 import net.dependableos.dcase.BasicNode;
-import net.dependableos.dcase.Goal;
 import net.dependableos.dcase.Justification;
 import net.dependableos.dcase.Monitor;
 import net.dependableos.dcase.System;
@@ -24,7 +22,6 @@ import net.dependableos.dcase.diagram.command.SetAttributeHandler;
 import net.dependableos.dcase.diagram.common.exception.DcaseRuntimeException;
 import net.dependableos.dcase.diagram.common.exception.DcaseSystemException;
 import net.dependableos.dcase.diagram.common.util.FileUtil;
-import net.dependableos.dcase.diagram.common.util.LinkManager;
 import net.dependableos.dcase.diagram.common.util.MessageTypeImpl;
 import net.dependableos.dcase.diagram.common.util.TermsMessages;
 import net.dependableos.dcase.diagram.common.util.UrlUtil;
@@ -33,13 +30,11 @@ import net.dependableos.dcase.diagram.edit.parts.SystemEditPart;
 import net.dependableos.dcase.diagram.edit.parts.custom.DcaseLinkEditPart;
 import net.dependableos.dcase.diagram.edit.parts.custom.DcaseNodeEditPart;
 import net.dependableos.dcase.diagram.part.DcaseDiagramEditor;
-import net.dependableos.dcase.diagram.part.DcaseDiagramEditorPlugin;
 import net.dependableos.dcase.diagram.part.DcaseDiagramEditorUtil;
 import net.dependableos.dcase.diagram.part.Messages;
 import net.dependableos.dcase.diagram.part.PatternUtil;
 import net.dependableos.dcase.diagram.providers.FileExtensionRestrictTreeContentProvider;
 import net.dependableos.dcase.impl.ParameterItem;
-import net.dependableos.dcase.impl.RequirementItem;
 import net.dependableos.dcase.provider.DcaseEditPlugin;
 
 import org.eclipse.core.commands.Command;
@@ -55,10 +50,8 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.InvalidRegistryObjectException;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.workspace.util.WorkspaceSynchronizer;
 import org.eclipse.gmf.runtime.diagram.core.util.ViewUtil;
@@ -109,7 +102,6 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.dialogs.ElementTreeSelectionDialog;
-import org.eclipse.ui.dialogs.ISelectionStatusValidator;
 import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.model.WorkbenchLabelProvider;
 import org.eclipse.ui.part.FileEditorInput;
@@ -156,21 +148,6 @@ public class AttributeDialog extends Dialog {
     private String attachment = null;
     
     /**
-     * the value of the Requirement.
-     */
-    private String requirement = "";    //$NON-NLS-1$
-    
-    /**
-     * a text control to input the value of the Status attribute.
-     */
-    private Text statusText = null;
-
-    /**
-     * the value of the Status attribute.
-     */
-    private String status = null;
-    
-    /**
      * a text control to input the value of the Stakeholder attribute.
      */
     private Text stakeholderText = null;
@@ -199,36 +176,6 @@ public class AttributeDialog extends Dialog {
      * the value of the IsNormal attribute.
      */
     private boolean isNormal;
-    
-    /**
-     * a combo box control to input requirement.
-     */
-    private Combo requeirementCombo;
-    
-    /**
-     * a item list for requirement combo box. 
-     */
-    private List<RequirementItem> requirementList;
-
-    /**
-     * a spinner control to input the value of the Weight attribute.
-     */
-    private Spinner weightSpinner = null;
-
-    /**
-     * the value of the Weight attribute.
-     */
-    private int weight = 0;
-
-    /**
-     * a text control to display the value of Score attribute.
-     */
-    private Text scoreText = null;
-
-    /**
-     * the value of the Score attribute.
-     */
-    private BigDecimal score = null;
     
     /**
      * a text control to display the value of Desc Format.
@@ -358,16 +305,6 @@ public class AttributeDialog extends Dialog {
     private static final int GRID_COLUMNS = 3;
 
     /**
-     * the width of the control to input the value of the Weight attribute.
-     */
-    private static final int WEIGHT_WIDTH = 46;
-
-    /**
-     * the width of the control to input the value of the Score attribute.
-     */
-    private static final int SCORE_WIDTH = 62;
-
-    /**
      * the height of a text area control.
      */
     private static final int TEXTAREA_HEIHGT = 96;
@@ -415,22 +352,6 @@ public class AttributeDialog extends Dialog {
      */
     private static final String ATTRIBUTEDIALOG_2 = "_UI_BasicNode_attachment_feature"; //$NON-NLS-1$
     /**
-     * the key for the label text of the Weight attribute of a Goal node.
-     */
-    private static final String ATTRIBUTEDIALOG_3 = "_UI_Goal_weight_feature"; //$NON-NLS-1$
-    /**
-     * the key for the label text of the Weight attribute of a System node.
-     */
-    private static final String ATTRIBUTEDIALOG_4 = "_UI_System_weight_feature"; //$NON-NLS-1$
-    /**
-     * the key for the label text of the Score attribute of a Goal node.
-     */
-    private static final String ATTRIBUTEDIALOG_5 = "_UI_Goal_score_feature"; //$NON-NLS-1$
-    /**
-     * the key for the label text of the Score attribute of a System node.
-     */
-    private static final String ATTRIBUTEDIALOG_6 = "_UI_System_score_feature"; //$NON-NLS-1$
-    /**
      * the key for the label text of the SubType attribute.
      */
     private static final String ATTRIBUTEDIALOG_7 = "_UI_System_subType_feature"; //$NON-NLS-1$
@@ -446,16 +367,7 @@ public class AttributeDialog extends Dialog {
      * the key for the label text of the IsNormal attribute.
      */
     private static final String ATTRIBUTEDIALOG_10 = "_UI_Monitor_isNormal_feature"; //$NON-NLS-1$
-    /**
-     * the key for the label text of the Status attribute.
-     */
-    private static final String ATTRIBUTEDIALOG_11 = "_UI_BasicLink_status_feature"; //$NON-NLS-1$    
 
-    /**
-     * the key for the label text of the requirement attribute of a Goal node.
-     */
-    private static final String ATTRIBUTEDIALOG_12 = "_UI_Goal_requirement_feature"; //$NON-NLS-1$
-    
     /**
      * the key for the label text of the desc format attribute of a Goal node.
      */
@@ -560,15 +472,6 @@ public class AttributeDialog extends Dialog {
         name = nameText.getText();
         desc = descText.getText();
         attachment = attachmentText.getText();
-        if (weightSpinner != null) {
-            weight = Integer.valueOf(weightSpinner.getText());
-        }
-        if (scoreText != null) {
-            score = new BigDecimal(scoreText.getText());
-        }
-        if (statusText != null) {
-            status = statusText.getText();
-        }
         if (subTypeCombo != null) {
             subType = subTypeCombo.getText();
         }
@@ -594,17 +497,6 @@ public class AttributeDialog extends Dialog {
         	respTime = respTimeText.getText();
         }
 
-        if (requeirementCombo != null) {
-            if (requirementList != null && requirementList.size() > 0) {
-                
-                if (requeirementCombo.getSelectionIndex() <= 0) {
-                    requirement = ""; //$NON-NLS-1$
-                } else {
-                    RequirementItem item = requirementList.get(requeirementCombo.getSelectionIndex() - 1);
-                    requirement = item.getFullId();
-                }
-            }
-        }
         if (leafNodeCombo != null) {
             leafNode = leafNodeCombo.getText();
         }
@@ -715,20 +607,6 @@ public class AttributeDialog extends Dialog {
         // create the control to select a attachment.
         createBrowseControl(parent);
 
-        // Label:Status
-        createLabel(expandPanel, getAttributeName(ATTRIBUTEDIALOG_11));
-
-        // Text:Status
-        statusText = createText(expandPanel, status);
-        GridData gridTextStatus = new GridData();
-        gridTextStatus.horizontalAlignment = GridData.FILL;
-        gridTextStatus.minimumWidth = TEXT_WIDTH;
-        gridTextStatus.grabExcessHorizontalSpace = true;
-        statusText.setLayoutData(gridTextStatus);
-
-        // LabelDunny:Name
-        createLabel(expandPanel);
-
         // Label:Responsibility_Name
         createLabel(expandPanel, getAttributeName(ATTRIBUTEDIALOG_15));
         
@@ -822,11 +700,6 @@ public class AttributeDialog extends Dialog {
         // Monitor
         if (basicNode instanceof Monitor) {
             createDialogAreaForMonitor();
-        }
-        
-        if (basicNode instanceof Goal) {
-            createDialogForSystemOrGoal();
-            createDialogAreaForGoal();
         }
         
         // Label:Script
@@ -1104,82 +977,6 @@ public class AttributeDialog extends Dialog {
         // LabelDunny:Name
         createLabel(expandPanel);
     }
-    
-    /**
-     * 
-     */
-    private void createDialogForSystemOrGoal() {
-        // Label:Weight
-        String goalLabel = null;
-        if (basicNode instanceof Goal) {
-            goalLabel = ATTRIBUTEDIALOG_3;
-        } else if (basicNode instanceof System) {
-            goalLabel = ATTRIBUTEDIALOG_4;
-        }
-        createLabel(expandPanel, getAttributeName(goalLabel));
-
-        // Spinner:Weight
-        weightSpinner = createSpinner(expandPanel, weight);
-        GridData gridSpinner = new GridData();
-        gridSpinner.minimumWidth = WEIGHT_WIDTH;
-        gridSpinner.grabExcessHorizontalSpace = true;
-        weightSpinner.setLayoutData(gridSpinner);
-
-        // LabelDummy:Weight
-        createLabel(expandPanel);
-
-        // Label:Score
-        String systemLabel = null;
-        if (basicNode instanceof Goal) {
-            systemLabel = ATTRIBUTEDIALOG_5;
-        } else if (basicNode instanceof System) {
-            systemLabel = ATTRIBUTEDIALOG_6;
-        }
-        createLabel(expandPanel, getAttributeName(systemLabel));
-
-        // Text:Score
-        scoreText = createScoreText(expandPanel, score);
-        scoreText.setEditable(false);
-        GridData gridTextScore = new GridData();
-        gridTextScore.minimumWidth = SCORE_WIDTH;
-        gridTextScore.grabExcessHorizontalSpace = true;
-        scoreText.setLayoutData(gridTextScore);
-
-        // LabelDummy:Score
-        createLabel(expandPanel);
-    }
-    
-    /**
-     * 
-     */
-    private void createDialogAreaForGoal() {
-        Goal goal = (Goal) basicNode;
-        // Label:Requirement
-        createLabel(expandPanel, getAttributeName(ATTRIBUTEDIALOG_12));
-        requeirementCombo = new Combo(expandPanel, SWT.DROP_DOWN | SWT.MULTI | SWT.BORDER | SWT.READ_ONLY);
-        LinkManager manager = new LinkManager();
-        manager.load((XMLResource) basicNode.eResource());
-        requirementList = manager.getRequirements();
-        if (requirementList != null && requirementList.size() > 0) {
-            requeirementCombo.add(""); //$NON-NLS-1$
-            int selectNo = 1;
-            for (RequirementItem item : requirementList) {
-                requeirementCombo.add(item.getDescription());
-                if (item.getFullId().equals(goal.getRequirement())) {
-                    requeirementCombo.select(selectNo);
-                }
-                selectNo++;
-            }
-        }
-        GridData gridComboRequirement = new GridData();
-        gridComboRequirement.horizontalAlignment = GridData.FILL;
-        gridComboRequirement.minimumWidth = IS_NORMAL_WIDTH;
-        gridComboRequirement.grabExcessHorizontalSpace = true;
-        requeirementCombo.setLayoutData(gridComboRequirement);
-        // LabelDunny:Name
-        createLabel(expandPanel);
-    }
-
     
     /**
      * Create the control to set the attachment property of the selected node. 
@@ -1507,23 +1304,6 @@ public class AttributeDialog extends Dialog {
     }
 
     /**
-     * Creates a single line text control and initializes it to represent the specified number.
-     * 
-     * @param parent the parent
-     * @param text a number
-     * @return a text control
-     */
-    private Text createScoreText(Composite parent, BigDecimal text) {
-        if (text == null) {
-            text = new BigDecimal(0);
-        }
-        // creates a single line text control.
-        Text textControl = new Text(parent, SWT.SINGLE | SWT.BORDER);
-        textControl.setText(text.toString());
-        return textControl;
-    }
-
-    /**
      * Creates a multi line text control and initializes it to represent the specified string.
      * 
      * @param parent the parent
@@ -1672,28 +1452,6 @@ public class AttributeDialog extends Dialog {
     }
     
     /**
-     * Sets the value of Status attribute.
-     * 
-     * @param status the value of Status attribute.
-     */
-    public void setStatus(String status) {
-        if (status == null) {
-            this.status = ""; //$NON-NLS-1$
-        } else {
-            this.status = status;
-        }
-    }
-
-    /**
-     * Returns the value of Status attribute.
-     * 
-     * @return the value of Status attribute.
-     */
-    public String getStatus() {
-        return status;
-    }
-    
-    /**
      * Sets the value of SubType attribute.
      * 
      * @param nodeLink the value of SubType attribute.
@@ -1775,60 +1533,6 @@ public class AttributeDialog extends Dialog {
      */
     public boolean isIsNormal() {
         return isNormal;
-    }
-    
-    /**
-     * @return the requirement
-     */
-    public String getRequirement() {
-        return requirement;
-    }
-
-    /**
-     * @param requirement the requirement to set
-     */
-    public void setRequirement(String requirement) {
-        if (requirement == null) {
-            this.requirement = ""; //$NON-NLS-1$
-        } else {
-            this.requirement = requirement;
-        }
-    }
-    
-    /**
-     * Sets the value of Weight attribute.
-     * 
-     * @param weight the value of Weight attribute.
-     */
-    public void setWeight(int weight) {
-        this.weight = weight;
-    }
-
-    /**
-     * Returns the value of Weight attribute.
-     * 
-     * @return the value of Weight attribute.
-     */
-    public int getWeight() {
-        return weight;
-    }
-
-    /**
-     * Sets the value of Score attribute.
-     * 
-     * @param score the value of Score attribute.
-     */
-    public void setScore(BigDecimal score) {
-        this.score = score;
-    }
-
-    /**
-     * Returns the value of Score attribute.
-     * 
-     * @return the value of Score attribute.
-     */
-    public BigDecimal getScore() {
-        return score;
     }
     
     /**
@@ -2125,33 +1829,6 @@ public class AttributeDialog extends Dialog {
         return true;
     }
 
-    /**
-     * A validator to indicate whether the selected file is valid.
-     * 
-     * @return a validator.
-     */
-    private ISelectionStatusValidator createElementSelectionStatusValidator() {
-        return new ISelectionStatusValidator() {
-            /**
-             * Indicates the selected file is valid.
-             * 
-             * @param selection the selected file.
-             * @return the status that indicates whether the selected file is valid.
-             * @see org.eclipse.ui.dialogs.ISelectionStatusValidator.validate#validate(java.lang.Object[])
-             */
-            public IStatus validate(Object[] selection) {
-                if (selection.length == 1) {
-                    if (selection[0] instanceof IFile) {
-                        return new Status(IStatus.OK,
-                                DcaseDiagramEditorPlugin.ID, ""); //$NON-NLS-1$
-                    }
-                }
-                return new Status(IStatus.ERROR, DcaseDiagramEditorPlugin.ID,
-                        ""); //$NON-NLS-1$
-            }
-        };
-    }
-    
     /**
      * Processes after care.
      * @param node the node.

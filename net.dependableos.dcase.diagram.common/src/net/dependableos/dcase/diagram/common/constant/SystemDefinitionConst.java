@@ -180,6 +180,11 @@ public final class SystemDefinitionConst {
     public static final String XSL_TO_SACM_PATH = "/resource/gmf_to_sacm.xsl";   //$NON-NLS-1$
 
     /**
+     * The path to the file to translate to Extended SACM from GMF model.
+     */
+    public static final String XSL_TO_EXTSACM_PATH = "/resource/gmf_to_extsacm.xsl";   //$NON-NLS-1$
+
+    /**
      * The file extension of EPS. 
      */
     public static final String EPS_FILE_EXTENSION = ".eps"; //$NON-NLS-1$

@@ -37,8 +37,6 @@
                         <xs:enumeration value="Action" />
                         <xs:enumeration value="External" />
                         <xs:enumeration value="Pattern" />
-                        <xs:enumeration value="Userdef002" />
-                        <xs:enumeration value="Userdef003" />
                       </xs:restriction>
                     </xs:simpleType>
                   </xs:attribute>
@@ -54,7 +52,6 @@
                   </xs:attribute>
                   <xs:attribute name="id" use="required" type="UUID">
                   </xs:attribute>
-                  <xs:attribute name="status" type="xs:string" use="optional" />
                 </xs:complexType>
               </xs:element>
             </xs:sequence>
@@ -73,14 +70,12 @@
                   <xs:attribute name="target" type="xs:string" use="required" />
                   <xs:attribute name="id" type="UUID" use="required" />
                   <xs:attribute name="name" type="xs:string" />
-                  <xs:attribute name="status" type="xs:string" use="optional" />
                   <xs:attribute name="type" use="optional" default="SupportedBy">
                     <xs:simpleType>
                       <xs:restriction base="xs:string">
                         <xs:enumeration value="SupportedBy" />
                         <xs:enumeration value="InContextOf" />
                         <xs:enumeration value="Responsibility" />
-                        <xs:enumeration value="Link004" />
                       </xs:restriction>
                     </xs:simpleType>
                   </xs:attribute>
@@ -109,33 +104,13 @@
           <xs:attribute name="name" use="required">
             <xs:simpleType>
               <xs:restriction base="xs:string">
-                <xs:enumeration value="Userdef001" />
-                <xs:enumeration value="Userdef002" />
-                <xs:enumeration value="Userdef003" />
-                <xs:enumeration value="Userdef004" />
-                <xs:enumeration value="Userdef005" />
-                <xs:enumeration value="Userdef006" />
-                <xs:enumeration value="Userdef007" />
-                <xs:enumeration value="Userdef008" />
-                <xs:enumeration value="Userdef009" />
-                <xs:enumeration value="Userdef010" />
-                <xs:enumeration value="Userdef011" />
-                <xs:enumeration value="Userdef012" />
-                <xs:enumeration value="Userdef013" />
-                <xs:enumeration value="Userdef014" />
-                <xs:enumeration value="Userdef015" />
-                <xs:enumeration value="Userdef016" />
                 <xs:enumeration value="Attachment" />
                 <xs:enumeration value="Message" />
-                <xs:enumeration value="Requirement" />
                 <xs:enumeration value="ParameterizedDesc" />
                 <xs:enumeration value="Parent" />
                 <xs:enumeration value="RefSource" />
                 <xs:enumeration value="Flag" />
-                <xs:enumeration value="Score" />
-                <xs:enumeration value="Weight" />
                 <xs:enumeration value="Stakeholder" />
-                <xs:enumeration value="RiskAnalysis" />
                 <xs:enumeration value="IsNormal" />
                 <xs:enumeration value="LeafNode" />
                 <xs:enumeration value="I" />

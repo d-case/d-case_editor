@@ -29,10 +29,9 @@ import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.MouseEvent;
 import org.eclipse.draw2d.MouseMotionListener;
 import org.eclipse.draw2d.Panel;
-import org.eclipse.draw2d.RoundedRectangle;
+import org.eclipse.draw2d.Ellipse;
 import org.eclipse.draw2d.Shape;
 import org.eclipse.draw2d.StackLayout;
-import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.commands.Command;
@@ -900,7 +899,7 @@ public class JustificationEditPart extends DcaseNodeEditPart {
     /**
      * @generated NOT
      */
-    public class JustificationFigure extends RoundedRectangle implements MouseMotionListener {
+    public class JustificationFigure extends Ellipse implements MouseMotionListener {
 
         /**
          * @generated NOT
@@ -939,6 +938,10 @@ public class JustificationEditPart extends DcaseNodeEditPart {
             CustomBorderLayout layoutThis = new CustomBorderLayout();
 
             layoutThis.setVerticalSpacing(NODE_MARGIN_VERTICAL);
+            // sets the padding ratio.
+            layoutThis.setPaddingRatio(0.8);
+            // sets the aspect ratio.
+            layoutThis.setAspectRatio(3, 2);
             // stretches the Desc attribute area vertically to fill any space left over.
             layoutThis.setStretchVertically(true);
 
@@ -951,9 +954,6 @@ public class JustificationEditPart extends DcaseNodeEditPart {
             MarginBorder border = new MarginBorder(NODE_MARGIN_TOP,
                     NODE_MARGIN_LEFT, NODE_MARGIN_BOTTOM, NODE_MARGIN_RIGHT);
             setBorder(border);
-
-            //sets the corner.
-            setCornerDimensions(new Dimension(CORNER_ARC_SIZE,CORNER_ARC_SIZE));
        }
 
         /**

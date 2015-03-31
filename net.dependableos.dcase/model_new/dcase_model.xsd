@@ -16,22 +16,17 @@
   <xsd:element ecore:ignore="true" name="Pattern" type="dcase:Pattern"/>
   <xsd:element ecore:ignore="true" name="Action" type="dcase:Action"/>
   <xsd:element ecore:ignore="true" name="External" type="dcase:External"/>
-  <xsd:element ecore:ignore="true" name="Userdef002" type="dcase:Userdef002"/>
-  <xsd:element ecore:ignore="true" name="Userdef003" type="dcase:Userdef003"/>
   <xsd:element ecore:ignore="true" name="BasicLink" type="dcase:BasicLink"/>
   <xsd:element ecore:ignore="true" name="SupportedBy" type="dcase:SupportedBy"/>
   <xsd:element ecore:ignore="true" name="InContextOf" type="dcase:InContextOf"/>
   <xsd:element ecore:ignore="true" name="Responsibility" type="dcase:Responsibility"/>
-  <xsd:element ecore:ignore="true" name="DcaseLink004" type="dcase:DcaseLink004"/>
   <xsd:complexType abstract="true" name="BasicNode">
     <xsd:attribute name="id" type="ecore:EString"/>
     <xsd:attribute name="name" type="ecore:EString"/>
     <xsd:attribute name="desc" type="ecore:EString"/>
     <xsd:attribute name="parameterizedDesc" type="ecore:EString"/>
     <xsd:attribute name="attachment" type="ecore:EString"/>
-    <xsd:attribute name="status" type="ecore:EString"/>
     <xsd:attribute name="message" type="ecore:EString"/>
-    <xsd:attribute name="requirement" type="ecore:EString"/>
     <xsd:attribute name="parameterDefs" type="ecore:EString"/>
     <xsd:attribute name="parameterVals" type="ecore:EString"/>
     <xsd:attribute name="parent" type="ecore:EString"/>
@@ -41,22 +36,6 @@
     <xsd:attribute name="respAddress" type="ecore:EString"/>
     <xsd:attribute name="respIcon" type="ecore:EString"/>
     <xsd:attribute name="validUntil" type="ecore:EString"/>
-    <xsd:attribute name="userdef001" type="ecore:EString"/>
-    <xsd:attribute name="userdef002" type="ecore:EString"/>
-    <xsd:attribute name="userdef003" type="ecore:EString"/>
-    <xsd:attribute name="userdef004" type="ecore:EString"/>
-    <xsd:attribute name="userdef005" type="ecore:EString"/>
-    <xsd:attribute name="userdef006" type="ecore:EString"/>
-    <xsd:attribute name="userdef007" type="ecore:EString"/>
-    <xsd:attribute name="userdef008" type="ecore:EString"/>
-    <xsd:attribute name="userdef009" type="ecore:EString"/>
-    <xsd:attribute name="userdef010" type="ecore:EString"/>
-    <xsd:attribute name="userdef011" type="ecore:EString"/>
-    <xsd:attribute name="userdef012" type="ecore:EString"/>
-    <xsd:attribute name="userdef013" type="ecore:EString"/>
-    <xsd:attribute name="userdef014" type="ecore:EString"/>
-    <xsd:attribute name="userdef015" type="ecore:EString"/>
-    <xsd:attribute name="userdef016" type="ecore:EString"/>
   </xsd:complexType>
   <xsd:complexType name="Argument">
     <xsd:complexContent>
@@ -65,14 +44,6 @@
           <xsd:element maxOccurs="unbounded" minOccurs="0" name="rootBasicNode" type="dcase:BasicNode"/>
           <xsd:element maxOccurs="unbounded" minOccurs="0" name="rootBasicLink" type="dcase:BasicLink"/>
         </xsd:sequence>
-      </xsd:extension>
-    </xsd:complexContent>
-  </xsd:complexType>
-  <xsd:complexType name="Goal">
-    <xsd:complexContent>
-      <xsd:extension base="dcase:BasicNode">
-        <xsd:attribute default="0" ecore:unsettable="false" name="score" type="ecore:EBigDecimal"/>
-        <xsd:attribute default="1" ecore:unsettable="false" name="weight" type="ecore:EInt"/>
       </xsd:extension>
     </xsd:complexContent>
   </xsd:complexType>
@@ -107,7 +78,6 @@
     <xsd:complexContent>
       <xsd:extension base="dcase:BasicNode">
         <xsd:attribute default="" ecore:unsettable="false" name="stakeholder" type="ecore:EString"/>
-        <xsd:attribute name="riskAnalysis" type="ecore:EString"/>
       </xsd:extension>
     </xsd:complexContent>
   </xsd:complexType>
@@ -155,16 +125,6 @@
       <xsd:extension base="dcase:BasicNode"/>
     </xsd:complexContent>
   </xsd:complexType>
-  <xsd:complexType name="Userdef002">
-    <xsd:complexContent>
-      <xsd:extension base="dcase:BasicNode"/>
-    </xsd:complexContent>
-  </xsd:complexType>
-  <xsd:complexType name="Userdef003">
-    <xsd:complexContent>
-      <xsd:extension base="dcase:BasicNode"/>
-    </xsd:complexContent>
-  </xsd:complexType>
   <xsd:complexType abstract="true" name="BasicLink">
     <xsd:attribute ecore:reference="dcase:BasicNode" name="source" type="xsd:anyURI"/>
     <xsd:attribute ecore:reference="dcase:BasicNode" name="target" type="xsd:anyURI"/>
@@ -172,25 +132,8 @@
     <xsd:attribute name="name" type="ecore:EString"/>
     <xsd:attribute name="desc" type="ecore:EString"/>
     <xsd:attribute name="attachment" type="ecore:EString"/>
-    <xsd:attribute name="status" type="ecore:EString"/>
     <xsd:attribute name="message" type="ecore:EString"/>
     <xsd:attribute name="siblingOrder" type="ecore:EString"/>
-    <xsd:attribute name="userdef001" type="ecore:EString"/>
-    <xsd:attribute name="userdef002" type="ecore:EString"/>
-    <xsd:attribute name="userdef003" type="ecore:EString"/>
-    <xsd:attribute name="userdef004" type="ecore:EString"/>
-    <xsd:attribute name="userdef005" type="ecore:EString"/>
-    <xsd:attribute name="userdef006" type="ecore:EString"/>
-    <xsd:attribute name="userdef007" type="ecore:EString"/>
-    <xsd:attribute name="userdef008" type="ecore:EString"/>
-    <xsd:attribute name="userdef009" type="ecore:EString"/>
-    <xsd:attribute name="userdef010" type="ecore:EString"/>
-    <xsd:attribute name="userdef011" type="ecore:EString"/>
-    <xsd:attribute name="userdef012" type="ecore:EString"/>
-    <xsd:attribute name="userdef013" type="ecore:EString"/>
-    <xsd:attribute name="userdef014" type="ecore:EString"/>
-    <xsd:attribute name="userdef015" type="ecore:EString"/>
-    <xsd:attribute name="userdef016" type="ecore:EString"/>
   </xsd:complexType>
   <xsd:complexType name="SupportedBy">
     <xsd:complexContent>
@@ -203,11 +146,6 @@
     </xsd:complexContent>
   </xsd:complexType>
   <xsd:complexType name="Responsibility">
-    <xsd:complexContent>
-      <xsd:extension base="dcase:BasicLink"/>
-    </xsd:complexContent>
-  </xsd:complexType>
-  <xsd:complexType name="DcaseLink004">
     <xsd:complexContent>
       <xsd:extension base="dcase:BasicLink"/>
     </xsd:complexContent>
